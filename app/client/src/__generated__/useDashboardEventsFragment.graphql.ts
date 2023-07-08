@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<66b84a3dbe7d106157e0c143a57c2a6e>>
+ * @generated SignedSource<<dda6460307c752e819aac58366563284>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -26,6 +26,10 @@ export type useDashboardEventsFragment$data = {
         readonly title: string | null;
       };
     }> | null;
+    readonly pageInfo: {
+      readonly endCursor: string | null;
+      readonly startCursor: string | null;
+    };
   } | null;
   readonly id: string;
   readonly " $fragmentType": "useDashboardEventsFragment";
@@ -198,6 +202,13 @@ return {
               "alias": null,
               "args": null,
               "kind": "ScalarField",
+              "name": "startCursor",
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
               "name": "endCursor",
               "storageKey": null
             },
@@ -232,6 +243,6 @@ return {
 };
 })();
 
-(node as any).hash = "f67f210adf210119d1e5afc11b5c670e";
+(node as any).hash = "80402d8c332902a3e06bd99c462d5881";
 
 export default node;

@@ -813,7 +813,7 @@ type Subscription {
   enqueuedPushQuestion(eventId: ID!): EventQuestionEdgeContainer!
   enqueuedRemoveQuestion(eventId: ID!): EventQuestionEdgeContainer!
   enqueuedUnshiftQuestion(eventId: ID!): EventQuestionEdgeContainer!
-  eventCreated(userId: ID!): EventEdgeContainer!
+  eventCreated(userId: ID): EventEdgeContainer!
   eventDeleted(eventIds: [ID!]!): EventEdgeContainer!
 
   """New messages as feedback is given"""

@@ -835,7 +835,7 @@ export type SubscriptioneventUpdatesArgs = {
 };
 
 export type SubscriptioneventCreatedArgs = {
-    userId: Scalars['ID'];
+    userId?: InputMaybe<Scalars['ID']>;
 };
 
 export type SubscriptioneventDeletedArgs = {
@@ -2556,7 +2556,7 @@ export type SubscriptionResolvers<
         'eventCreated',
         ParentType,
         ContextType,
-        RequireFields<SubscriptioneventCreatedArgs, 'userId'>
+        Partial<SubscriptioneventCreatedArgs>
     >;
     eventDeleted?: SubscriptionResolver<
         ResolversTypes['EventEdgeContainer'],

@@ -299,7 +299,7 @@ type EventBroadcastMessageEdge {
 
 type Subscription {
     eventUpdates(userId: ID!): Event!
-    eventCreated(userId: ID!): EventEdgeContainer!
+    eventCreated(userId: ID): EventEdgeContainer!
     eventDeleted(eventIds: [ID!]!): EventEdgeContainer!
     broadcastMessageCreated(eventId: ID!): EventBroadcastMessageEdgeContainer!
     broadcastMessageDeleted(eventId: ID!): EventBroadcastMessageEdgeContainer!

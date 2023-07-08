@@ -142,7 +142,8 @@ export const resolvers: Resolvers = {
                 (parent, args, ctx) => ctx.pubsub.subscribe('eventCreated'),
                 async (payload, args, ctx) => {
                     const { id: eventId } = fromGlobalId(payload.eventCreated.edge.node.id);
-                    const { id: userId } = fromGlobalId(args.userId);
+                    const userId = ctx.viewer.id;
+                    if (!userId) return false;
 
                     const moderatorsIds = (await Event.findModeratorsByEventId(eventId, ctx.prisma)).map(
                         ({ id }) => id

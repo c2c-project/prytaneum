@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f9cdbbe8ebaf8b88e92827eb9b7ed855>>
+ * @generated SignedSource<<abfdbd1ad376b98fbc3d580a65c52fdf>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,7 +11,6 @@
 import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
 export type useEventCreatedSubscription$variables = {
   connections: ReadonlyArray<string>;
-  userId: string;
 };
 export type useEventCreatedSubscription$data = {
   readonly eventCreated: {
@@ -36,66 +35,56 @@ export type useEventCreatedSubscription = {
 };
 
 const node: ConcreteRequest = (function(){
-var v0 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "connections"
-},
-v1 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "userId"
-},
-v2 = [
+var v0 = [
   {
-    "kind": "Variable",
-    "name": "userId",
-    "variableName": "userId"
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "connections"
   }
 ],
-v3 = {
+v1 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v4 = {
+v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "title",
   "storageKey": null
 },
-v5 = {
+v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "description",
   "storageKey": null
 },
-v6 = {
+v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "startDateTime",
   "storageKey": null
 },
-v7 = {
+v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "endDateTime",
   "storageKey": null
 },
-v8 = {
+v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isViewerModerator",
   "storageKey": null
 },
-v9 = {
+v7 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -104,17 +93,14 @@ v9 = {
 };
 return {
   "fragment": {
-    "argumentDefinitions": [
-      (v0/*: any*/),
-      (v1/*: any*/)
-    ],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
     "name": "useEventCreatedSubscription",
     "selections": [
       {
         "alias": null,
-        "args": (v2/*: any*/),
+        "args": null,
         "concreteType": "EventEdgeContainer",
         "kind": "LinkedField",
         "name": "eventCreated",
@@ -136,12 +122,12 @@ return {
                 "name": "node",
                 "plural": false,
                 "selections": [
+                  (v1/*: any*/),
+                  (v2/*: any*/),
                   (v3/*: any*/),
                   (v4/*: any*/),
                   (v5/*: any*/),
                   (v6/*: any*/),
-                  (v7/*: any*/),
-                  (v8/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -150,7 +136,7 @@ return {
                     "name": "organization",
                     "plural": false,
                     "selections": [
-                      (v9/*: any*/)
+                      (v7/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -169,16 +155,13 @@ return {
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [
-      (v1/*: any*/),
-      (v0/*: any*/)
-    ],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "useEventCreatedSubscription",
     "selections": [
       {
         "alias": null,
-        "args": (v2/*: any*/),
+        "args": null,
         "concreteType": "EventEdgeContainer",
         "kind": "LinkedField",
         "name": "eventCreated",
@@ -200,12 +183,12 @@ return {
                 "name": "node",
                 "plural": false,
                 "selections": [
+                  (v1/*: any*/),
+                  (v2/*: any*/),
                   (v3/*: any*/),
                   (v4/*: any*/),
                   (v5/*: any*/),
                   (v6/*: any*/),
-                  (v7/*: any*/),
-                  (v8/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -214,8 +197,8 @@ return {
                     "name": "organization",
                     "plural": false,
                     "selections": [
-                      (v9/*: any*/),
-                      (v3/*: any*/)
+                      (v7/*: any*/),
+                      (v1/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -247,16 +230,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "36d2320373f73fa43703923b283862b1",
+    "cacheID": "20dc174b92a570dd686b7d34029fb3ad",
     "id": null,
     "metadata": {},
     "name": "useEventCreatedSubscription",
     "operationKind": "subscription",
-    "text": "subscription useEventCreatedSubscription(\n  $userId: ID!\n) {\n  eventCreated(userId: $userId) {\n    edge {\n      node {\n        id\n        title\n        description\n        startDateTime\n        endDateTime\n        isViewerModerator\n        organization {\n          name\n          id\n        }\n      }\n    }\n  }\n}\n"
+    "text": "subscription useEventCreatedSubscription {\n  eventCreated {\n    edge {\n      node {\n        id\n        title\n        description\n        startDateTime\n        endDateTime\n        isViewerModerator\n        organization {\n          name\n          id\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "5ff8fa1f2f75ce23794b2ea537c74e34";
+(node as any).hash = "7bb8de20e7163b8d11dea804b78f1f54";
 
 export default node;

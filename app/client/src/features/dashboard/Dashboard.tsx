@@ -1,70 +1,49 @@
 import * as React from 'react';
-import { fetchQuery, graphql, useQueryLoader } from 'react-relay';
+import { graphql, PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
 
 import type { DashboardQuery } from '@local/__generated__/DashboardQuery.graphql';
-import { useEnvironment } from '@local/core';
 import { ConditionalRender } from '@local/components/ConditionalRender';
 import { Loader } from '@local/components/Loader';
-import { DashboardEventList } from './DashboardEventList';
+import { DashboardEvents } from './DashboardEvents';
 
 export const DASHBOARD_QUERY = graphql`
     query DashboardQuery {
         me {
-            events {
-                __id
-                edges {
-                    node {
-                        id
-                        title
-                        description
-                        startDateTime
-                        endDateTime
-                        isViewerModerator
-                        organization {
-                            name
-                        }
-                    }
-                }
-            }
+            ...useDashboardEventsFragment
         }
     }
 `;
 
-export function Dashboard() {
-    const [queryRef, loadQuery] = useQueryLoader<DashboardQuery>(DASHBOARD_QUERY);
-    const [isRefreshing, setIsRefreshing] = React.useState(false);
-    const { env } = useEnvironment();
-    const REFRESH_INTERVAL = 20000; // 20 seconds
+interface DashboardContainerProps {
+    queryRef: PreloadedQuery<DashboardQuery>;
+}
 
-    const refresh = React.useCallback(() => {
-        if (isRefreshing) return;
-        setIsRefreshing(true);
-        fetchQuery(env, DASHBOARD_QUERY, {}).subscribe({
-            complete: () => {
-                setIsRefreshing(false);
-                loadQuery({}, { fetchPolicy: 'store-or-network' });
-            },
-            error: () => {
-                setIsRefreshing(false);
-            },
-        });
-    }, [env, isRefreshing, loadQuery]);
+export function DashboardContainer({ queryRef }: DashboardContainerProps) {
+    const { me: queryResponse } = usePreloadedQuery(DASHBOARD_QUERY, queryRef);
+
+    if (!queryResponse) return <Loader />;
+    return (
+        <React.Suspense fallback={<Loader />}>
+            <DashboardEvents fragmentRef={queryResponse} />
+        </React.Suspense>
+    );
+}
+
+export function PreloadedDashboard() {
+    const [queryRef, loadQuery, dispose] = useQueryLoader<DashboardQuery>(DASHBOARD_QUERY);
 
     React.useEffect(() => {
         // Load the query on initial render
         if (!queryRef) loadQuery({}, { fetchPolicy: 'network-only' });
-        // Refresh the query every interval
-        const interval = setInterval(() => {
-            refresh();
-        }, REFRESH_INTERVAL);
-        return () => clearInterval(interval);
-    }, [loadQuery, queryRef, refresh]);
+        return () => dispose();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     if (!queryRef) return <Loader />;
     return (
         <ConditionalRender client>
             <React.Suspense fallback={<Loader />}>
-                <DashboardEventList queryRef={queryRef} />
+                <DashboardContainer queryRef={queryRef} />
             </React.Suspense>
         </ConditionalRender>
     );

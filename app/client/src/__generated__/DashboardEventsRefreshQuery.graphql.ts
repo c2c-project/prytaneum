@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<11c683e18bc4f63c05b79e6c830abdbd>>
+ * @generated SignedSource<<205ae8286a751a256e0a25afc6ae6151>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -238,6 +238,13 @@ return {
                         "alias": null,
                         "args": null,
                         "kind": "ScalarField",
+                        "name": "startCursor",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
                         "name": "endCursor",
                         "storageKey": null
                       },
@@ -285,16 +292,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "a11311d442d58cb49a17bd65954d3edc",
+    "cacheID": "812296c4da66d22d70e41bd10e18034a",
     "id": null,
     "metadata": {},
     "name": "DashboardEventsRefreshQuery",
     "operationKind": "query",
-    "text": "query DashboardEventsRefreshQuery(\n  $count: Int = 50\n  $cursor: String = \"\"\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useDashboardEventsFragment_1G22uz\n    id\n  }\n}\n\nfragment useDashboardEventsFragment_1G22uz on User {\n  id\n  events(first: $count, after: $cursor) {\n    edges {\n      node {\n        id\n        title\n        description\n        startDateTime\n        endDateTime\n        isViewerModerator\n        organization {\n          name\n          id\n        }\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query DashboardEventsRefreshQuery(\n  $count: Int = 50\n  $cursor: String = \"\"\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useDashboardEventsFragment_1G22uz\n    id\n  }\n}\n\nfragment useDashboardEventsFragment_1G22uz on User {\n  id\n  events(first: $count, after: $cursor) {\n    edges {\n      node {\n        id\n        title\n        description\n        startDateTime\n        endDateTime\n        isViewerModerator\n        organization {\n          name\n          id\n        }\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      startCursor\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "f67f210adf210119d1e5afc11b5c670e";
+(node as any).hash = "80402d8c332902a3e06bd99c462d5881";
 
 export default node;

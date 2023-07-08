@@ -1260,7 +1260,7 @@ export type SubscriptionEnqueuedUnshiftQuestionArgs = {
 
 
 export type SubscriptionEventCreatedArgs = {
-  userId: Scalars['ID'];
+  userId?: InputMaybe<Scalars['ID']>;
 };
 
 
