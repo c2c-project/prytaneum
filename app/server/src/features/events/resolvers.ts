@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { connectionFromArray, fromGlobalId } from 'graphql-relay';
 import * as Event from './methods';
+import * as Moderation from '@local/features/events/moderation/methods';
 import { Resolvers, toGlobalId, errors, runMutation, withFilter } from '@local/features/utils';
 import { ProtectedError } from '@local/lib/ProtectedError';
 import type {
@@ -276,6 +277,18 @@ export const resolvers: Resolvers = {
             const { id: eventId } = fromGlobalId(parent.id);
             const participants = await Event.findParticipantsByEventId(eventId, ctx.prisma);
             return connectionFromArray(participants.map(toUserId), args);
+        },
+        async isViewerInvited(parent, args, ctx, info) {
+            const { id: eventId } = fromGlobalId(parent.id);
+            ctx.app.log.debug(eventId);
+            if (!ctx.viewer.id) return false;
+            // Check if user is organizer or moderator (no need to check if invited when they are)
+            const isModerator = await Moderation.isModerator(ctx.viewer.id, eventId, ctx.prisma);
+            if (isModerator) return true;
+            const isMember = await Moderation.isMember(ctx.viewer.id, eventId, ctx.prisma);
+            if (isMember) return true;
+            // Check if user is invited to the event
+            return Event.isInvited(ctx.viewer.id, eventId, ctx.prisma);
         },
     },
 };
