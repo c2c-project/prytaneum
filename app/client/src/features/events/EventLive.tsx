@@ -61,8 +61,6 @@ export const EVENT_LIVE_QUERY = graphql`
             id
             ... on Event {
                 isViewerModerator
-                isActive
-                isPrivate
                 ...EventSidebarFragment
                 ...useBroadcastMessageListFragment
                 ...EventVideoFragment
@@ -84,28 +82,62 @@ type Node = {
     readonly ' $fragmentSpreads': FragmentRefs<any>;
 };
 
+type ValidateInvite = {
+    readonly user: {
+        readonly avatar: string | null;
+        readonly email: string | null;
+        readonly firstName: string | null;
+        readonly id: string;
+        readonly isAdmin: boolean | null;
+        readonly lastName: string | null;
+    } | null;
+    readonly valid: boolean;
+};
+
 interface EventLiveProps {
     node: Node;
+    validateInvite: ValidateInvite;
+    tokenProvided: boolean;
 }
 
-function EventLive({ node }: EventLiveProps) {
+function EventLive({ node, validateInvite, tokenProvided }: EventLiveProps) {
     const router = useRouter();
-    const { id: eventId } = node;
+    const { displaySnack } = useSnack();
+    const [routeChecked, setRouteChecked] = React.useState(false);
+    const [validationChecked, setValidationChecked] = React.useState(false);
     const { eventData, isLive, setIsLive } = useEventDetails({ fragmentRef: node });
     const isModerator = Boolean(node.isViewerModerator);
+    const { user } = useUser();
+    const { id: eventId } = eventData;
 
     usePingEvent(eventId);
 
+    // Handle private events and token validation
     React.useEffect(() => {
-        if (eventData.isActive || isModerator) return;
-        if (!eventData.isActive && !isModerator) {
-            if (eventData.endDateTime === null) {
-                router.push(`/events/${eventId}/post`);
+        if (eventData.isViewerModerator) {
+            setValidationChecked(true);
+            return;
+        }
+        if (!validateInvite?.valid && eventData.isPrivate === true) {
+            if (eventData.isViewerInvited === true) {
+                setValidationChecked(true);
                 return;
             }
-            // TODO: Revisit this logic when we have a better idea of how we want to handle edge cases
-            // IE: If event is ended early by moderator, should we redirect to post event page?
-            // How early is too early to redirect to post event page?
+            if (tokenProvided) displaySnack('Invalid invite token.', { variant: 'error' });
+            else displaySnack('You do not have permission to join this private event.', { variant: 'error' });
+            router.push('/');
+        }
+        // Ensure user is logged in if invite is valid (Do not reload if user is already logged in)
+        if (user === null && validateInvite?.valid && validateInvite?.user !== null) router.reload();
+        else setValidationChecked(true);
+    }, [displaySnack, eventData, router, tokenProvided, user, validateInvite]);
+
+    React.useEffect(() => {
+        if (isLive || isModerator) {
+            setRouteChecked(true);
+            return;
+        }
+        if (eventData.endDateTime !== null) {
             const now = new Date();
             const endTime = new Date(eventData.endDateTime);
             if (now > endTime) {
@@ -113,8 +145,10 @@ function EventLive({ node }: EventLiveProps) {
             } else {
                 router.push(`/events/${eventId}/pre`);
             }
+        } else {
+            router.push(`/events/${eventId}/pre`);
         }
-    }, [eventData, eventData.endDateTime, eventData.isActive, eventId, isLive, isModerator, router]);
+    }, [eventId, eventData.endDateTime, isLive, isModerator, router]);
 
     // styles
     const classes = useStyles();
@@ -147,7 +181,7 @@ function EventLive({ node }: EventLiveProps) {
         });
     };
 
-    if (!node || (!isLive && !isModerator)) return <Loader />;
+    if (!routeChecked || !validationChecked) return <Loader />;
 
     return (
         <EventContext.Provider value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}>
@@ -188,24 +222,10 @@ interface EventLiveContainerProps {
 function EventLiveContainer({ eventLiveQueryRef, validateInviteQueryRef, tokenProvided }: EventLiveContainerProps) {
     const { node } = usePreloadedQuery(EVENT_LIVE_QUERY, eventLiveQueryRef);
     const { validateInvite } = usePreloadedQuery(VALIDATE_INVITE_QUERY, validateInviteQueryRef);
-    const { displaySnack } = useSnack();
-    const router = useRouter();
-    const { user } = useUser();
-
-    // Handle private events and token validation
-    React.useEffect(() => {
-        if (node?.isViewerModerator) return;
-        if (!validateInvite?.valid && node?.isPrivate === true) {
-            if (tokenProvided) displaySnack('Invalid invite token.', { variant: 'error' });
-            else displaySnack('You do not have permission to join this private event.', { variant: 'error' });
-            router.push('/');
-        }
-        // Ensure user is logged in if invite is valid (Do not reload if user is already logged in)
-        if (user === null && validateInvite?.valid && validateInvite?.user !== null) router.reload();
-    }, [displaySnack, node?.isPrivate, node?.isViewerModerator, router, tokenProvided, user, validateInvite]);
 
     if (!node || !validateInvite) return <Loader />;
-    return <EventLive node={node} />;
+
+    return <EventLive node={node} validateInvite={validateInvite} tokenProvided={tokenProvided} />;
 }
 
 export interface PreloadedEventLiveProps {
