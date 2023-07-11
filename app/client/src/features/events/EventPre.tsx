@@ -51,27 +51,23 @@ export function EventPre({ fragmentRef }: EventPreProps) {
     const mdDownBreakpoint = useMediaQuery(theme.breakpoints.down('md'));
     const [tab, setTab] = React.useState<'Questions' | 'Feedback'>('Questions');
     const { eventData } = useEventDetails({ fragmentRef });
-    const { id: eventId, isActive, isViewerModerator, endDateTime } = eventData;
+    const { id: eventId, isActive, isViewerModerator } = eventData;
+    // used to create the countdown component
+    const date = eventData.startDateTime as Date;
+
+    // TODO: add is private event check
+    React.useEffect(() => {
+        if (isActive || isViewerModerator) router.push(`/events/${eventId}/live`);
+        if (!eventData.endDateTime) return;
+        const now = new Date();
+        const endTime = new Date(eventData.endDateTime);
+        if (!isActive && now > endTime) router.push(`/events/${eventId}/post`);
+    }, [eventData.endDateTime, eventId, isActive, isViewerModerator, router]);
 
     const handleChange = (e: React.SyntheticEvent, newTab: 'Questions' | 'Feedback') => {
         e.preventDefault();
         setTab(newTab);
     };
-
-    // used to create the countdown component
-    const date = eventData.startDateTime as Date;
-
-    // route user to live event if event is on-going
-    if (isActive || isViewerModerator) {
-        // navigate back to /live once the event starts
-        router.push('/events/' + eventId + '/live');
-    }
-    const now = new Date();
-    const eventEnd = new Date(endDateTime || now);
-    if (!isActive && now > eventEnd) {
-        // navigate to pre-event page if event has not started
-        router.push('/events/' + eventId + '/post');
-    }
 
     return (
         <EventContext.Provider value={{ eventId: eventData.id, isModerator: Boolean(eventData.isViewerModerator) }}>
