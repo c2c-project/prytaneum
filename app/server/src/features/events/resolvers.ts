@@ -276,7 +276,13 @@ export const resolvers: Resolvers = {
         async participants(parent, args, ctx, info) {
             const { id: eventId } = fromGlobalId(parent.id);
             const participants = await Event.findParticipantsByEventId(eventId, ctx.prisma);
-            return connectionFromArray(participants.map(toUserId), args);
+            const formattedParticipants = participants.map((participant) => {
+                return {
+                    user: toUserId(participant.user),
+                    isMuted: participant.isMuted,
+                };
+            });
+            return connectionFromArray(formattedParticipants, args);
         },
         async isViewerInvited(parent, args, ctx, info) {
             const { id: eventId } = fromGlobalId(parent.id);

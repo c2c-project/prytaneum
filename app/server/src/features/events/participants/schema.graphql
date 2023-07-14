@@ -4,7 +4,7 @@ type EventParticipant {
 }
 
 type EventParticipantEdge {
-    node: User!
+    node: EventParticipant!
     cursor: String!
 }
 

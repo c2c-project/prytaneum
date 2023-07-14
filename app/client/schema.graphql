@@ -215,7 +215,7 @@ type Event implements Node {
   organization: Organization
 
   """Participants of the event -- individuals who showed up"""
-  participants(after: String, first: Int): UserConnection
+  participants(after: String, first: Int): EventParticipantConnection
 
   """Questions having to do with the queue"""
   questionQueue(after: String, first: Int): EventQuestionQueue
@@ -401,7 +401,7 @@ type EventParticipantConnection {
 
 type EventParticipantEdge {
   cursor: String!
-  node: User!
+  node: EventParticipant!
 }
 
 type EventQuestion implements Node {

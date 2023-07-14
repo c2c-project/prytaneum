@@ -327,8 +327,13 @@ export async function findAllEvents(viewerId: string, filter: EventsSearchFilter
 }
 
 export async function findParticipantsByEventId(eventId: string, prisma: PrismaClient) {
-    const results = await prisma.eventParticipant.findMany({ where: { eventId }, include: { user: true } });
-    return results.map(({ user }) => user);
+    const SIXTY_SECONDS = 1000 * 60;
+    const result = await prisma.eventParticipant.findMany({
+        where: { eventId, lastPingTime: { gte: new Date(Date.now() - SIXTY_SECONDS) } },
+        select: { user: true, isMuted: true },
+        orderBy: { user: { firstName: 'asc' } },
+    });
+    return result;
 }
 
 export async function isInvited(userId: string, eventId: string, prisma: PrismaClient) {
