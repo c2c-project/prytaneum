@@ -14,6 +14,8 @@ export const USE_EVENT_DETAILS_FRAGMENT = graphql`
         endDateTime
         isActive
         isViewerModerator
+        isPrivate
+        isViewerInvited
     }
 `;
 
@@ -23,8 +25,7 @@ interface Props {
 
 export function useEventDetails({ fragmentRef }: Props) {
     const [data, refetch] = useRefetchableFragment(USE_EVENT_DETAILS_FRAGMENT, fragmentRef);
-    const [isLive, setIsLive] = React.useState(false);
-    // const { startDateTime, endDateTime } = data;
+    const [isLive, setIsLive] = React.useState(Boolean(data.isActive));
 
     const REFRESH_INTERVAL = 30000; // 30 seconds
     const refresh = React.useCallback(() => {
@@ -38,6 +39,7 @@ export function useEventDetails({ fragmentRef }: Props) {
             setIsLive(true);
             return;
         }
+        setIsLive(false);
     }, [data.isActive]);
 
     return { eventData: data, isLive, setIsLive };

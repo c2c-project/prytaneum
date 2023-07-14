@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { connectionFromArray, fromGlobalId } from 'graphql-relay';
 import * as Event from './methods';
+import * as Moderation from '@local/features/events/moderation/methods';
 import { Resolvers, toGlobalId, errors, runMutation, withFilter } from '@local/features/utils';
 import { ProtectedError } from '@local/lib/ProtectedError';
 import type {
@@ -142,7 +143,8 @@ export const resolvers: Resolvers = {
                 (parent, args, ctx) => ctx.pubsub.subscribe('eventCreated'),
                 async (payload, args, ctx) => {
                     const { id: eventId } = fromGlobalId(payload.eventCreated.edge.node.id);
-                    const { id: userId } = fromGlobalId(args.userId);
+                    const userId = ctx.viewer.id;
+                    if (!userId) return false;
 
                     const moderatorsIds = (await Event.findModeratorsByEventId(eventId, ctx.prisma)).map(
                         ({ id }) => id
@@ -274,7 +276,25 @@ export const resolvers: Resolvers = {
         async participants(parent, args, ctx, info) {
             const { id: eventId } = fromGlobalId(parent.id);
             const participants = await Event.findParticipantsByEventId(eventId, ctx.prisma);
-            return connectionFromArray(participants.map(toUserId), args);
+            const formattedParticipants = participants.map((participant) => {
+                return {
+                    user: toUserId(participant.user),
+                    isMuted: participant.isMuted,
+                };
+            });
+            return connectionFromArray(formattedParticipants, args);
+        },
+        async isViewerInvited(parent, args, ctx, info) {
+            const { id: eventId } = fromGlobalId(parent.id);
+            ctx.app.log.debug(eventId);
+            if (!ctx.viewer.id) return false;
+            // Check if user is organizer or moderator (no need to check if invited when they are)
+            const isModerator = await Moderation.isModerator(ctx.viewer.id, eventId, ctx.prisma);
+            if (isModerator) return true;
+            const isMember = await Moderation.isMember(ctx.viewer.id, eventId, ctx.prisma);
+            if (isMember) return true;
+            // Check if user is invited to the event
+            return Event.isInvited(ctx.viewer.id, eventId, ctx.prisma);
         },
     },
 };

@@ -1,78 +1,106 @@
+import * as React from 'react';
 import { Button, Card, CardContent, Grid, List, ListItemSecondaryAction, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { useTheme } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 
 import { DashboardEventListItem } from './DashboardEventListItem';
-import { Event } from './DashboardEventList';
+import { useDashboardEvents } from './useDashboardEvents';
+import { useDashboardEventsFragment$key } from '@local/__generated__/useDashboardEventsFragment.graphql';
+import { useEventDeleted } from './useEventDeleted';
+import { useEventCreated } from './useEventCreated';
 
-const useStyles = makeStyles((theme) => ({
-    item: {
-        marginBottom: theme.spacing(4),
-    },
-    card: {
-        padding: theme.spacing(1),
-    },
-    title: {
-        marginBottom: theme.spacing(1),
-    },
-    text: {
-        marginLeft: theme.spacing(1),
-    },
-}));
+export interface Event {
+    node: {
+        readonly description: string | null;
+        readonly endDateTime: Date | null;
+        readonly id: string;
+        readonly isViewerModerator: boolean | null;
+        readonly organization: {
+            readonly name: string;
+        } | null;
+        readonly startDateTime: Date | null;
+        readonly title: string | null;
+    };
+}
 
-interface Props {
-    eventList: Event[];
+interface EventListProps {
+    events: Event[];
     ongoing: boolean;
 }
 
-export function DashboardEventListDisplay({ ongoing, eventList }: Props) {
-    const classes = useStyles();
+function EventList({ events, ongoing }: EventListProps) {
     const router = useRouter();
     const handleNav = (path: string) => () => router.push(path);
 
+    if (events.length === 0) {
+        return <Typography variant='subtitle2'>No {ongoing ? 'Ongoing' : 'Upcoming'} Events To Display</Typography>;
+    }
+
     return (
-        <Grid item xs={12} className={classes.item}>
-            <Card className={classes.card}>
+        <List>
+            {events.map(({ node: event }, idx) => (
+                <DashboardEventListItem key={event.id} event={event} divider={idx !== events.length - 1}>
+                    <ListItemSecondaryAction>
+                        {event.isViewerModerator ? (
+                            <Button
+                                aria-label='view live feed of current event'
+                                variant='contained'
+                                color='primary'
+                                onClick={handleNav(`/events/${event.id}/live`)}
+                            >
+                                Live Feed
+                            </Button>
+                        ) : (
+                            <Button
+                                aria-label='view live feed of current event'
+                                variant='contained'
+                                color='primary'
+                                onClick={
+                                    ongoing
+                                        ? handleNav(`/events/${event.id}/live`)
+                                        : handleNav(`/events/${event.id}/pre`)
+                                }
+                            >
+                                {ongoing ? 'Live Feed' : 'Pre Event'}
+                            </Button>
+                        )}
+                    </ListItemSecondaryAction>
+                </DashboardEventListItem>
+            ))}
+        </List>
+    );
+}
+
+interface Props {
+    ongoing: boolean;
+    fragmentRef: useDashboardEventsFragment$key;
+}
+
+export function DashboardEventListDisplay({ ongoing, fragmentRef }: Props) {
+    const theme = useTheme();
+    const { currentEvents, upcomingEvents, eventIds, connections } = useDashboardEvents({ fragmentRef });
+
+    useEventCreated({ connections });
+    useEventDeleted({ eventIds, connections });
+
+    return (
+        <Grid item xs={12} marginBottom={theme.spacing(4)}>
+            <Card style={{ padding: theme.spacing(1) }}>
                 <CardContent>
                     {ongoing ? (
-                        <Typography variant='h6' className={classes.title}>
-                            Current Events
-                        </Typography>
+                        <React.Fragment>
+                            <Typography variant='h6' marginBottom={theme.spacing(1)}>
+                                Current Events
+                            </Typography>
+                            <EventList events={currentEvents} ongoing={true} />
+                        </React.Fragment>
                     ) : (
-                        <Typography variant='h6' className={classes.title}>
-                            Upcoming Events
-                        </Typography>
-                    )}
-
-                    {eventList.length > 0 ? (
-                        <List>
-                            {eventList.map(({ node: event }, idx) => {
-                                return (
-                                    <DashboardEventListItem
-                                        key={event.id}
-                                        event={event}
-                                        divider={idx !== eventList.length - 1}
-                                    >
-                                        {ongoing && (
-                                            <ListItemSecondaryAction>
-                                                <Button
-                                                    aria-label='view live feed of current event'
-                                                    variant='contained'
-                                                    color='primary'
-                                                    onClick={handleNav(`/events/${event.id}/live`)}
-                                                >
-                                                    Live Feed
-                                                </Button>
-                                            </ListItemSecondaryAction>
-                                        )}
-                                    </DashboardEventListItem>
-                                );
-                            })}
-                        </List>
-                    ) : (
-                        <Typography className={classes.text} variant='subtitle2'>
-                            No Events To Display
-                        </Typography>
+                        <React.Fragment>
+                            <Typography variant='h6' marginBottom={theme.spacing(1)}>
+                                Upcoming Events
+                            </Typography>
+                            <EventList events={upcomingEvents} ongoing={false} />
+                        </React.Fragment>
                     )}
                 </CardContent>
             </Card>

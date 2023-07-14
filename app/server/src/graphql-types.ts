@@ -611,7 +611,7 @@ export type Event = Node & {
     /** Registrants for this event -- individuals invited */
     registrants?: Maybe<UserConnection>;
     /** Participants of the event -- individuals who showed up */
-    participants?: Maybe<UserConnection>;
+    participants?: Maybe<EventParticipantConnection>;
     /** Video feeds and the languages */
     videos?: Maybe<EventVideoConnection>;
     /** Live Feedback given during the event */
@@ -835,7 +835,7 @@ export type SubscriptioneventUpdatesArgs = {
 };
 
 export type SubscriptioneventCreatedArgs = {
-    userId: Scalars['ID'];
+    userId?: InputMaybe<Scalars['ID']>;
 };
 
 export type SubscriptioneventDeletedArgs = {
@@ -1230,7 +1230,7 @@ export type EventParticipant = {
 
 export type EventParticipantEdge = {
     __typename?: 'EventParticipantEdge';
-    node: User;
+    node: EventParticipant;
     cursor: Scalars['String'];
 };
 
@@ -2413,7 +2413,7 @@ export type EventResolvers<
     >;
     registrants?: Resolver<Maybe<ResolversTypes['UserConnection']>, ParentType, ContextType>;
     participants?: Resolver<
-        Maybe<ResolversTypes['UserConnection']>,
+        Maybe<ResolversTypes['EventParticipantConnection']>,
         ParentType,
         ContextType,
         Partial<EventparticipantsArgs>
@@ -2556,7 +2556,7 @@ export type SubscriptionResolvers<
         'eventCreated',
         ParentType,
         ContextType,
-        RequireFields<SubscriptioneventCreatedArgs, 'userId'>
+        Partial<SubscriptioneventCreatedArgs>
     >;
     eventDeleted?: SubscriptionResolver<
         ResolversTypes['EventEdgeContainer'],
@@ -2979,7 +2979,7 @@ export type EventParticipantEdgeResolvers<
     ContextType = MercuriusContext,
     ParentType extends ResolversParentTypes['EventParticipantEdge'] = ResolversParentTypes['EventParticipantEdge']
 > = {
-    node?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+    node?: Resolver<ResolversTypes['EventParticipant'], ParentType, ContextType>;
     cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -3365,7 +3365,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         >;
         speakers?: LoaderResolver<Maybe<EventSpeakerConnection>, Event, EventspeakersArgs, TContext>;
         registrants?: LoaderResolver<Maybe<UserConnection>, Event, {}, TContext>;
-        participants?: LoaderResolver<Maybe<UserConnection>, Event, EventparticipantsArgs, TContext>;
+        participants?: LoaderResolver<Maybe<EventParticipantConnection>, Event, EventparticipantsArgs, TContext>;
         videos?: LoaderResolver<Maybe<EventVideoConnection>, Event, EventvideosArgs, TContext>;
         liveFeedback?: LoaderResolver<Maybe<EventLiveFeedbackConnection>, Event, EventliveFeedbackArgs, TContext>;
         liveFeedbackPrompts?: LoaderResolver<
@@ -3608,7 +3608,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
     };
 
     EventParticipantEdge?: {
-        node?: LoaderResolver<User, EventParticipantEdge, {}, TContext>;
+        node?: LoaderResolver<EventParticipant, EventParticipantEdge, {}, TContext>;
         cursor?: LoaderResolver<Scalars['String'], EventParticipantEdge, {}, TContext>;
     };
 

@@ -71,7 +71,7 @@ type Event implements Node {
     """
     Participants of the event -- individuals who showed up
     """
-    participants(first: Int, after: String): UserConnection
+    participants(first: Int, after: String): EventParticipantConnection
 
     """
     Video feeds and the languages
@@ -299,7 +299,7 @@ type EventBroadcastMessageEdge {
 
 type Subscription {
     eventUpdates(userId: ID!): Event!
-    eventCreated(userId: ID!): EventEdgeContainer!
+    eventCreated(userId: ID): EventEdgeContainer!
     eventDeleted(eventIds: [ID!]!): EventEdgeContainer!
     broadcastMessageCreated(eventId: ID!): EventBroadcastMessageEdgeContainer!
     broadcastMessageDeleted(eventId: ID!): EventBroadcastMessageEdgeContainer!

@@ -12,7 +12,7 @@ import type {
     RemoveQuestionFromQueue,
 } from '@local/graphql-types';
 
-async function isMember(userId: string, eventId: string, prisma: PrismaClient) {
+export async function isMember(userId: string, eventId: string, prisma: PrismaClient) {
     const memberResults = await prisma.event.findUnique({
         where: { id: eventId },
         select: { organization: { select: { members: { where: { userId } } } } },

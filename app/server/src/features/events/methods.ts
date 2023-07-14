@@ -129,7 +129,7 @@ export async function canUserModify(userId: string, id: string, prisma: PrismaCl
     });
     const _isModerator = queryResult ? queryResult.moderators.find((mod) => mod.userId === userId) : false;
     const _isMember = queryResult ? queryResult.organization.members.length > 0 : false;
-    return _isMember || _isModerator;
+    return _isMember || Boolean(_isModerator);
 }
 
 /**
@@ -327,6 +327,17 @@ export async function findAllEvents(viewerId: string, filter: EventsSearchFilter
 }
 
 export async function findParticipantsByEventId(eventId: string, prisma: PrismaClient) {
-    const results = await prisma.eventParticipant.findMany({ where: { eventId }, include: { user: true } });
-    return results.map(({ user }) => user);
+    const SIXTY_SECONDS = 1000 * 60;
+    const result = await prisma.eventParticipant.findMany({
+        where: { eventId, lastPingTime: { gte: new Date(Date.now() - SIXTY_SECONDS) } },
+        select: { user: true, isMuted: true },
+        orderBy: { user: { firstName: 'asc' } },
+    });
+    return result;
+}
+
+export async function isInvited(userId: string, eventId: string, prisma: PrismaClient) {
+    const result = await prisma.eventInvited.findUnique({ where: { eventId_userId: { eventId, userId } } });
+    console.log('RESULT: ', result);
+    return Boolean(result);
 }

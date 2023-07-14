@@ -5,8 +5,8 @@ import { GraphQLSubscriptionConfig } from 'relay-runtime';
 import type { useEventCreatedSubscription } from '@local/__generated__/useEventCreatedSubscription.graphql';
 
 const USE_EVENT_CREATED_SUBSCRIPTION = graphql`
-    subscription useEventCreatedSubscription($userId: ID!, $connections: [ID!]!) {
-        eventCreated(userId: $userId) {
+    subscription useEventCreatedSubscription($connections: [ID!]!) {
+        eventCreated {
             edge @prependEdge(connections: $connections) {
                 node {
                     id
@@ -24,16 +24,19 @@ const USE_EVENT_CREATED_SUBSCRIPTION = graphql`
     }
 `;
 
-export function useEventCreated(userId: string, connections: string[]) {
+interface Props {
+    connections: string[];
+}
+
+export function useEventCreated({ connections }: Props) {
     const createdConfig = useMemo<GraphQLSubscriptionConfig<useEventCreatedSubscription>>(
         () => ({
             variables: {
-                userId,
                 connections,
             },
             subscription: USE_EVENT_CREATED_SUBSCRIPTION,
         }),
-        [userId, connections]
+        [connections]
     );
 
     useSubscription<useEventCreatedSubscription>(createdConfig);

@@ -201,7 +201,7 @@ export type Event = Node & {
   /** The owning organization */
   organization?: Maybe<Organization>;
   /** Participants of the event -- individuals who showed up */
-  participants?: Maybe<UserConnection>;
+  participants?: Maybe<EventParticipantConnection>;
   /** Questions having to do with the queue */
   questionQueue?: Maybe<EventQuestionQueue>;
   /** All questions relating to this event */
@@ -466,7 +466,7 @@ export type EventParticipantConnection = {
 export type EventParticipantEdge = {
   __typename?: 'EventParticipantEdge';
   cursor: Scalars['String'];
-  node: User;
+  node: EventParticipant;
 };
 
 export type EventQuestion = Node & {
@@ -1260,7 +1260,7 @@ export type SubscriptionEnqueuedUnshiftQuestionArgs = {
 
 
 export type SubscriptionEventCreatedArgs = {
-  userId: Scalars['ID'];
+  userId?: InputMaybe<Scalars['ID']>;
 };
 
 

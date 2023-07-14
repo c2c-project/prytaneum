@@ -24,7 +24,12 @@ const USE_EVENT_DELETED_SUBSCRIPTION = graphql`
     }
 `;
 
-export function useEventDeleted(eventIds: string[], connections: string[]) {
+interface Props {
+    eventIds: string[];
+    connections: string[];
+}
+
+export function useEventDeleted({ eventIds, connections }: Props) {
     const createdConfig = useMemo<GraphQLSubscriptionConfig<useEventDeletedSubscription>>(
         () => ({
             variables: {

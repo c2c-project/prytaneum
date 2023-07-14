@@ -34,7 +34,7 @@ export function CallToAction() {
                     style={{ objectFit: 'contain' }}
                     data-test-id='landing-prytanum-logo'
                     alt='Prytaneum Logo'
-                    src='/static/p_logo.svg'
+                    src='/static/prytaneum_logo2.svg'
                     width='100%'
                     height='100%'
                 />

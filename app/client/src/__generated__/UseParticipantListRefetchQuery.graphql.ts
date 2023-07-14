@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4bebae8525bba3a605b935e6fc0b4138>>
+ * @generated SignedSource<<10a8c2b9399a3292b770eaed0a36407d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,55 +10,80 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type ParticipantsListQuery$variables = {
+export type UseParticipantListRefetchQuery$variables = {
+  after?: string | null;
   eventId: string;
+  first?: number | null;
+  id: string;
 };
-export type ParticipantsListQuery$data = {
+export type UseParticipantListRefetchQuery$data = {
   readonly node: {
-    readonly id: string;
     readonly " $fragmentSpreads": FragmentRefs<"useParticipantListFragment">;
   } | null;
 };
-export type ParticipantsListQuery = {
-  response: ParticipantsListQuery$data;
-  variables: ParticipantsListQuery$variables;
+export type UseParticipantListRefetchQuery = {
+  response: UseParticipantListRefetchQuery$data;
+  variables: UseParticipantListRefetchQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){
 var v0 = [
   {
+    "defaultValue": "",
+    "kind": "LocalArgument",
+    "name": "after"
+  },
+  {
     "defaultValue": null,
     "kind": "LocalArgument",
     "name": "eventId"
+  },
+  {
+    "defaultValue": 10,
+    "kind": "LocalArgument",
+    "name": "first"
+  },
+  {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "id"
   }
 ],
 v1 = [
   {
     "kind": "Variable",
     "name": "id",
-    "variableName": "eventId"
+    "variableName": "id"
   }
 ],
 v2 = {
+  "kind": "Variable",
+  "name": "after",
+  "variableName": "after"
+},
+v3 = {
+  "kind": "Variable",
+  "name": "eventId",
+  "variableName": "eventId"
+},
+v4 = {
+  "kind": "Variable",
+  "name": "first",
+  "variableName": "first"
+},
+v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
-},
-v3 = [
-  {
-    "kind": "Variable",
-    "name": "eventId",
-    "variableName": "eventId"
-  }
-];
+};
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "ParticipantsListQuery",
+    "name": "UseParticipantListRefetchQuery",
     "selections": [
       {
         "alias": null,
@@ -68,18 +93,14 @@ return {
         "name": "node",
         "plural": false,
         "selections": [
-          (v2/*: any*/),
           {
-            "kind": "InlineFragment",
-            "selections": [
-              {
-                "args": (v3/*: any*/),
-                "kind": "FragmentSpread",
-                "name": "useParticipantListFragment"
-              }
+            "args": [
+              (v2/*: any*/),
+              (v3/*: any*/),
+              (v4/*: any*/)
             ],
-            "type": "Event",
-            "abstractKey": null
+            "kind": "FragmentSpread",
+            "name": "useParticipantListFragment"
           }
         ],
         "storageKey": null
@@ -92,7 +113,7 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "ParticipantsListQuery",
+    "name": "UseParticipantListRefetchQuery",
     "selections": [
       {
         "alias": null,
@@ -109,23 +130,15 @@ return {
             "name": "__typename",
             "storageKey": null
           },
-          (v2/*: any*/),
+          (v5/*: any*/),
           {
             "kind": "InlineFragment",
             "selections": [
               {
                 "alias": null,
                 "args": [
-                  {
-                    "kind": "Literal",
-                    "name": "after",
-                    "value": ""
-                  },
-                  {
-                    "kind": "Literal",
-                    "name": "first",
-                    "value": 10
-                  }
+                  (v2/*: any*/),
+                  (v4/*: any*/)
                 ],
                 "concreteType": "EventParticipantConnection",
                 "kind": "LinkedField",
@@ -156,7 +169,7 @@ return {
                             "name": "user",
                             "plural": false,
                             "selections": [
-                              (v2/*: any*/),
+                              (v5/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -173,7 +186,9 @@ return {
                               },
                               {
                                 "alias": null,
-                                "args": (v3/*: any*/),
+                                "args": [
+                                  (v3/*: any*/)
+                                ],
                                 "kind": "ScalarField",
                                 "name": "moderatorOf",
                                 "storageKey": null
@@ -220,7 +235,7 @@ return {
                     "storageKey": null
                   }
                 ],
-                "storageKey": "participants(after:\"\",first:10)"
+                "storageKey": null
               }
             ],
             "type": "Event",
@@ -232,16 +247,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "f202efabafbcdddcadbd3c44b43ef1f8",
+    "cacheID": "56614e45da448cbd81c0d79bdcd5213e",
     "id": null,
     "metadata": {},
-    "name": "ParticipantsListQuery",
+    "name": "UseParticipantListRefetchQuery",
     "operationKind": "query",
-    "text": "query ParticipantsListQuery(\n  $eventId: ID!\n) {\n  node(id: $eventId) {\n    __typename\n    id\n    ... on Event {\n      ...useParticipantListFragment_32qNee\n    }\n  }\n}\n\nfragment useParticipantListFragment_32qNee on Event {\n  participants(first: 10, after: \"\") {\n    edges {\n      node {\n        user {\n          id\n          firstName\n          lastName\n          moderatorOf(eventId: $eventId)\n        }\n        isMuted\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n  id\n}\n"
+    "text": "query UseParticipantListRefetchQuery(\n  $after: String = \"\"\n  $eventId: ID!\n  $first: Int = 10\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useParticipantListFragment_ftjyf\n    id\n  }\n}\n\nfragment useParticipantListFragment_ftjyf on Event {\n  participants(first: $first, after: $after) {\n    edges {\n      node {\n        user {\n          id\n          firstName\n          lastName\n          moderatorOf(eventId: $eventId)\n        }\n        isMuted\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n  id\n}\n"
   }
 };
 })();
 
-(node as any).hash = "fdae21a454d2bdc712153d57d6863f8a";
+(node as any).hash = "c8e724f9deba4cd044ba8fddd9a23978";
 
 export default node;

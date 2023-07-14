@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { NextPage } from 'next';
-import { Dashboard } from '@local/features/dashboard/Dashboard';
+import { PreloadedDashboard } from '@local/features/dashboard/Dashboard';
 import { Loader } from '@local/components/Loader';
 import { useUser } from '@local/features/accounts';
 import { useRouter } from 'next/router';
@@ -15,7 +15,7 @@ const DashboardPage: NextPage = () => {
         if (!user && !isLoading) router.push('/');
     }, [user, router, isLoading]);
 
-    return checkComplete ? <Dashboard /> : <Loader />;
+    return checkComplete ? <PreloadedDashboard /> : <Loader />;
 };
 
 export default DashboardPage;
