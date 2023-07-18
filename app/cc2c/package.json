@@ -6,7 +6,8 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "next lint",
+        "generate": "yarn pnpify prisma generate"
     },
     "dependencies": {
         "@prisma/client": "^5.0.0",
@@ -22,6 +23,7 @@
     },
     "devDependencies": {
         "@types/eslint": "^8",
+        "@yarnpkg/pnpify": "^4.0.0-rc.48",
         "prisma": "^5.0.0"
     }
 }
