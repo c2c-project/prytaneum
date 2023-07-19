@@ -15,7 +15,7 @@
         "g:stop-db": "yarn exec db/stop-db.sh",
         "g:start-redis": "yarn exec redis/start-redis.sh",
         "g:stop-redis": "yarn exec redis/stop-redis.sh",
-        "g:dev-cc2c": "yarn workspace @app/cc2c generate && yarn workspace @app/cc2c dev"
+        "g:dev-cc2c": "yarn workspace @app/cc2c prisma-generate && yarn workspace @app/cc2c prisma-db-push && yarn workspace @app/cc2c dev"
     },
     "devDependencies": {
         "@babel/core": "^7.20.5",
