@@ -39,7 +39,7 @@ services:
         image: timothyjmiller/prisma-studio:latest
         restart: unless-stopped
         environment:
-            PROJECT_NAME: prytaneum
+            PROJECT_NAME: cc2c
             POSTGRES_DATABASE: postgres
             POSTGRES_HOST: cc2c-db
             POSTGRES_USERNAME: postgres
