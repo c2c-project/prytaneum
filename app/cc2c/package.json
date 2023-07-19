@@ -7,21 +7,34 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "generate": "yarn pnpify prisma generate"
+        "prisma-generate": "yarn pnpify prisma generate",
+        "prisma-db-push": "prisma db push --skip-generate",
+        "prisma-db-seed": "prisma db seed",
+        "prisma-migrate-dev": "prisma migrate dev --skip-generate",
+        "prisma-migrate-deploy": "prisma migrate deploy",
+        "prisma-migrate-diff": "prisma migrate diff",
+        "prisma-down-migration": "prisma db execute --file ./down.sql --schema prisma/schema.prisma"
     },
     "dependencies": {
+        "@emotion/react": "^11.11.1",
+        "@emotion/styled": "^11.11.0",
+        "@fontsource/roboto": "^5.0.5",
+        "@mui/material": "^5.14.0",
         "@prisma/client": "^5.0.0",
         "@types/node": "20.4.2",
         "@types/react": "18.2.15",
         "@types/react-dom": "18.2.7",
+        "bcrypt": "^5.1.0",
         "eslint": "8.45.0",
         "eslint-config-next": "13.4.10",
         "next": "13.4.10",
+        "next-auth": "^4.22.3",
         "react": "18.2.0",
         "react-dom": "18.2.0",
         "typescript": "5.1.6"
     },
     "devDependencies": {
+        "@types/bcrypt": "^5.0.0",
         "@types/eslint": "^8",
         "@yarnpkg/pnpify": "^4.0.0-rc.48",
         "prisma": "^5.0.0"
