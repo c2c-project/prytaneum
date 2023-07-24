@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<205ae8286a751a256e0a25afc6ae6151>>
+ * @generated SignedSource<<e3212f80fa4e0815e414b223a4806d22>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -196,6 +196,13 @@ return {
                           {
                             "alias": null,
                             "args": null,
+                            "kind": "ScalarField",
+                            "name": "isActive",
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
                             "concreteType": "Organization",
                             "kind": "LinkedField",
                             "name": "organization",
@@ -292,16 +299,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "812296c4da66d22d70e41bd10e18034a",
+    "cacheID": "a0a2666e27789388c0a7b31e41e1490d",
     "id": null,
     "metadata": {},
     "name": "DashboardEventsRefreshQuery",
     "operationKind": "query",
-    "text": "query DashboardEventsRefreshQuery(\n  $count: Int = 50\n  $cursor: String = \"\"\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useDashboardEventsFragment_1G22uz\n    id\n  }\n}\n\nfragment useDashboardEventsFragment_1G22uz on User {\n  id\n  events(first: $count, after: $cursor) {\n    edges {\n      node {\n        id\n        title\n        description\n        startDateTime\n        endDateTime\n        isViewerModerator\n        organization {\n          name\n          id\n        }\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      startCursor\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query DashboardEventsRefreshQuery(\n  $count: Int = 50\n  $cursor: String = \"\"\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useDashboardEventsFragment_1G22uz\n    id\n  }\n}\n\nfragment useDashboardEventsFragment_1G22uz on User {\n  id\n  events(first: $count, after: $cursor) {\n    edges {\n      node {\n        id\n        title\n        description\n        startDateTime\n        endDateTime\n        isViewerModerator\n        isActive\n        organization {\n          name\n          id\n        }\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      startCursor\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "80402d8c332902a3e06bd99c462d5881";
+(node as any).hash = "fca3b63714dc30b4acac8c446258dd3b";
 
 export default node;

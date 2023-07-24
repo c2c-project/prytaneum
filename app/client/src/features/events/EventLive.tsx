@@ -137,10 +137,10 @@ function EventLive({ node, validateInvite, tokenProvided }: EventLiveProps) {
             setRouteChecked(true);
             return;
         }
-        if (eventData.endDateTime !== null) {
+        if (eventData.startDateTime !== null) {
             const now = new Date();
-            const endTime = new Date(eventData.endDateTime);
-            if (now > endTime) {
+            const startTime = new Date(eventData.startDateTime);
+            if (now > startTime) {
                 router.push(`/events/${eventId}/post`);
             } else {
                 router.push(`/events/${eventId}/pre`);
@@ -148,7 +148,7 @@ function EventLive({ node, validateInvite, tokenProvided }: EventLiveProps) {
         } else {
             router.push(`/events/${eventId}/pre`);
         }
-    }, [eventId, eventData.endDateTime, isLive, isModerator, router]);
+    }, [eventId, isLive, isModerator, router, eventData.startDateTime]);
 
     // styles
     const classes = useStyles();

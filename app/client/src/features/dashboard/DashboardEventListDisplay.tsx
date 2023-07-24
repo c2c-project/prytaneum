@@ -15,6 +15,7 @@ export interface Event {
         readonly endDateTime: Date | null;
         readonly id: string;
         readonly isViewerModerator: boolean | null;
+        readonly isActive: boolean | null;
         readonly organization: {
             readonly name: string;
         } | null;
@@ -30,7 +31,10 @@ interface EventListProps {
 
 function EventList({ events, ongoing }: EventListProps) {
     const router = useRouter();
-    const handleNav = (path: string) => () => router.push(path);
+    const handleNav = (event: Event['node']) => () => {
+        if (event.isActive) router.push(`/events/${event.id}/live`);
+        else router.push(`/events/${event.id}/pre`);
+    };
 
     if (events.length === 0) {
         return <Typography variant='subtitle2'>No {ongoing ? 'Ongoing' : 'Upcoming'} Events To Display</Typography>;
@@ -46,7 +50,7 @@ function EventList({ events, ongoing }: EventListProps) {
                                 aria-label='view live feed of current event'
                                 variant='contained'
                                 color='primary'
-                                onClick={handleNav(`/events/${event.id}/live`)}
+                                onClick={handleNav(event)}
                             >
                                 Live Feed
                             </Button>
@@ -55,13 +59,9 @@ function EventList({ events, ongoing }: EventListProps) {
                                 aria-label='view live feed of current event'
                                 variant='contained'
                                 color='primary'
-                                onClick={
-                                    ongoing
-                                        ? handleNav(`/events/${event.id}/live`)
-                                        : handleNav(`/events/${event.id}/pre`)
-                                }
+                                onClick={handleNav(event)}
                             >
-                                {ongoing ? 'Live Feed' : 'Pre Event'}
+                                {event.isActive ? 'Live Feed' : 'Pre Event'}
                             </Button>
                         )}
                     </ListItemSecondaryAction>

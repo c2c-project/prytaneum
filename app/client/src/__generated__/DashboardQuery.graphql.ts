@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f8188ba84232744e2edc09349f435ad2>>
+ * @generated SignedSource<<89a18e5ed98ac85ea80bcc8f175a23b0>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -146,6 +146,13 @@ return {
                       {
                         "alias": null,
                         "args": null,
+                        "kind": "ScalarField",
+                        "name": "isActive",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
                         "concreteType": "Organization",
                         "kind": "LinkedField",
                         "name": "organization",
@@ -244,12 +251,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "3c033084e06921ddc13fb75f51ce1338",
+    "cacheID": "8468a9cff02e9250079fe7a1ce56cd16",
     "id": null,
     "metadata": {},
     "name": "DashboardQuery",
     "operationKind": "query",
-    "text": "query DashboardQuery {\n  me {\n    ...useDashboardEventsFragment\n    id\n  }\n}\n\nfragment useDashboardEventsFragment on User {\n  id\n  events(first: 50, after: \"\") {\n    edges {\n      node {\n        id\n        title\n        description\n        startDateTime\n        endDateTime\n        isViewerModerator\n        organization {\n          name\n          id\n        }\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      startCursor\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query DashboardQuery {\n  me {\n    ...useDashboardEventsFragment\n    id\n  }\n}\n\nfragment useDashboardEventsFragment on User {\n  id\n  events(first: 50, after: \"\") {\n    edges {\n      node {\n        id\n        title\n        description\n        startDateTime\n        endDateTime\n        isViewerModerator\n        isActive\n        organization {\n          name\n          id\n        }\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      startCursor\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();

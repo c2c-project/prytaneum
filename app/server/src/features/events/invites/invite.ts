@@ -11,6 +11,8 @@ import { FastifyRequest } from 'fastify/types/request';
 import Invite, { InviteData, InviteeData } from '@local/lib/invite';
 import { getPrismaClient } from '@local/core/utils';
 import { fromGlobalId } from 'graphql-relay';
+import { extractAuthenticationJwt } from '@local/core/utils';
+import { canUserModify } from '@local/features/events/methods';
 
 const server = getOrCreateServer();
 const downloadPath = path.join(__dirname, '..', '..', '..', 'downloads');
@@ -56,6 +58,7 @@ const readCSV = async (filePath: string) => {
     return new Promise((resolve) => {
         Papa.parse(csvData, {
             header: true,
+            skipEmptyLines: true,
             complete: (results) => {
                 console.log('Complete', results.data.length, 'records.');
                 resolve(results.data);
@@ -69,17 +72,18 @@ server.route({
     url: '/graphql/invite-csv',
     preHandler: inviteUpload.single('invite-list'),
     handler: async (req: FastifyMulterRequest, reply) => {
-        const { file } = req;
+        const { file, headers } = req;
         const prisma = getPrismaClient(reply.log);
 
+        console.log(headers.cookie);
+
         try {
-            // TODO: Autheticate & check that user has permission to invite
-            // let viewerId = await extractAuthenticationJwt(req).catch(() => reply.clearCookie('jwt').send());
-            // if (viewerId) {
-            //     const { id } = fromGlobalId(viewerId);
-            //     viewerId = id;
-            // }
-            // if (!viewerId) throw new Error('Must be authenticated to invite users.');
+            let viewerId = await extractAuthenticationJwt(req).catch(() => reply.clearCookie('jwt').send());
+            if (viewerId) {
+                const { id } = fromGlobalId(viewerId);
+                viewerId = id;
+            }
+            if (!viewerId) throw new Error('Must be authenticated to invite users.');
 
             if (!file) {
                 server.log.error('File undefined');
@@ -91,6 +95,12 @@ server.route({
             Invite.validateData(inviteData);
             inviteData.eventId = fromGlobalId(inviteData.eventId).id;
             inviteData.deliveryTime = Invite.validateDeliveryTime(inviteData.deliveryTimeString);
+
+            // Ensure user has permission to invite
+            const permissionToInvite = await canUserModify(viewerId, inviteData.eventId, prisma);
+            if (!permissionToInvite) throw new Error('You do not have permission to invite users.');
+
+            // Read CSV file
             const inviteeData: Array<InviteeData> = (await readCSV(file.path)) as Array<InviteeData>;
 
             // Remove file after use

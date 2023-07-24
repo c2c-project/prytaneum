@@ -77,7 +77,7 @@ export async function createEvent(userId: string, prisma: PrismaClient, input: C
         isQuestionFeedVisible: true,
         isCollectRatingsEnabled: true,
         isForumEnabled: true,
-        isPrivate: true,
+        isPrivate: false,
         createdById: userId,
     };
 

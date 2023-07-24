@@ -17,7 +17,7 @@ export interface InviteeData {
 
 export interface InviteData {
     deliveryTimeString?: string; // ISO/UTC format
-    deliveryTime: Date;
+    deliveryTime?: Date;
     eventId: string;
     previewEmail?: string;
 }
@@ -162,8 +162,12 @@ const inviteMany = async (
                 // text: inviteString,
                 template: 'prytaneum-invites',
                 'recipient-variables': recipiantVariables,
-                'h:X-Mailgun-Variables': JSON.stringify({ 'event-title': title, topic: event.topic, 'event-start-date': eventStartDate }),
-                'o:deliverytime': deliveryTime.toUTCString(),
+                'h:X-Mailgun-Variables': JSON.stringify({
+                    'event-title': title,
+                    topic: event.topic,
+                    'event-start-date': eventStartDate,
+                }),
+                'o:deliverytime': deliveryTime ? deliveryTime.toUTCString() : new Date().toUTCString(),
                 'v:invite-url': '%recipient.inviteLink%',
                 'v:first-name': '%recipient.first%',
                 // 'v:unsubscribe-url': '%recipient.unsubLink%',
@@ -201,7 +205,7 @@ const validateDeliveryTime = (deliveryTimeString: string | undefined): Date => {
 const inviteCSVList = async (
     inviteeList: Array<InviteeData>,
     data: InviteData,
-    prisma: PrismaClient,
+    prisma: PrismaClient
     // previewEmail?: string
 ): Promise<Array<string | Mailgun.messages.SendResponse>> => {
     const unsubSet = new Set();

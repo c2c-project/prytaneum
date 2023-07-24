@@ -47,7 +47,10 @@ export function ModeratorActions({ isLive, setIsLive, eventId }: ModeratorAction
                     eventId,
                 },
                 onCompleted() {
-                    displaySnack('Event has ended!', { variant: 'error' });
+                    displaySnack(
+                        'Event has ended! Please note that it may take up to 30 seconds for participants to be routed to the post event page.',
+                        { variant: 'error' }
+                    );
                     setIsLive(false);
                 },
             });
@@ -57,7 +60,10 @@ export function ModeratorActions({ isLive, setIsLive, eventId }: ModeratorAction
                     eventId,
                 },
                 onCompleted() {
-                    displaySnack('Event has started!', { variant: 'success' });
+                    displaySnack(
+                        'Event has started! Please note that it may take up to 30 seconds for participants to enter.',
+                        { variant: 'success' }
+                    );
                     setIsLive(true);
                 },
             });
