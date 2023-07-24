@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { graphql, useRefetchableFragment } from 'react-relay';
-import { isBefore, isAfter } from 'date-fns';
+import { isAfter } from 'date-fns';
 
 import type { useDashboardEventsFragment$key } from '@local/__generated__/useDashboardEventsFragment.graphql';
 import type { DashboardEventsRefreshQuery } from '@local/__generated__/DashboardEventsRefreshQuery.graphql';
@@ -21,6 +21,7 @@ export const USE_DASHBOARD_EVENTS_FRAGMENT = graphql`
                     startDateTime
                     endDateTime
                     isViewerModerator
+                    isActive
                     organization {
                         name
                     }
@@ -65,10 +66,9 @@ export function useDashboardEvents({ fragmentRef }: TArgs) {
 
     const currentEvents = React.useMemo(() => {
         return eventList.filter(({ node: event }) => {
-            if (!event.startDateTime || !event.endDateTime) return false;
-            return isBefore(new Date(event.startDateTime), now) && isAfter(new Date(event.endDateTime), now);
+            return Boolean(event.isActive);
         });
-    }, [eventList, now]);
+    }, [eventList]);
 
     const upcomingEvents = React.useMemo(() => {
         return eventList.filter(({ node: event }) => {

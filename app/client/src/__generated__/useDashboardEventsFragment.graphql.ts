@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<dda6460307c752e819aac58366563284>>
+ * @generated SignedSource<<3750be696c9e476ce2bbda385f9c269d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,6 +18,7 @@ export type useDashboardEventsFragment$data = {
         readonly description: string | null;
         readonly endDateTime: Date | null;
         readonly id: string;
+        readonly isActive: boolean | null;
         readonly isViewerModerator: boolean | null;
         readonly organization: {
           readonly name: string;
@@ -155,6 +156,13 @@ return {
                 {
                   "alias": null,
                   "args": null,
+                  "kind": "ScalarField",
+                  "name": "isActive",
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
                   "concreteType": "Organization",
                   "kind": "LinkedField",
                   "name": "organization",
@@ -243,6 +251,6 @@ return {
 };
 })();
 
-(node as any).hash = "80402d8c332902a3e06bd99c462d5881";
+(node as any).hash = "fca3b63714dc30b4acac8c446258dd3b";
 
 export default node;
