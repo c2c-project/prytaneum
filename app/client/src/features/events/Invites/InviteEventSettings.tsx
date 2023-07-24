@@ -115,15 +115,15 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
                 file.value = file.defaultValue;
                 setIsUploading(false);
                 if (res.status === 200) {
-                    res.json().then((data) => { 
+                    res.json().then((data) => {
                         if (!data) {
                             displaySnack('Something went wrong, please try again later.', { variant: 'error' });
                             return;
                         }
                         const { isError, message } = data as { isError: boolean; message: string };
                         if (isError) displaySnack(message, { variant: 'error' });
-                        else displaySnack(message, { variant: 'success' });
-                     });
+                        else displaySnack('Invites sent.', { variant: 'success' });
+                    });
                 } else {
                     displaySnack('Invites failed to upload.', { variant: 'error' });
                 }
@@ -143,12 +143,17 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
             </ResponsiveDialog>
             <Grid container justifyContent='right'>
                 <Grid item paddingRight='1rem'>
-                    <Button style={{ margin: theme.spacing(2, 0)}} onClick={toggleInviteLink} variant='outlined'>
+                    <Button style={{ margin: theme.spacing(2, 0) }} onClick={toggleInviteLink} variant='outlined'>
                         {open ? 'Hide invite link' : 'Reveal invite link'}
                     </Button>
                 </Grid>
                 <Grid item>
-                    <Button style={{ margin: theme.spacing(2, 0)}} onClick={openFormDialog} variant='outlined' startIcon={<Add />}>
+                    <Button
+                        style={{ margin: theme.spacing(2, 0) }}
+                        onClick={openFormDialog}
+                        variant='outlined'
+                        startIcon={<Add />}
+                    >
                         Invite
                     </Button>
                 </Grid>
