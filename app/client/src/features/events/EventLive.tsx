@@ -140,12 +140,12 @@ function EventLive({ node, validateInvite, tokenProvided }: EventLiveProps) {
         const { startDateTime, endDateTime } = eventData;
         if (startDateTime !== null && endDateTime !== null) {
             const now = new Date();
-            const startTime = new Date(startDateTime);
-            const endTime = new Date(endDateTime);
+            const startTime = new Date(startDateTime.toUTCString());
+            const endTime = new Date(endDateTime.toUTCString());
             const eventLengthInSeconds = (endTime.getTime() - startTime.getTime()) / 1000;
             const eventLengthInMinutes = eventLengthInSeconds / 60;
             const middleTime = new Date();
-            middleTime.setMinutes(startTime.getMinutes() + eventLengthInMinutes / 2);
+            middleTime.setUTCMinutes(startTime.getUTCMinutes() + eventLengthInMinutes / 2);
             if (now > middleTime) {
                 router.push(`/events/${eventId}/post`);
             } else {
