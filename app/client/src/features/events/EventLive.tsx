@@ -138,14 +138,20 @@ function EventLive({ node, validateInvite, tokenProvided }: EventLiveProps) {
             return;
         }
         const { startDateTime, endDateTime } = eventData;
+        console.log('Start/End Date Time: ', startDateTime, endDateTime);
         if (startDateTime !== null && endDateTime !== null) {
             const now = new Date();
             const startTime = new Date(startDateTime);
             const endTime = new Date(endDateTime);
             const eventLengthInSeconds = (endTime.getTime() - startTime.getTime()) / 1000;
             const eventLengthInMinutes = eventLengthInSeconds / 60;
-            const middleTime = new Date();
+            const middleTime = new Date(startTime);
             middleTime.setUTCMinutes(startTime.getUTCMinutes() + eventLengthInMinutes / 2);
+            console.log('Now: ', now);
+            console.log('Start Time: ', startTime);
+            console.log('End Time: ', endTime);
+            console.log('Event Length in Minutes: ', eventLengthInMinutes);
+            console.log('middleTime: ', middleTime);
             if (now > middleTime) {
                 router.push(`/events/${eventId}/post`);
             } else {
