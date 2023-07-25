@@ -137,10 +137,16 @@ function EventLive({ node, validateInvite, tokenProvided }: EventLiveProps) {
             setRouteChecked(true);
             return;
         }
-        if (eventData.startDateTime !== null) {
+        const { startDateTime, endDateTime } = eventData;
+        if (startDateTime !== null && endDateTime !== null) {
             const now = new Date();
-            const startTime = new Date(eventData.startDateTime);
-            if (now > startTime) {
+            const startTime = new Date(startDateTime);
+            const endTime = new Date(endDateTime);
+            const eventLengthInSeconds = (endTime.getTime() - startTime.getTime()) / 1000;
+            const eventLengthInMinutes = eventLengthInSeconds / 60;
+            const middleTime = new Date();
+            middleTime.setMinutes(startTime.getMinutes() + eventLengthInMinutes / 2);
+            if (now > middleTime) {
                 router.push(`/events/${eventId}/post`);
             } else {
                 router.push(`/events/${eventId}/pre`);
@@ -148,7 +154,7 @@ function EventLive({ node, validateInvite, tokenProvided }: EventLiveProps) {
         } else {
             router.push(`/events/${eventId}/pre`);
         }
-    }, [eventId, isLive, isModerator, router, eventData.startDateTime]);
+    }, [eventId, isLive, isModerator, router, eventData]);
 
     // styles
     const classes = useStyles();
