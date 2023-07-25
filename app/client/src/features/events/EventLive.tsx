@@ -140,8 +140,8 @@ function EventLive({ node, validateInvite, tokenProvided }: EventLiveProps) {
         const { startDateTime, endDateTime } = eventData;
         if (startDateTime !== null && endDateTime !== null) {
             const now = new Date();
-            const startTime = new Date(startDateTime.toUTCString());
-            const endTime = new Date(endDateTime.toUTCString());
+            const startTime = new Date(startDateTime);
+            const endTime = new Date(endDateTime);
             const eventLengthInSeconds = (endTime.getTime() - startTime.getTime()) / 1000;
             const eventLengthInMinutes = eventLengthInSeconds / 60;
             const middleTime = new Date();
