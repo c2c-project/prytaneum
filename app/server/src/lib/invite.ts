@@ -1,7 +1,7 @@
 import Mailgun from 'mailgun-js';
 import jwt from 'jsonwebtoken';
 
-import { sendEmail } from '@local/lib/email';
+// import { sendEmail } from '@local/lib/email';
 import { PrismaClient, User } from '@local/__generated__/prisma';
 import { register } from '@local/features/accounts/methods';
 import { toGlobalId } from '@local/features/utils';
@@ -117,6 +117,7 @@ const generateRecipiantVariables = async (
 };
 
 // TODO Add timezone suffix to time (e.g. EST)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const formatDate = (dt: Date): string => {
     const padL = (nr: number, chr = '0') => `${nr}`.padStart(2, chr);
     return `${padL(dt.getMonth() + 1)}/${padL(dt.getDate())}/${dt.getFullYear()} ${padL(dt.getHours())}:${padL(
@@ -135,44 +136,48 @@ const inviteMany = async (
     inviteData: InviteData,
     prisma: PrismaClient
 ): Promise<Array<string | Mailgun.messages.SendResponse>> => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { eventId, deliveryTime } = inviteData;
     // Get event from eventId and check it exists
     const event = await prisma.event.findUnique({ where: { id: eventId } });
     if (!event) throw new Error('Event not found');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { title, startDateTime, endDateTime } = event;
     const globalEventId = toEventId(event).id;
     // Format start date as string for template variable
-    const eventStartDate = formatDate(startDateTime);
+    // const eventStartDate = formatDate(startDateTime);
 
     const results: Array<Promise<string | Mailgun.messages.SendResponse>> = [];
     const subsetSize = 1000;
     for (let i = 0; i < inviteeList.length; i += subsetSize) {
         // Take max of 1k invitees and format to list of emails and string of recipiantVariables
         const subset = inviteeList.slice(i, Math.min(inviteeList.length, i + subsetSize));
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { emails, recipiantVariables } = await generateRecipiantVariables(
             subset,
             globalEventId,
             endDateTime,
             prisma
         );
-        results.push(
-            sendEmail({
-                to: emails,
-                subject: 'Prytaneum Invite',
-                // text: inviteString,
-                template: 'prytaneum-invites',
-                'recipient-variables': recipiantVariables,
-                'h:X-Mailgun-Variables': JSON.stringify({
-                    'event-title': title,
-                    topic: event.topic,
-                    'event-start-date': eventStartDate,
-                }),
-                'o:deliverytime': deliveryTime ? deliveryTime.toUTCString() : new Date().toUTCString(),
-                'v:invite-url': '%recipient.inviteLink%',
-                'v:first-name': '%recipient.first%',
-                // 'v:unsubscribe-url': '%recipient.unsubLink%',
-            })
-        );
+        // TODO: Restore this
+        // results.push(
+        //     sendEmail({
+        //         to: emails,
+        //         subject: 'Prytaneum Invite',
+        //         // text: inviteString,
+        //         template: 'prytaneum-invites',
+        //         'recipient-variables': recipiantVariables,
+        //         'h:X-Mailgun-Variables': JSON.stringify({
+        //             'event-title': title,
+        //             topic: event.topic,
+        //             'event-start-date': eventStartDate,
+        //         }),
+        //         'o:deliverytime': deliveryTime ? deliveryTime.toUTCString() : new Date().toUTCString(),
+        //         'v:invite-url': '%recipient.inviteLink%',
+        //         'v:first-name': '%recipient.first%',
+        //         // 'v:unsubscribe-url': '%recipient.unsubLink%',
+        //     })
+        // );
     }
     return Promise.all(results);
 };
