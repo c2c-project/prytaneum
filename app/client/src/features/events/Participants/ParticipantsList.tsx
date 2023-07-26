@@ -7,8 +7,8 @@ import type { ParticipantsListQuery } from '@local/__generated__/ParticipantsLis
 import { ConditionalRender, Loader } from '@local/components';
 import { useEvent } from '../useEvent';
 import { useParticipantMuted } from './useParticipantMuted';
-// import ListFilter, { Accessors, useFilters } from '@local/components/ListFilter';
-// import { ArrayElement } from '@local/utils/ts-utils';
+import ListFilter, { Accessors, useFilters } from '@local/components/ListFilter';
+import { ArrayElement } from '@local/utils/ts-utils';
 import { ParticipantCard } from './ParticipantCard';
 import { useParticipantList } from './useParticipantList';
 
@@ -48,7 +48,12 @@ export function ParticipantsList({ node, isVisible }: ParticipantsListProps) {
     // Refreshes the list when a participant is muted/unmuted
     useParticipantMuted(eventId, refresh);
 
-    // const [filteredList, handleSearch, handleFilterChange] = useFilters(participants, accessors);
+    const accessors = React.useMemo<Accessors<ArrayElement<Participant[]>>[]>(
+        () => [(p) => p.firstName || '', (p) => p.lastName || ''],
+        []
+    );
+
+    const [filteredList, handleSearch, handleFilterChange] = useFilters(participants, accessors);
 
     if (!isVisible) return <React.Fragment />;
 
@@ -59,14 +64,14 @@ export function ParticipantsList({ node, isVisible }: ParticipantsListProps) {
                     <Typography variant='h6'>Participants List</Typography>
                 </Grid>
                 {participants.length === 0 && <p>No participants yet</p>}
-                {/* <ListFilter
-                    className={classes.listFilter}
+                <ListFilter
+                    style={{ flex: 1, marginLeft: '1rem', marginBottom: '-1rem' }}
                     onFilterChange={handleFilterChange}
                     onSearch={handleSearch}
                     length={filteredList.length}
-                /> */}
+                />
                 <List>
-                    {participants.map((participant) => (
+                    {filteredList.map((participant) => (
                         <ListItem key={participant.id}>
                             <Paper style={{ width: '100%' }}>
                                 <Grid container direction='row' alignItems='center' display='grid'>

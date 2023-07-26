@@ -31,6 +31,7 @@ export interface Props<T> {
     className?: string;
     menuIcons?: JSX.Element[];
     displayNumResults?: boolean;
+    style?: React.CSSProperties;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -77,6 +78,7 @@ export default function ListFilter<T>({
     menuIcons,
     // displayNumResults,
     className,
+    style,
 }: Props<T>) {
     const classes = useStyles();
     const [filters, setFilters] = React.useState<Filters>(new Set());
@@ -129,7 +131,7 @@ export default function ListFilter<T>({
     };
 
     return (
-        <div className={className}>
+        <div style={style} className={className}>
             <Grid container alignItems='center'>
                 <Grid item xs='auto' className={classes.search}>
                     <TextField
