@@ -6,7 +6,7 @@ import { InviteForm, InviteFormProps } from './InviteForm';
 import { CreateInviteMutation } from '@local/__generated__/CreateInviteMutation.graphql';
 
 interface CreateInviteProps {
-    onSubmit: () => void;
+    onSubmit?: () => void;
     eventId: string;
 }
 
@@ -15,6 +15,12 @@ export const CREATE_INVITE_MUTATION = graphql`
         createInvite(input: $input) {
             isError
             message
+            body {
+                cursor
+                node {
+                    id
+                }
+            }
         }
     }
 `;
@@ -28,7 +34,10 @@ export const CreateInvite = ({ onSubmit, eventId }: CreateInviteProps) => {
             variables: { input: { ...submittedForm, eventId } },
             onCompleted({ createInvite }) {
                 if (createInvite.isError) displaySnack(createInvite.message, { variant: 'error' });
-                else onSubmit();
+                else {
+                    displaySnack('User invited', { variant: 'success' });
+                    if (onSubmit) onSubmit();
+                }
             },
         });
     };

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<af8772b8fd548eef48d57089145681ef>>
+ * @generated SignedSource<<9a1eeb56e7d03888f6a453f82490ca01>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,6 +18,12 @@ export type CreateInviteMutation$variables = {
 };
 export type CreateInviteMutation$data = {
   readonly createInvite: {
+    readonly body: {
+      readonly cursor: string;
+      readonly node: {
+        readonly id: string;
+      };
+    } | null;
     readonly isError: boolean;
     readonly message: string;
   };
@@ -63,6 +69,42 @@ v1 = [
         "kind": "ScalarField",
         "name": "message",
         "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "UserEdge",
+        "kind": "LinkedField",
+        "name": "body",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "cursor",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "User",
+            "kind": "LinkedField",
+            "name": "node",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "id",
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
       }
     ],
     "storageKey": null
@@ -86,16 +128,16 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "9a1cb027be23c9ee155a628002b6efe1",
+    "cacheID": "1d3c4a3301fca112b1a9e9ebe29c6734",
     "id": null,
     "metadata": {},
     "name": "CreateInviteMutation",
     "operationKind": "mutation",
-    "text": "mutation CreateInviteMutation(\n  $input: CreateInvite!\n) {\n  createInvite(input: $input) {\n    isError\n    message\n  }\n}\n"
+    "text": "mutation CreateInviteMutation(\n  $input: CreateInvite!\n) {\n  createInvite(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "858a870da81b55350eaf926fe62ff37c";
+(node as any).hash = "3f52f84ab74c0b60eb02cc614e6f582c";
 
 export default node;
