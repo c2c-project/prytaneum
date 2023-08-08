@@ -632,6 +632,7 @@ export type HideQuestion = {
 
 export type InviteMutationResponse = MutationResponse & {
   __typename?: 'InviteMutationResponse';
+  body?: Maybe<UserEdge>;
   isError: Scalars['Boolean'];
   message: Scalars['String'];
 };
@@ -716,6 +717,7 @@ export type Mutation = {
   /** Start the event so that it is "live" */
   startEvent: EventMutationResponse;
   submitPostEventFeedback: PostEventFeedbackMutationResponse;
+  uninviteUser: InviteMutationResponse;
   unmuteParticipant: MuteParticipantMutationResponse;
   updateEmail: UserMutationResponse;
   updateEvent: EventMutationResponse;
@@ -929,6 +931,12 @@ export type MutationStartEventArgs = {
 export type MutationSubmitPostEventFeedbackArgs = {
   eventId: Scalars['ID'];
   feedback: Scalars['String'];
+};
+
+
+export type MutationUninviteUserArgs = {
+  eventId: Scalars['ID'];
+  userId: Scalars['ID'];
 };
 
 
@@ -1231,6 +1239,10 @@ export type Subscription = {
   recordPushQuestion: EventQuestionEdgeContainer;
   recordRemoveQuestion: EventQuestionEdgeContainer;
   recordUnshiftQuestion: EventQuestionEdgeContainer;
+  /** Subscribes to the creation of invites for a given event. */
+  userInvited: UserEdgeContainer;
+  /** Subscribes to the removal of invites for a given event. */
+  userUninvited: UserEdgeContainer;
 };
 
 
@@ -1348,6 +1360,16 @@ export type SubscriptionRecordRemoveQuestionArgs = {
 
 
 export type SubscriptionRecordUnshiftQuestionArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionUserInvitedArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionUserUninvitedArgs = {
   eventId: Scalars['ID'];
 };
 
@@ -1492,6 +1514,11 @@ export type UserEdge = {
   __typename?: 'UserEdge';
   cursor: Scalars['String'];
   node: User;
+};
+
+export type UserEdgeContainer = {
+  __typename?: 'UserEdgeContainer';
+  edge: UserEdge;
 };
 
 export type UserMutationResponse = MutationResponse & {
