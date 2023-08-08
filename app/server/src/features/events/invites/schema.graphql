@@ -11,6 +11,7 @@ input ValidateInvite {
 type InviteMutationResponse implements MutationResponse {
     isError: Boolean!
     message: String!
+    body: UserEdge
 }
 
 type ValidateInviteQueryResponse {
@@ -27,4 +28,16 @@ type Query {
 
 type Mutation {
     createInvite(input: CreateInvite!): InviteMutationResponse!
+    uninviteUser(eventId: ID!, userId: ID!): InviteMutationResponse!
+}
+
+type Subscription {
+    """
+    Subscribes to the creation of invites for a given event.
+    """
+    userInvited(eventId: ID!): UserEdgeContainer!
+    """
+    Subscribes to the removal of invites for a given event.
+    """
+    userUninvited(eventId: ID!): UserEdgeContainer!
 }
