@@ -12,6 +12,8 @@ import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { EVENT_DETAILS_FRAGMENT } from '../EventSettings/EventDetails';
 import { CreateInvite } from './CreateInvite';
 import { useSnack } from '@local/core';
+import { InvitedUsersList } from './InvitedUsersList';
+import { useInvitedUsersListFragment$key } from '@local/__generated__/useInvitedUsersListFragment.graphql';
 
 interface TState {
     isFormDialogOpen: boolean;
@@ -45,12 +47,17 @@ const reducer = (state: TState, action: Action): TState => {
 };
 
 interface EventSettingsProps {
-    fragmentRef: EventDetailsFragment$key;
+    eventDetailsFragmentRef: EventDetailsFragment$key;
+    invitedUsersListFragmentRef: useInvitedUsersListFragment$key;
     className?: string;
 }
 
-export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsProps) => {
-    const { id: eventId } = useFragment(EVENT_DETAILS_FRAGMENT, fragmentRef);
+export const InviteEventSettings = ({
+    eventDetailsFragmentRef,
+    invitedUsersListFragmentRef,
+    className,
+}: EventSettingsProps) => {
+    const { id: eventId } = useFragment(EVENT_DETAILS_FRAGMENT, eventDetailsFragmentRef);
     const [link, setLink] = React.useState('');
     const [{ isFormDialogOpen }, dispatch] = React.useReducer(reducer, {
         isFormDialogOpen: false,
@@ -174,6 +181,9 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
                 <Button disabled={csvFile === null || isUploading} onClick={uploadCSV} variant='outlined'>
                     Upload CSV
                 </Button>
+            </Grid>
+            <Grid container direction='column' alignItems='center' justifyContent='center'>
+                <InvitedUsersList isVisible={true} fragmentRef={invitedUsersListFragmentRef} />
             </Grid>
         </Grid>
     );

@@ -15,7 +15,7 @@ const Page: NextPage = () => {
     const [queryRef, loadQuery] = useQueryLoader<EventSettingsQuery>(EVENT_SETTINGS_QUERY);
 
     React.useEffect(() => {
-        if (router.isReady) loadQuery({ input: eventId });
+        if (router.isReady) loadQuery({ eventId });
     }, [router.isReady, loadQuery, eventId]);
 
     React.useEffect(() => {
