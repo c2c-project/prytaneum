@@ -558,6 +558,7 @@ input HideQuestion {
 }
 
 type InviteMutationResponse implements MutationResponse {
+  body: UserEdge
   isError: Boolean!
   message: String!
 }
@@ -651,6 +652,7 @@ type Mutation {
   """
   startEvent(eventId: String!): EventMutationResponse!
   submitPostEventFeedback(eventId: ID!, feedback: String!): PostEventFeedbackMutationResponse!
+  uninviteUser(eventId: ID!, userId: ID!): InviteMutationResponse!
   unmuteParticipant(eventId: ID!, userId: ID!): MuteParticipantMutationResponse!
   updateEmail(input: UpdateEmailForm!): UserMutationResponse!
   updateEvent(event: UpdateEvent!): EventMutationResponse!
@@ -838,6 +840,12 @@ type Subscription {
   recordPushQuestion(eventId: ID!): EventQuestionEdgeContainer!
   recordRemoveQuestion(eventId: ID!): EventQuestionEdgeContainer!
   recordUnshiftQuestion(eventId: ID!): EventQuestionEdgeContainer!
+
+  """Subscribes to the creation of invites for a given event."""
+  userInvited(eventId: ID!): UserEdgeContainer!
+
+  """Subscribes to the removal of invites for a given event."""
+  userUninvited(eventId: ID!): UserEdgeContainer!
 }
 
 input UpdateEmailForm {
@@ -947,6 +955,10 @@ type UserConnection {
 type UserEdge {
   cursor: String!
   node: User!
+}
+
+type UserEdgeContainer {
+  edge: UserEdge!
 }
 
 type UserMutationResponse implements MutationResponse {

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<9a1eeb56e7d03888f6a453f82490ca01>>
+ * @generated SignedSource<<fca10e4c0f99ee831a5386486cf077e7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,15 +9,12 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
-export type CreateInvite = {
-  email: string;
+export type UninviteUserMutation$variables = {
   eventId: string;
+  userId: string;
 };
-export type CreateInviteMutation$variables = {
-  input: CreateInvite;
-};
-export type CreateInviteMutation$data = {
-  readonly createInvite: {
+export type UninviteUserMutation$data = {
+  readonly uninviteUser: {
     readonly body: {
       readonly cursor: string;
       readonly node: {
@@ -28,9 +25,9 @@ export type CreateInviteMutation$data = {
     readonly message: string;
   };
 };
-export type CreateInviteMutation = {
-  response: CreateInviteMutation$data;
-  variables: CreateInviteMutation$variables;
+export type UninviteUserMutation = {
+  response: UninviteUserMutation$data;
+  variables: UninviteUserMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){
@@ -38,7 +35,12 @@ var v0 = [
   {
     "defaultValue": null,
     "kind": "LocalArgument",
-    "name": "input"
+    "name": "eventId"
+  },
+  {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "userId"
   }
 ],
 v1 = [
@@ -47,13 +49,18 @@ v1 = [
     "args": [
       {
         "kind": "Variable",
-        "name": "input",
-        "variableName": "input"
+        "name": "eventId",
+        "variableName": "eventId"
+      },
+      {
+        "kind": "Variable",
+        "name": "userId",
+        "variableName": "userId"
       }
     ],
     "concreteType": "InviteMutationResponse",
     "kind": "LinkedField",
-    "name": "createInvite",
+    "name": "uninviteUser",
     "plural": false,
     "selections": [
       {
@@ -115,7 +122,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "CreateInviteMutation",
+    "name": "UninviteUserMutation",
     "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
@@ -124,20 +131,20 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "CreateInviteMutation",
+    "name": "UninviteUserMutation",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "1d3c4a3301fca112b1a9e9ebe29c6734",
+    "cacheID": "676711cc18d930983c587b5bbe1ca744",
     "id": null,
     "metadata": {},
-    "name": "CreateInviteMutation",
+    "name": "UninviteUserMutation",
     "operationKind": "mutation",
-    "text": "mutation CreateInviteMutation(\n  $input: CreateInvite!\n) {\n  createInvite(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n      }\n    }\n  }\n}\n"
+    "text": "mutation UninviteUserMutation(\n  $eventId: ID!\n  $userId: ID!\n) {\n  uninviteUser(eventId: $eventId, userId: $userId) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "3f52f84ab74c0b60eb02cc614e6f582c";
+(node as any).hash = "1f24c403f9e6dbb12673dc80c63284bd";
 
 export default node;

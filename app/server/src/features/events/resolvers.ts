@@ -296,5 +296,13 @@ export const resolvers: Resolvers = {
             // Check if user is invited to the event
             return Event.isInvited(ctx.viewer.id, eventId, ctx.prisma);
         },
+        async invited(parent, args, ctx, info) {
+            const { id: eventId } = fromGlobalId(parent.id);
+            const { first, after } = args;
+            const invited = await Event.findInvitedByEventId(eventId, ctx.prisma);
+            const connection = connectionFromArray(invited.map(toUserId), args);
+            if (invited.length === 0) connection.pageInfo = { ...connection.pageInfo, startCursor: '', endCursor: '' };
+            return connection;
+        },
     },
 };

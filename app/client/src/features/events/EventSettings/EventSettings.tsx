@@ -31,8 +31,8 @@ export const townhallSettingsSections = [
 ];
 
 export const EVENT_SETTINGS_QUERY = graphql`
-    query EventSettingsQuery($input: ID!) {
-        node(id: $input) {
+    query EventSettingsQuery($eventId: ID!) {
+        node(id: $eventId) {
             id
             ... on Event {
                 isViewerModerator
@@ -41,6 +41,7 @@ export const EVENT_SETTINGS_QUERY = graphql`
                 ...VideoEventSettingsFragment
                 ...GenericSettingsFragment
                 ...ModeratorEventSettingsFragment
+                ...useInvitedUsersListFragment @arguments(eventId: $eventId)
             }
         }
     }
@@ -109,7 +110,12 @@ export function EventSettings({ queryRef }: Props) {
                             {
                                 title: 'Invites',
                                 description: 'Invite people to join the event',
-                                component: <InviteEventSettings fragmentRef={data.node} />,
+                                component: (
+                                    <InviteEventSettings
+                                        eventDetailsFragmentRef={data.node}
+                                        invitedUsersListFragmentRef={data.node}
+                                    />
+                                ),
                             },
                             {
                                 title: 'Delete Event',

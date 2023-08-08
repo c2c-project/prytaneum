@@ -80,6 +80,10 @@ type UserEdge {
     cursor: String!
 }
 
+type UserEdgeContainer {
+    edge: UserEdge!
+}
+
 type UserConnection {
     edges: [UserEdge!]
     pageInfo: PageInfo!

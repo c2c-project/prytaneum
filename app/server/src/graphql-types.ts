@@ -213,6 +213,11 @@ export type UserEdge = {
     cursor: Scalars['String'];
 };
 
+export type UserEdgeContainer = {
+    __typename?: 'UserEdgeContainer';
+    edge: UserEdge;
+};
+
 export type UserConnection = {
     __typename?: 'UserConnection';
     edges?: Maybe<Array<UserEdge>>;
@@ -340,6 +345,7 @@ export type Mutation = {
     shareFeedbackPromptResults: EventFeedbackPromptMutationResponse;
     submitPostEventFeedback: PostEventFeedbackMutationResponse;
     createInvite: InviteMutationResponse;
+    uninviteUser: InviteMutationResponse;
     hideQuestion?: Maybe<EventQuestion>;
     updateQuestionPosition: EventQuestionMutationResponse;
     addQuestionToQueue: EventQuestionMutationResponse;
@@ -489,6 +495,11 @@ export type MutationsubmitPostEventFeedbackArgs = {
 
 export type MutationcreateInviteArgs = {
     input: CreateInvite;
+};
+
+export type MutationuninviteUserArgs = {
+    eventId: Scalars['ID'];
+    userId: Scalars['ID'];
 };
 
 export type MutationhideQuestionArgs = {
@@ -811,6 +822,10 @@ export type Subscription = {
     feedbackCRUD: FeedbackOperation;
     feedbackPrompted: EventLiveFeedbackPrompt;
     feedbackPromptResultsShared: EventLiveFeedbackPrompt;
+    /** Subscribes to the creation of invites for a given event. */
+    userInvited: UserEdgeContainer;
+    /** Subscribes to the removal of invites for a given event. */
+    userUninvited: UserEdgeContainer;
     /** New messages as feedback is given */
     eventLiveFeedbackCreated: EventLiveFeedback;
     participantMuted?: Maybe<Scalars['Boolean']>;
@@ -859,6 +874,14 @@ export type SubscriptionfeedbackPromptedArgs = {
 };
 
 export type SubscriptionfeedbackPromptResultsSharedArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptionuserInvitedArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptionuserUninvitedArgs = {
     eventId: Scalars['ID'];
 };
 
@@ -1163,6 +1186,7 @@ export type InviteMutationResponse = MutationResponse & {
     __typename?: 'InviteMutationResponse';
     isError: Scalars['Boolean'];
     message: Scalars['String'];
+    body?: Maybe<UserEdge>;
 };
 
 export type ValidateInviteQueryResponse = {
@@ -1568,6 +1592,7 @@ export type ResolversTypes = {
     EventsSearchFilters: EventsSearchFilters;
     UserSettings: ResolverTypeWrapper<UserSettings>;
     UserEdge: ResolverTypeWrapper<UserEdge>;
+    UserEdgeContainer: ResolverTypeWrapper<UserEdgeContainer>;
     UserConnection: ResolverTypeWrapper<UserConnection>;
     RegistrationForm: RegistrationForm;
     UpdateEmailForm: UpdateEmailForm;
@@ -1718,6 +1743,7 @@ export type ResolversParentTypes = {
     EventsSearchFilters: EventsSearchFilters;
     UserSettings: UserSettings;
     UserEdge: UserEdge;
+    UserEdgeContainer: UserEdgeContainer;
     UserConnection: UserConnection;
     RegistrationForm: RegistrationForm;
     UpdateEmailForm: UpdateEmailForm;
@@ -2020,6 +2046,14 @@ export type UserEdgeResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type UserEdgeContainerResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['UserEdgeContainer'] = ResolversParentTypes['UserEdgeContainer']
+> = {
+    edge?: Resolver<ResolversTypes['UserEdge'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type UserConnectionResolvers<
     ContextType = MercuriusContext,
     ParentType extends ResolversParentTypes['UserConnection'] = ResolversParentTypes['UserConnection']
@@ -2245,6 +2279,12 @@ export type MutationResolvers<
         ParentType,
         ContextType,
         RequireFields<MutationcreateInviteArgs, 'input'>
+    >;
+    uninviteUser?: Resolver<
+        ResolversTypes['InviteMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationuninviteUserArgs, 'eventId' | 'userId'>
     >;
     hideQuestion?: Resolver<
         Maybe<ResolversTypes['EventQuestion']>,
@@ -2606,6 +2646,20 @@ export type SubscriptionResolvers<
         ContextType,
         RequireFields<SubscriptionfeedbackPromptResultsSharedArgs, 'eventId'>
     >;
+    userInvited?: SubscriptionResolver<
+        ResolversTypes['UserEdgeContainer'],
+        'userInvited',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionuserInvitedArgs, 'eventId'>
+    >;
+    userUninvited?: SubscriptionResolver<
+        ResolversTypes['UserEdgeContainer'],
+        'userUninvited',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionuserUninvitedArgs, 'eventId'>
+    >;
     eventLiveFeedbackCreated?: SubscriptionResolver<
         ResolversTypes['EventLiveFeedback'],
         'eventLiveFeedbackCreated',
@@ -2944,6 +2998,7 @@ export type InviteMutationResponseResolvers<
 > = {
     isError?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
     message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    body?: Resolver<Maybe<ResolversTypes['UserEdge']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3191,6 +3246,7 @@ export type Resolvers<ContextType = MercuriusContext> = {
     User?: UserResolvers<ContextType>;
     UserSettings?: UserSettingsResolvers<ContextType>;
     UserEdge?: UserEdgeResolvers<ContextType>;
+    UserEdgeContainer?: UserEdgeContainerResolvers<ContextType>;
     UserConnection?: UserConnectionResolvers<ContextType>;
     UserMutationResponse?: UserMutationResponseResolvers<ContextType>;
     ResetPasswordRequestMutationResponse?: ResetPasswordRequestMutationResponseResolvers<ContextType>;
@@ -3311,6 +3367,10 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
     UserEdge?: {
         node?: LoaderResolver<User, UserEdge, {}, TContext>;
         cursor?: LoaderResolver<Scalars['String'], UserEdge, {}, TContext>;
+    };
+
+    UserEdgeContainer?: {
+        edge?: LoaderResolver<UserEdge, UserEdgeContainer, {}, TContext>;
     };
 
     UserConnection?: {
@@ -3589,6 +3649,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
     InviteMutationResponse?: {
         isError?: LoaderResolver<Scalars['Boolean'], InviteMutationResponse, {}, TContext>;
         message?: LoaderResolver<Scalars['String'], InviteMutationResponse, {}, TContext>;
+        body?: LoaderResolver<Maybe<UserEdge>, InviteMutationResponse, {}, TContext>;
     };
 
     ValidateInviteQueryResponse?: {
