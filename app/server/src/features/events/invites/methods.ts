@@ -29,31 +29,54 @@ export async function invite(viewerId: string, prisma: PrismaClient, { email, ev
     let userResult = await prisma.user.findFirst({ where: { email } });
 
     // create user if email is not in accounts system
-    let invitedUserId = userResult?.id;
-    if (!invitedUserId) {
+    let invitedUser = userResult;
+    if (!invitedUser) {
         userResult = await register(prisma, { email });
-        invitedUserId = userResult.id;
+        invitedUser = userResult;
     }
     // Add to invitedOf for event
     await prisma.eventInvited.create({
         data: {
-            user: { connect: { id: invitedUserId } },
+            user: { connect: { id: invitedUser.id } },
             event: { connect: { id: globalEventId } },
         },
     });
 
     // Sign token
-    const token = await sign({ eventId, invitedUserId }); // TODO: expire at some point
+    const token = await sign({ eventId, invitedUserId: invitedUser.id }); // TODO: expire at some point
 
     // Send Email
-    return sendInviteEmail(
-        queryResult.title,
-        eventId,
-        queryResult.startDateTime,
-        queryResult.endDateTime,
-        email,
-        token
-    );
+    sendInviteEmail(queryResult.title, eventId, queryResult.startDateTime, queryResult.endDateTime, email, token);
+
+    return { invitedUser };
+}
+
+export async function uninvite(viewerId: string, eventId: string, userId: string, prisma: PrismaClient) {
+    // Check if event exists
+    const queryResult = await prisma.event.findUnique({ where: { id: eventId } });
+    if (!queryResult)
+        throw new ProtectedError({
+            userMessage: 'Event not found.',
+            internalMessage: `Count not find event with id ${eventId}.`,
+        });
+
+    // Check if viewer has permission to invite
+    if (!canUserModify(viewerId, eventId, prisma)) throw new ProtectedError({ userMessage: errors.permissions });
+
+    // check if user exists
+    const userResult = await prisma.user.findUnique({ where: { id: userId } });
+    if (!userResult)
+        throw new ProtectedError({
+            userMessage: 'User not found.',
+            internalMessage: `Count not find user with id ${userId}.`,
+        });
+
+    // Remove from invitedOf for event
+    await prisma.eventInvited.delete({
+        where: { eventId_userId: { eventId: eventId, userId: userId } },
+    });
+
+    return { uninvitedUser: userResult };
 }
 
 export async function validateInviteWithoutToken(viewerId: string, eventId: string, prisma: PrismaClient) {
@@ -65,7 +88,6 @@ export async function validateInviteWithoutToken(viewerId: string, eventId: stri
         const user = await prisma.user.findUnique({ where: { id: viewerId } });
         if (!user) throw new Error('User not found.');
         return { valid: true, user };
-
     } catch (err) {
         server.log.error(err);
         return { valid: false, user: null };
