@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth/next';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import type { UserWithoutPass } from '@local/app/api/auth/types';
+import type { MutationResult } from '@local/core';
 
 const handler = NextAuth({
     providers: [
@@ -18,8 +19,7 @@ const handler = NextAuth({
             async authorize(credentials, req) {
                 if (!credentials) throw new Error('No credentials');
 
-                // TODO: Update to env var
-                const res = await fetch('http://localhost:3000/api/auth/login', {
+                const res = await fetch(`${process.env.ORIGIN_URL || 'http://localhost:3000'}/api/auth/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -28,9 +28,15 @@ const handler = NextAuth({
                     }),
                 });
 
-                const user = (await res.json()) as (UserWithoutPass & { accessToken: string }) | null;
+                type UserWithToken = UserWithoutPass & { accessToken: string };
+                // const user = (await res.json()) as (UserWithoutPass & { accessToken: string }) | null;
+                const parsedResult = (await res.json()) as MutationResult<UserWithToken>;
+                if (parsedResult.isError) {
+                    console.error(parsedResult.message);
+                    return null;
+                }
 
-                console.log('user', user);
+                const user = parsedResult.body;
 
                 if (user) {
                     // Any object returned will be saved in `user` property of the JWT
