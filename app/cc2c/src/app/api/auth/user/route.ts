@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt';
-import { prisma } from '@local/core/prisma';
+import { prisma, runMutation } from '@local/core';
 
 interface RequestBody {
     name: string;
@@ -8,7 +8,7 @@ interface RequestBody {
 }
 
 export async function POST(req: Request) {
-    try {
+    const result = await runMutation(async () => {
         const body: RequestBody = await req.json();
 
         const newUser = await prisma.user.create({
@@ -20,9 +20,8 @@ export async function POST(req: Request) {
         });
 
         const { password, ...userWithoutPass } = newUser;
-        return new Response(JSON.stringify(userWithoutPass));
-    } catch (error) {
-        console.error(error);
-        return new Response(JSON.stringify(null));
-    }
+        return userWithoutPass;
+    });
+
+    return new Response(JSON.stringify(result));
 }
