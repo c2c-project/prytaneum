@@ -4,11 +4,13 @@ const nextConfig = {
         serverActions: true,
     },
     env: {
+        ORIGIN_URL: process.env.ORIGIN_URL,
         NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+        NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     },
     webpack: (config) => {
         config.watchOptions = {
-            poll: 1000,
+            poll: 5000,
             aggregateTimeout: 300,
         };
         return config;
