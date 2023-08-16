@@ -1,25 +1,20 @@
 import { Fragment } from 'react';
-import { prisma } from '@local/core/prisma';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@local/app/api/auth/[...nextauth]/route';
 
-async function createUser() {
-    'use server';
-    console.log('Creating user');
-    await prisma.user.create({
-        data: {
-            email: 'test@test.com',
-            password: 'test',
-            name: 'Test User',
-        },
-    });
-}
+import { AppBar } from '@local/components';
+import { Dashboard } from './dashboard';
+import { redirect } from 'next/navigation';
 
-export default async function Dashboard() {
+export default async function DashboardPage() {
+    // Ensure user is authenticated
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user) redirect('/');
+
     return (
         <Fragment>
-            <header>
-                <h1>Landing</h1>
-                <button onClick={createUser}>Click</button>
-            </header>
+            <AppBar />
+            <Dashboard />
         </Fragment>
     );
 }
