@@ -1,12 +1,20 @@
+import React from 'react';
+import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from './api/auth/[...nextauth]/route';
+
 import { AppBar } from '@local/components';
-import { Fragment } from 'react';
 import Landing from './landing';
 
 export default async function LandingPage() {
+    // Redirect to dashboard if user is already authenticated
+    const session = await getServerSession(authOptions);
+    if (session?.user !== undefined) redirect('/dashboard');
+
     return (
-        <Fragment>
+        <React.Fragment>
             <AppBar />
             <Landing />
-        </Fragment>
+        </React.Fragment>
     );
 }
