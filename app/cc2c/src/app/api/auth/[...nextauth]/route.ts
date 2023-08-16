@@ -1,9 +1,11 @@
 import NextAuth from 'next-auth/next';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import type { NextAuthOptions } from 'next-auth';
+
 import type { UserWithoutPass } from '@local/app/api/auth/types';
 import type { MutationResult } from '@local/core';
 
-const handler = NextAuth({
+export const authOptions: NextAuthOptions = {
     providers: [
         CredentialsProvider({
             // The name to display on the sign in form (e.g. "Sign in with...")
@@ -60,6 +62,15 @@ const handler = NextAuth({
             return session;
         },
     },
-});
+    pages: {
+        signIn: '/auth/signin',
+        // signOut: '/auth/signout',
+        // error: '/auth/error', // Error code passed in query string as ?error=
+        // verifyRequest: '/auth/verify-request', // (used for check email message)
+        // newUser: '/auth/signup', // New users will be directed here on first sign in (leave the property out if not of interest)
+    },
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
