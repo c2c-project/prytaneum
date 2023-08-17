@@ -62,6 +62,7 @@ export function SignIn({ csfrToken }: Props) {
                 <Grid item>
                     <TextField
                         required
+                        autoComplete='email'
                         type='email'
                         id='email'
                         name='email'
@@ -71,6 +72,7 @@ export function SignIn({ csfrToken }: Props) {
                     />
                     <TextField
                         required
+                        autoComplete='off'
                         type='password'
                         id='password'
                         name='password'
