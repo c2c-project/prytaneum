@@ -83,6 +83,7 @@ export function SignUp({ csfrToken }: Props) {
                     <ListItem>
                         <TextField
                             required
+                            autoComplete='off'
                             type='text'
                             id='name'
                             name='name'
@@ -94,6 +95,7 @@ export function SignUp({ csfrToken }: Props) {
                     <ListItem>
                         <TextField
                             required
+                            autoComplete='email'
                             type='email'
                             id='email'
                             name='email'
@@ -105,6 +107,7 @@ export function SignUp({ csfrToken }: Props) {
                     <ListItem>
                         <TextField
                             required
+                            autoComplete='off'
                             type='password'
                             id='password'
                             name='password'
@@ -116,6 +119,7 @@ export function SignUp({ csfrToken }: Props) {
                     <ListItem>
                         <TextField
                             required
+                            autoComplete='off'
                             type='password'
                             id='password-confirmation'
                             name='confirmPassword'
