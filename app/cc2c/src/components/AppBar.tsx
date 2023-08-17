@@ -8,9 +8,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useTheme } from '@mui/material/styles';
 
 import { useAuth } from '@local/lib/useAuth';
-import { SignInButton } from './SignInButton';
-import { RegisterButton } from './RegisterButton';
-import { SignOutButton } from './SignOutButton';
+import { SignInButton } from './auth/SignInButton';
+import { RegisterButton } from './auth/RegisterButton';
+import { SignOutButton } from './auth/SignOutButton';
 import { DashboardButton } from './DashboardButton';
 import { PersistentDrawer } from './PersistentDrawer';
 
