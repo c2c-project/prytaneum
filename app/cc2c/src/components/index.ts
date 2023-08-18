@@ -7,3 +7,4 @@ export * from './DashboardButton';
 export * from './PersistentDrawer';
 export * from './Providers';
 export * from './TablePaginationActions';
+export * from './PageLoading';
