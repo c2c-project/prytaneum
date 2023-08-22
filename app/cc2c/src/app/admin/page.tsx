@@ -11,7 +11,8 @@ export default async function AdminPage() {
     // Ensure user is authenticated & admin
     const session = await getServerSession(authOptions);
     const user = session?.user as User | undefined;
-    if (!user || !user.isAdmin) redirect('/');
+    const isAdmin = user?.role === 'ADMIN';
+    if (!user || !isAdmin) redirect('/');
 
     return (
         <Fragment>
