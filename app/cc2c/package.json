@@ -9,6 +9,7 @@
         "lint": "next lint",
         "prisma-generate": "yarn pnpify prisma generate",
         "prisma-db-push": "prisma db push --skip-generate",
+        "prisma-db-push-dev": "prisma db push --skip-generate --accept-data-loss",
         "prisma-db-seed": "prisma db seed",
         "prisma-migrate-dev": "prisma migrate dev --skip-generate",
         "prisma-migrate-deploy": "prisma migrate deploy",
