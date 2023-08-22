@@ -5,8 +5,8 @@ on:
         branches:
             - staging
         paths:
-            - 'k8s/ingress/**'
-            - 'k8s/cert/**'
+            - 'k8s/cc2c/ingress/**'
+            - 'k8s/cc2c/cert/**'
     workflow_dispatch:
         inputs:
             releaseType:
