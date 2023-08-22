@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: gcp-config
+    namespace: cc2c-production
+    labels:
+        app: gcp
+data:
+    HOST: 0.0.0.0
+    PORT: '3002'
+    NODE_ENV: production
+    GCP_PROJECT_ID: prytaneum-project
