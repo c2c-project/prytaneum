@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: cc2c-ingress
+    namespace: cc2c-production
+    annotations:
+        kubernetes.io/ingress.class: 'gce'
+        networking.gke.io/v1beta1.FrontendConfig: 'cc2c-frontend-config'
+        cloud.google.com/backend-config: '{"default": "cc2c-backendconfig"}'
+        kubernetes.io/ingress.allow-http: 'true'
+        kubernetes.io/ingress.regional-static-ip-name: cc2c-prytaneum-io-ip
+        networking.gke.io/managed-certificates: cc2c-prytaneum-io-cert
+spec:
+    rules:
+        - host: cc2c.prytaneum.io
+          http:
+              paths:
+                  - backend:
+                        service:
+                            name: cc2c-service
+                            port:
+                                number: 3000
+                    path: /*
+                    pathType: ImplementationSpecific
+                  - backend:
+                        service:
+                            name: gcp-service
+                            port:
+                                number: 3002
+                    path: /cc2c/*
+                    pathType: ImplementationSpecific
