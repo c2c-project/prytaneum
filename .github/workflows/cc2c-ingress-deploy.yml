@@ -1,0 +1,126 @@
+name: Deploy CC2C Ingress
+
+on:
+    push:
+        branches:
+            - staging
+        paths:
+            - 'k8s/cc2c/ingress/**'
+            - 'k8s/cc2c/cert/**'
+    workflow_dispatch:
+        inputs:
+            releaseType:
+                description: 'Where to release (staging or prod)?'
+                required: true
+                default: 'staging'
+                type: choice
+                options:
+                    - staging
+                    - prod
+
+env:
+    GKE_CLUSTER: ${{ vars.GKE_CLUSTER }}
+    GKE_ZONE: ${{ vars.GKE_ZONE }}
+    NAMESPACE: ${{ vars.NAMESPACE }}
+
+jobs:
+    staging:
+        name: Deploy Staging Ingress
+        runs-on: ubuntu-latest
+        environment: cc2c-development
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - id: 'auth'
+              uses: 'google-github-actions/auth@v1'
+              with:
+                  credentials_json: '${{ secrets.GKE_SA_KEY }}'
+
+            # Setup gcloud CLI
+            - name: 'Set up Cloud SDK'
+              uses: google-github-actions/setup-gcloud@v1
+              with:
+                  version: '400.0.0'
+                  project_id: ${{ secrets.GKE_PROJECT_ID }}
+
+            # Configure Docker to use the gcloud command-line tool as a credential
+            # helper for authentication
+            - run: |-
+                  gcloud --quiet auth configure-docker
+            # Get the GKE credentials so we can deploy to the cluster
+            - id: 'get-credentials'
+              uses: google-github-actions/get-gke-credentials@v0.7.0
+              with:
+                  cluster_name: ${{ env.GKE_CLUSTER }}
+                  location: ${{ env.GKE_ZONE }}
+
+            - name: Kustomize & Deploy Ingress
+              run: |-
+                  cd ./k8s/ingress/development
+                  kubectl apply -f ./cc2c-ingress.yml
+
+            - name: Deploy Certificate
+              run: |-
+                  cd ./k8s/cc2c/cert
+                  kubectl apply -f ./cc2c-managed-certificate-dev.yml
+
+            - name: Set kubectl context
+              run: |-
+                  kubectl config set-context --current --namespace=$NAMESPACE
+
+            - name: Deployment Rollout Check
+              run: |-
+                  kubectl get services -o wide
+    prod:
+        if: github.event.inputs.releaseType == 'prod'
+        name: Deploy Production Ingress
+        runs-on: ubuntu-latest
+        environment: cc2c-production
+        needs: [staging]
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - id: 'auth'
+              uses: 'google-github-actions/auth@v1'
+              with:
+                  credentials_json: '${{ secrets.GKE_SA_KEY }}'
+
+            # Setup gcloud CLI
+            - name: 'Set up Cloud SDK'
+              uses: google-github-actions/setup-gcloud@v1
+              with:
+                  version: '400.0.0'
+                  project_id: ${{ secrets.GKE_PROJECT_ID }}
+
+            # Configure Docker to use the gcloud command-line tool as a credential
+            # helper for authentication
+            - run: |-
+                  gcloud --quiet auth configure-docker
+            # Get the GKE credentials so we can deploy to the cluster
+            - id: 'get-credentials'
+              uses: google-github-actions/get-gke-credentials@v0.7.0
+              with:
+                  cluster_name: ${{ env.GKE_CLUSTER }}
+                  location: ${{ env.GKE_ZONE }}
+
+            - name: Kustomize & Deploy Ingress
+              run: |-
+                  cd ./k8s/cc2c/ingress/development
+                  kubectl apply -f ./cc2c-ingress.yml
+
+            - name: Deploy Certificate
+              run: |-
+                  cd ./k8s/cc2c/cert
+                  kubectl apply -f ./cc2c-managed-certificate-dev.yml
+
+            - name: Set kubectl context
+              run: |-
+                  kubectl config set-context --current --namespace=$NAMESPACE
+
+            - name: Deployment Rollout Check
+              run: |-
+                  kubectl get services -o wide
