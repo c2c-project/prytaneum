@@ -1,6 +1,16 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { Divider, Drawer, List, ListItem, Toolbar, useMediaQuery, IconButton, Button } from '@mui/material';
+import {
+    Divider,
+    Drawer,
+    List,
+    ListItem,
+    Toolbar,
+    useMediaQuery,
+    IconButton,
+    Button,
+    ClickAwayListener,
+} from '@mui/material';
 import type { DrawerProps } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -18,7 +28,7 @@ interface Props extends DrawerProps {
     handleDrawerClose: () => void;
 }
 
-export function PersistentDrawer({ handleDrawerClose, ...restProps }: Props) {
+export function TemporaryDrawer({ handleDrawerClose, ...restProps }: Props) {
     const router = useRouter();
     const theme = useTheme();
     const { isLoading, isTeacher, isAdmin } = useAuth();
@@ -45,22 +55,20 @@ export function PersistentDrawer({ handleDrawerClose, ...restProps }: Props) {
     };
 
     return (
-        <React.Fragment>
-            <Drawer variant='persistent' {...restProps}>
-                <Toolbar>
-                    <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                    </IconButton>
-                </Toolbar>
-                <Divider />
-                <List>
-                    {getListByRole().map((text, index) => (
-                        <ListItem key={index}>
-                            <Button onClick={navigateTo(text)}>{text}</Button>
-                        </ListItem>
-                    ))}
-                </List>
-            </Drawer>
-        </React.Fragment>
+        <Drawer variant='temporary' {...restProps}>
+            <Toolbar>
+                <IconButton onClick={handleDrawerClose}>
+                    {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                </IconButton>
+            </Toolbar>
+            <Divider />
+            <List>
+                {getListByRole().map((text, index) => (
+                    <ListItem key={index}>
+                        <Button onClick={navigateTo(text)}>{text}</Button>
+                    </ListItem>
+                ))}
+            </List>
+        </Drawer>
     );
 }
