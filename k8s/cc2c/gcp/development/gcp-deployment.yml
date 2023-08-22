@@ -2,13 +2,13 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
     labels:
-        app: cc2c
-    name: cc2c
+        app: gcp
+    name: gcp
     namespace: cc2c-development
 spec:
     selector:
         matchLabels:
-            app: cc2c
+            app: gcp
     replicas: 4
     revisionHistoryLimit: 100
     strategy:
@@ -19,7 +19,7 @@ spec:
     template:
         metadata:
             labels:
-                app: cc2c
+                app: gcp
         spec:
             volumes:
                 - name: google-cloud-key
