@@ -24,7 +24,7 @@ spec:
             volumes:
                 - name: google-cloud-key
                   secret:
-                  secretName: gcp-storage-credentials
+                      secretName: gcp-storage-credentials
             containers:
                 - name: cc2c
                   image: gcr.io/PROJECT_ID/CC2C_IMAGE:TAG
