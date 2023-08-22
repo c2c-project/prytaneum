@@ -7,6 +7,7 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
+        "test:ci": "echo TODO",
         "prisma-generate": "yarn pnpify prisma generate",
         "prisma-db-push": "prisma db push --skip-generate",
         "prisma-db-push-dev": "prisma db push --skip-generate --accept-data-loss",
