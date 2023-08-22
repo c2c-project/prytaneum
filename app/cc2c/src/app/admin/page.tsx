@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@local/app/api/auth/[...nextauth]/route';
 
-import { AppBar, UsersTable } from '@local/components';
+import { AppBar } from '@local/components';
 import { Admin } from './admin';
 import type { User } from '@local/lib';
 
