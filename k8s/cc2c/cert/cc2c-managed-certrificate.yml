@@ -1,8 +1,0 @@
-apiVersion: networking.gke.io/v1
-kind: ManagedCertificate
-metadata:
-    name: cc2c-prytaneum-io-cert
-    namespace: cc2c-production
-spec:
-    domains:
-        - cc2c.prytaneum.io
