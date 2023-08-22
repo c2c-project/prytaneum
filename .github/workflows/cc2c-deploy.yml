@@ -134,7 +134,7 @@ jobs:
             # Deploy the Docker image to the GKE cluster
             - name: Kustomize & Deploy GCP Service
               run: |-
-                  cd ./k8s/cc2c/gcp/development/gcp
+                  cd ./k8s/cc2c/gcp/development
                   kustomize edit set image gcr.io/PROJECT_ID/GCP_SERVICE_IMAGE:TAG=gcr.io/$PROJECT_ID/$GCP_SERVICE_IMAGE:$GITHUB_SHA
                   kustomize edit set namespace $GCP_NAMESPACE
                   kustomize build . | kubectl apply -f -
@@ -253,7 +253,7 @@ jobs:
             # Deploy the Docker image to the GKE cluster
             - name: Kustomize & Deploy GCP Service
               run: |-
-                  cd ./k8s/cc2c/gcp/production/gcp
+                  cd ./k8s/cc2c/gcp/production
                   kustomize edit set image gcr.io/PROJECT_ID/GCP_SERVICE_IMAGE:TAG=gcr.io/$PROJECT_ID/$GCP_SERVICE_IMAGE:$GITHUB_SHA
                   kustomize edit set namespace $NAMESPACE
                   kustomize build . | kubectl apply -f -
