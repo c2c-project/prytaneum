@@ -136,13 +136,13 @@ jobs:
               run: |-
                   cd ./k8s/cc2c/gcp/development
                   kustomize edit set image gcr.io/PROJECT_ID/GCP_SERVICE_IMAGE:TAG=gcr.io/$PROJECT_ID/$GCP_SERVICE_IMAGE:$GITHUB_SHA
-                  kustomize edit set namespace $GCP_NAMESPACE
+                  kustomize edit set namespace $NAMESPACE
                   kustomize build . | kubectl apply -f -
 
             # Finalize Deployment
             - name: Set kubectl context
               run: |-
-                  kubectl config set-context --current --namespace=$GCP_NAMESPACE
+                  kubectl config set-context --current --namespace=$NAMESPACE
 
             - name: GCP Deployment Rollout Check
               run: |-
