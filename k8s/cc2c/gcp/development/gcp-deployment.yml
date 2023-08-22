@@ -24,7 +24,7 @@ spec:
             volumes:
                 - name: google-cloud-key
                   secret:
-                  secretName: gcp-storage-credentials
+                      secretName: gcp-storage-credentials
             containers:
                 - name: gcp
                   image: gcr.io/PROJECT_ID/GCP_SERVICE_IMAGE:TAG
