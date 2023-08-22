@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { Typography, AppBar as MUIAppBar, Toolbar, Button, IconButton } from '@mui/material';
+import { Typography, AppBar as MUIAppBar, Toolbar, Button, IconButton, useMediaQuery } from '@mui/material';
 import type { AppBarProps } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useTheme } from '@mui/material/styles';
@@ -12,20 +12,26 @@ import { SignInButton } from './auth/SignInButton';
 import { RegisterButton } from './auth/RegisterButton';
 import { SignOutButton } from './auth/SignOutButton';
 import { DashboardButton } from './DashboardButton';
-import { PersistentDrawer } from './PersistentDrawer';
+import { TemporaryDrawer } from './TemporaryDrawer';
+import { AdminMenuButton } from './AdminMenuButton';
 
 export function AppBar({ children, ...restProps }: AppBarProps) {
     const theme = useTheme();
+    const mdDownBreakpoint = useMediaQuery(theme.breakpoints.down('md'));
     const router = useRouter();
-    const { authenticated, isLoading } = useAuth();
+    const { authenticated, isAdmin, isLoading } = useAuth();
     const [open, setOpen] = React.useState(false);
 
     const handleDrawerOpen = () => {
-        setOpen(true);
+        if (!open) setOpen(true);
     };
 
     const handleDrawerClose = () => {
-        setOpen(false);
+        if (open) setOpen(false);
+    };
+
+    const toggleDrawer = () => {
+        setOpen(!open);
     };
 
     return (
@@ -33,15 +39,17 @@ export function AppBar({ children, ...restProps }: AppBarProps) {
             <MUIAppBar position='sticky' {...restProps}>
                 <Toolbar>
                     {children}
-                    <IconButton
-                        color='inherit'
-                        aria-label='open drawer'
-                        onClick={handleDrawerOpen}
-                        edge='start'
-                        sx={{ mr: 2 }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
+                    {mdDownBreakpoint && (
+                        <IconButton
+                            color='inherit'
+                            aria-label='open drawer'
+                            onClick={handleDrawerOpen}
+                            edge='start'
+                            sx={{ mr: 2 }}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                    )}
                     <Typography
                         component={Button}
                         variant='h6'
@@ -51,14 +59,16 @@ export function AppBar({ children, ...restProps }: AppBarProps) {
                     >
                         CC2C
                     </Typography>
-                    <DashboardButton visible={!isLoading && authenticated} />
+                    {/* Desktop Menu */}
+                    <DashboardButton style={{ marginRight: '2rem' }} visible={!isLoading && authenticated} />
+                    <AdminMenuButton style={{ marginRight: '2rem' }} visible={!isLoading && isAdmin} />
                     <div style={{ flexGrow: 1 }} />
                     <SignInButton visible={!isLoading && !authenticated} />
                     <SignOutButton visible={!isLoading && authenticated} />
                     <RegisterButton visible={!isLoading && !authenticated} />
                 </Toolbar>
             </MUIAppBar>
-            <PersistentDrawer open={open} handleDrawerClose={handleDrawerClose} />
+            <TemporaryDrawer open={open} handleDrawerClose={handleDrawerClose} onClose={toggleDrawer} />
         </React.Fragment>
     );
 }
