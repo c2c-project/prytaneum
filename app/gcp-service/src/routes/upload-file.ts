@@ -54,7 +54,6 @@ server.route({
 
         try {
             const { bucket } = body as { bucket?: string };
-            console.log(bucket);
             if (!bucket) throw new Error('Bucket name not provided.');
             if (!file) {
                 server.log.error('File undefined');
