@@ -128,12 +128,6 @@ export function UsersTable({}: UsersTableProps) {
         if (nextPageIsLastPage) handleLoadNext();
     }, [handleLoadNext, nextPageIsLastPage]);
 
-    const getUserRole = (user: User) => {
-        if (user.isAdmin) return 'Admin';
-        if (user.isTeacher) return 'Teacher';
-        return 'Student';
-    };
-
     return (
         <React.Fragment>
             <Grid container justifyContent='center'>
@@ -175,7 +169,7 @@ export function UsersTable({}: UsersTableProps) {
                                     <Typography>{user.email}</Typography>
                                 </TableCell>
                                 <TableCell>
-                                    <Typography>{getUserRole(user)}</Typography>
+                                    <Typography>{user.role.toLocaleLowerCase()}</Typography>
                                 </TableCell>
                                 <TableCell>
                                     {/* TODO: Get this from the backend */}
