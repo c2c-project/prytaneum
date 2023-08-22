@@ -1,0 +1,8 @@
+apiVersion: networking.gke.io/v1beta1
+kind: FrontendConfig
+metadata:
+    name: cc2c-frontend-config
+    namespace: cc2c-development
+spec:
+    redirectToHttps:
+        enabled: true
