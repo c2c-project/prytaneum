@@ -2,13 +2,13 @@
 
 import React from 'react';
 import { useSession } from 'next-auth/react';
+import type { Role } from '@local/__generated__/prisma';
 
 export type User = {
     id: string;
     name: string;
     email: string;
-    isTeacher: boolean;
-    isAdmin: boolean;
+    role: Role;
 };
 
 export function useAuth() {
@@ -32,8 +32,8 @@ export function useAuth() {
     }, [session, status]);
 
     const user = React.useMemo(() => session?.user, [session?.user]) as User | undefined;
-    const isTeacher = React.useMemo(() => user?.isTeacher || false, [user?.isTeacher]);
-    const isAdmin = React.useMemo(() => user?.isAdmin || false, [user?.isAdmin]);
+    const isTeacher = React.useMemo(() => user?.role === 'TEACHER' || false, [user?.role]);
+    const isAdmin = React.useMemo(() => user?.role === 'ADMIN' || false, [user?.role]);
 
     return { isLoading, user, authenticated, isTeacher, isAdmin };
 }
