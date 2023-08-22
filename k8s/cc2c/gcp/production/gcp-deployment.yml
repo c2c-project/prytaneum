@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    labels:
+        app: gcp
+    name: gcp
+    namespace: cc2c-production
+spec:
+    selector:
+        matchLabels:
+            app: gcp
+    replicas: 4
+    revisionHistoryLimit: 100
+    strategy:
+        rollingUpdate:
+            maxSurge: 25%
+            maxUnavailable: 50%
+        type: RollingUpdate
+    template:
+        metadata:
+            labels:
+                app: gcp
+        spec:
+            volumes:
+                - name: google-cloud-key
+                  secret:
+                      secretName: gcp-storage-credentials
+            containers:
+                - name: gcp
+                  image: gcr.io/PROJECT_ID/GCP_SERVICE_IMAGE:TAG
+                  volumeMounts:
+                      - name: google-cloud-key
+                        mountPath: /var/secrets/google
+                  imagePullPolicy: IfNotPresent
+                  env:
+                      - name: GOOGLE_APPLICATION_CREDENTIALS
+                        value: /var/secrets/google/gcp-storage-credentials.json
+                      - name: NODE_ENV
+                        valueFrom:
+                            configMapKeyRef:
+                                key: NODE_ENV
+                                name: gcp-config
+                      - name: HOST
+                        valueFrom:
+                            configMapKeyRef:
+                                key: HOST
+                                name: gcp-config
+                      - name: PORT
+                        valueFrom:
+                            configMapKeyRef:
+                                key: PORT
+                                name: gcp-config
+                      - name: POD_ID
+                        valueFrom:
+                            fieldRef:
+                                fieldPath: metadata.name
+                      - name: GCP_PROJECT_ID
+                        valueFrom:
+                            configMapKeyRef:
+                                key: GCP_PROJECT_ID
+                                name: gcp-config
