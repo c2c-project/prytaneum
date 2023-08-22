@@ -10,8 +10,7 @@ export async function getAllUsers(ammount: number) {
             id: true,
             email: true,
             name: true,
-            isTeacher: true,
-            isAdmin: true,
+            role: true,
         },
     });
 
@@ -53,8 +52,7 @@ export async function loadNextPage(ammount: number, page: number, filter: UsersT
             id: true,
             email: true,
             name: true,
-            isTeacher: true,
-            isAdmin: true,
+            role: true,
         },
     });
 
@@ -78,8 +76,7 @@ export async function refresh(ammount: number, filter: UsersTableSearchFilter) {
             id: true,
             email: true,
             name: true,
-            isTeacher: true,
-            isAdmin: true,
+            role: true,
         },
     });
 
