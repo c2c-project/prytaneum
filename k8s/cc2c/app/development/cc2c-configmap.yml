@@ -8,5 +8,8 @@ metadata:
 data:
     HOST: 0.0.0.0
     PORT: '3000'
+    ORIGIN_URL: https://dev-cc2c.prytaneum.io
+    GCP_SERVICE_URL: https://dev-cc2c.prytaneum.io/cc2c
+    NEXTAUTH_URL: https://dev-cc2c.prytaneum.io
     NODE_ENV: production
     GCP_PROJECT_ID: prytaneum-project
