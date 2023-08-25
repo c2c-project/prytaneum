@@ -8,18 +8,18 @@ metadata:
         networking.gke.io/v1beta1.FrontendConfig: 'cc2c-frontend-config'
         cloud.google.com/backend-config: '{"default": "gcp-backendconfig"}'
         kubernetes.io/ingress.allow-http: 'true'
-        kubernetes.io/ingress.regional-static-ip-name: dev-cc2c-prytaneum-io-ip
-        # networking.gke.io/managed-certificates: dev-cc2c-prytaneum-io-cert
+        kubernetes.io/ingress.regional-static-ip-name: dev-cc2c-prytaneum-io
+        networking.gke.io/managed-certificates: dev-cc2c-prytaneum-io-cert
 spec:
     rules:
-        # - host: dev-cc2c.prytaneum.io
-        - http:
+        - host: dev-cc2c.prytaneum.io
+          http:
               paths:
                   - backend:
                         service:
                             name: cc2c-service
                             port:
-                                number: 3000
+                                number: 8080
                     path: /*
                     pathType: ImplementationSpecific
                   - backend:
