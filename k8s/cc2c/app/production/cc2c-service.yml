@@ -12,7 +12,7 @@ metadata:
 spec:
     ports:
         - protocol: TCP
-          port: 3000
+          port: 8080
           targetPort: 3000
     selector:
         app: cc2c

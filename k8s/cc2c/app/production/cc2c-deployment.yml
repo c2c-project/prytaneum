@@ -41,7 +41,7 @@ spec:
                           memory: 300Mi
                   env:
                       - name: GOOGLE_APPLICATION_CREDENTIALS
-                        value: /var/secrets/google/gcp-storage-credentials.json
+                        value: /var/secrets/google/key.json
                       - name: NODE_ENV
                         valueFrom:
                             configMapKeyRef:
