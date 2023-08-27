@@ -6,16 +6,26 @@ import { signIn } from 'next-auth/react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Grid, Typography, TextField, Button, List, ListItem } from '@mui/material';
 
-import { signUp } from '@local/lib';
+import { teacherSignUp, TeacherSignUpFormData } from '@local/lib';
 
 interface Props {
     csfrToken?: string;
 }
 
-export function SignUp({ csfrToken }: Props) {
+export function TeacherSignUp({ csfrToken }: Props) {
     const router = useRouter();
     const [loading, setLoading] = React.useState(false);
-    const [formValues, setFormValues] = React.useState({ name: '', email: '', password: '', confirmPassword: '' });
+    const defaultFormValues = {
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        authorizationCode: '',
+    };
+    const [formValues, setFormValues] = React.useState<TeacherSignUpFormData & { confirmPassword: string }>(
+        defaultFormValues
+    );
     const [error, setError] = React.useState('');
 
     const searchParams = useSearchParams();
@@ -31,10 +41,12 @@ export function SignUp({ csfrToken }: Props) {
                 throw new Error('Passwords do not match');
             }
 
-            const { isError, errorMessage } = await signUp({
-                name: formValues.name,
+            const { isError, errorMessage } = await teacherSignUp({
+                firstName: formValues.firstName,
+                lastName: formValues.lastName,
                 email: formValues.email,
                 password: formValues.password,
+                authorizationCode: formValues.authorizationCode,
             });
 
             if (isError) {
@@ -76,7 +88,7 @@ export function SignUp({ csfrToken }: Props) {
         <Grid container component='form' onSubmit={onSubmit} justifyContent='center' height='80vh'>
             <Grid container direction='column' justifyContent='center' alignItems='center'>
                 <Grid item paddingY={3}>
-                    <Typography variant='h3'>Registration</Typography>
+                    <Typography variant='h3'>Teacher Registration</Typography>
                 </Grid>
                 <input type='hidden' name='csrfToken' defaultValue={csfrToken} />
                 <List>
@@ -85,11 +97,23 @@ export function SignUp({ csfrToken }: Props) {
                             required
                             autoComplete='off'
                             type='text'
-                            id='name'
-                            name='name'
-                            value={formValues.name}
+                            id='firstName'
+                            name='firstName'
+                            value={formValues.firstName}
                             onChange={handleChange}
-                            label='Name'
+                            label='First Name'
+                        />
+                    </ListItem>
+                    <ListItem>
+                        <TextField
+                            required
+                            autoComplete='off'
+                            type='text'
+                            id='lastName'
+                            name='lastName'
+                            value={formValues.lastName}
+                            onChange={handleChange}
+                            label='Last Name'
                         />
                     </ListItem>
                     <ListItem>
@@ -126,6 +150,18 @@ export function SignUp({ csfrToken }: Props) {
                             value={formValues.confirmPassword}
                             onChange={handleChange}
                             label='Confirm Password'
+                        />
+                    </ListItem>
+                    <ListItem>
+                        <TextField
+                            required
+                            autoComplete='off'
+                            type='text'
+                            id='authorizationCode'
+                            name='authorizationCode'
+                            value={formValues.authorizationCode}
+                            onChange={handleChange}
+                            label='Authorization Code'
                         />
                     </ListItem>
                 </List>
