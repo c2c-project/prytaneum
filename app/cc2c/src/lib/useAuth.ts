@@ -6,7 +6,8 @@ import type { Role } from '@local/__generated__/prisma';
 
 export type User = {
     id: string;
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
     role: Role;
 };

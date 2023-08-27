@@ -23,7 +23,8 @@ import { TablePaginationActions } from '../TablePaginationActions';
 import { getAllUsers, loadNextPage, refresh } from './actions';
 
 export type UsersTableSearchFilter = {
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
 };
 
@@ -32,7 +33,7 @@ interface UsersTableSearchBarProps {
 }
 
 function SearchBar({ handleSearchFilter }: UsersTableSearchBarProps) {
-    const initialState = { name: '', email: '' };
+    const initialState = { firstName: '', lastName: '', email: '' };
     const [form, , handleSubmit, handleChange] = useForm(initialState);
 
     return (
@@ -48,7 +49,20 @@ function SearchBar({ handleSearchFilter }: UsersTableSearchBarProps) {
             alignItems='center'
         >
             <Grid item>
-                <TextField label='Name' aria-label='Name' value={form.name} onChange={handleChange('name')} />
+                <TextField
+                    label='First Name'
+                    aria-label='First Name'
+                    value={form.firstName}
+                    onChange={handleChange('firstName')}
+                />
+            </Grid>
+            <Grid item>
+                <TextField
+                    label='Last Name'
+                    aria-label='Last Name'
+                    value={form.lastName}
+                    onChange={handleChange('lastName')}
+                />
             </Grid>
             <Grid item>
                 <TextField label='Email' aria-label='Email' value={form.email} onChange={handleChange('email')} />
@@ -74,7 +88,7 @@ export function UsersTable({}: UsersTableProps) {
     const [users, setUsers] = React.useState<User[]>([]);
     const [isLoadingNext, setIsLoadingNext] = React.useState<boolean>(false);
     const [hasNext, setHasNext] = React.useState<boolean>(false);
-    const [filter, setFilter] = React.useState<UsersTableSearchFilter>({ name: '', email: '' });
+    const [filter, setFilter] = React.useState<UsersTableSearchFilter>({ firstName: '', lastName: '', email: '' });
 
     React.useEffect(() => {
         getAllUsers(FETCH_AMMOUNT).then(({ users, hasNextPage }) => {
@@ -101,7 +115,6 @@ export function UsersTable({}: UsersTableProps) {
     const handleSearchFilter = (filter: UsersTableSearchFilter) => {
         setFilter(filter);
         refresh(FETCH_AMMOUNT, filter).then(({ users, hasNextPage }) => {
-            console.log(users);
             setUsers(users);
             setHasNext(hasNextPage);
         });
@@ -141,16 +154,16 @@ export function UsersTable({}: UsersTableProps) {
                     <TableHead>
                         <TableRow>
                             <TableCell style={{ width: 250 }}>
-                                <Typography fontWeight='bold'>Name</Typography>
+                                <Typography fontWeight='bold'>First Name</Typography>
+                            </TableCell>
+                            <TableCell style={{ width: 250 }}>
+                                <Typography fontWeight='bold'>Last Name</Typography>
                             </TableCell>
                             <TableCell style={{ width: 250 }}>
                                 <Typography fontWeight='bold'>Email</Typography>
                             </TableCell>
                             <TableCell style={{ width: 150 }}>
                                 <Typography fontWeight='bold'>User Type</Typography>
-                            </TableCell>
-                            <TableCell style={{ width: 200 }}>
-                                <Typography fontWeight='bold'>Last Login Date</Typography>
                             </TableCell>
                             <TableCell />
                             {/* <TableCell /> */}
@@ -163,21 +176,16 @@ export function UsersTable({}: UsersTableProps) {
                         ).map((user) => (
                             <TableRow key={user.id}>
                                 <TableCell>
-                                    <Typography>{user.name}</Typography>
+                                    <Typography>{user.firstName}</Typography>
+                                </TableCell>
+                                <TableCell>
+                                    <Typography>{user.lastName}</Typography>
                                 </TableCell>
                                 <TableCell>
                                     <Typography>{user.email}</Typography>
                                 </TableCell>
                                 <TableCell>
                                     <Typography>{user.role.toLocaleLowerCase()}</Typography>
-                                </TableCell>
-                                <TableCell>
-                                    {/* TODO: Get this from the backend */}
-                                    <Typography>
-                                        {date.toLocaleDateString() +
-                                            ' ' +
-                                            date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                    </Typography>
                                 </TableCell>
                                 <TableCell></TableCell>
                             </TableRow>
