@@ -1,11 +1,11 @@
 import * as bcrypt from 'bcrypt';
 import { prisma, ProtectedError, runMutation } from '@local/core';
 
-import type { FacultySignUpFormData } from '@local/lib';
+import type { TeacherSignUpFormData } from '@local/lib';
 
 export async function POST(req: Request) {
     const result = await runMutation(async () => {
-        const body: FacultySignUpFormData = await req.json();
+        const body: TeacherSignUpFormData = await req.json();
 
         // Validate Authorization Code
         if (body.authorizationCode !== process.env.REGISTRATION_AUTHORIZATION_CODE) {
