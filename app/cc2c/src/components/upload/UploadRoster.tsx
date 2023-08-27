@@ -4,7 +4,7 @@ import React from 'react';
 import Papa from 'papaparse';
 import { Button } from '@mui/material';
 
-type RosterCSVData = {
+export type RosterCSVData = {
     course_id: string;
     student_id: string;
     email: string;
