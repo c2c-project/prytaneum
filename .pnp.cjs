@@ -303,16 +303,20 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/eslint", "npm:8.44.2"],\
             ["@types/jsonwebtoken", "npm:9.0.2"],\
             ["@types/node", "npm:20.4.2"],\
+            ["@types/papaparse", "npm:5.3.7"],\
             ["@types/react", "npm:18.2.15"],\
             ["@types/react-dom", "npm:18.2.7"],\
             ["@yarnpkg/pnpify", "npm:4.0.0-rc.48"],\
             ["bcrypt", "npm:5.1.0"],\
             ["eslint", "npm:8.47.0"],\
             ["eslint-config-next", "virtual:5e19bc5de45bf01aba6cc48a8928ccac9787cef8f9f42f0201eeb1e0b5c9a40c251610026ebe469612106294a3321769df5a06038561ba50c0792239bd7788eb#npm:13.4.18"],\
+            ["form-data", "npm:4.0.0"],\
             ["jsonwebtoken", "npm:9.0.1"],\
+            ["mailgun.js", "npm:9.2.1"],\
             ["next", "virtual:5e19bc5de45bf01aba6cc48a8928ccac9787cef8f9f42f0201eeb1e0b5c9a40c251610026ebe469612106294a3321769df5a06038561ba50c0792239bd7788eb#npm:13.4.18"],\
             ["next-auth", "virtual:5e19bc5de45bf01aba6cc48a8928ccac9787cef8f9f42f0201eeb1e0b5c9a40c251610026ebe469612106294a3321769df5a06038561ba50c0792239bd7788eb#npm:4.22.3"],\
             ["notistack", "virtual:5e19bc5de45bf01aba6cc48a8928ccac9787cef8f9f42f0201eeb1e0b5c9a40c251610026ebe469612106294a3321769df5a06038561ba50c0792239bd7788eb#npm:3.0.1"],\
+            ["papaparse", "npm:5.4.1"],\
             ["prisma", "npm:5.0.0"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:5e19bc5de45bf01aba6cc48a8928ccac9787cef8f9f42f0201eeb1e0b5c9a40c251610026ebe469612106294a3321769df5a06038561ba50c0792239bd7788eb#npm:18.2.0"],\
@@ -15134,6 +15138,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["follow-redirects", "virtual:a1c287d287cceec925a9c0ff143359f3710be8008f8559da00a15e4d93f76849e9493b8b7760d073ae605ea56d1482d54174c007b28cbf6b38332d152576190f#npm:1.15.1"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:1.4.0", {\
+          "packageLocation": "./.yarn/cache/axios-npm-1.4.0-4d7ce8ca3e-7fb6a4313b.zip/node_modules/axios/",\
+          "packageDependencies": [\
+            ["axios", "npm:1.4.0"],\
+            ["follow-redirects", "virtual:4d7ce8ca3e1e44d82523fba2ad95e1be18c4e9f8dec6d551377587540da3ed75bd8bd3e812280309a3b90cfdb0560f076f3552a20839f7f15665207a4fbd588a#npm:1.15.2"],\
+            ["form-data", "npm:4.0.0"],\
+            ["proxy-from-env", "npm:1.1.0"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["axobject-query", [\
@@ -15763,6 +15777,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["isobject", "npm:3.0.1"],\
             ["mixin-deep", "npm:1.3.2"],\
             ["pascalcase", "npm:0.1.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["base-64", [\
+        ["npm:1.0.0", {\
+          "packageLocation": "./.yarn/cache/base-64-npm-1.0.0-0683a6b836-d10b64a1fc.zip/node_modules/base-64/",\
+          "packageDependencies": [\
+            ["base-64", "npm:1.0.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -22222,6 +22245,26 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "SOFT"\
         }],\
+        ["npm:1.15.2", {\
+          "packageLocation": "./.yarn/cache/follow-redirects-npm-1.15.2-1ec1dd82be-faa66059b6.zip/node_modules/follow-redirects/",\
+          "packageDependencies": [\
+            ["follow-redirects", "npm:1.15.2"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:4d7ce8ca3e1e44d82523fba2ad95e1be18c4e9f8dec6d551377587540da3ed75bd8bd3e812280309a3b90cfdb0560f076f3552a20839f7f15665207a4fbd588a#npm:1.15.2", {\
+          "packageLocation": "./.yarn/__virtual__/follow-redirects-virtual-359bc4c55c/0/cache/follow-redirects-npm-1.15.2-1ec1dd82be-faa66059b6.zip/node_modules/follow-redirects/",\
+          "packageDependencies": [\
+            ["follow-redirects", "virtual:4d7ce8ca3e1e44d82523fba2ad95e1be18c4e9f8dec6d551377587540da3ed75bd8bd3e812280309a3b90cfdb0560f076f3552a20839f7f15665207a4fbd588a#npm:1.15.2"],\
+            ["@types/debug", null],\
+            ["debug", null]\
+          ],\
+          "packagePeers": [\
+            "@types/debug",\
+            "debug"\
+          ],\
+          "linkType": "HARD"\
+        }],\
         ["virtual:a1c287d287cceec925a9c0ff143359f3710be8008f8559da00a15e4d93f76849e9493b8b7760d073ae605ea56d1482d54174c007b28cbf6b38332d152576190f#npm:1.15.1", {\
           "packageLocation": "./.yarn/__virtual__/follow-redirects-virtual-a2d8fd0f6a/0/cache/follow-redirects-npm-1.15.1-6b191885cd-6aa4e3e3cd.zip/node_modules/follow-redirects/",\
           "packageDependencies": [\
@@ -27915,6 +27958,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["webpack-merge", "npm:5.8.0"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:9.2.1", {\
+          "packageLocation": "./.yarn/cache/mailgun.js-npm-9.2.1-e4d348fa6d-f5c78b226b.zip/node_modules/mailgun.js/",\
+          "packageDependencies": [\
+            ["mailgun.js", "npm:9.2.1"],\
+            ["axios", "npm:1.4.0"],\
+            ["base-64", "npm:1.0.0"],\
+            ["url-join", "npm:4.0.1"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["make-dir", [\
@@ -32413,6 +32466,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["proxy-addr", "npm:2.0.7"],\
             ["forwarded", "npm:0.2.0"],\
             ["ipaddr.js", "npm:1.9.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["proxy-from-env", [\
+        ["npm:1.1.0", {\
+          "packageLocation": "./.yarn/cache/proxy-from-env-npm-1.1.0-c13d07f26b-ed7fcc2ba0.zip/node_modules/proxy-from-env/",\
+          "packageDependencies": [\
+            ["proxy-from-env", "npm:1.1.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -38590,6 +38652,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/url-join-npm-0.0.1-891d88cf8e-f1d75a8fea.zip/node_modules/url-join/",\
           "packageDependencies": [\
             ["url-join", "npm:0.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:4.0.1", {\
+          "packageLocation": "./.yarn/cache/url-join-npm-4.0.1-e1f4415722-f74e868bf2.zip/node_modules/url-join/",\
+          "packageDependencies": [\
+            ["url-join", "npm:4.0.1"]\
           ],\
           "linkType": "HARD"\
         }]\
