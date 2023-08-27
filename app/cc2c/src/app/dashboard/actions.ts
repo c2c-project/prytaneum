@@ -2,17 +2,12 @@
 
 import { prisma } from '@local/core';
 import { revalidatePath } from 'next/cache';
-
-export type Class = {
-    id: string;
-    termId: string;
-    name: string;
-};
+import type { Class } from '@local/server';
 
 export async function getAllClasses(): Promise<Class[]> {
     try {
         const classes = await prisma.class.findMany({
-            select: { id: true, termId: true, name: true },
+            select: { id: true, termId: true, name: true, prytaneumURL: true },
         });
         return classes;
     } catch (error) {
@@ -25,7 +20,7 @@ export async function getClassById(id: string): Promise<Class | null> {
     try {
         const _class = await prisma.class.findUnique({
             where: { id },
-            select: { id: true, termId: true, name: true },
+            select: { id: true, termId: true, name: true, prytaneumURL: true },
         });
         return _class;
     } catch (error) {
