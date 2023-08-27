@@ -15,6 +15,8 @@ ENV HOST 0.0.0.0
 ENV PORT 3000
 ARG DEPLOYMENT_ENV=production
 ENV DEPLOYMENT_ENV ${DEPLOYMENT_ENV}
+ARG REGISTRATION_AUTHORIZATION_CODE=secret
+ENV REGISTRATION_AUTHORIZATION_CODE ${REGISTRATION_AUTHORIZATION_CODE}
 # Copy core files
 COPY --from=build-stage /usr/project/package.json ./
 COPY --from=build-stage /usr/project/.env.production ./
