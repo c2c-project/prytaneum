@@ -44,6 +44,7 @@ model Class {
   id  String @id @default(uuid()) @db.Uuid
   termId String @unique @db.VarChar(255)
   name String @db.VarChar(255)
+  prytaneumURL String @db.VarChar(255) @default("")
 
   // Relations
   teachers Teacher[]

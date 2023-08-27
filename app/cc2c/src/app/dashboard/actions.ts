@@ -35,7 +35,7 @@ export async function createClass(formData: FormData): Promise<void> {
         const termId = formData.get('termId') as string | null;
         if (!name || !termId) throw new Error('Missing required fields');
         await prisma.class.create({
-            data: { name, termId },
+            data: { name, termId, prytaneumURL: '' },
         });
         revalidatePath('/dashboard');
     } catch (error) {
