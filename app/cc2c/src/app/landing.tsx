@@ -1,20 +1,40 @@
+'use client';
+
 import React from 'react';
 import Image from 'next/image';
-import { Grid, Typography, List, ListItem } from '@mui/material';
+import { Grid, Typography, List, ListItem, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 export default function Landing() {
+    const theme = useTheme();
+    const lgDownBreakpoint = useMediaQuery(theme.breakpoints.down('lg'));
+    const smDownBreakpoint = useMediaQuery(theme.breakpoints.down('sm'));
+
+    const getImageWidth = () => {
+        if (smDownBreakpoint) return 250;
+        if (lgDownBreakpoint) return 500;
+        return 1000;
+    };
+
+    const getImageHeight = () => {
+        if (smDownBreakpoint) return 170;
+        if (lgDownBreakpoint) return 341;
+        return 682;
+    };
+
     return (
         <Grid container justifyContent='center' direction='column'>
             <Typography variant='h2' align='center' sx={{ fontWeight: 'bold', mb: 2 }}>
                 Connecting Classrooms to Congress
             </Typography>
-            <Grid item container justifyContent='center'>
+            <Grid item container justifyContent='center' width='100%'>
                 <Image
                     priority
-                    src='/landing1.jpg'
+                    src='/images/landing1.jpg'
                     alt='Connecting Classrooms to Congress'
-                    width={1500}
-                    height={1023}
+                    style={{ objectFit: 'contain' }}
+                    width={getImageWidth()}
+                    height={getImageHeight()}
                 />
             </Grid>
             <Typography variant='h3' sx={{ fontWeight: 'bold', mb: 2 }}>
@@ -31,7 +51,13 @@ export default function Landing() {
                 policymakers.
             </Typography>
             <Grid item container justifyContent='center'>
-                <Image src='/landing2.jpg' alt='Connecting Classrooms to Congress' width={1500} height={1023} />
+                <Image
+                    src='/images/landing2.jpg'
+                    alt='Connecting Classrooms to Congress'
+                    style={{ objectFit: 'contain' }}
+                    width={getImageWidth()}
+                    height={getImageHeight()}
+                />
             </Grid>
             <Typography variant='body1'>
                 Our approach provides a way to scale engagement with significant public issues – a learning opportunity
