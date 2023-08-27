@@ -30,6 +30,7 @@ env:
     NAMESPACE: ${{ vars.NAMESPACE }}
     ORIGIN: ${{ vars.ORIGIN }}
     DATABASE_URL: ${{ secrets.DATABASE_URL }} # Used for prisma migration
+    REGISTRATION_AUTHORIZATION_CODE: ${{ secrets.REGISTRATION_AUTHORIZATION_CODE }}
 
 jobs:
     staging:
@@ -75,6 +76,7 @@ jobs:
                     --build-arg GITHUB_SHA="$GITHUB_SHA" \
                     --build-arg GITHUB_REF="$GITHUB_REF" \
                     --build-arg DEPLOYMENT_ENV="development" \
+                    --build-arg REGISTRATION_AUTHORIZATION_CODE="$REGISTRATION_AUTHORIZATION_CODE" \
                     .
 
             # Push the App image to Google Container Registry
@@ -194,6 +196,7 @@ jobs:
                     --build-arg GITHUB_SHA="$GITHUB_SHA" \
                     --build-arg GITHUB_REF="$GITHUB_REF" \
                     --build-arg DEPLOYMENT_ENV="production" \
+                    --build-arg REGISTRATION_AUTHORIZATION_CODE="$REGISTRATION_AUTHORIZATION_CODE" \
                     .
 
             # Push the App image to Google Container Registry
