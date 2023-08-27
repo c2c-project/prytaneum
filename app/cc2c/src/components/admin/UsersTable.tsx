@@ -20,7 +20,7 @@ import { Search as SearchIcon } from '@mui/icons-material';
 import { useForm } from '@local/lib';
 import type { User } from '@local/lib';
 import { TablePaginationActions } from '../TablePaginationActions';
-import { getAllUsers, loadNextPage, refresh } from './actions';
+import { getAllUsers, loadNextPageUsers, refreshUsers } from './actions';
 
 export type UsersTableSearchFilter = {
     firstName: string;
@@ -114,7 +114,7 @@ export function UsersTable({}: UsersTableProps) {
 
     const handleSearchFilter = (filter: UsersTableSearchFilter) => {
         setFilter(filter);
-        refresh(FETCH_AMMOUNT, filter).then(({ users, hasNextPage }) => {
+        refreshUsers(FETCH_AMMOUNT, filter).then(({ users, hasNextPage }) => {
             setUsers(users);
             setHasNext(hasNextPage);
         });
@@ -123,7 +123,7 @@ export function UsersTable({}: UsersTableProps) {
     const handleLoadNext = React.useCallback(() => {
         if (hasNext && !isLoadingNext) {
             setIsLoadingNext(true);
-            loadNextPage(FETCH_AMMOUNT, page, filter).then(({ users, hasNextPage }) => {
+            loadNextPageUsers(FETCH_AMMOUNT, page, filter).then(({ users, hasNextPage }) => {
                 setUsers(users);
                 setHasNext(hasNextPage);
                 setIsLoadingNext(false);
@@ -163,10 +163,8 @@ export function UsersTable({}: UsersTableProps) {
                                 <Typography fontWeight='bold'>Email</Typography>
                             </TableCell>
                             <TableCell style={{ width: 150 }}>
-                                <Typography fontWeight='bold'>User Type</Typography>
+                                <Typography fontWeight='bold'>User Role</Typography>
                             </TableCell>
-                            <TableCell />
-                            {/* <TableCell /> */}
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -187,7 +185,6 @@ export function UsersTable({}: UsersTableProps) {
                                 <TableCell>
                                     <Typography>{user.role.toLocaleLowerCase()}</Typography>
                                 </TableCell>
-                                <TableCell></TableCell>
                             </TableRow>
                         ))}
                         {emptyRows > 0 && (
