@@ -9,7 +9,8 @@ export async function getAllUsers(ammount: number) {
         select: {
             id: true,
             email: true,
-            name: true,
+            firstName: true,
+            lastName: true,
             role: true,
         },
     });
@@ -27,8 +28,11 @@ export async function hasNextPage(ammount: number, page: number, filter: UsersTa
             email: {
                 contains: filter.email,
             },
-            name: {
-                contains: filter.name,
+            firstName: {
+                contains: filter.firstName,
+            },
+            lastName: {
+                contains: filter.lastName,
             },
         },
     });
@@ -44,14 +48,18 @@ export async function loadNextPage(ammount: number, page: number, filter: UsersT
             email: {
                 contains: filter.email,
             },
-            name: {
-                contains: filter.name,
+            firstName: {
+                contains: filter.firstName,
+            },
+            lastName: {
+                contains: filter.lastName,
             },
         },
         select: {
             id: true,
             email: true,
-            name: true,
+            firstName: true,
+            lastName: true,
             role: true,
         },
     });
@@ -68,14 +76,18 @@ export async function refresh(ammount: number, filter: UsersTableSearchFilter) {
             email: {
                 contains: filter.email,
             },
-            name: {
-                contains: filter.name,
+            firstName: {
+                contains: filter.firstName,
+            },
+            lastName: {
+                contains: filter.lastName,
             },
         },
         select: {
             id: true,
             email: true,
-            name: true,
+            firstName: true,
+            lastName: true,
             role: true,
         },
     });
