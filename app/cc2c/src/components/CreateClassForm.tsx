@@ -5,9 +5,15 @@ import { Grid, Typography, TextField, Button } from '@mui/material';
 import { useForm } from '@local/lib';
 import { createClass } from '@local/app/dashboard/actions';
 
+type ClassFormState = {
+    name: string;
+    termId: string;
+    prytaneumURL: string;
+};
+
 export function CreateClassForm() {
-    const initialState = { name: '', termId: '' };
-    const [form, , , handleChange] = useForm(initialState);
+    const initialState = { name: '', termId: '', prytaneumURL: '' };
+    const [form, , , handleChange] = useForm<ClassFormState>(initialState);
     return (
         <Grid container component='form' action={createClass} justifyContent='center' height='80vh'>
             <Grid container direction='column' justifyContent='center' alignItems='center'>
@@ -34,6 +40,15 @@ export function CreateClassForm() {
                         value={form.termId}
                         onChange={handleChange('termId')}
                         label='Term Id'
+                    />
+                    <TextField
+                        autoComplete='off'
+                        type='text'
+                        id='prytaneumURL'
+                        name='prytaneumURL'
+                        value={form.prytaneumURL}
+                        onChange={handleChange('prytaneumURL')}
+                        label='Prytaneum URL'
                     />
                 </Grid>
                 <Grid item paddingTop={3}>
