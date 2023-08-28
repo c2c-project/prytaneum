@@ -2,9 +2,7 @@ import React from 'react';
 import { Grid } from '@mui/material';
 import { UsersTable, ClassesTable } from '@local/components';
 
-interface Props {}
-
-export function Admin({}: Props) {
+export function Admin() {
     return (
         <Grid container>
             <UsersTable />
