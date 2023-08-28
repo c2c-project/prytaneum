@@ -1,14 +1,14 @@
-import { Fragment } from 'react';
+import React from 'react';
 
 import { AppBar } from '@local/components';
-import { StudentDashboard } from './StudentDashboard';
+import { TeacherDashboard } from './TeacherDashboard';
 
 export default async function DashboardPage() {
     return (
-        <Fragment>
+        <React.Fragment>
             <AppBar />
             {/* @ts-ignore - Server Component */}
-            <StudentDashboard />
-        </Fragment>
+            <TeacherDashboard />
+        </React.Fragment>
     );
 }
