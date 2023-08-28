@@ -60,14 +60,9 @@ export function AppBar({ children, ...restProps }: AppBarProps) {
                         CC2C
                     </Typography>
                     {/* Desktop Menu */}
-                    <DashboardButton
-                        style={{ marginRight: '2rem' }}
-                        visible={!isLoading && authenticated && !mdDownBreakpoint}
-                    />
-                    <AdminMenuButton
-                        style={{ marginRight: '2rem' }}
-                        visible={!isLoading && isAdmin && !mdDownBreakpoint}
-                    />
+                    <DashboardButton visible={!isLoading && authenticated && !mdDownBreakpoint} />
+                    <div style={{ width: '1rem' }} />
+                    <AdminMenuButton visible={!isLoading && isAdmin && !mdDownBreakpoint} />
                     <div style={{ flexGrow: 1 }} />
                     <SignInButton visible={!isLoading && !authenticated} />
                     <SignOutButton visible={!isLoading && authenticated} />

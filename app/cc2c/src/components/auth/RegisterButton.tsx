@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@mui/material';
 import type { ButtonProps } from '@mui/material';
@@ -14,8 +15,10 @@ export function RegisterButton({ visible, ...restProps }: Props): JSX.Element | 
     if (!visible) return null;
 
     return (
-        <Button variant='contained' color='primary' onClick={() => router.push('/auth/signup')} {...restProps}>
-            Register
-        </Button>
+        <Link style={{ textDecoration: 'none' }} href='/auth/signup'>
+            <Button variant='contained' color='primary' {...restProps}>
+                Register
+            </Button>
+        </Link>
     );
 }
