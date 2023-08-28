@@ -14,13 +14,14 @@ import {
     IconButton,
     TableFooter,
     TablePagination,
+    Button,
 } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
 
 import { useForm } from '@local/lib';
 import type { User } from '@local/lib';
 import { TablePaginationActions } from '../TablePaginationActions';
-import { getAllUsers, loadNextPageUsers, refreshUsers } from './actions';
+import { demoteUser, getAllUsers, loadNextPageUsers, promoteUser, refreshUsers } from './actions';
 
 export type UsersTableSearchFilter = {
     firstName: string;
@@ -137,6 +138,24 @@ export function UsersTable({}: UsersTableProps) {
         [page, rowsPerPage, usersListLength]
     );
 
+    const handlePromoteUser = (userId: string) => () => {
+        promoteUser(userId).then(({ isError, message }) => {
+            refreshUsers(FETCH_AMMOUNT, filter).then(({ users, hasNextPage }) => {
+                setUsers(users);
+                setHasNext(hasNextPage);
+            });
+        });
+    };
+
+    const handleDemoteUser = (userId: string) => () => {
+        demoteUser(userId).then(({ isError, message }) => {
+            refreshUsers(FETCH_AMMOUNT, filter).then(({ users, hasNextPage }) => {
+                setUsers(users);
+                setHasNext(hasNextPage);
+            });
+        });
+    };
+
     React.useEffect(() => {
         if (nextPageIsLastPage) handleLoadNext();
     }, [handleLoadNext, nextPageIsLastPage]);
@@ -165,6 +184,9 @@ export function UsersTable({}: UsersTableProps) {
                             <TableCell style={{ width: 150 }}>
                                 <Typography fontWeight='bold'>User Role</Typography>
                             </TableCell>
+                            <TableCell style={{ width: 150 }}>
+                                <Typography fontWeight='bold'>Actions</Typography>
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -184,6 +206,21 @@ export function UsersTable({}: UsersTableProps) {
                                 </TableCell>
                                 <TableCell>
                                     <Typography>{user.role.toLocaleLowerCase()}</Typography>
+                                </TableCell>
+                                <TableCell>
+                                    {user.role === 'STUDENT' ? (
+                                        <Button
+                                            variant='contained'
+                                            color='primary'
+                                            onClick={handlePromoteUser(user.id)}
+                                        >
+                                            Promote
+                                        </Button>
+                                    ) : (
+                                        <Button variant='contained' color='primary' onClick={handleDemoteUser(user.id)}>
+                                            Demote
+                                        </Button>
+                                    )}
                                 </TableCell>
                             </TableRow>
                         ))}
