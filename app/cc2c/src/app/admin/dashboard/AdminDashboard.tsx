@@ -14,9 +14,7 @@ export async function AdminDashboard() {
             </Grid>
             <Grid item container justifyContent='center'>
                 <UploadRoster />
-                <Button component={Link} href='/class/create'>
-                    Create Class
-                </Button>
+                <div style={{ width: '2rem' }} />
                 <Link style={{ textDecoration: 'none' }} href='/class/create'>
                     <Button variant='contained' color='primary'>
                         Create Class
