@@ -7,7 +7,7 @@ export default async function CreateClassPage() {
     return (
         <React.Fragment>
             <AppBar />
-            {/* @ts-expect-error Server Component */}
+            {/* @ts-ignore Server Component */}
             <CreateClass />
         </React.Fragment>
     );
