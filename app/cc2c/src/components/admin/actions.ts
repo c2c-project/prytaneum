@@ -4,6 +4,42 @@ import { prisma } from '@local/core';
 import type { UsersTableSearchFilter } from './UsersTable';
 import type { ClassesTableSearchFilter } from './ClassesTable';
 
+export async function promoteUser(userId: string) {
+    try {
+        await prisma.user.update({
+            where: {
+                id: userId,
+            },
+            data: {
+                role: 'TEACHER',
+            },
+        });
+
+        return { isError: false, message: 'User promoted successfully' };
+    } catch (error) {
+        console.error(error);
+        return { isError: true, message: 'Error promoting user' };
+    }
+}
+
+export async function demoteUser(userId: string) {
+    try {
+        await prisma.user.update({
+            where: {
+                id: userId,
+            },
+            data: {
+                role: 'STUDENT',
+            },
+        });
+
+        return { isError: false, message: 'User demoted successfully' };
+    } catch (error) {
+        console.error(error);
+        return { isError: true, message: 'Error demoting user' };
+    }
+}
+
 export async function getAllUsers(ammount: number) {
     try {
         const users = await prisma.user.findMany({
