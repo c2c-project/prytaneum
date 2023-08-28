@@ -10,7 +10,7 @@ export default async function AdminDashboardPage() {
     return (
         <React.Fragment>
             <AppBar />
-            {/* @ts-expect-error Server Component */}
+            {/* @ts-ignore Server Component */}
             <AdminDashboard />
         </React.Fragment>
     );
