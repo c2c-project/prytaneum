@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 
 import { AppBar } from '@local/components';
-import { Admin } from './admin';
+import { Admin } from './Admin';
 
 export default async function AdminPage() {
     return (
