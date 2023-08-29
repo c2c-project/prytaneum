@@ -50,23 +50,23 @@ export async function getStudentById(studentId: string): Promise<Student | null>
     return student;
 }
 
-export async function getStudentsByClassId(classId: string): Promise<Student[]> {
-    const students = await prisma.user.findMany({
-        where: {
-            studentOf: {
-                some: {
-                    classId,
+export async function getStudentsByClassId(classId: string) {
+    const students = await prisma.student.findMany({
+        where: { classId },
+        select: {
+            userId: true,
+            preWriting: true,
+            postWriting: true,
+            user: {
+                select: {
+                    studentId: true,
+                    email: true,
+                    firstName: true,
+                    lastName: true,
+                    researchProjectConsent: true,
+                    shadowAccount: true,
                 },
             },
-        },
-        select: {
-            id: true,
-            studentId: true,
-            email: true,
-            firstName: true,
-            lastName: true,
-            researchProjectConsent: true,
-            shadowAccount: true,
         },
     });
 
