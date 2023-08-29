@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import {
     Grid,
     Typography,
@@ -18,7 +19,6 @@ import {
 import { Search as SearchIcon } from '@mui/icons-material';
 
 import { useForm } from '@local/lib';
-import type { User } from '@local/lib';
 import { TablePaginationActions } from '../TablePaginationActions';
 import { getAllClasses, loadNextPageClasses, refreshClasses } from './actions';
 import { Class } from '@local/server';
@@ -63,13 +63,9 @@ function SearchBar({ handleSearchFilter }: ClassesTableSearchBarProps) {
     );
 }
 
-interface ClassesTableProps {}
-
-export function ClassesTable({}: ClassesTableProps) {
+export function ClassesTable() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-    const date = new Date();
     const FETCH_AMMOUNT = 100;
 
     const [classes, setClasses] = React.useState<Omit<Class, 'prytaneumURL'>[]>([]);
@@ -152,13 +148,15 @@ export function ClassesTable({}: ClassesTableProps) {
                         {(rowsPerPage > 0
                             ? classes.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             : classes
-                        ).map((user) => (
-                            <TableRow key={user.id}>
+                        ).map((_class) => (
+                            <TableRow key={_class.id}>
                                 <TableCell>
-                                    <Typography>{user.termId}</Typography>
+                                    <Link href={`/class/${_class.id}`}>
+                                        <Typography>{_class.termId}</Typography>
+                                    </Link>
                                 </TableCell>
                                 <TableCell>
-                                    <Typography>{user.name}</Typography>
+                                    <Typography>{_class.name}</Typography>
                                 </TableCell>
                             </TableRow>
                         ))}
