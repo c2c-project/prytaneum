@@ -251,3 +251,37 @@ export async function refreshClasses(ammount: number, filter: ClassesTableSearch
         return { classes: [], hasNextPage: false };
     }
 }
+
+export async function addTeacherByEmail(formData: FormData) {
+    'use server';
+    const email = formData.get('email') as string;
+    const classId = formData.get('classId') as string;
+
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                email,
+                // role: 'TEACHER',
+            },
+        });
+        if (!user) throw new Error('User not found');
+        await prisma.teacher.upsert({
+            where: {
+                userId_classId: {
+                    userId: user.id,
+                    classId,
+                },
+            },
+            update: {},
+            create: {
+                userId: user.id,
+                classId,
+            },
+        });
+        return { isError: false, message: '' };
+    } catch (error) {
+        console.error(error);
+        if (error instanceof Error) return { isError: true, message: error.message };
+        else return { isError: true, message: 'Something went wrong' };
+    }
+}
