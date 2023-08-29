@@ -22,7 +22,7 @@ export async function getAllClasses(): Promise<Class[]> {
     return classes;
 }
 
-export async function getClassById(id: string): Promise<Class | null> {
+export async function getClassById(id: string) {
     const _class = await prisma.class.findUnique({
         where: {
             id,
@@ -32,6 +32,7 @@ export async function getClassById(id: string): Promise<Class | null> {
             termId: true,
             name: true,
             prytaneumURL: true,
+            students: true,
         },
     });
 
