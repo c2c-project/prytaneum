@@ -67,8 +67,8 @@ model Student {
   // Info
   userId String @db.Uuid
   classId String @db.Uuid
-  preWriting String @db.VarChar(2000) @default("")
-  postWriting String @db.VarChar(2000) @default("")
+  preWriting String @default("")
+  postWriting String @default("")
 
   // Relations
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
