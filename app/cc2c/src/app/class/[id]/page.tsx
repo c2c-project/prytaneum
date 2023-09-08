@@ -14,7 +14,7 @@ export default function ClassPage({ params }: ClassPageProps) {
     return (
         <React.Fragment>
             <AppBar />
-            {/* @ts-expect-error Server Component */}
+            {/* @ts-ignore Server Component */}
             <Class classId={classId} />
             <AddTeacherFormModal classId={classId} />
         </React.Fragment>
