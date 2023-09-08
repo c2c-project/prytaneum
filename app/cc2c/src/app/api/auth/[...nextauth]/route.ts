@@ -5,6 +5,8 @@ import type { NextAuthOptions } from 'next-auth';
 import type { UserWithoutPass } from '@local/app/api/auth/types';
 import type { MutationResult } from '@local/core';
 
+export type UserWithToken = UserWithoutPass & { accessToken: string };
+
 export const authOptions: NextAuthOptions = {
     providers: [
         CredentialsProvider({
@@ -30,7 +32,6 @@ export const authOptions: NextAuthOptions = {
                     }),
                 });
 
-                type UserWithToken = UserWithoutPass & { accessToken: string };
                 // const user = (await res.json()) as (UserWithoutPass & { accessToken: string }) | null;
                 const parsedResult = (await res.json()) as MutationResult<UserWithToken>;
                 if (parsedResult.isError) {
