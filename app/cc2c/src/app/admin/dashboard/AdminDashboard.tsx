@@ -20,7 +20,6 @@ export async function AdminDashboard() {
                         Create Class
                     </Button>
                 </Link>
-                {/* <ClassesList classes={classes} /> */}
             </Grid>
         </Grid>
     );

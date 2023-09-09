@@ -71,7 +71,7 @@ export function SignIn({ csfrToken }: Props) {
                         label='Email'
                     />
                     <TextField
-                        required
+                        // required
                         autoComplete='off'
                         type='password'
                         id='password'
