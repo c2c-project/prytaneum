@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Box, List, ListItem, ListItemText, ListItemButton, Divider, Typography, Avatar } from '@mui/material';
+import { Grid, Box, Divider, Typography } from '@mui/material';
 
 import { getClassById, getStudentsByClassId } from '@local/server';
 import { StudentsList } from '@local/components';
