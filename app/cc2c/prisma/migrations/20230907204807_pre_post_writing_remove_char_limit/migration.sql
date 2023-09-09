@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "Student" ALTER COLUMN "postWriting" SET DATA TYPE TEXT,
-ALTER COLUMN "preWriting" SET DATA TYPE TEXT;
