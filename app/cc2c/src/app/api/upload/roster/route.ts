@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import * as bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
+import mg from '@local/lib/email/client';
 import { prisma } from '@local/core';
 import type { RosterCSVData } from '@local/components';
 
@@ -19,6 +21,17 @@ export async function POST(request: NextRequest) {
     const usersToRegister = JSON.parse(csvData as string) as RosterCSVData[];
     const cache: Record<string, string> = {};
 
+    // Verify env variables
+    if (!process.env.JWT_SECRET) throw new Error('JWT_SECRET not configured');
+    if (!process.env.MAILGUN_DOMAIN) throw new Error('MAILGUN_DOMAIN not configured');
+
+    interface RecipiantVariables {
+        [key: string]: { first: string; registrationLink: string };
+    }
+    const recipiantVariables: RecipiantVariables = {};
+    const emails = [];
+
+    // Create users and classes, then add users to classes
     for (const data of usersToRegister) {
         const { student_id, course_id, email, first_name, last_name, research_project_consent } = data;
         try {
@@ -65,9 +78,44 @@ export async function POST(request: NextRequest) {
                     classId: _class.id,
                 },
             });
+
+            // Create JWT token for user to complete registration and add to email list
+            const payload = { userId: newUser.id };
+            const token = jwt.sign(payload, process.env.JWT_SECRET);
+            const registrationLink = `${process.env.ORIGIN_URL}/auth/complete-registration/?token=${token}`;
+
+            recipiantVariables[email] = { first: first_name, registrationLink };
+            emails.push(email);
+
+            // TODO: Create prytaneum account for user as well
+            const response = await fetch(`${process.env.PRYTANEUM_URL}/graphql/create-account`, {
+                method: 'POST',
+                body: JSON.stringify({ email, firstName: first_name, lastName: last_name }),
+            });
+
+            if (response.ok) console.log(`Successfully created Prytaneum account: ${email}`);
+            else {
+                console.error(response.statusText);
+                throw new Error(`Error creating Prytaneum account: ${email}`);
+            }
         } catch (error) {
             console.error(error);
         }
+    }
+
+    try {
+        await mg.messages.create(process.env.MAILGUN_DOMAIN, {
+            from: `CC2C <${process.env.MAILGUN_FROM_EMAIL}>`,
+            to: emails,
+            'recipient-variables': JSON.stringify(recipiantVariables),
+            subject: 'Welcome to CC2C!',
+            template: 'cc2c-complete-registration',
+            'v:complete-registration-url': '%recipient.registrationLink%',
+            'v:first-name': '%recipient.first%',
+        });
+    } catch (error) {
+        console.error(error);
+        return new NextResponse('Error sending emails', { status: 400 });
     }
 
     return new NextResponse('OK', { status: 200 });
