@@ -1,0 +1,53 @@
+{
+    "name": "@app/cc2c",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint",
+        "test:ci": "echo TODO",
+        "prisma-generate": "yarn pnpify prisma generate",
+        "prisma-db-push": "prisma db push --skip-generate",
+        "prisma-db-push-dev": "prisma db push --skip-generate --accept-data-loss",
+        "prisma-db-seed": "prisma db seed",
+        "prisma-migrate-dev": "prisma migrate dev --skip-generate",
+        "prisma-migrate-deploy": "prisma migrate deploy",
+        "prisma-migrate-diff": "prisma migrate diff",
+        "prisma-down-migration": "prisma db execute --file ./down.sql --schema prisma/schema.prisma"
+    },
+    "dependencies": {
+        "@emotion/react": "^11.11.1",
+        "@emotion/styled": "^11.11.0",
+        "@fontsource/roboto": "^5.0.8",
+        "@mui/icons-material": "^5.14.3",
+        "@mui/material": "^5.14.0",
+        "@prisma/client": "^5.0.0",
+        "@types/node": "20.4.2",
+        "@types/react": "18.2.15",
+        "@types/react-dom": "18.2.7",
+        "bcrypt": "^5.1.0",
+        "form-data": "^4.0.0",
+        "jsonwebtoken": "^9.0.1",
+        "mailgun.js": "^9.2.1",
+        "next": "^13.4.18",
+        "next-auth": "^4.22.3",
+        "notistack": "^3.0.1",
+        "papaparse": "^5.4.1",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "typescript": "5.1.6",
+        "yup": "^1.2.0"
+    },
+    "devDependencies": {
+        "@types/bcrypt": "^5.0.0",
+        "@types/eslint": "^8",
+        "@types/jsonwebtoken": "^9",
+        "@types/papaparse": "^5",
+        "@yarnpkg/pnpify": "^4.0.0-rc.48",
+        "eslint": "^8.47.0",
+        "eslint-config-next": "^13.4.18",
+        "prisma": "^5.0.0"
+    }
+}
