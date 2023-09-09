@@ -1,27 +1,37 @@
 import React from 'react';
 import { Button, Grid, Typography } from '@mui/material';
+import { getServerSession } from 'next-auth';
+import { authOptions, UserWithToken } from '@local/app/api/auth/[...nextauth]/route';
 
-import { UploadPreWriting, UploadPostWriting } from '@local/components';
+import { getStudentWritingStatus } from './actions';
+import { SubmitPostWritng, SubmitPreWritng } from '@local/components/student';
 
 interface Props {}
 
-export function StudentDashboard({}: Props) {
+export async function StudentDashboard({}: Props) {
+    const session = await getServerSession(authOptions);
+    if (!session) return <div>loading...</div>;
+    const user = session.user as UserWithToken;
+
+    const { preWritingSubmitted, postWritingSubmitted, classId } = await getStudentWritingStatus(user.id);
+
     return (
         <Grid container justifyContent='center'>
             <Grid item>
                 <Typography variant='h3' marginY='3rem'>
-                    Town Hall with your member of Congress
+                    Connecting Classrooms to Congress
                 </Typography>
             </Grid>
             <Grid item container justifyContent='center'>
                 <Grid item container direction='column' alignItems='center'>
                     <Typography>Event Info</Typography>
-                    <Button>Join Event</Button>
+                    <Button>Join Town Hall</Button>
                 </Grid>
             </Grid>
+            {/* TODO: Add indicators for pre/post writing status & disable button if already submitted*/}
             <Grid item container justifyContent='center'>
-                <UploadPreWriting />
-                <UploadPostWriting />
+                <SubmitPreWritng userId={user.id} classId={classId} preWritingSubmitted={preWritingSubmitted} />
+                <SubmitPostWritng userId={user.id} classId={classId} postWritingSubmitted={postWritingSubmitted} />
             </Grid>
         </Grid>
     );
