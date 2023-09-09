@@ -74,15 +74,15 @@ spec:
                       - name: MAILGUN_API_KEY
                         valueFrom:
                             secretKeyRef:
-                            key: api_key
-                            name: mailgun-secret
+                                key: api_key
+                                name: mailgun-secret
                       - name: MAILGUN_DOMAIN
                         valueFrom:
                             secretKeyRef:
-                            key: domain
-                            name: mailgun-secret
+                                key: domain
+                                name: mailgun-secret
                       - name: MAILGUN_FROM_EMAIL
                         valueFrom:
                             secretKeyRef:
-                            key: from_email
-                            name: mailgun-secret
+                                key: from_email
+                                name: mailgun-secret
