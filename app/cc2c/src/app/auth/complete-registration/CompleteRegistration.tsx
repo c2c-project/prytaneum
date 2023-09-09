@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { Grid, Button, TextField, Typography } from '@mui/material';
 
 import { updatePasswordWithToken } from './actions';
@@ -8,6 +9,7 @@ import { updatePasswordWithToken } from './actions';
 export function CompleteRegistration({ token }: { token: string }) {
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState('');
+    const router = useRouter();
 
     const handleCompleteRegistration = async (formData: FormData) => {
         setLoading(true);
@@ -17,6 +19,7 @@ export function CompleteRegistration({ token }: { token: string }) {
 
         if (isError) setError(message);
         setLoading(false);
+        router.replace('/auth/signin');
     };
 
     return (

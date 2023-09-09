@@ -32,7 +32,8 @@ export function StudentSignUp({ csfrToken }: Props) {
 
     const searchParams = useSearchParams();
     const callbackUrl =
-        searchParams.get('callbackUrl') || (process.env.ORIGIN_URL || 'http://localhost:3000') + '/dashboard';
+        searchParams.get('callbackUrl') ||
+        (process.env.NEXT_PUBLIC_ORIGIN_URL || 'http://localhost:3000') + '/dashboard';
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

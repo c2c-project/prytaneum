@@ -79,6 +79,7 @@ jobs:
                     --build-arg DEPLOYMENT_ENV="development" \
                     --build-arg REGISTRATION_AUTHORIZATION_CODE="$REGISTRATION_AUTHORIZATION_CODE" \
                     --build-arg ORIGIN_URL="$ORIGIN" \
+                    --build-arg NEXT_PUBLIC_ORIGIN_URL="$ORIGIN" \
                     --build-arg PRYTANEUM_URL="$PRYTANEUM_URL" \
                     .
 
@@ -201,6 +202,7 @@ jobs:
                     --build-arg DEPLOYMENT_ENV="production" \
                     --build-arg REGISTRATION_AUTHORIZATION_CODE="$REGISTRATION_AUTHORIZATION_CODE" \
                     --build-arg ORIGIN_URL="$ORIGIN" \
+                    --build-arg NEXT_PUBLIC_ORIGIN_URL="$ORIGIN" \
                     --build-arg PRYTANEUM_URL="$PRYTANEUM_URL" \
                     .
 

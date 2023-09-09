@@ -23,7 +23,7 @@ export const updatePasswordWithToken = async (formData: FormData) => {
             where: { id: userId },
             data: { password: await bcrypt.hash(password, 10) },
         });
-        redirect('/auth/signin');
+        return { isError: false, message: 'Password updated successfully' };
     } catch (error) {
         console.error(error);
         return { isError: true, message: error instanceof Error ? error.message : 'Unknown error occured' };

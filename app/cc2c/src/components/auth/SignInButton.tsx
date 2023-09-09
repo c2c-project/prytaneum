@@ -16,7 +16,9 @@ export function SignInButton({ visible, ...restProps }: Props): JSX.Element | nu
             variant='contained'
             color='primary'
             onClick={() =>
-                signIn('email', { callbackUrl: `${process.env.ORIGIN_URL || 'http://localhost:3000'}/dashboard` })
+                signIn('email', {
+                    callbackUrl: `${process.env.NEXT_PUBLIC_ORIGIN_URL || 'http://localhost:3000'}/dashboard`,
+                })
             }
             {...restProps}
         >
