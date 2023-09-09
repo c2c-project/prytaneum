@@ -77,6 +77,7 @@ jobs:
                     --build-arg GITHUB_REF="$GITHUB_REF" \
                     --build-arg DEPLOYMENT_ENV="development" \
                     --build-arg REGISTRATION_AUTHORIZATION_CODE="$REGISTRATION_AUTHORIZATION_CODE" \
+                    --build-arg ORIGIN_URL="$ORIGIN" \
                     .
 
             # Push the App image to Google Container Registry
@@ -197,6 +198,7 @@ jobs:
                     --build-arg GITHUB_REF="$GITHUB_REF" \
                     --build-arg DEPLOYMENT_ENV="production" \
                     --build-arg REGISTRATION_AUTHORIZATION_CODE="$REGISTRATION_AUTHORIZATION_CODE" \
+                    --build-arg ORIGIN_URL="$ORIGIN" \
                     .
 
             # Push the App image to Google Container Registry

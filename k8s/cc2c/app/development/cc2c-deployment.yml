@@ -47,6 +47,11 @@ spec:
                             configMapKeyRef:
                                 key: NODE_ENV
                                 name: cc2c-config
+                      - name: ORIGIN_URL
+                        valueFrom:
+                            configMapKeyRef:
+                                key: ORIGIN_URL
+                                name: cc2c-config
                       - name: HOST
                         valueFrom:
                             configMapKeyRef:
@@ -65,6 +70,16 @@ spec:
                         valueFrom:
                             configMapKeyRef:
                                 key: GCP_PROJECT_ID
+                                name: cc2c-config
+                      - name: GCP_SERVICE_URL
+                        valueFrom:
+                            configMapKeyRef:
+                                key: GCP_SERVICE_URL
+                                name: cc2c-config
+                      - name: NEXTAUTH_URL
+                        valueFrom:
+                            configMapKeyRef:
+                                key: NEXTAUTH_URL
                                 name: cc2c-config
                       - name: DATABASE_URL
                         valueFrom:
