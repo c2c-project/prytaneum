@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Student" ADD COLUMN     "postWriting" VARCHAR(2000) NOT NULL DEFAULT '',
+ADD COLUMN     "preWriting" VARCHAR(2000) NOT NULL DEFAULT '';

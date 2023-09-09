@@ -1,0 +1,274 @@
+name: Deploy CC2C
+
+on:
+    push:
+        branches:
+            - staging
+        paths:
+            - 'app/cc2c/**'
+            - 'app/gcp/**'
+            - 'k8s/cc2c/**'
+            - 'k8s/gcp/**'
+    workflow_dispatch:
+        inputs:
+            releaseType:
+                description: 'Where to release (staging or prod)?'
+                required: true
+                default: 'staging'
+                type: choice
+                options:
+                    - staging
+                    - prod
+
+env:
+    PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
+    GKE_CLUSTER: ${{ vars.GKE_CLUSTER }}
+    GKE_ZONE: ${{ vars.GKE_ZONE }}
+    CC2C_DEPLOYMENT: ${{ vars.CLIENT_DEPLOYMENT }}
+    CC2C_IMAGE: ${{ vars.CC2C_IMAGE }}
+    GCP_SERVICE_IMAGE: ${{ vars.GCP_SERVICE_IMAGE }}
+    NAMESPACE: ${{ vars.NAMESPACE }}
+    ORIGIN: ${{ vars.ORIGIN }}
+    DATABASE_URL: ${{ secrets.DATABASE_URL }} # Used for prisma migration
+    REGISTRATION_AUTHORIZATION_CODE: ${{ secrets.REGISTRATION_AUTHORIZATION_CODE }}
+
+jobs:
+    staging:
+        name: Deploy to Staging
+        runs-on: ubuntu-latest
+        environment:
+            name: cc2c-development
+            url: ${{ env.ORIGIN }}
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - id: 'auth'
+              uses: 'google-github-actions/auth@v1'
+              with:
+                  credentials_json: '${{ secrets.GKE_SA_KEY }}'
+
+            # Setup gcloud CLI
+            - name: 'Set up Cloud SDK'
+              uses: google-github-actions/setup-gcloud@v1
+              with:
+                  version: '400.0.0'
+                  project_id: ${{ secrets.GKE_PROJECT_ID }}
+
+            # Configure Docker to use the gcloud command-line tool as a credential
+            # helper for authentication
+            - run: |-
+                  gcloud --quiet auth configure-docker
+            # Get the GKE credentials so we can deploy to the cluster
+            - id: 'get-credentials'
+              uses: google-github-actions/get-gke-credentials@v0.7.0
+              with:
+                  cluster_name: ${{ env.GKE_CLUSTER }}
+                  location: ${{ env.GKE_ZONE }}
+
+            # Build the App
+            - name: Build App
+              run: |-
+                  docker build \
+                    -f ./docker/Dockerfile.cc2c \
+                    --tag "gcr.io/$PROJECT_ID/$CC2C_IMAGE:$GITHUB_SHA" \
+                    --build-arg GITHUB_SHA="$GITHUB_SHA" \
+                    --build-arg GITHUB_REF="$GITHUB_REF" \
+                    --build-arg DEPLOYMENT_ENV="development" \
+                    --build-arg REGISTRATION_AUTHORIZATION_CODE="$REGISTRATION_AUTHORIZATION_CODE" \
+                    --build-arg ORIGIN_URL="$ORIGIN" \
+                    .
+
+            # Push the App image to Google Container Registry
+            - name: Publish App
+              run: docker push "gcr.io/$PROJECT_ID/$CC2C_IMAGE:$GITHUB_SHA"
+
+            # Set up kustomize
+            - name: Set up Kustomize
+              run: |-
+                  curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
+                  chmod u+x ./kustomize
+
+            # Deploy the Docker image to the GKE cluster
+            - name: Kustomize & Deploy App
+              run: |-
+                  cd ./k8s/cc2c/app/development
+                  kustomize edit set image gcr.io/PROJECT_ID/CC2C_IMAGE:TAG=gcr.io/$PROJECT_ID/$CC2C_IMAGE:$GITHUB_SHA
+                  kustomize edit set namespace $NAMESPACE
+                  kustomize build . | kubectl apply -f -
+
+            - uses: actions/setup-node@v2
+              with:
+                  node-version: '16'
+
+            - name: Yarn Install
+              run: yarn install
+
+            # Update DB schema to be in sync with prisma schema
+            - name: Prisma Migration
+              run: yarn workspace @app/cc2c prisma-migrate-deploy
+
+            # Finalize Deployment
+            - name: Set kubectl context
+              run: |-
+                  kubectl config set-context --current --namespace=$NAMESPACE
+
+            - name: CC2C Deployment Rollout Check
+              run: |-
+                  kubectl rollout status deployment/cc2c
+                  kubectl get services -o wide
+
+            # Deploy GCP Service
+            - name: Build GCP Service
+              run: |-
+                  docker build \
+                    -f ./docker/Dockerfile.gcp \
+                    --tag "gcr.io/$PROJECT_ID/$GCP_SERVICE_IMAGE:$GITHUB_SHA" \
+                    --build-arg GITHUB_SHA="$GITHUB_SHA" \
+                    --build-arg GITHUB_REF="$GITHUB_REF" \
+                    --build-arg DEPLOYMENT_ENV="development" \
+                    .
+
+            # Push the App image to Google Container Registry
+            - name: Publish GCP Service
+              run: docker push "gcr.io/$PROJECT_ID/$GCP_SERVICE_IMAGE:$GITHUB_SHA"
+
+            # Deploy the Docker image to the GKE cluster
+            - name: Kustomize & Deploy GCP Service
+              run: |-
+                  cd ./k8s/cc2c/gcp/development
+                  kustomize edit set image gcr.io/PROJECT_ID/GCP_SERVICE_IMAGE:TAG=gcr.io/$PROJECT_ID/$GCP_SERVICE_IMAGE:$GITHUB_SHA
+                  kustomize edit set namespace $NAMESPACE
+                  kustomize build . | kubectl apply -f -
+
+            # Finalize Deployment
+            - name: Set kubectl context
+              run: |-
+                  kubectl config set-context --current --namespace=$NAMESPACE
+
+            - name: GCP Deployment Rollout Check
+              run: |-
+                  kubectl rollout status deployment/gcp
+                  kubectl get services -o wide
+
+    prod:
+        if: github.event.inputs.releaseType == 'prod'
+        name: Deploy to Production
+        runs-on: ubuntu-latest
+        environment:
+            name: cc2c-production
+            url: ${{ env.ORIGIN }}
+        needs: [staging]
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - id: 'auth'
+              uses: 'google-github-actions/auth@v1'
+              with:
+                  credentials_json: '${{ secrets.GKE_SA_KEY }}'
+
+            # Setup gcloud CLI
+            - name: 'Set up Cloud SDK'
+              uses: google-github-actions/setup-gcloud@v1
+              with:
+                  version: '400.0.0'
+                  project_id: ${{ secrets.GKE_PROJECT_ID }}
+
+            # Configure Docker to use the gcloud command-line tool as a credential
+            # helper for authentication
+            - run: |-
+                  gcloud --quiet auth configure-docker
+            # Get the GKE credentials so we can deploy to the cluster
+            - id: 'get-credentials'
+              uses: google-github-actions/get-gke-credentials@v0.7.0
+              with:
+                  cluster_name: ${{ env.GKE_CLUSTER }}
+                  location: ${{ env.GKE_ZONE }}
+
+            # Build the App
+            - name: Build App
+              run: |-
+                  docker build \
+                    -f ./docker/Dockerfile.cc2c \
+                    --tag "gcr.io/$PROJECT_ID/$CC2C_IMAGE:$GITHUB_SHA" \
+                    --build-arg GITHUB_SHA="$GITHUB_SHA" \
+                    --build-arg GITHUB_REF="$GITHUB_REF" \
+                    --build-arg DEPLOYMENT_ENV="production" \
+                    --build-arg REGISTRATION_AUTHORIZATION_CODE="$REGISTRATION_AUTHORIZATION_CODE" \
+                    --build-arg ORIGIN_URL="$ORIGIN" \
+                    .
+
+            # Push the App image to Google Container Registry
+            - name: Publish App
+              run: docker push "gcr.io/$PROJECT_ID/$CC2C_IMAGE:$GITHUB_SHA"
+
+            # Set up kustomize
+            - name: Set up Kustomize
+              run: |-
+                  curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
+                  chmod u+x ./kustomize
+
+            # Deploy the Docker image to the GKE cluster
+            - name: Kustomize & Deploy App
+              run: |-
+                  cd ./k8s/cc2c/app/production
+                  kustomize edit set image gcr.io/PROJECT_ID/CC2C_IMAGE:TAG=gcr.io/$PROJECT_ID/$CC2C_IMAGE:$GITHUB_SHA
+                  kustomize edit set namespace $NAMESPACE
+                  kustomize build . | kubectl apply -f -
+
+            - uses: actions/setup-node@v2
+              with:
+                  node-version: '16'
+
+            - name: Yarn Install
+              run: yarn install
+
+            # Update DB schema to be in sync with prisma schema
+            - name: Prisma Migration
+              run: yarn workspace @app/cc2c prisma-migrate-deploy
+
+            # Finalize Deployment
+            - name: Set kubectl context
+              run: |-
+                  kubectl config set-context --current --namespace=$NAMESPACE
+
+            - name: CC2C Deployment Rollout Check
+              run: |-
+                  kubectl rollout status deployment/cc2c
+                  kubectl get services -o wide
+
+            # Deploy GCP Service
+            - name: Build GCP Service
+              run: |-
+                  docker build \
+                    -f ./docker/Dockerfile.gcp \
+                    --tag "gcr.io/$PROJECT_ID/$GCP_SERVICE_IMAGE:$GITHUB_SHA" \
+                    --build-arg GITHUB_SHA="$GITHUB_SHA" \
+                    --build-arg GITHUB_REF="$GITHUB_REF" \
+                    --build-arg DEPLOYMENT_ENV="production" \
+                    .
+
+            # Push the App image to Google Container Registry
+            - name: Publish GCP Service
+              run: docker push "gcr.io/$PROJECT_ID/$GCP_SERVICE_IMAGE:$GITHUB_SHA"
+
+            # Deploy the Docker image to the GKE cluster
+            - name: Kustomize & Deploy GCP Service
+              run: |-
+                  cd ./k8s/cc2c/gcp/production
+                  kustomize edit set image gcr.io/PROJECT_ID/GCP_SERVICE_IMAGE:TAG=gcr.io/$PROJECT_ID/$GCP_SERVICE_IMAGE:$GITHUB_SHA
+                  kustomize edit set namespace $NAMESPACE
+                  kustomize build . | kubectl apply -f -
+
+            # Finalize Deployment
+            - name: Set kubectl context
+              run: |-
+                  kubectl config set-context --current --namespace=$NAMESPACE
+
+            - name: GCP Deployment Rollout Check
+              run: |-
+                  kubectl rollout status deployment/gcp
+                  kubectl get services -o wide
