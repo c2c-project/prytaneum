@@ -9,6 +9,7 @@ export * from './CreateClassForm';
 export * from './DashboardButton';
 export * from './TemporaryDrawer';
 export * from './Providers';
+export * from './ResponsiveDialog';
 export * from './StudentsList';
 export * from './TablePaginationActions';
 export * from './PageLoading';
