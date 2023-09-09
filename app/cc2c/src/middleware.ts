@@ -15,8 +15,7 @@ export async function middleware(request: NextRequest, _next: NextFetchEvent) {
     if (pathname === '/dashboard') {
         const token = await getToken({ req: request });
         if (!token) {
-            const url = new URL(`/signin`, request.url);
-            url.searchParams.set('callbackUrl', encodeURI(request.url));
+            const url = new URL(`/auth/signin`, request.url);
             return NextResponse.redirect(url);
         }
         if (token.role === 'ADMIN') {
@@ -34,12 +33,11 @@ export async function middleware(request: NextRequest, _next: NextFetchEvent) {
     if (matchesAdminPath) {
         const token = await getToken({ req: request });
         if (!token) {
-            const url = new URL(`/signin`, request.url);
-            url.searchParams.set('callbackUrl', encodeURI(request.url));
+            const url = new URL(`/auth/signin`, request.url);
             return NextResponse.redirect(url);
         }
         if (token.role !== 'ADMIN') {
-            const url = new URL(`/403`, request.url);
+            const url = new URL(`/`, request.url);
             return NextResponse.rewrite(url);
         }
     }
@@ -48,14 +46,12 @@ export async function middleware(request: NextRequest, _next: NextFetchEvent) {
     const matchesTeacherPath = teacherPaths.some((path) => pathname.startsWith(path));
     if (matchesTeacherPath) {
         const token = await getToken({ req: request });
-        console.log('token', token);
         if (!token) {
-            const url = new URL(`/signin`, request.url);
-            url.searchParams.set('callbackUrl', encodeURI(request.url));
+            const url = new URL(`/auth/signin`, request.url);
             return NextResponse.redirect(url);
         }
         if (token.role !== 'TEACHER') {
-            const url = new URL(`/403`, request.url);
+            const url = new URL(`/`, request.url);
             return NextResponse.rewrite(url);
         }
     }
