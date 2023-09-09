@@ -20,7 +20,6 @@ export const onRosterUpload = async (inputRef: React.MutableRefObject<HTMLInputE
         complete: async (results) => {
             const headers = results.meta.fields;
             if (!headers) throw new Error('No headers found');
-            console.log('Headers: ', headers);
             const expectedHeaders = [
                 'course_id',
                 'student_id',
@@ -35,13 +34,10 @@ export const onRosterUpload = async (inputRef: React.MutableRefObject<HTMLInputE
                 }
             });
             const data = results.data as RosterCSVData[];
-            console.log(data);
 
             const formData = new FormData();
             formData.append('headers', JSON.stringify(headers));
             formData.append('data', JSON.stringify(data));
-
-            console.log(formData);
 
             const result = await fetch('/api/upload/roster', {
                 method: 'POST',

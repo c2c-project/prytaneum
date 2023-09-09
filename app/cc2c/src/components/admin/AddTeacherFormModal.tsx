@@ -21,10 +21,6 @@ export function AddTeacherFormModal({ classId }: AddTeacherFormProps) {
         setIsLoading(false);
     }
 
-    React.useEffect(() => {
-        console.log(isLoading);
-    }, [isLoading]);
-
     return (
         <React.Fragment>
             <Grid container justifyContent='center'>
