@@ -42,3 +42,23 @@ export async function createClass(formData: FormData): Promise<void> {
         console.error(error);
     }
 }
+
+export async function getStudentWritingStatus(userId: string) {
+    try {
+        const student = await prisma.student.findFirst({
+            where: { userId },
+            select: { preWriting: true, postWriting: true, classId: true },
+        });
+
+        if (!student) throw new Error('Student not found');
+        const { preWriting, postWriting } = student;
+
+        const preWritingSubmitted = preWriting !== '';
+        const postWritingSubmitted = postWriting !== '';
+
+        return { preWritingSubmitted, postWritingSubmitted, classId: student.classId };
+    } catch (error) {
+        console.error(error);
+        return { preWritingSubmitted: false, postWritingSubmitted: false, classId: '' };
+    }
+}
