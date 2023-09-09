@@ -15,7 +15,7 @@ export function SignOutButton({ visible, ...restProps }: Props): JSX.Element | n
         <Button
             variant='contained'
             color='primary'
-            onClick={() => signOut({ callbackUrl: process.env.ORIGIN_URL || 'http://localhost:3000/' })}
+            onClick={() => signOut({ callbackUrl: process.env.NEXT_PUBLIC_ORIGIN_URL || 'http://localhost:3000/' })}
             {...restProps}
         >
             Sign Out
