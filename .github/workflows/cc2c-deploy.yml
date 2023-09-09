@@ -106,7 +106,7 @@ jobs:
 
             # Update DB schema to be in sync with prisma schema
             - name: Prisma Migration
-              run: yarn workspace @app/server prisma-migrate-deploy
+              run: yarn workspace @app/cc2c prisma-migrate-deploy
 
             # Finalize Deployment
             - name: Set kubectl context
@@ -226,7 +226,7 @@ jobs:
 
             # Update DB schema to be in sync with prisma schema
             - name: Prisma Migration
-              run: yarn workspace @app/server prisma-migrate-deploy
+              run: yarn workspace @app/cc2c prisma-migrate-deploy
 
             # Finalize Deployment
             - name: Set kubectl context
