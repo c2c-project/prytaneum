@@ -12,16 +12,7 @@ interface Props extends ButtonProps {
 export function SignInButton({ visible, ...restProps }: Props): JSX.Element | null {
     if (!visible) return null;
     return (
-        <Button
-            variant='contained'
-            color='primary'
-            onClick={() =>
-                signIn('email', {
-                    callbackUrl: `${process.env.NEXT_PUBLIC_ORIGIN_URL || 'http://localhost:3000'}/dashboard`,
-                })
-            }
-            {...restProps}
-        >
+        <Button variant='contained' color='primary' onClick={() => signIn('email')} {...restProps}>
             Sign In
         </Button>
     );

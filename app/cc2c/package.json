@@ -5,7 +5,7 @@
     "scripts": {
         "dev": "next dev",
         "build": "next build",
-        "start": "next start",
+        "start": "next start --hostname 0.0.0.0",
         "lint": "next lint",
         "test:ci": "echo TODO",
         "prisma-generate": "yarn pnpify prisma generate",

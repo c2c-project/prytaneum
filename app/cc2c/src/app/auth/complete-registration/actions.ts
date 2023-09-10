@@ -12,7 +12,6 @@ export const updatePasswordWithToken = async (formData: FormData) => {
         if (!token) throw new Error('Missing token');
         // Get other data from token
         const { userId } = jwt.verify(token, process.env.JWT_SECRET as string) as { userId: string };
-        console.log(userId);
         // Set password
         const password = formData.get('password') as string | null;
         if (!password) throw new Error('Missing password field');

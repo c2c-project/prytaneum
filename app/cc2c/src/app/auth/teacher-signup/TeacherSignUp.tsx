@@ -3,7 +3,7 @@
 import React from 'react';
 import type { ChangeEvent } from 'react';
 import { signIn } from 'next-auth/react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Grid, Typography, TextField, Button, List, ListItem } from '@mui/material';
 
 import { teacherSignUp, TeacherSignUpFormData } from '@local/lib';
@@ -27,11 +27,6 @@ export function TeacherSignUp({ csfrToken }: Props) {
         defaultFormValues
     );
     const [error, setError] = React.useState('');
-
-    const searchParams = useSearchParams();
-    const callbackUrl =
-        searchParams.get('callbackUrl') ||
-        (process.env.NEXT_PUBLIC_ORIGIN_URL || 'http://localhost:3000') + '/dashboard';
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -61,7 +56,7 @@ export function TeacherSignUp({ csfrToken }: Props) {
             const res = await signIn('credentials', {
                 email: formValues.email,
                 password: formValues.password,
-                callbackUrl,
+                redirect: false,
             });
 
             setLoading(false);
@@ -69,7 +64,7 @@ export function TeacherSignUp({ csfrToken }: Props) {
                 console.error(res.error);
                 setError(res.error);
             } else {
-                router.push('/dashboard');
+                router.replace('/dashboard');
             }
         } catch (error) {
             setLoading(false);
