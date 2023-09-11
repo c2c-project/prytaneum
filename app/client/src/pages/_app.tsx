@@ -19,7 +19,7 @@ declare module '@mui/styles/defaultTheme' {
     interface DefaultTheme extends Theme {}
 }
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps }: AppProps & { pageProps: any }) {
     const router = useRouter();
     const { env } = useEnvironment(pageProps.initialRecords);
 
