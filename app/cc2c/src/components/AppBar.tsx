@@ -66,7 +66,6 @@ export function AppBar({ children, ...restProps }: AppBarProps) {
                     <div style={{ flexGrow: 1 }} />
                     <SignInButton visible={!isLoading && !authenticated} />
                     <SignOutButton visible={!isLoading && authenticated} />
-                    <RegisterButton visible={!isLoading && !authenticated} />
                 </Toolbar>
             </MUIAppBar>
             <TemporaryDrawer open={open} handleDrawerClose={handleDrawerClose} onClose={toggleDrawer} />
