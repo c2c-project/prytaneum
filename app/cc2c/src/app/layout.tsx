@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang='en'>
             <head>
-                <title>Create Next App</title>
+                <title>CC2C</title>
                 <meta name='Connecting Classrooms to Congress' content='Connecting Classrooms to Congress' />
                 <link rel='icon' href='/favicon.ico' />
             </head>
