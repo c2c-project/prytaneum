@@ -1,6 +1,6 @@
 module.exports = {
     plugins: ['jest', '@typescript-eslint'],
-    extends: ['next/core-web-vitals', 'react-app', 'airbnb-typescript', 'prettier'],
+    extends: ['next/core-web-vitals', 'airbnb-typescript', 'prettier'],
     parserOptions: {
         project: './tsconfig.json',
     },
