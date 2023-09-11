@@ -2,6 +2,7 @@
 
 import React from 'react';
 import type { ChangeEvent } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { Grid, Typography, TextField, Button } from '@mui/material';
@@ -87,6 +88,9 @@ export function SignIn({ csfrToken }: Props) {
                             {error}
                         </Typography>
                     )}
+                </Grid>
+                <Grid item paddingTop={3}>
+                    <Link href='/auth/forgot-password'>Forgot Password</Link>
                 </Grid>
             </Grid>
         </Grid>
