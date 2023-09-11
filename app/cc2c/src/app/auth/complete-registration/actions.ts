@@ -4,7 +4,6 @@ import * as bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 import { prisma } from '@local/core';
-import { redirect } from 'next/navigation';
 
 export const updatePasswordWithToken = async (formData: FormData) => {
     try {
@@ -17,6 +16,7 @@ export const updatePasswordWithToken = async (formData: FormData) => {
         if (!password) throw new Error('Missing password field');
         const confirmPassword = formData.get('confirmPassword') as string | null;
         if (!confirmPassword) throw new Error('Missing confirmPassword field');
+        if (password.length < 8) throw new Error('Password must be at least 8 characters long');
         if (password !== confirmPassword) throw new Error('Passwords do not match');
         await prisma.user.update({
             where: { id: userId },
