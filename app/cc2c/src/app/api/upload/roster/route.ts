@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
             from: `CC2C <${process.env.MAILGUN_FROM_EMAIL}>`,
             to: emails,
             'recipient-variables': JSON.stringify(recipiantVariables),
-            subject: 'Welcome to CC2C!',
+            subject: 'Welcome to the Connecting Classrooms to Congress project!',
             template: 'cc2c-complete-registration',
             'v:complete-registration-url': '%recipient.registrationLink%',
             'v:first-name': '%recipient.first%',
