@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
 
             if (response.ok) console.log(`Successfully created Prytaneum account: ${email}`);
             else {
-                console.error(response.statusText);
+                console.error(response);
                 throw new Error(`Error creating Prytaneum account: ${email}`);
             }
         } catch (error) {
