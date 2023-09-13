@@ -1,12 +1,12 @@
-import { createProxyMiddleware } from 'http-proxy-middleware';
+import { createProxyMiddleware, Filter } from 'http-proxy-middleware';
 import express from 'express';
 
 const app = express();
 
 // graphql server
 app.use(
-    '/graphql',
-    createProxyMiddleware('/graphql', {
+    ['/graphql', '/api'],
+    createProxyMiddleware(['/graphql', '/api'], {
         changeOrigin: true,
         ws: true,
         target: `http://${process.env.HOST}:${process.env.SERVER_PORT}`,

@@ -6,6 +6,8 @@ import { getPrismaClient, getRedisClient } from './utils';
 import * as plugins from './plugins';
 import * as hooks from './hooks';
 
+require('@local/features/accounts/account');
+
 export function startup() {
     const server = getOrCreateServer();
     server.log.info('Performing setup checks...');
