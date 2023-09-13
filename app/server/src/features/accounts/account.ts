@@ -6,7 +6,7 @@ const server = getOrCreateServer();
 
 server.route({
     method: 'POST',
-    url: '/graphql/create-account',
+    url: '/api/create-account',
     handler: async (req, res) => {
         interface ExpectedBody {
             email: string;
