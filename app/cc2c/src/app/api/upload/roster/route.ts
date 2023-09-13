@@ -87,8 +87,8 @@ export async function POST(request: NextRequest) {
             recipiantVariables[email] = { first: first_name, registrationLink };
             emails.push(email);
 
-            // TODO: Create prytaneum account for user as well
-            const response = await fetch(`${process.env.PRYTANEUM_URL}/graphql/create-account`, {
+            // Create prytaneum account for user as well
+            const response = await fetch(`${process.env.PRYTANEUM_URL}/api/create-account`, {
                 method: 'POST',
                 body: JSON.stringify({ email, firstName: first_name, lastName: last_name }),
             });
