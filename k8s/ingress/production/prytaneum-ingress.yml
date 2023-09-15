@@ -27,6 +27,13 @@ spec:
                             name: prytaneum-server-service
                             port:
                                 number: 80
+                    path: /graphql
+                    pathType: ImplementationSpecific
+                  - backend:
+                        service:
+                            name: prytaneum-server-service
+                            port:
+                                number: 80
                     path: /graphql/*
                     pathType: ImplementationSpecific
                   - backend:
