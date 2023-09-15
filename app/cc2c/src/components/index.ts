@@ -7,6 +7,7 @@ export * from './auth/RegisterButton';
 export * from './AppBar';
 export * from './CreateClassForm';
 export * from './DashboardButton';
+export * from './EditClassDialog';
 export * from './TemporaryDrawer';
 export * from './Providers';
 export * from './ResponsiveDialog';

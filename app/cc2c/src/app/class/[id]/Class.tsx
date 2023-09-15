@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, Box, Divider, Typography } from '@mui/material';
 
 import { getClassById, getStudentsByClassId } from '@local/server';
-import { StudentsList } from '@local/components';
+import { StudentsList, EditClassDialog } from '@local/components';
 
 // TODO: Add edit class button (To edit name)
 export async function Class({ classId }: { classId: string }) {
@@ -23,6 +23,14 @@ export async function Class({ classId }: { classId: string }) {
                 <Typography variant='body1'>Class Name: {_class.name}</Typography>
                 <Typography variant='body1'>Term ID: {_class.termId}</Typography>
             </Grid>
+            <EditClassDialog
+                classId={classId}
+                defaultValues={{
+                    className: _class.name,
+                    termId: _class.termId,
+                    prytaneumURL: _class.prytaneumURL,
+                }}
+            />
             <Divider />
             <Grid item container justifyContent='center'>
                 <Typography variant='h4'>Students</Typography>
