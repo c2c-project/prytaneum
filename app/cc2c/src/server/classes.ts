@@ -46,11 +46,11 @@ export async function updateClass(formData: FormData) {
         const classId = formData.get('classId') as string | null;
         if (!classId) throw new Error('Class id not found');
         const className = formData.get('className') as string | null;
-        if (!className) throw new Error('Class name not found');
+        if (className === null) throw new Error('Class name not found');
         const prytaneumURL = formData.get('prytaneumURL') as string | null;
-        if (!prytaneumURL) throw new Error('Prytaneum URL not found');
+        if (prytaneumURL === null) throw new Error('Prytaneum URL not found');
         const termId = formData.get('termId') as string | null;
-        if (!termId) throw new Error('Term id not found');
+        if (termId === null) throw new Error('Term id not found');
 
         await prisma.class.update({
             where: {
