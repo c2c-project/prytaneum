@@ -3,6 +3,7 @@
 import { prisma } from '@local/core';
 import { revalidatePath } from 'next/cache';
 import type { Class } from '@local/server';
+import { UserWithToken } from '../api/auth/[...nextauth]/route';
 
 export async function getAllClasses(): Promise<Class[]> {
     try {
@@ -43,11 +44,11 @@ export async function createClass(formData: FormData): Promise<void> {
     }
 }
 
-export async function getStudentWritingStatus(userId: string) {
+export async function getStudentData(user: UserWithToken) {
     try {
         const student = await prisma.student.findFirst({
-            where: { userId },
-            select: { preWriting: true, postWriting: true, classId: true },
+            where: { userId: user.id },
+            select: { preWriting: true, postWriting: true, classId: true, eventURL: true },
         });
 
         if (!student) throw new Error('Student not found');
@@ -56,9 +57,46 @@ export async function getStudentWritingStatus(userId: string) {
         const preWritingSubmitted = preWriting !== '';
         const postWritingSubmitted = postWriting !== '';
 
-        return { preWritingSubmitted, postWritingSubmitted, classId: student.classId };
+        if (student.eventURL === '') {
+            const eventURL = await getEventLink(user, student.classId);
+            await prisma.student.update({
+                where: { userId_classId: { userId: user.id, classId: student.classId } },
+                data: { eventURL },
+            });
+            return { preWritingSubmitted, postWritingSubmitted, classId: student.classId, eventURL };
+        }
+
+        return { preWritingSubmitted, postWritingSubmitted, classId: student.classId, eventURL: student.eventURL };
     } catch (error) {
         console.error(error);
-        return { preWritingSubmitted: false, postWritingSubmitted: false, classId: '' };
+        return { preWritingSubmitted: false, postWritingSubmitted: false, classId: '', eventURL: '' };
+    }
+}
+
+export async function getEventLink(user: UserWithToken, classId: string) {
+    try {
+        const classData = await prisma.class.findUnique({
+            where: { id: classId },
+            select: { prytaneumURL: true },
+        });
+        if (!classData) throw new Error('Class not found');
+        const { prytaneumURL } = classData;
+        if (prytaneumURL === '') throw new Error('Prytaneum URL not set yet');
+        const url = new URL(prytaneumURL);
+        const eventId = url.pathname.split('/')[2];
+
+        // Get token from prytaneum
+        const result = await fetch(`${prytaneumURL}/api/generate-invite-token`, {
+            method: 'POST',
+            body: JSON.stringify({ email: user.email.toLowerCase(), eventId }),
+        });
+
+        if (!result.ok) throw new Error('Failed to generate token');
+        const { token } = await result.json();
+
+        return `${prytaneumURL}/?token=${token}`;
+    } catch (error) {
+        console.error(error);
+        return '';
     }
 }
