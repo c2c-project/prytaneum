@@ -34,6 +34,7 @@ export async function POST(request: NextRequest) {
     // Create users and classes, then add users to classes
     for (const data of usersToRegister) {
         const { student_id, course_id, email, first_name, last_name, research_project_consent } = data;
+        const lowerCaseEmail = email.toLowerCase();
         try {
             let _class = { id: '' };
 
@@ -62,7 +63,7 @@ export async function POST(request: NextRequest) {
             const newUser = await prisma.user.create({
                 data: {
                     studentId: student_id,
-                    email: email,
+                    email: lowerCaseEmail,
                     password: await bcrypt.hash('', 10),
                     firstName: first_name,
                     lastName: last_name,
@@ -84,19 +85,19 @@ export async function POST(request: NextRequest) {
             const token = jwt.sign(payload, process.env.JWT_SECRET);
             const registrationLink = `${process.env.ORIGIN_URL}/auth/complete-registration/?token=${token}`;
 
-            recipiantVariables[email] = { first: first_name, registrationLink };
-            emails.push(email);
+            recipiantVariables[lowerCaseEmail] = { first: first_name, registrationLink };
+            emails.push(lowerCaseEmail);
 
-            // TODO: Create prytaneum account for user as well
-            const response = await fetch(`${process.env.PRYTANEUM_URL}/graphql/create-account`, {
+            // Create prytaneum account for user as well
+            const response = await fetch(`${process.env.PRYTANEUM_URL}/api/create-account`, {
                 method: 'POST',
-                body: JSON.stringify({ email, firstName: first_name, lastName: last_name }),
+                body: JSON.stringify({ email: lowerCaseEmail, firstName: first_name, lastName: last_name }),
             });
 
-            if (response.ok) console.log(`Successfully created Prytaneum account: ${email}`);
+            if (response.ok) console.log(`Successfully created Prytaneum account: ${lowerCaseEmail}`);
             else {
                 console.error(response);
-                throw new Error(`Error creating Prytaneum account: ${email}`);
+                throw new Error(`Error creating Prytaneum account: ${lowerCaseEmail}`);
             }
         } catch (error) {
             console.error(error);

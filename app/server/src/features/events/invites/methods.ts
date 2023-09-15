@@ -43,7 +43,7 @@ export async function invite(viewerId: string, prisma: PrismaClient, { email, ev
     });
 
     // Sign token
-    const token = await sign({ eventId, invitedUserId: invitedUser.id }); // TODO: expire at some point
+    const token = await sign({ eventId, email: invitedUser.email }); // TODO: expire at some point
 
     // Send Email
     sendInviteEmail(queryResult.title, eventId, queryResult.startDateTime, queryResult.endDateTime, email, token);
