@@ -69,6 +69,7 @@ model Student {
   classId String @db.Uuid
   preWriting String @default("")
   postWriting String @default("")
+  eventURL String @default("")
 
   // Relations
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
