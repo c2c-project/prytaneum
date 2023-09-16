@@ -5,7 +5,8 @@ import type { ChangeEvent } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import { Grid, Typography, TextField, Button } from '@mui/material';
+import { Grid, Typography, TextField, Button, InputAdornment, IconButton } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 interface Props {
     csfrToken?: string;
@@ -16,6 +17,10 @@ export function SignIn({ csfrToken }: Props) {
     const [loading, setLoading] = React.useState(false);
     const [formValues, setFormValues] = React.useState({ email: '', password: '' });
     const [error, setError] = React.useState('');
+    const [showPassword, setShowPassword] = React.useState(false);
+
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
+    const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -69,12 +74,25 @@ export function SignIn({ csfrToken }: Props) {
                     <TextField
                         // required
                         autoComplete='off'
-                        type='password'
+                        type={showPassword ? 'text' : 'password'}
                         id='password'
                         name='password'
                         value={formValues.password}
                         onChange={handleChange}
                         label='Password'
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position='end'>
+                                    <IconButton
+                                        aria-label='toggle password visibility'
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                    >
+                                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
                     />
                 </Grid>
                 <Grid item paddingTop={3}>
