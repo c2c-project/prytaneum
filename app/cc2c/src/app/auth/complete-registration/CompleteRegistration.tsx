@@ -2,13 +2,16 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { Grid, Button, TextField, Typography } from '@mui/material';
+import { Grid, Button, TextField, Typography, InputAdornment, IconButton } from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import { updatePasswordWithToken } from './actions';
 
 export function CompleteRegistration({ token }: { token: string }) {
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState('');
+    const [isPassVisible, setIsPassVisible] = React.useState(false);
     const router = useRouter();
 
     const handleCompleteRegistration = async (formData: FormData) => {
@@ -32,9 +35,49 @@ export function CompleteRegistration({ token }: { token: string }) {
             <form action={handleCompleteRegistration}>
                 <Grid container direction='column' alignItems='center' paddingTop='2rem'>
                     <input type='hidden' name='token' value={token} />
-                    <TextField name='password' label='Password' type='password' required />
+                    <TextField
+                        name='password'
+                        label='Password'
+                        type={isPassVisible ? 'text' : 'password'}
+                        required
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position='end'>
+                                    <IconButton
+                                        aria-label='toggle password visibility'
+                                        onClick={() => setIsPassVisible(!isPassVisible)}
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        edge='end'
+                                        size='large'
+                                    >
+                                        {isPassVisible ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
                     <Grid item paddingTop='1rem' />
-                    <TextField name='confirmPassword' label='Confirm Password' type='password' required />
+                    <TextField
+                        name='confirmPassword'
+                        label='Confirm Password'
+                        type={isPassVisible ? 'text' : 'password'}
+                        required
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position='end'>
+                                    <IconButton
+                                        aria-label='toggle password visibility'
+                                        onClick={() => setIsPassVisible(!isPassVisible)}
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        edge='end'
+                                        size='large'
+                                    >
+                                        {isPassVisible ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
                     <Grid item paddingTop='1rem' />
                     <Button disabled={loading} type='submit'>
                         Set Password
