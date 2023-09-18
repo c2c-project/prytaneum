@@ -11,7 +11,7 @@ export async function POST(req: Request) {
         const body: RequestBody = await req.json();
 
         const user = await prisma.user.findFirst({
-            where: { email: body.email },
+            where: { email: body.email.toLowerCase() },
         });
 
         if (!user)
