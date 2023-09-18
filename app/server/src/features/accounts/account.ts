@@ -48,6 +48,13 @@ server.route({
             const { id: globalEventId } = fromGlobalId(eventId);
             const event = await prisma.event.findUnique({ where: { id: globalEventId } });
             if (!event) throw new Error('Event not found');
+            // Add this user to the invited list for this event
+            await prisma.eventInvited.create({
+                data: {
+                    user: { connect: { id: user.id } },
+                    event: { connect: { id: globalEventId } },
+                },
+            });
             const token = await sign({ email, eventId });
             res.header('Access-Control-Allow-Origin', '*');
             res.header('Access-Control-Allow-Methods', 'POST');
