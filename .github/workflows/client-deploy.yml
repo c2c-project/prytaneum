@@ -131,15 +131,20 @@ jobs:
                   project_id: ${{ secrets.GKE_PROJECT_ID }}
 
             # Configure Docker to use the gcloud command-line tool as a credential
-            # helper for authentication# Finalize
-            - name: Set kubectl context
-              run: |-
-                  kubectl config set-context --current --namespace=$NAMESPACE
+            # helper for authentication
+            - run: |-
+                  gcloud --quiet auth configure-docker
+            # Get the GKE credentials so we can deploy to the cluster
+            - id: 'get-credentials'
+              uses: google-github-actions/get-gke-credentials@v0.7.0
+              with:
+                  cluster_name: ${{ env.GKE_CLUSTER }}
+                  location: ${{ env.GKE_ZONE }}
 
-            - name: Deployment Rollout Check
+            # Build the Client
+            - name: Build Client
               run: |-
-                  kubectl rollout status deployment/prytaneum-client
-                  kubectl get services -o wide
+                  docker build \
                     -f ./docker/Dockerfile.client \
                     --tag "gcr.io/$PROJECT_ID/$CLIENT_IMAGE:$GITHUB_SHA" \
                     --build-arg GITHUB_SHA="$GITHUB_SHA" \
@@ -162,10 +167,11 @@ jobs:
             # Deploy the Docker image to the GKE cluster
             - name: Kustomize & Deploy Client
               run: |-
-                  cd ./k8s/client/production
+                  cd ./k8s/client/development
                   kustomize edit set image gcr.io/PROJECT_ID/CLIENT_IMAGE:TAG=gcr.io/$PROJECT_ID/$CLIENT_IMAGE:$GITHUB_SHA
                   kustomize edit set namespace $NAMESPACE
                   kustomize build . | kubectl apply -f -
+
             # Finalize Deployment
             - name: Set kubectl context
               run: |-
