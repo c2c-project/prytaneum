@@ -5,6 +5,8 @@ COPY app/cc2c ./
 
 ARG NEXT_PUBLIC_ORIGIN_URL=https://cc2c.prytaneum.io
 ENV NEXT_PUBLIC_ORIGIN_URL ${NEXT_PUBLIC_ORIGIN_URL}
+ARG NEXTAUTH_URL=https://cc2c.prytaneum.io
+ENV NEXTAUTH_URL ${NEXTAUTH_URL}
 ARG ORIGIN_URL=https://cc2c.prytaneum.io
 ENV ORIGIN_URL ${ORIGIN_URL}
 # Build the app
@@ -20,6 +22,8 @@ ENV HOST 0.0.0.0
 ENV PORT 3000
 ARG NEXT_PUBLIC_ORIGIN_URL=https://cc2c.prytaneum.io
 ENV NEXT_PUBLIC_ORIGIN_URL ${NEXT_PUBLIC_ORIGIN_URL}
+ARG NEXTAUTH_URL=https://cc2c.prytaneum.io
+ENV NEXTAUTH_URL ${NEXTAUTH_URL}
 ARG ORIGIN_URL=https://cc2c.prytaneum.io
 ENV ORIGIN_URL ${ORIGIN_URL}
 ARG PRYTANEUM_URL=https://prytaneum.io
