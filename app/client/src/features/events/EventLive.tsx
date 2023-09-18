@@ -133,12 +133,12 @@ function EventLive({ node, validateInvite, tokenProvided }: EventLiveProps) {
     }, [displaySnack, eventData, router, tokenProvided, user, validateInvite]);
 
     React.useEffect(() => {
+        if (!validationChecked) return;
         if (isLive || isModerator) {
             setRouteChecked(true);
             return;
         }
         const { startDateTime, endDateTime } = eventData;
-        console.log('Start/End Date Time: ', startDateTime, endDateTime);
         if (startDateTime !== null && endDateTime !== null) {
             const now = new Date();
             const startTime = new Date(startDateTime);
@@ -147,11 +147,6 @@ function EventLive({ node, validateInvite, tokenProvided }: EventLiveProps) {
             const eventLengthInMinutes = eventLengthInSeconds / 60;
             const middleTime = new Date(startTime);
             middleTime.setUTCMinutes(startTime.getUTCMinutes() + eventLengthInMinutes / 2);
-            console.log('Now: ', now);
-            console.log('Start Time: ', startTime);
-            console.log('End Time: ', endTime);
-            console.log('Event Length in Minutes: ', eventLengthInMinutes);
-            console.log('middleTime: ', middleTime);
             if (now > middleTime) {
                 router.push(`/events/${eventId}/post`);
             } else {
@@ -160,7 +155,7 @@ function EventLive({ node, validateInvite, tokenProvided }: EventLiveProps) {
         } else {
             router.push(`/events/${eventId}/pre`);
         }
-    }, [eventId, isLive, isModerator, router, eventData]);
+    }, [eventId, isLive, isModerator, router, eventData, validationChecked]);
 
     // styles
     const classes = useStyles();
