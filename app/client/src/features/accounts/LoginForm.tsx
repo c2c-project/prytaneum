@@ -136,11 +136,7 @@ export function LoginForm({ onSuccess, close, secondaryActions }: Props) {
                                             edge='end'
                                             size='large'
                                         >
-                                            {isPassVisible ? (
-                                                <VisibilityOff color={errors.password ? 'error' : undefined} />
-                                            ) : (
-                                                <Visibility color={errors.password ? 'error' : undefined} />
-                                            )}
+                                            {isPassVisible ? <VisibilityOff /> : <Visibility />}
                                         </IconButton>
                                     </InputAdornment>
                                 ),
