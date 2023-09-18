@@ -109,13 +109,13 @@ jobs:
 
             - name: Kustomize & Deploy Ingress
               run: |-
-                  cd ./k8s/ingress/development
+                  cd ./k8s/ingress/production
                   kubectl apply -f ./prytaneum-ingress.yml
 
             - name: Deploy Certificate
               run: |-
                   cd ./k8s/cert
-                  kubectl apply -f ./prytaneum-managed-certificate-dev.yml
+                  kubectl apply -f ./prytaneum-managed-certificate.yml
 
             - name: Set kubectl context
               run: |-
