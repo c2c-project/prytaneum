@@ -25,7 +25,6 @@ export async function StudentDashboard({}: Props) {
             </Grid>
             <Grid item container justifyContent='center'>
                 <Grid item container direction='column' alignItems='center'>
-                    <Typography>Event Info</Typography>
                     {eventURL !== '' && (
                         <Link style={{ textDecoration: 'none' }} href={eventURL}>
                             <Button>Join Town Hall</Button>
