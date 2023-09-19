@@ -84,12 +84,15 @@ export async function getEventLink(user: UserWithToken, classId: string) {
         if (prytaneumURL === '') throw new Error('Prytaneum URL not set yet');
         const url = new URL(prytaneumURL);
         const eventId = url.pathname.split('/')[2];
+        console.log('Event ID: ', eventId);
 
+        if (!process.env.PRYTANEUM_URL) throw new Error('Prytaneum URL ENV not set');
         // Get token from prytaneum
-        const result = await fetch(`${prytaneumURL}/api/generate-invite-token`, {
+        const result = await fetch(`${process.env.PRYTANEUM_URL}/api/generate-invite-token`, {
             method: 'POST',
             body: JSON.stringify({ email: user.email.toLowerCase(), eventId }),
         });
+        console.log(result);
 
         if (!result.ok) throw new Error('Failed to generate token');
         const { token } = await result.json();
