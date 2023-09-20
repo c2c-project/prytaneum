@@ -5,7 +5,7 @@ import mercuriusCodgen from 'mercurius-codegen';
 import { join } from 'path';
 
 import redis from 'mqemitter-redis';
-import { getRedisClient, loadSchema, getPrismaClient, extractAuthenticationJwt } from '@local/core/utils';
+import { loadSchema, getPrismaClient, extractAuthenticationJwt } from '@local/core/utils';
 
 //
 // ─── CONTEXT GENERATOR FUNCTIONS ────────────────────────────────────────────────
@@ -19,10 +19,8 @@ async function makeRequestContext(req: FastifyRequest, reply: FastifyReply) {
         const { id } = fromGlobalId(userId);
         userId = id;
     }
-    const _redis = getRedisClient(reply.log);
     return {
         prisma: getPrismaClient(reply.log),
-        redis: _redis,
         viewer: {
             id: userId,
         },
@@ -35,10 +33,8 @@ async function makeSubscriptionContext(_: any, req: FastifyRequest) {
         const { id } = fromGlobalId(userId);
         userId = id;
     }
-    const _redis = getRedisClient(req.log);
     return {
         prisma: getPrismaClient(req.log),
-        redis: _redis,
         viewer: {
             id: userId,
         },
