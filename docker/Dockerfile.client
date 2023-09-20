@@ -27,6 +27,8 @@ WORKDIR /usr/monorepo
 ENV NODE_ENV production
 ENV HOST 0.0.0.0
 ENV PORT 3000
+ARG GRAPHQL_URL=https://prytaneum.io/graphql
+ENV NEXT_PUBLIC_GRAPHQL_URL ${GRAPHQL_URL}
 ARG DEPLOYMENT_ENV=production
 ENV DEPLOYMENT_ENV ${DEPLOYMENT_ENV}
 ENV NEXT_SHARP_PATH=/usr/monorepo/app/client/sharp
