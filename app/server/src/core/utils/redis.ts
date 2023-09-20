@@ -26,6 +26,7 @@ function generateNewRedisClient(logger: FastifyLoggerInstance) {
                 },
             ],
             {
+                slotsRefreshTimeout: 10000, // 10 seconds
                 redisOptions: {
                     password: process.env.REDIS_PASSWORD,
                     connectTimeout: 10000, // 10 seconds
