@@ -16,31 +16,32 @@ function generateNewRedisClient(logger: FastifyLoggerInstance) {
     const res = dns.lookup(process.env.REDIS_HOST, console.log);
     console.log(res);
     logger.info('Generating new redis client.');
-    if (process.env.NODE_ENV === 'production') {
-        logger.info('Using production redis client.');
-        return new Redis.Cluster(
-            [
-                {
-                    host: process.env.REDIS_HOST,
-                    port: Number(process.env.REDIS_PORT),
-                },
-            ],
-            {
-                redisOptions: {
-                    password: process.env.REDIS_PASSWORD,
-                    connectTimeout: 10000, // 10 seconds
-                    reconnectOnError(err) {
-                        const targetError = 'READONLY';
-                        if (err.message.includes(targetError)) {
-                            // Only reconnect when the error contains "READONLY"
-                            return true; // or `return 1;`
-                        }
-                        return false;
-                    },
-                },
-            }
-        );
-    }
+    // if (process.env.NODE_ENV === 'production') {
+    //     logger.info('Using production redis client.');
+    //     return new Redis.Cluster(
+    //         [
+    //             {
+    //                 host: process.env.REDIS_HOST,
+    //                 port: Number(process.env.REDIS_PORT),
+    //             },
+    //         ],
+    //         {
+    //             slotsRefreshTimeout: 10000, // 10 seconds
+    //             redisOptions: {
+    //                 password: process.env.REDIS_PASSWORD,
+    //                 connectTimeout: 10000, // 10 seconds
+    //                 reconnectOnError(err) {
+    //                     const targetError = 'READONLY';
+    //                     if (err.message.includes(targetError)) {
+    //                         // Only reconnect when the error contains "READONLY"
+    //                         return true; // or `return 1;`
+    //                     }
+    //                     return false;
+    //                 },
+    //             },
+    //         }
+    //     );
+    // }
     return new Redis({
         host: process.env.REDIS_HOST,
         port: Number(process.env.REDIS_PORT),
