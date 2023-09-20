@@ -60,7 +60,6 @@
         "multer": "^1.4.5-lts.1",
         "papaparse": "^5.4.1",
         "pino-pretty": "^7.1.0",
-        "redis": "^4.6.9",
         "uuid": "^8.3.2"
     },
     "devDependencies": {
