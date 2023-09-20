@@ -11,5 +11,5 @@ data:
     SERVER_PORT: '3002'
     GCP_PROJECT_ID: prytaneum-project
     PUB_SUB_PREFIX: projects/prytaneum-project/topics/
-    REDIS_HOST: staging-redis-master.development.svc.cluster.local
+    REDIS_HOST: staging-redis-cluster.redis.svc.cluster.local
     REDIS_PORT: '6379'
