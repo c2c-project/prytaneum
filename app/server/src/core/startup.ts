@@ -1,8 +1,8 @@
 import { getOrCreateServer } from './server';
 import { checkEnv } from './check-env';
-// import { initGracefulShutdown } from './graceful-shutdown';
+import { initGracefulShutdown } from './graceful-shutdown';
 import { setupMetaRoutes } from './meta-routes';
-import { getPrismaClient } from './utils';
+import { getPrismaClient, getRedisClient } from './utils';
 import * as plugins from './plugins';
 import * as hooks from './hooks';
 
@@ -12,12 +12,12 @@ export function startup() {
     const server = getOrCreateServer();
     server.log.info('Performing setup checks...');
     checkEnv();
-    // initGracefulShutdown(server.log);
+    initGracefulShutdown(server.log);
     setupMetaRoutes(server);
     // Init prisma client
     getPrismaClient(server.log);
     // Intit redis client
-    // getRedisClient(server.log);
+    getRedisClient(server.log);
 
     server.log.info('Attaching plugins...');
     plugins.attachAltairTo(server);

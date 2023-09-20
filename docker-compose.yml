@@ -17,7 +17,6 @@ services:
             DATABASE_URL: postgresql://postgres:postgrespassword@db:5432
             REDIS_HOST: redis-server
             REDIS_PORT: 6379
-            REDIS_PASSWORD: redispassword
         depends_on:
             - db
             - redis-server
@@ -44,7 +43,7 @@ services:
         ports:
             - '6379:6380'
         # --save 20 1 means save every 20 seconds if 1 or more writes has been made
-        command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASS:-redispassword}
+        command: redis-server --save 20 1 --loglevel warning
         volumes:
             - redis_data:/data
             - redis_conf:/usr/local/etc/redis/redis.conf
