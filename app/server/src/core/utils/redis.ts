@@ -1,73 +1,27 @@
 import type { FastifyLoggerInstance } from 'fastify';
-import { Redis, Cluster } from 'ioredis';
-// @ts-ignore - MockRedis is not typed
-import MockRedis from 'ioredis-mock';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { createClient } from 'redis';
+import type { RedisClientType } from 'redis';
 
 // Redis client must be a singleton
-let _redis: Redis | Cluster | null = null;
+let _redis: RedisClientType | null = null;
 
-function generateNewRedisClient(logger: FastifyLoggerInstance) {
-    if (process.env.NODE_ENV === 'test') {
-        logger.info('Using mock redis client.');
-        return new MockRedis() as Redis;
-    }
-    logger.debug('DEBUG DNS lookup');
-    const dns = require('dns');
-    const res = dns.lookup(process.env.REDIS_HOST, console.log);
-    console.log(res);
-    logger.info('Generating new redis client.');
-    if (process.env.NODE_ENV === 'production') {
-        logger.info('Using production redis client.');
-        return new Redis.Cluster(
-            [
-                {
-                    host: process.env.REDIS_HOST,
-                    port: Number(process.env.REDIS_PORT),
-                },
-            ],
-            {
-                redisOptions: {
-                    password: process.env.REDIS_PASSWORD,
-                    connectTimeout: 10000, // 10 seconds
-                    reconnectOnError(err) {
-                        const targetError = 'READONLY';
-                        if (err.message.includes(targetError)) {
-                            // Only reconnect when the error contains "READONLY"
-                            return true; // or `return 1;`
-                        }
-                        return false;
-                    },
-                },
-            }
-        );
-    }
-    return new Redis({
-        host: process.env.REDIS_HOST,
-        port: Number(process.env.REDIS_PORT),
-        password: process.env.REDIS_PASSWORD,
-        connectTimeout: 10000, // 10 seconds
-        reconnectOnError(err) {
-            const targetError = 'READONLY';
-            if (err.message.includes(targetError)) {
-                // Only reconnect when the error contains "READONLY"
-                return true; // or `return 1;`
-            }
-            return false;
-        },
-    });
-}
-
-export function getRedisClient(logger: FastifyLoggerInstance) {
-    const redis = _redis ?? generateNewRedisClient(logger);
-
+export async function getRedisClient(logger: FastifyLoggerInstance) {
+    const redis =
+        _redis ??
+        createClient({
+            socket: { host: process.env.REDIS_HOST, port: Number(process.env.REDIS_PORT) },
+            username: process.env.REDIS_USERNAME,
+            password: process.env.REDIS_PASSWORD,
+        });
     if (!_redis) {
         logger.info('Instantiating new redis client.');
         _redis = redis;
-        redis.on('connect', () => logger.info('Redis client connected.'));
-        redis.on('close', () => logger.info('Redis client closed.'));
-        redis.on('ready', () => logger.info('Redis client ready.'));
-        redis.on('reconnecting', () => logger.info('Redis client reconnecting.'));
-        redis.on('error', (err) => logger.error(err));
+        _redis.on('error', (err) => logger.error(err));
+        if (process.env.NODE_ENV !== 'test') {
+            await _redis.connect();
+            logger.info('Redis client connected.');
+        }
     }
 
     return redis;
