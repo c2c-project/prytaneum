@@ -15,7 +15,7 @@ server.route({
             firstName: string;
             lastName: string;
         }
-        const { email, firstName, lastName } = req.body as ExpectedBody;
+        const { email, firstName, lastName } = JSON.parse(req.body as string) as ExpectedBody;
         const prisma = getPrismaClient(server.log);
         try {
             const result = await register(prisma, { email, firstName, lastName });
@@ -40,7 +40,7 @@ server.route({
             email: string;
             eventId: string;
         }
-        const { email, eventId } = req.body as ExpectedBody;
+        const { email, eventId } = JSON.parse(req.body as string) as ExpectedBody;
         const prisma = getPrismaClient(server.log);
         try {
             const user = await prisma.user.findFirst({ where: { email } });
