@@ -56,5 +56,19 @@ export async function middleware(request: NextRequest, _next: NextFetchEvent) {
         }
     }
 
+    const facultyPaths = ['/class/*'];
+    const matchesFacultyPath = facultyPaths.some((path) => pathname.startsWith(path));
+    if (matchesFacultyPath) {
+        const token = await getToken({ req: request });
+        if (!token) {
+            const url = new URL(`/auth/signin`, request.url);
+            return NextResponse.redirect(url);
+        }
+        if (token.role !== 'TEACHER' && token.role !== 'ADMIN') {
+            const url = new URL(`/`, request.url);
+            return NextResponse.rewrite(url);
+        }
+    }
+
     return NextResponse.next();
 }
