@@ -15,21 +15,23 @@ interface Props {
 export function SignIn({ csfrToken }: Props) {
     const router = useRouter();
     const [loading, setLoading] = React.useState(false);
-    const [formValues, setFormValues] = React.useState({ email: '', password: '' });
     const [error, setError] = React.useState('');
     const [showPassword, setShowPassword] = React.useState(false);
 
     const handleClickShowPassword = () => setShowPassword(!showPassword);
     const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
-    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const handleSignIn = async (formData: FormData) => {
         try {
             setLoading(true);
+            const email = formData.get('email') as string | null;
+            if (!email) throw new Error('Email is required');
+            const password = formData.get('password') as string | null;
+            if (!password) throw new Error('Password is required');
 
             const res = await signIn('credentials', {
-                email: formValues.email,
-                password: formValues.password,
+                email: email.toLowerCase(),
+                password: password,
                 redirect: false,
             });
 
@@ -48,37 +50,21 @@ export function SignIn({ csfrToken }: Props) {
         }
     };
 
-    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-        setFormValues({ ...formValues, [name]: value });
-    };
-
     return (
-        <Grid container component='form' onSubmit={onSubmit} justifyContent='center' height='80vh'>
+        <Grid container component='form' action={handleSignIn} justifyContent='center' height='80vh'>
             <Grid container direction='column' justifyContent='center' alignItems='center'>
                 <Grid item paddingY={3}>
                     <Typography variant='h3'>Sign In</Typography>
                 </Grid>
                 <input type='hidden' name='csrfToken' defaultValue={csfrToken} />
                 <Grid item>
-                    <TextField
-                        required
-                        autoComplete='email'
-                        type='email'
-                        id='email'
-                        name='email'
-                        value={formValues.email}
-                        onChange={handleChange}
-                        label='Email'
-                    />
+                    <TextField required autoComplete='email' type='email' id='email' name='email' label='Email' />
                     <TextField
                         // required
                         autoComplete='off'
                         type={showPassword ? 'text' : 'password'}
                         id='password'
                         name='password'
-                        value={formValues.password}
-                        onChange={handleChange}
                         label='Password'
                         InputProps={{
                             endAdornment: (
