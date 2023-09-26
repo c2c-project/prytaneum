@@ -5,7 +5,7 @@ import { Button, DialogContent, Grid, TextField, Typography } from '@mui/materia
 
 import { ResponsiveDialog, useResponsiveDialog } from '@local/components';
 import { useSnack } from '@local/lib';
-import { handlePreWritingSubmit } from './actions';
+import { handlePostWritingSubmit } from './actions';
 
 interface Props {
     userId: string;
@@ -22,7 +22,7 @@ export function SubmitPostWritng({ userId, classId, postWritingSubmitted }: Prop
 
     async function handleSubmit(formData: FormData) {
         setIsLoading(true);
-        const { isError, message } = await handlePreWritingSubmit(formData);
+        const { isError, message } = await handlePostWritingSubmit(formData);
         if (isError) {
             setError(message);
             displaySnack(message);
