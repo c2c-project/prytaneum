@@ -10,7 +10,9 @@ export const updatePasswordWithToken = async (formData: FormData) => {
         const token = formData.get('token') as string | null;
         if (!token) throw new Error('Missing token');
         // Get other data from token
-        const { userId } = jwt.verify(token, process.env.JWT_SECRET as string) as { userId: string };
+        const { userId } = jwt.verify(token, process.env.JWT_SECRET as string) as { userId: string | undefined | null };
+        if (!userId) throw new Error('Missing userId from token');
+        console.log('Complete Registration for userId: ', userId);
         // Set password
         const password = formData.get('password') as string | null;
         if (!password) throw new Error('Missing password field');
@@ -20,7 +22,7 @@ export const updatePasswordWithToken = async (formData: FormData) => {
         if (password !== confirmPassword) throw new Error('Passwords do not match');
         await prisma.user.update({
             where: { id: userId },
-            data: { password: await bcrypt.hash(password, 10) },
+            data: { password: await bcrypt.hash(password, 10), shadowAccount: false },
         });
         return { isError: false, message: 'Password updated successfully' };
     } catch (error) {
