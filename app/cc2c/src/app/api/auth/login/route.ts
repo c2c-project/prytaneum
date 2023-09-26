@@ -9,6 +9,7 @@ interface RequestBody {
 export async function POST(req: Request) {
     const result = await runMutation(async () => {
         const body: RequestBody = await req.json();
+        console.log('Authenticating ', body.email);
 
         const user = await prisma.user.findFirst({
             where: { email: body.email.toLowerCase() },
