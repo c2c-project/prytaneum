@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     // Create users and classes, then add users to classes
     for (const data of usersToRegister) {
         const { student_id, course_id, email, first_name, last_name, research_project_consent } = data;
-        const lowerCaseEmail = email.toLowerCase();
+        const lowerCaseEmail = email.toLowerCase().replace(/ /g, ''); // Remove spaces and make lowercase
         try {
             let _class = { id: '' };
 
