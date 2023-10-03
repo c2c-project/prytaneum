@@ -52,13 +52,36 @@ export async function updateClass(formData: FormData) {
         const termId = formData.get('termId') as string | null;
         if (termId === null) throw new Error('Term id not found');
 
+        const _class = await prisma.class.findUnique({
+            where: {
+                id: classId,
+            },
+            select: {
+                prytaneumURL: true,
+            },
+        });
+
+        if (!_class) throw new Error('Class not found');
+        const { prytaneumURL: oldPrytaneumURL } = _class;
+        if (oldPrytaneumURL !== prytaneumURL) {
+            // Update prytaneum URL, so we need to reset the students urls
+            await prisma.student.updateMany({
+                where: {
+                    classId,
+                },
+                data: {
+                    eventURL: '',
+                },
+            });
+        }
+
         await prisma.class.update({
             where: {
                 id: classId,
             },
             data: {
                 name: className === '' ? undefined : className,
-                prytaneumURL: prytaneumURL === '' ? undefined : prytaneumURL,
+                prytaneumURL,
                 termId: termId === '' ? undefined : termId,
             },
         });
