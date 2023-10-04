@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import * as React from 'react';
-import { Grid, Tab } from '@mui/material';
+import { Grid, Tab, useMediaQuery } from '@mui/material';
 import { useQueryLoader, PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { FragmentRefs, graphql } from 'relay-runtime';
 import { Loader } from '@local/components/Loader';
@@ -23,6 +23,8 @@ import { QuestionList } from './Questions';
 import { LiveFeedbackList } from './LiveFeedback';
 import { CurrentQuestionCard } from './Moderation/ManageQuestions/CurrentQuestionCard';
 import { BroadcastMessageList } from './BroadcastMessages/BroadcastMessageList';
+import { SubmitLiveFeedbackPrompt } from './LiveFeedbackPrompts/LiveFeedbackPrompt';
+import { ShareFeedbackResults } from './LiveFeedbackPrompts';
 
 export const EVENT_LIVE_MODERATOR_VIEW_QUERY = graphql`
     query EventLiveModeratorViewQuery($eventId: ID!) {
@@ -58,15 +60,34 @@ interface EventLiveProps {
 }
 
 function EventLiveModeratorView({ node }: EventLiveProps) {
+    const smallBreakpoint = useMediaQuery('(max-width: 1280px)');
     const { eventData, isLive, setIsLive } = useEventDetails({ fragmentRef: node });
     const { id: eventId } = node;
 
     usePingEvent(eventId);
 
-    // TODO: Add broadcast tab to moderator section
+    const feedbackActionButtons = React.useMemo(() => {
+        return (
+            <Grid container direction='row' justifyContent='space-evenly' alignItems='center'>
+                <Grid item paddingBottom='1rem'>
+                    <SubmitLiveFeedbackPrompt eventId={eventId} />
+                </Grid>
+                <Grid item paddingBottom='1rem'>
+                    <ShareFeedbackResults />
+                </Grid>
+            </Grid>
+        );
+    }, [eventId]);
+
     return (
         <EventContext.Provider value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}>
-            <Grid container columns={8} direction='row' justifyContent='space-around' height='100%'>
+            <Grid
+                container
+                columns={smallBreakpoint ? 6 : 8}
+                direction='row'
+                justifyContent='space-around'
+                height='100%'
+            >
                 <Grid container item direction='column' xs={2} height='100%'>
                     <EventVideo fragmentRef={node} />
                     <EventDetailsCard eventData={eventData} />
@@ -120,7 +141,14 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
                     </Grid>
                 </Grid>
                 <Grid container item direction='column' xs={2} height='100%'>
-                    <Grid item container direction='column' height='50%' justifyContent='center' alignContent='center'>
+                    <Grid
+                        item
+                        container
+                        direction='column'
+                        height={smallBreakpoint ? '100%' : '50%'}
+                        justifyContent='center'
+                        alignContent='center'
+                    >
                         <StyledTabs value='Feedback'>
                             <Tab label='Feedback' value='Feedback' />
                         </StyledTabs>
@@ -131,24 +159,62 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
                                 width: '98%',
                             }}
                         >
-                            <LiveFeedbackList fragmentRef={node} ActionButtons={true} isVisible={true} />
+                            <LiveFeedbackList
+                                fragmentRef={node}
+                                ActionButtons={feedbackActionButtons}
+                                isVisible={true}
+                            />
                         </StyledColumnGrid>
                     </Grid>
-                    <Grid item container direction='column' flexGrow={1} justifyContent='center' alignContent='center'>
-                        <StyledTabs value='Broadcast'>
-                            <Tab label='Broadcast' value='Broadcast' />
-                        </StyledTabs>
-                        <StyledColumnGrid
-                            props={{
-                                display: 'flex',
-                                flexGrow: 1,
-                                width: '98%',
-                            }}
+                    {!smallBreakpoint && (
+                        <Grid
+                            item
+                            container
+                            direction='column'
+                            flexGrow={1}
+                            justifyContent='center'
+                            alignContent='center'
                         >
-                            <BroadcastMessageList fragmentRef={node} isVisible={true} />
-                        </StyledColumnGrid>
-                    </Grid>
+                            <StyledTabs value='Broadcast'>
+                                <Tab label='Broadcast' value='Broadcast' />
+                            </StyledTabs>
+                            <StyledColumnGrid
+                                props={{
+                                    display: 'flex',
+                                    flexGrow: 1,
+                                    width: '98%',
+                                }}
+                            >
+                                <BroadcastMessageList fragmentRef={node} isVisible={true} />
+                            </StyledColumnGrid>
+                        </Grid>
+                    )}
                 </Grid>
+                {smallBreakpoint && (
+                    <Grid container item direction='column' xs={2} height='100%'>
+                        <Grid
+                            item
+                            container
+                            direction='column'
+                            flexGrow={1}
+                            justifyContent='center'
+                            alignContent='center'
+                        >
+                            <StyledTabs value='Broadcast'>
+                                <Tab label='Broadcast' value='Broadcast' />
+                            </StyledTabs>
+                            <StyledColumnGrid
+                                props={{
+                                    display: 'flex',
+                                    flexGrow: 1,
+                                    width: '98%',
+                                }}
+                            >
+                                <BroadcastMessageList fragmentRef={node} isVisible={true} />
+                            </StyledColumnGrid>
+                        </Grid>
+                    </Grid>
+                )}
             </Grid>
         </EventContext.Provider>
     );
