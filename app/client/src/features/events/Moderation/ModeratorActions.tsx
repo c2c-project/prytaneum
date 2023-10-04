@@ -93,11 +93,11 @@ export function ModeratorActions({ isLive, setIsLive, eventId }: ModeratorAction
                     )}
                 </IconButton>
             </Grid>
-            <Grid item>
+            {/* <Grid item>
                 <Button variant='contained' onClick={() => console.log('TODO')}>
                     Intermission
                 </Button>
-            </Grid>
+            </Grid> */}
             <Grid item>
                 <Button variant='contained' color={isLive ? 'error' : 'success'} onClick={updateEventStatus}>
                     {isLive ? 'End Event' : 'Start Event'}
