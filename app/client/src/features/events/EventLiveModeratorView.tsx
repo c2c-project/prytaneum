@@ -23,6 +23,8 @@ import { QuestionList } from './Questions';
 import { LiveFeedbackList } from './LiveFeedback';
 import { CurrentQuestionCard } from './Moderation/ManageQuestions/CurrentQuestionCard';
 import { BroadcastMessageList } from './BroadcastMessages/BroadcastMessageList';
+import { SubmitLiveFeedbackPrompt } from './LiveFeedbackPrompts/LiveFeedbackPrompt';
+import { ShareFeedbackResults } from './LiveFeedbackPrompts';
 
 export const EVENT_LIVE_MODERATOR_VIEW_QUERY = graphql`
     query EventLiveModeratorViewQuery($eventId: ID!) {
@@ -63,7 +65,19 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
 
     usePingEvent(eventId);
 
-    // TODO: Add broadcast tab to moderator section
+    const feedbackActionButtons = React.useMemo(() => {
+        return (
+            <Grid container direction='row' justifyContent='space-evenly' alignItems='center'>
+                <Grid item paddingBottom='1rem'>
+                    <SubmitLiveFeedbackPrompt eventId={eventId} />
+                </Grid>
+                <Grid item paddingBottom='1rem'>
+                    <ShareFeedbackResults />
+                </Grid>
+            </Grid>
+        );
+    }, [eventId]);
+
     return (
         <EventContext.Provider value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}>
             <Grid container columns={8} direction='row' justifyContent='space-around' height='100%'>
@@ -131,7 +145,11 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
                                 width: '98%',
                             }}
                         >
-                            <LiveFeedbackList fragmentRef={node} ActionButtons={true} isVisible={true} />
+                            <LiveFeedbackList
+                                fragmentRef={node}
+                                ActionButtons={feedbackActionButtons}
+                                isVisible={true}
+                            />
                         </StyledColumnGrid>
                     </Grid>
                     <Grid item container direction='column' flexGrow={1} justifyContent='center' alignContent='center'>
