@@ -63,6 +63,13 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
     const smallBreakpoint = useMediaQuery('(max-width: 1280px)');
     const { eventData, isLive, setIsLive } = useEventDetails({ fragmentRef: node });
     const { id: eventId } = node;
+    type tabs = 'Moderator' | 'Feedback' | 'Broadcast';
+    const [tab, setTab] = React.useState<tabs>('Moderator');
+
+    const handleTabChange = (e: React.SyntheticEvent, newTab: tabs) => {
+        e.preventDefault();
+        setTab(newTab);
+    };
 
     usePingEvent(eventId);
 
@@ -79,6 +86,12 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
         );
     }, [eventId]);
 
+    React.useEffect(() => {
+        if (!smallBreakpoint) {
+            setTab('Moderator');
+        }
+    }, [smallBreakpoint]);
+
     return (
         <EventContext.Provider value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}>
             <Grid
@@ -93,13 +106,28 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
                     <EventDetailsCard eventData={eventData} />
                     <SpeakerList fragmentRef={node} />
                     <Grid item container direction='column' flex={1} justifyContent='center' alignContent='center'>
-                        <StyledTabs value='Moderator'>
+                        <StyledTabs value={tab} props={{ onChange: handleTabChange, 'aria-label': 'moderator tabs' }}>
                             <Tab label='Moderator' value='Moderator' />
+                            {smallBreakpoint && <Tab label='Feedback' value='Feedback' />}
+                            {smallBreakpoint && <Tab label='Broadcast' value='Broadcast' />}
                         </StyledTabs>
                         <StyledColumnGrid props={{ width: '98%', display: 'flex', flexGrow: 1 }}>
                             <Grid item width='100%'>
-                                <ModeratorActions isLive={isLive} setIsLive={setIsLive} eventId={eventId} />
-                                <PreloadedParticipantsList eventId={eventData.id} isVisible={true} />
+                                {tab === 'Moderator' && (
+                                    <React.Fragment>
+                                        <ModeratorActions isLive={isLive} setIsLive={setIsLive} eventId={eventId} />
+                                        <PreloadedParticipantsList
+                                            eventId={eventData.id}
+                                            isVisible={tab === 'Moderator'}
+                                        />
+                                    </React.Fragment>
+                                )}
+                                <LiveFeedbackList
+                                    fragmentRef={node}
+                                    ActionButtons={feedbackActionButtons}
+                                    isVisible={tab === 'Feedback'}
+                                />
+                                <BroadcastMessageList fragmentRef={node} isVisible={tab === 'Broadcast'} />
                             </Grid>
                         </StyledColumnGrid>
                     </Grid>
@@ -140,43 +168,18 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
                         </StyledColumnGrid>
                     </Grid>
                 </Grid>
-                <Grid container item direction='column' xs={2} height='100%'>
-                    <Grid
-                        item
-                        container
-                        direction='column'
-                        height={smallBreakpoint ? '100%' : '50%'}
-                        justifyContent='center'
-                        alignContent='center'
-                    >
-                        <StyledTabs value='Feedback'>
-                            <Tab label='Feedback' value='Feedback' />
-                        </StyledTabs>
-                        <StyledColumnGrid
-                            props={{
-                                display: 'flex',
-                                flexGrow: 1,
-                                width: '98%',
-                            }}
-                        >
-                            <LiveFeedbackList
-                                fragmentRef={node}
-                                ActionButtons={feedbackActionButtons}
-                                isVisible={true}
-                            />
-                        </StyledColumnGrid>
-                    </Grid>
-                    {!smallBreakpoint && (
+                {!smallBreakpoint && (
+                    <Grid container item direction='column' xs={2} height='100%'>
                         <Grid
                             item
                             container
                             direction='column'
-                            flexGrow={1}
+                            height='50%'
                             justifyContent='center'
                             alignContent='center'
                         >
-                            <StyledTabs value='Broadcast'>
-                                <Tab label='Broadcast' value='Broadcast' />
+                            <StyledTabs value='Feedback'>
+                                <Tab label='Feedback' value='Feedback' />
                             </StyledTabs>
                             <StyledColumnGrid
                                 props={{
@@ -185,13 +188,13 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
                                     width: '98%',
                                 }}
                             >
-                                <BroadcastMessageList fragmentRef={node} isVisible={true} />
+                                <LiveFeedbackList
+                                    fragmentRef={node}
+                                    ActionButtons={feedbackActionButtons}
+                                    isVisible={true}
+                                />
                             </StyledColumnGrid>
                         </Grid>
-                    )}
-                </Grid>
-                {smallBreakpoint && (
-                    <Grid container item direction='column' xs={2} height='100%'>
                         <Grid
                             item
                             container
