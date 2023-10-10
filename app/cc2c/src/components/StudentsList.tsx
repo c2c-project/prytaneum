@@ -150,14 +150,14 @@ export function StudentsList({ students, classId }: StudentsListProps) {
                             </Typography>
                             <ListItemText primary={student.postWriting === '' ? <PendingIcon /> : <DoneIcon />} />
                         </ListItemButton>
-                        <IconButton onClick={handleDownloadWritings(student)}>
+                        <IconButton disabled={isLoading} onClick={handleDownloadWritings(student)}>
                             <DownloadIcon />
                         </IconButton>
                     </ListItem>
                 ))}
             </List>
             <Grid container justifyContent='center' paddingBottom={2}>
-                <Button variant='outlined' onClick={handleDownloadAllWritings}>
+                <Button disabled={isLoading} variant='outlined' onClick={handleDownloadAllWritings}>
                     Download All Writings
                 </Button>
             </Grid>
