@@ -1,6 +1,7 @@
 'use server';
 
 import { prisma } from '@local/core';
+import { revalidatePath } from 'next/cache';
 
 export type Student = {
     id: string;
@@ -68,7 +69,44 @@ export async function getStudentsByClassId(classId: string) {
                 },
             },
         },
+        orderBy: {
+            user: {
+                studentId: 'asc',
+            },
+        },
     });
 
     return students;
+}
+
+export async function updateStudentData(formData: FormData, resetPreWriting = false, resetPostWriting = false) {
+    try {
+        const studentId = formData.get('studentId') as string | null;
+        if (!studentId) throw new Error('Student id not found');
+        const classId = formData.get('classId') as string | null;
+        if (!classId) throw new Error('Class id not found');
+
+        if (resetPreWriting && resetPostWriting) {
+            await prisma.student.updateMany({
+                where: { userId: studentId },
+                data: { preWriting: '', postWriting: '' },
+            });
+        } else if (resetPreWriting) {
+            await prisma.student.updateMany({
+                where: { userId: studentId },
+                data: { preWriting: '' },
+            });
+        } else if (resetPostWriting) {
+            await prisma.student.updateMany({
+                where: { userId: studentId },
+                data: { postWriting: '' },
+            });
+        }
+
+        revalidatePath(`/class/${classId}`);
+        return { isError: false, message: '' };
+    } catch (error) {
+        console.error(error);
+        return { isError: true, message: error instanceof Error ? error.message : 'Unknown error' };
+    }
 }

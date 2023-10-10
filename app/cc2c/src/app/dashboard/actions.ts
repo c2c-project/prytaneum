@@ -84,7 +84,6 @@ export async function getEventLink(user: UserWithToken, classId: string) {
         if (prytaneumURL === '') throw new Error('Prytaneum URL not set yet');
         const url = new URL(prytaneumURL);
         const eventId = url.pathname.split('/')[2];
-        console.log('Event ID: ', eventId);
 
         if (!process.env.PRYTANEUM_URL) throw new Error('Prytaneum URL ENV not set');
         // Get token from prytaneum

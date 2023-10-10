@@ -36,7 +36,7 @@ export async function Class({ classId }: { classId: string }) {
                 <Typography variant='h4'>Students</Typography>
             </Grid>
             <Box sx={{ width: '100%', maxWidth: 450, bgcolor: 'background.paper' }}>
-                <StudentsList students={students} />
+                <StudentsList students={students} classId={classId} />
             </Box>
         </Grid>
     );

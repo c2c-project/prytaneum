@@ -18,10 +18,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <meta name='Connecting Classrooms to Congress' content='Connecting Classrooms to Congress' />
                 <link rel='icon' href='/favicon.ico' />
             </head>
-            <Providers>
-                <CssBaseline />
-                <body className={inter.className}>{children}</body>
-            </Providers>
+            <body className={inter.className}>
+                <Providers>
+                    <CssBaseline />
+                    {children}
+                </Providers>
+            </body>
         </html>
     );
 }

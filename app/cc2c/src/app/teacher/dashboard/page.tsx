@@ -10,7 +10,6 @@ import { authOptions } from '@local/app/api/auth/[...nextauth]/route';
 
 export default async function DashboardPage() {
     const session = await getServerSession(authOptions);
-    console.log(session);
     const user = session?.user as UserWithoutPass | undefined;
     if (!user) redirect('/');
     const classId = await getClassByTeacherId(user.id);
