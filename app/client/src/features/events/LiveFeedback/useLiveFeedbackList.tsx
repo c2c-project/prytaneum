@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { graphql, useFragment, useSubscription } from 'react-relay';
-import { ConnectionHandler, GraphQLSubscriptionConfig } from 'relay-runtime';
+import { GraphQLSubscriptionConfig } from 'relay-runtime';
 import { useLiveFeedbackListSubscription } from '@local/__generated__/useLiveFeedbackListSubscription.graphql';
 import { useLiveFeedbackListFragment$key } from '@local/__generated__/useLiveFeedbackListFragment.graphql';
 import { useUser } from '@local/features/accounts/useUser';
 import { useEvent } from '../useEvent';
 
 export const USE_LIVE_FEEDBACK_LIST_SUBSCRIPTION = graphql`
-    subscription useLiveFeedbackListSubscription($eventId: ID!) {
+    subscription useLiveFeedbackListSubscription($eventId: ID!, $connections: [ID!]!) {
         feedbackCRUD(eventId: $eventId) {
             operationType
-            edge {
+            edge @prependEdge(connections: $connections) {
                 cursor
                 node {
                     id
@@ -18,15 +18,18 @@ export const USE_LIVE_FEEDBACK_LIST_SUBSCRIPTION = graphql`
                     createdBy {
                         id
                         firstName
+                        moderatorOf(eventId: $eventId)
                     }
                     refFeedback {
                         createdBy {
                             id
+                            firstName
+                            moderatorOf(eventId: $eventId)
                         }
-                        ...LiveFeedbackReplyFragment
+                        ...LiveFeedbackReplyFragment @arguments(eventId: $eventId)
                     }
-                    ...LiveFeedbackReplyFragment
-                    ...LiveFeedbackAuthorFragment
+                    ...LiveFeedbackReplyFragment @arguments(eventId: $eventId)
+                    ...LiveFeedbackAuthorFragment @arguments(eventId: $eventId)
                 }
             }
         }
@@ -35,7 +38,11 @@ export const USE_LIVE_FEEDBACK_LIST_SUBSCRIPTION = graphql`
 
 export const USE_LIVE_FEEDBACK_LIST = graphql`
     fragment useLiveFeedbackListFragment on Event
-    @argumentDefinitions(first: { type: "Int", defaultValue: 100 }, after: { type: "String", defaultValue: "" }) {
+    @argumentDefinitions(
+        first: { type: "Int", defaultValue: 100 }
+        after: { type: "String", defaultValue: "" }
+        eventId: { type: "ID!", defaultValue: "" }
+    ) {
         id
         liveFeedback(first: $first, after: $after) @connection(key: "useLiveFeedbackListFragment_liveFeedback") {
             __id
@@ -47,15 +54,18 @@ export const USE_LIVE_FEEDBACK_LIST = graphql`
                     createdBy {
                         id
                         firstName
+                        moderatorOf(eventId: $eventId)
                     }
                     refFeedback {
                         createdBy {
                             id
+                            firstName
+                            moderatorOf(eventId: $eventId)
                         }
-                        ...LiveFeedbackReplyFragment
+                        ...LiveFeedbackReplyFragment @arguments(eventId: $eventId)
                     }
-                    ...LiveFeedbackReplyFragment
-                    ...LiveFeedbackAuthorFragment
+                    ...LiveFeedbackReplyFragment @arguments(eventId: $eventId)
+                    ...LiveFeedbackAuthorFragment @arguments(eventId: $eventId)
                 }
             }
         }
@@ -75,32 +85,14 @@ export function useLiveFeedbackList({ fragmentRef }: Props) {
         [liveFeedback]
     );
 
+    const connections = React.useMemo(() => (liveFeedback?.__id ? [liveFeedback.__id] : []), [liveFeedback]);
+
     const config = React.useMemo<GraphQLSubscriptionConfig<useLiveFeedbackListSubscription>>(
         () => ({
-            variables: { eventId },
+            variables: { eventId, connections },
             subscription: USE_LIVE_FEEDBACK_LIST_SUBSCRIPTION,
-            updater(store) {
-                const eventRecord = store.get(eventId);
-                if (!eventRecord) return;
-
-                const eventLiveFeedbackConnectionRecord = ConnectionHandler.getConnection(
-                    eventRecord,
-                    'useLiveFeedbackListFragment_liveFeedback'
-                );
-
-                if (!eventLiveFeedbackConnectionRecord) return;
-
-                const payload = store.getRootField('feedbackCRUD');
-                const edge = payload.getLinkedRecord('edge');
-                if (!edge) return;
-
-                const newEdge = ConnectionHandler.buildConnectionEdge(store, eventLiveFeedbackConnectionRecord, edge);
-                if (!newEdge) return;
-
-                ConnectionHandler.insertEdgeBefore(eventLiveFeedbackConnectionRecord, newEdge);
-            },
         }),
-        [eventId]
+        [eventId, connections]
     );
 
     useSubscription<useLiveFeedbackListSubscription>(config);

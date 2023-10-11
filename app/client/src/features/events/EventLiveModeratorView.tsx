@@ -25,6 +25,7 @@ import { CurrentQuestionCard } from './Moderation/ManageQuestions/CurrentQuestio
 import { BroadcastMessageList } from './BroadcastMessages/BroadcastMessageList';
 import { SubmitLiveFeedbackPrompt } from './LiveFeedbackPrompts/LiveFeedbackPrompt';
 import { ShareFeedbackResults } from './LiveFeedbackPrompts';
+import { SubmitLiveFeedback } from './LiveFeedback/SubmitLiveFeedback';
 
 export const EVENT_LIVE_MODERATOR_VIEW_QUERY = graphql`
     query EventLiveModeratorViewQuery($eventId: ID!) {
@@ -42,7 +43,7 @@ export const EVENT_LIVE_MODERATOR_VIEW_QUERY = graphql`
                 ...useBroadcastMessageListFragment
                 ...useQuestionQueueFragment
                 ...QuestionCarouselFragment
-                ...useLiveFeedbackListFragment
+                ...useLiveFeedbackListFragment @arguments(eventId: $eventId)
             }
         }
     }
@@ -81,6 +82,9 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
                 </Grid>
                 <Grid item paddingBottom='1rem'>
                     <ShareFeedbackResults />
+                </Grid>
+                <Grid item paddingBottom='1rem'>
+                    <SubmitLiveFeedback eventId={eventId} />
                 </Grid>
             </Grid>
         );

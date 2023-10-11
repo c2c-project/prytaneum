@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c2ab41008873c8f9eff6c6812e1f7411>>
+ * @generated SignedSource<<b051f208530d28afd756efc8c213ab64>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,12 +20,15 @@ export type useLiveFeedbackListFragment$data = {
         readonly createdBy: {
           readonly firstName: string | null;
           readonly id: string;
+          readonly moderatorOf: boolean | null;
         } | null;
         readonly id: string;
         readonly message: string;
         readonly refFeedback: {
           readonly createdBy: {
+            readonly firstName: string | null;
             readonly id: string;
+            readonly moderatorOf: boolean | null;
           } | null;
           readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackReplyFragment">;
         } | null;
@@ -48,8 +51,41 @@ var v0 = {
   "name": "id",
   "storageKey": null
 },
-v1 = {
+v1 = [
+  {
+    "kind": "Variable",
+    "name": "eventId",
+    "variableName": "eventId"
+  }
+],
+v2 = {
+  "alias": null,
   "args": null,
+  "concreteType": "User",
+  "kind": "LinkedField",
+  "name": "createdBy",
+  "plural": false,
+  "selections": [
+    (v0/*: any*/),
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "firstName",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": (v1/*: any*/),
+      "kind": "ScalarField",
+      "name": "moderatorOf",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v3 = {
+  "args": (v1/*: any*/),
   "kind": "FragmentSpread",
   "name": "LiveFeedbackReplyFragment"
 };
@@ -59,6 +95,11 @@ return {
       "defaultValue": "",
       "kind": "LocalArgument",
       "name": "after"
+    },
+    {
+      "defaultValue": "",
+      "kind": "LocalArgument",
+      "name": "eventId"
     },
     {
       "defaultValue": 100,
@@ -121,25 +162,7 @@ return {
                   "name": "message",
                   "storageKey": null
                 },
-                {
-                  "alias": null,
-                  "args": null,
-                  "concreteType": "User",
-                  "kind": "LinkedField",
-                  "name": "createdBy",
-                  "plural": false,
-                  "selections": [
-                    (v0/*: any*/),
-                    {
-                      "alias": null,
-                      "args": null,
-                      "kind": "ScalarField",
-                      "name": "firstName",
-                      "storageKey": null
-                    }
-                  ],
-                  "storageKey": null
-                },
+                (v2/*: any*/),
                 {
                   "alias": null,
                   "args": null,
@@ -148,25 +171,14 @@ return {
                   "name": "refFeedback",
                   "plural": false,
                   "selections": [
-                    {
-                      "alias": null,
-                      "args": null,
-                      "concreteType": "User",
-                      "kind": "LinkedField",
-                      "name": "createdBy",
-                      "plural": false,
-                      "selections": [
-                        (v0/*: any*/)
-                      ],
-                      "storageKey": null
-                    },
-                    (v1/*: any*/)
+                    (v2/*: any*/),
+                    (v3/*: any*/)
                   ],
                   "storageKey": null
                 },
-                (v1/*: any*/),
+                (v3/*: any*/),
                 {
-                  "args": null,
+                  "args": (v1/*: any*/),
                   "kind": "FragmentSpread",
                   "name": "LiveFeedbackAuthorFragment"
                 },
@@ -229,6 +241,6 @@ return {
 };
 })();
 
-(node as any).hash = "aad2990e7cbff0102230cb08a28f5bc5";
+(node as any).hash = "d3ec5be05ce4c1e749ac2cc58405ff57";
 
 export default node;

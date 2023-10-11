@@ -8,7 +8,7 @@ export const USE_PARTICIPANT_LIST_FRAGMENT = graphql`
     fragment useParticipantListFragment on Event
     @refetchable(queryName: "UseParticipantListRefetchQuery")
     @argumentDefinitions(
-        first: { type: "Int", defaultValue: 10 }
+        first: { type: "Int", defaultValue: 100 }
         after: { type: "String", defaultValue: "" }
         eventId: { type: "ID!" }
     ) {
@@ -50,7 +50,7 @@ export function useParticipantList({ fragmentRef, eventId }: Props) {
 
     const REFRESH_INTERVAL = 15000; // 15 seconds
     const refresh = React.useCallback(() => {
-        refetch({ eventId }, { fetchPolicy: 'store-and-network' });
+        refetch({ eventId, first: 1000 }, { fetchPolicy: 'store-and-network' });
     }, [refetch, eventId]);
 
     useRefresh({ refreshInterval: REFRESH_INTERVAL, callback: refresh });

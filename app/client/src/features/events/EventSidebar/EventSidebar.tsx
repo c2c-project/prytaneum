@@ -31,7 +31,7 @@ export const EVENT_SIDEBAR_FRAGMENT = graphql`
         ...useBroadcastMessageListFragment
         ...useQuestionQueueFragment
         ...QuestionCarouselFragment
-        ...useLiveFeedbackListFragment
+        ...useLiveFeedbackListFragment @arguments(eventId: $eventId)
     }
 `;
 
@@ -88,6 +88,9 @@ export const EventSidebar = ({ fragmentRef, isViewerModerator, isLive, setIsLive
                         </Grid>
                         <Grid item paddingBottom='1rem'>
                             <ShareFeedbackResults />
+                        </Grid>
+                        <Grid item paddingBottom='1rem'>
+                            <SubmitLiveFeedback eventId={eventId} />
                         </Grid>
                     </Grid>
                 );

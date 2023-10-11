@@ -1,6 +1,7 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Avatar, Typography, CardHeader, CardHeaderProps } from '@mui/material';
 import { graphql, useFragment } from 'react-relay';
+import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 
 import type { LiveFeedbackAuthorFragment$key } from '@local/__generated__/LiveFeedbackAuthorFragment.graphql';
 import { formatDate } from '@local/utils/format';
@@ -10,12 +11,13 @@ export type LiveFeedbackAuthorProps = {
 } & CardHeaderProps;
 
 export const LIVE_FEEDBACK_AUTHOR_FRAGMENT = graphql`
-    fragment LiveFeedbackAuthorFragment on EventLiveFeedback {
+    fragment LiveFeedbackAuthorFragment on EventLiveFeedback @argumentDefinitions(eventId: { type: "ID!" }) {
         createdBy {
             id
             firstName
             lastName
             avatar
+            moderatorOf(eventId: $eventId)
         }
         createdAt
     }
@@ -26,6 +28,7 @@ export const LIVE_FEEDBACK_AUTHOR_FRAGMENT = graphql`
  */
 export function LiveFeedbackAuthor({ fragmentRef, ...props }: LiveFeedbackAuthorProps) {
     const authorData = useFragment(LIVE_FEEDBACK_AUTHOR_FRAGMENT, fragmentRef);
+    const isModerator = authorData.createdBy?.moderatorOf === true;
     const [time, month] = useMemo(() => {
         if (authorData.createdAt) return formatDate(authorData.createdAt, 'p-P').split('-');
         return ['', ''];
@@ -55,7 +58,14 @@ export function LiveFeedbackAuthor({ fragmentRef, ...props }: LiveFeedbackAuthor
         <CardHeader
             // get first letter of name to use as avatar
             avatar={<Avatar>{authorName[0]}</Avatar>}
-            title={<Typography>{authorName}</Typography>}
+            title={
+                <React.Fragment>
+                    <Typography>
+                        {isModerator && <VerifiedUserIcon fontSize='small' />}
+                        {authorName}
+                    </Typography>
+                </React.Fragment>
+            }
             subheader={subheader}
             {...props}
         />

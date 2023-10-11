@@ -29,7 +29,7 @@ const EVENT_PRE_QUERY = graphql`
             id
             ... on Event {
                 ...useViewerOnlyQuestionListFragment
-                ...useLiveFeedbackListFragment
+                ...useLiveFeedbackListFragment @arguments(eventId: $eventId)
                 ...useEventDetailsFragment
                 ...SpeakerListFragment
             }

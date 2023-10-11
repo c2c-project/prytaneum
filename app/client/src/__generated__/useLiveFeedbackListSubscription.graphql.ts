@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<af0c708986df94c81a3c890996ccf3b8>>
+ * @generated SignedSource<<1995d84e8442b640675a9ae9ae7fef5d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,6 +12,7 @@ import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type Operation = "CREATE" | "DELETE" | "UPDATE" | "%future added value";
 export type useLiveFeedbackListSubscription$variables = {
+  connections: ReadonlyArray<string>;
   eventId: string;
 };
 export type useLiveFeedbackListSubscription$data = {
@@ -22,12 +23,15 @@ export type useLiveFeedbackListSubscription$data = {
         readonly createdBy: {
           readonly firstName: string | null;
           readonly id: string;
+          readonly moderatorOf: boolean | null;
         } | null;
         readonly id: string;
         readonly message: string;
         readonly refFeedback: {
           readonly createdBy: {
+            readonly firstName: string | null;
             readonly id: string;
+            readonly moderatorOf: boolean | null;
           } | null;
           readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackReplyFragment">;
         } | null;
@@ -43,61 +47,66 @@ export type useLiveFeedbackListSubscription = {
 };
 
 const node: ConcreteRequest = (function(){
-var v0 = [
-  {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "eventId"
-  }
-],
-v1 = [
+var v0 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "connections"
+},
+v1 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "eventId"
+},
+v2 = [
   {
     "kind": "Variable",
     "name": "eventId",
     "variableName": "eventId"
   }
 ],
-v2 = {
+v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "operationType",
   "storageKey": null
 },
-v3 = {
+v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "cursor",
   "storageKey": null
 },
-v4 = {
+v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v5 = {
+v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "message",
   "storageKey": null
 },
-v6 = {
+v7 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "firstName",
   "storageKey": null
 },
-v7 = {
-  "args": null,
-  "kind": "FragmentSpread",
-  "name": "LiveFeedbackReplyFragment"
-},
 v8 = {
+  "alias": null,
+  "args": (v2/*: any*/),
+  "kind": "ScalarField",
+  "name": "moderatorOf",
+  "storageKey": null
+},
+v9 = {
   "alias": null,
   "args": null,
   "concreteType": "User",
@@ -105,8 +114,28 @@ v8 = {
   "name": "createdBy",
   "plural": false,
   "selections": [
-    (v4/*: any*/),
-    (v6/*: any*/),
+    (v5/*: any*/),
+    (v7/*: any*/),
+    (v8/*: any*/)
+  ],
+  "storageKey": null
+},
+v10 = {
+  "args": (v2/*: any*/),
+  "kind": "FragmentSpread",
+  "name": "LiveFeedbackReplyFragment"
+},
+v11 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "User",
+  "kind": "LinkedField",
+  "name": "createdBy",
+  "plural": false,
+  "selections": [
+    (v5/*: any*/),
+    (v7/*: any*/),
+    (v8/*: any*/),
     {
       "alias": null,
       "args": null,
@@ -124,7 +153,7 @@ v8 = {
   ],
   "storageKey": null
 },
-v9 = {
+v12 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -133,20 +162,23 @@ v9 = {
 };
 return {
   "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v0/*: any*/),
+      (v1/*: any*/)
+    ],
     "kind": "Fragment",
     "metadata": null,
     "name": "useLiveFeedbackListSubscription",
     "selections": [
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": (v2/*: any*/),
         "concreteType": "FeedbackOperation",
         "kind": "LinkedField",
         "name": "feedbackCRUD",
         "plural": false,
         "selections": [
-          (v2/*: any*/),
+          (v3/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -155,7 +187,7 @@ return {
             "name": "edge",
             "plural": false,
             "selections": [
-              (v3/*: any*/),
+              (v4/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -164,21 +196,9 @@ return {
                 "name": "node",
                 "plural": false,
                 "selections": [
-                  (v4/*: any*/),
                   (v5/*: any*/),
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "User",
-                    "kind": "LinkedField",
-                    "name": "createdBy",
-                    "plural": false,
-                    "selections": [
-                      (v4/*: any*/),
-                      (v6/*: any*/)
-                    ],
-                    "storageKey": null
-                  },
+                  (v6/*: any*/),
+                  (v9/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -187,25 +207,14 @@ return {
                     "name": "refFeedback",
                     "plural": false,
                     "selections": [
-                      {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": "User",
-                        "kind": "LinkedField",
-                        "name": "createdBy",
-                        "plural": false,
-                        "selections": [
-                          (v4/*: any*/)
-                        ],
-                        "storageKey": null
-                      },
-                      (v7/*: any*/)
+                      (v9/*: any*/),
+                      (v10/*: any*/)
                     ],
                     "storageKey": null
                   },
-                  (v7/*: any*/),
+                  (v10/*: any*/),
                   {
-                    "args": null,
+                    "args": (v2/*: any*/),
                     "kind": "FragmentSpread",
                     "name": "LiveFeedbackAuthorFragment"
                   }
@@ -224,19 +233,22 @@ return {
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v1/*: any*/),
+      (v0/*: any*/)
+    ],
     "kind": "Operation",
     "name": "useLiveFeedbackListSubscription",
     "selections": [
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": (v2/*: any*/),
         "concreteType": "FeedbackOperation",
         "kind": "LinkedField",
         "name": "feedbackCRUD",
         "plural": false,
         "selections": [
-          (v2/*: any*/),
+          (v3/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -245,7 +257,7 @@ return {
             "name": "edge",
             "plural": false,
             "selections": [
-              (v3/*: any*/),
+              (v4/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -254,9 +266,9 @@ return {
                 "name": "node",
                 "plural": false,
                 "selections": [
-                  (v4/*: any*/),
                   (v5/*: any*/),
-                  (v8/*: any*/),
+                  (v6/*: any*/),
+                  (v11/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -265,19 +277,35 @@ return {
                     "name": "refFeedback",
                     "plural": false,
                     "selections": [
-                      (v8/*: any*/),
-                      (v4/*: any*/),
+                      (v11/*: any*/),
                       (v5/*: any*/),
-                      (v9/*: any*/)
+                      (v6/*: any*/),
+                      (v12/*: any*/)
                     ],
                     "storageKey": null
                   },
-                  (v9/*: any*/)
+                  (v12/*: any*/)
                 ],
                 "storageKey": null
               }
             ],
             "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "filters": null,
+            "handle": "prependEdge",
+            "key": "",
+            "kind": "LinkedHandle",
+            "name": "edge",
+            "handleArgs": [
+              {
+                "kind": "Variable",
+                "name": "connections",
+                "variableName": "connections"
+              }
+            ]
           }
         ],
         "storageKey": null
@@ -285,16 +313,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "1262a2f50f7a8a5f7d871d2b7afff342",
+    "cacheID": "92e6aa62233961a7cc09d95d419cfc14",
     "id": null,
     "metadata": {},
     "name": "useLiveFeedbackListSubscription",
     "operationKind": "subscription",
-    "text": "subscription useLiveFeedbackListSubscription(\n  $eventId: ID!\n) {\n  feedbackCRUD(eventId: $eventId) {\n    operationType\n    edge {\n      cursor\n      node {\n        id\n        message\n        createdBy {\n          id\n          firstName\n        }\n        refFeedback {\n          createdBy {\n            id\n          }\n          ...LiveFeedbackReplyFragment\n          id\n        }\n        ...LiveFeedbackReplyFragment\n        ...LiveFeedbackAuthorFragment\n      }\n    }\n  }\n}\n\nfragment LiveFeedbackAuthorFragment on EventLiveFeedback {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment LiveFeedbackReplyFragment on EventLiveFeedback {\n  id\n  message\n  ...LiveFeedbackAuthorFragment\n}\n"
+    "text": "subscription useLiveFeedbackListSubscription(\n  $eventId: ID!\n) {\n  feedbackCRUD(eventId: $eventId) {\n    operationType\n    edge {\n      cursor\n      node {\n        id\n        message\n        createdBy {\n          id\n          firstName\n          moderatorOf(eventId: $eventId)\n        }\n        refFeedback {\n          createdBy {\n            id\n            firstName\n            moderatorOf(eventId: $eventId)\n          }\n          ...LiveFeedbackReplyFragment_32qNee\n          id\n        }\n        ...LiveFeedbackReplyFragment_32qNee\n        ...LiveFeedbackAuthorFragment_32qNee\n      }\n    }\n  }\n}\n\nfragment LiveFeedbackAuthorFragment_32qNee on EventLiveFeedback {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n    moderatorOf(eventId: $eventId)\n  }\n  createdAt\n}\n\nfragment LiveFeedbackReplyFragment_32qNee on EventLiveFeedback {\n  id\n  message\n  ...LiveFeedbackAuthorFragment_32qNee\n}\n"
   }
 };
 })();
 
-(node as any).hash = "47ab729d3b19732e30514df5b46855d6";
+(node as any).hash = "e9a3905b5d95c575434277a067f7ec15";
 
 export default node;

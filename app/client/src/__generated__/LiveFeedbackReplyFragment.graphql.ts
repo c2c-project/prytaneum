@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d8c5952a2cb611fe1de20d2644587ccb>>
+ * @generated SignedSource<<324ee14523ac9e40c87793bee3cc954e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -22,7 +22,13 @@ export type LiveFeedbackReplyFragment$key = {
 };
 
 const node: ReaderFragment = {
-  "argumentDefinitions": [],
+  "argumentDefinitions": [
+    {
+      "defaultValue": null,
+      "kind": "LocalArgument",
+      "name": "eventId"
+    }
+  ],
   "kind": "Fragment",
   "metadata": null,
   "name": "LiveFeedbackReplyFragment",
@@ -42,7 +48,13 @@ const node: ReaderFragment = {
       "storageKey": null
     },
     {
-      "args": null,
+      "args": [
+        {
+          "kind": "Variable",
+          "name": "eventId",
+          "variableName": "eventId"
+        }
+      ],
       "kind": "FragmentSpread",
       "name": "LiveFeedbackAuthorFragment"
     }
@@ -51,6 +63,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "e028616ca10ae0413afa855c18cd2464";
+(node as any).hash = "627e727cc1c7f1fbc55642077151d7f2";
 
 export default node;

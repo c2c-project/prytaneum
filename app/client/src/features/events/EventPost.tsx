@@ -26,7 +26,7 @@ const EVENT_POST_QUERY = graphql`
             id
             ... on Event {
                 ...useQuestionListFragment
-                ...useLiveFeedbackListFragment
+                ...useLiveFeedbackListFragment @arguments(eventId: $eventId)
                 ...useEventDetailsFragment
                 ...SpeakerListFragment
                 ...EventVideoFragment
