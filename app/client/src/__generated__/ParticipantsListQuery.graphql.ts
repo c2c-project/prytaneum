@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4bebae8525bba3a605b935e6fc0b4138>>
+ * @generated SignedSource<<0bf70bb5c1d6950afa66bf3317e8201d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -124,7 +124,7 @@ return {
                   {
                     "kind": "Literal",
                     "name": "first",
-                    "value": 10
+                    "value": 100
                   }
                 ],
                 "concreteType": "EventParticipantConnection",
@@ -220,7 +220,7 @@ return {
                     "storageKey": null
                   }
                 ],
-                "storageKey": "participants(after:\"\",first:10)"
+                "storageKey": "participants(after:\"\",first:100)"
               }
             ],
             "type": "Event",
@@ -232,12 +232,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "f202efabafbcdddcadbd3c44b43ef1f8",
+    "cacheID": "96ba32a79fdbfcd5921731acf54a674b",
     "id": null,
     "metadata": {},
     "name": "ParticipantsListQuery",
     "operationKind": "query",
-    "text": "query ParticipantsListQuery(\n  $eventId: ID!\n) {\n  node(id: $eventId) {\n    __typename\n    id\n    ... on Event {\n      ...useParticipantListFragment_32qNee\n    }\n  }\n}\n\nfragment useParticipantListFragment_32qNee on Event {\n  participants(first: 10, after: \"\") {\n    edges {\n      node {\n        user {\n          id\n          firstName\n          lastName\n          moderatorOf(eventId: $eventId)\n        }\n        isMuted\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n  id\n}\n"
+    "text": "query ParticipantsListQuery(\n  $eventId: ID!\n) {\n  node(id: $eventId) {\n    __typename\n    id\n    ... on Event {\n      ...useParticipantListFragment_32qNee\n    }\n  }\n}\n\nfragment useParticipantListFragment_32qNee on Event {\n  participants(first: 100, after: \"\") {\n    edges {\n      node {\n        user {\n          id\n          firstName\n          lastName\n          moderatorOf(eventId: $eventId)\n        }\n        isMuted\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n  id\n}\n"
   }
 };
 })();

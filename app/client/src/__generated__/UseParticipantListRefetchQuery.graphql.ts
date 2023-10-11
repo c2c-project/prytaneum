@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<10a8c2b9399a3292b770eaed0a36407d>>
+ * @generated SignedSource<<bfef6793683fca668a0a5a4cca1fdd36>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -39,7 +39,7 @@ var v0 = [
     "name": "eventId"
   },
   {
-    "defaultValue": 10,
+    "defaultValue": 100,
     "kind": "LocalArgument",
     "name": "first"
   },
@@ -247,16 +247,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "56614e45da448cbd81c0d79bdcd5213e",
+    "cacheID": "7ffabcf1c939ebae20ec2e0433077a62",
     "id": null,
     "metadata": {},
     "name": "UseParticipantListRefetchQuery",
     "operationKind": "query",
-    "text": "query UseParticipantListRefetchQuery(\n  $after: String = \"\"\n  $eventId: ID!\n  $first: Int = 10\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useParticipantListFragment_ftjyf\n    id\n  }\n}\n\nfragment useParticipantListFragment_ftjyf on Event {\n  participants(first: $first, after: $after) {\n    edges {\n      node {\n        user {\n          id\n          firstName\n          lastName\n          moderatorOf(eventId: $eventId)\n        }\n        isMuted\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n  id\n}\n"
+    "text": "query UseParticipantListRefetchQuery(\n  $after: String = \"\"\n  $eventId: ID!\n  $first: Int = 100\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useParticipantListFragment_ftjyf\n    id\n  }\n}\n\nfragment useParticipantListFragment_ftjyf on Event {\n  participants(first: $first, after: $after) {\n    edges {\n      node {\n        user {\n          id\n          firstName\n          lastName\n          moderatorOf(eventId: $eventId)\n        }\n        isMuted\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n  id\n}\n"
   }
 };
 })();
 
-(node as any).hash = "c8e724f9deba4cd044ba8fddd9a23978";
+(node as any).hash = "0085385411845dd7284c25325e747c68";
 
 export default node;
