@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ab63a300087160d489e1a20ce03ac0e9>>
+ * @generated SignedSource<<94a266a848c7ac61a4d24f1534eece28>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -23,7 +23,12 @@ export type EventSidebarFragment$key = {
 };
 
 const node: ReaderFragment = {
-  "argumentDefinitions": [],
+  "argumentDefinitions": [
+    {
+      "kind": "RootArgument",
+      "name": "eventId"
+    }
+  ],
   "kind": "Fragment",
   "metadata": null,
   "name": "EventSidebarFragment",
@@ -75,7 +80,13 @@ const node: ReaderFragment = {
       "name": "QuestionCarouselFragment"
     },
     {
-      "args": null,
+      "args": [
+        {
+          "kind": "Variable",
+          "name": "eventId",
+          "variableName": "eventId"
+        }
+      ],
       "kind": "FragmentSpread",
       "name": "useLiveFeedbackListFragment"
     }
@@ -84,6 +95,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "94c28af07b7f3d9989d86da15aca26e6";
+(node as any).hash = "f24286a7daf88bc6c623ec098faf2453";
 
 export default node;

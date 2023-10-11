@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c0af721bae96ce631e634c9f040995d5>>
+ * @generated SignedSource<<49f9c8134a43d1d38233582a4585398d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,6 +17,7 @@ export type LiveFeedbackAuthorFragment$data = {
     readonly firstName: string | null;
     readonly id: string;
     readonly lastName: string | null;
+    readonly moderatorOf: boolean | null;
   } | null;
   readonly " $fragmentType": "LiveFeedbackAuthorFragment";
 };
@@ -26,7 +27,13 @@ export type LiveFeedbackAuthorFragment$key = {
 };
 
 const node: ReaderFragment = {
-  "argumentDefinitions": [],
+  "argumentDefinitions": [
+    {
+      "defaultValue": null,
+      "kind": "LocalArgument",
+      "name": "eventId"
+    }
+  ],
   "kind": "Fragment",
   "metadata": null,
   "name": "LiveFeedbackAuthorFragment",
@@ -66,6 +73,19 @@ const node: ReaderFragment = {
           "kind": "ScalarField",
           "name": "avatar",
           "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": [
+            {
+              "kind": "Variable",
+              "name": "eventId",
+              "variableName": "eventId"
+            }
+          ],
+          "kind": "ScalarField",
+          "name": "moderatorOf",
+          "storageKey": null
         }
       ],
       "storageKey": null
@@ -82,6 +102,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "a0a13d002b29cf7f098fd4cd05756b36";
+(node as any).hash = "d16b96759fa6467e03a8dc1d6f6e8f06";
 
 export default node;

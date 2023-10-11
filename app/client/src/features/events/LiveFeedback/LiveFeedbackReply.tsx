@@ -7,10 +7,10 @@ import { LiveFeedbackReplyFragment$key } from '@local/__generated__/LiveFeedback
 import { LiveFeedbackAuthor } from './LiveFeedbackAuthor';
 
 export const LIVE_FEEDBACK_REPLY_FRAGMENT = graphql`
-    fragment LiveFeedbackReplyFragment on EventLiveFeedback {
+    fragment LiveFeedbackReplyFragment on EventLiveFeedback @argumentDefinitions(eventId: { type: "ID!" }) {
         id
         message
-        ...LiveFeedbackAuthorFragment
+        ...LiveFeedbackAuthorFragment @arguments(eventId: $eventId)
     }
 `;
 
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
         border: `1px solid ${theme.palette.divider}`,
     },
     content: {
-        margin: theme.spacing(-2, 0, 0, 0)
+        margin: theme.spacing(-2, 0, 0, 0),
     },
 }));
 

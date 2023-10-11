@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const LIVE_FEEDBACK_REPLY_ACTION_MUTATION = graphql`
-    mutation LiveFeedbackReplyActionMutation($input: CreateFeedback!) {
+    mutation LiveFeedbackReplyActionMutation($input: CreateFeedback!, $eventId: ID!) {
         createFeedback(input: $input) {
             isError
             message
@@ -29,7 +29,7 @@ const LIVE_FEEDBACK_REPLY_ACTION_MUTATION = graphql`
                 node {
                     id
                     message
-                    ...LiveFeedbackAuthorFragment
+                    ...LiveFeedbackAuthorFragment @arguments(eventId: $eventId)
                 }
             }
         }
@@ -37,7 +37,7 @@ const LIVE_FEEDBACK_REPLY_ACTION_MUTATION = graphql`
 `;
 
 interface Props {
-    fragmentRef: LiveFeedbackReplyFragment$key
+    fragmentRef: LiveFeedbackReplyFragment$key;
 }
 
 export function LiveFeedbackReplyAction({ fragmentRef }: Props) {
@@ -57,6 +57,7 @@ export function LiveFeedbackReplyAction({ fragmentRef }: Props) {
                     isReply: true,
                     refFeedbackId: data.id,
                 },
+                eventId,
             },
         });
         close();
@@ -67,7 +68,7 @@ export function LiveFeedbackReplyAction({ fragmentRef }: Props) {
             <Card className={classes.card}>
                 <LiveFeedbackAuthor fragmentRef={data} />
                 <CardContent>
-                    <Typography style={{ wordBreak: 'break-word'}}>{data.message}</Typography>
+                    <Typography style={{ wordBreak: 'break-word' }}>{data.message}</Typography>
                 </CardContent>
             </Card>
         ),
@@ -81,12 +82,7 @@ export function LiveFeedbackReplyAction({ fragmentRef }: Props) {
                     <LiveFeedbackForm onSubmit={handleSubmit} reply={reply} onCancel={close} />
                 </DialogContent>
             </ResponsiveDialog>
-            <Button
-                color='inherit'
-                onClick={open}
-                startIcon={<ReplyIcon fontSize='small' />}
-                fullWidth
-            >
+            <Button color='inherit' onClick={open} startIcon={<ReplyIcon fontSize='small' />} fullWidth>
                 Reply
             </Button>
         </>
