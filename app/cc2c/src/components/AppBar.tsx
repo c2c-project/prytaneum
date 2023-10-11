@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { Typography, AppBar as MUIAppBar, Toolbar, Button, IconButton, useMediaQuery } from '@mui/material';
+import { Typography, AppBar as MUIAppBar, Toolbar, Button, IconButton, useMediaQuery, Switch } from '@mui/material';
 import type { AppBarProps } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useTheme } from '@mui/material/styles';
@@ -14,9 +14,12 @@ import { SignOutButton } from './auth/SignOutButton';
 import { DashboardButton } from './DashboardButton';
 import { TemporaryDrawer } from './TemporaryDrawer';
 import { AdminMenuButton } from './AdminMenuButton';
+import { useThemeMode } from './Providers';
+import { DarkModeSwitch } from './DarkModeSwitch';
 
 export function AppBar({ children, ...restProps }: AppBarProps) {
     const theme = useTheme();
+    const { darkMode, toggleTheme } = useThemeMode();
     const mdDownBreakpoint = useMediaQuery(theme.breakpoints.down('md'));
     const router = useRouter();
     const { authenticated, isAdmin, isLoading } = useAuth();
@@ -32,6 +35,12 @@ export function AppBar({ children, ...restProps }: AppBarProps) {
 
     const toggleDrawer = () => {
         setOpen(!open);
+    };
+
+    const updateTheme = (event: React.ChangeEvent<HTMLInputElement>) => {
+        event.preventDefault();
+        toggleTheme();
+        window.location.reload();
     };
 
     return (
@@ -64,6 +73,7 @@ export function AppBar({ children, ...restProps }: AppBarProps) {
                     <div style={{ width: '1rem' }} />
                     <AdminMenuButton visible={!isLoading && isAdmin && !mdDownBreakpoint} />
                     <div style={{ flexGrow: 1 }} />
+                    <DarkModeSwitch sx={{ m: 1 }} checked={darkMode} onChange={updateTheme} />
                     <SignInButton visible={!isLoading && !authenticated} />
                     <SignOutButton visible={!isLoading && authenticated} />
                 </Toolbar>
