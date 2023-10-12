@@ -23,11 +23,9 @@ export function AddTeacherFormModal({ classId }: AddTeacherFormProps) {
 
     return (
         <React.Fragment>
-            <Grid container justifyContent='center'>
-                <Button variant='contained' onClick={() => setModalVisible(true)}>
-                    Add Teacher
-                </Button>
-            </Grid>
+            <Button variant='contained' onClick={() => setModalVisible(true)}>
+                Add Teacher
+            </Button>
             <Modal open={modalVisible}>
                 <Box
                     sx={{
