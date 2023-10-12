@@ -19,12 +19,10 @@ import {
     FormControlLabel,
     Checkbox,
 } from '@mui/material';
-import CircleIcon from '@mui/icons-material/Circle';
-import PersonIcon from '@mui/icons-material/Person';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import DoneIcon from '@mui/icons-material/Done';
 import DownloadIcon from '@mui/icons-material/Download';
-import PendingIcon from '@mui/icons-material/Pending';
+import PendingOutlinedIcon from '@mui/icons-material/PendingOutlined';
 
 import { ResponsiveDialog, useResponsiveDialog } from './ResponsiveDialog';
 import { updateStudentData } from '@local/server';
@@ -162,7 +160,7 @@ export function StudentsTable({ students, classId }: StudentsTableProps) {
                                         </Tooltip>
                                     ) : (
                                         <Tooltip title='Not Registered'>
-                                            <PersonIcon />
+                                            <PendingOutlinedIcon />
                                         </Tooltip>
                                     )}
                                 </TableCell>
@@ -173,7 +171,7 @@ export function StudentsTable({ students, classId }: StudentsTableProps) {
                                 <TableCell align='center'>
                                     {student.preWriting === '' ? (
                                         <Tooltip title='Not Submitted'>
-                                            <PendingIcon />
+                                            <PendingOutlinedIcon />
                                         </Tooltip>
                                     ) : (
                                         <Tooltip title='Submitted'>
@@ -184,7 +182,7 @@ export function StudentsTable({ students, classId }: StudentsTableProps) {
                                 <TableCell align='center'>
                                     {student.postWriting === '' ? (
                                         <Tooltip title='Not Submitted'>
-                                            <PendingIcon />
+                                            <PendingOutlinedIcon />
                                         </Tooltip>
                                     ) : (
                                         <Tooltip title='Submitted'>
