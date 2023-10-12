@@ -35,7 +35,9 @@ export function EditClassDialog({ classId, defaultValues }: Props) {
 
     return (
         <React.Fragment>
-            <Button onClick={open}>Edit Class</Button>
+            <Button variant='contained' onClick={open}>
+                Edit Class
+            </Button>
             <ResponsiveDialog open={isOpen} onClose={close} fullWidth>
                 <DialogContent>
                     <form action={handleSubmit}>
