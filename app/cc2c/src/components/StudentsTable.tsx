@@ -20,6 +20,7 @@ import {
     Checkbox,
 } from '@mui/material';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
+import PersonIcon from '@mui/icons-material/Person';
 import DoneIcon from '@mui/icons-material/Done';
 import DownloadIcon from '@mui/icons-material/Download';
 import PendingOutlinedIcon from '@mui/icons-material/PendingOutlined';
@@ -155,12 +156,12 @@ export function StudentsTable({ students, classId }: StudentsTableProps) {
                             <TableRow key={student.userId}>
                                 <TableCell align='center'>
                                     {student.user.shadowAccount ? (
-                                        <Tooltip title='Registered'>
-                                            <HowToRegIcon color='success' />
+                                        <Tooltip title='Not Registered'>
+                                            <PersonIcon color='warning' />
                                         </Tooltip>
                                     ) : (
-                                        <Tooltip title='Not Registered'>
-                                            <PendingOutlinedIcon color='warning' />
+                                        <Tooltip title='Registered'>
+                                            <HowToRegIcon color='success' />
                                         </Tooltip>
                                     )}
                                 </TableCell>
