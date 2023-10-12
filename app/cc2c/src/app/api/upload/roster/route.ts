@@ -59,9 +59,13 @@ export async function POST(request: NextRequest) {
                 cache[course_id] = _class.id;
             }
 
-            // Create new user
-            const newUser = await prisma.user.create({
-                data: {
+            // Create new user or fetch from DB
+            const user = await prisma.user.upsert({
+                where: {
+                    email: lowerCaseEmail,
+                },
+                update: {},
+                create: {
                     studentId: student_id,
                     email: lowerCaseEmail,
                     password: await bcrypt.hash('', 10),
@@ -70,18 +74,35 @@ export async function POST(request: NextRequest) {
                     researchProjectConsent: research_project_consent === 1 ? true : false,
                     shadowAccount: true,
                 },
+                select: {
+                    id: true,
+                    shadowAccount: true,
+                },
             });
 
+            if (user.shadowAccount === false) {
+                // User already set up account
+                // Skip creating user and adding to class
+                continue;
+            }
+
             // Add new user to class as student
-            await prisma.student.create({
-                data: {
-                    userId: newUser.id,
+            await prisma.student.upsert({
+                where: {
+                    userId_classId: {
+                        userId: user.id,
+                        classId: _class.id,
+                    },
+                },
+                update: {},
+                create: {
+                    userId: user.id,
                     classId: _class.id,
                 },
             });
 
             // Create JWT token for user to complete registration and add to email list
-            const payload = { userId: newUser.id };
+            const payload = { userId: user.id };
             const token = jwt.sign(payload, process.env.JWT_SECRET);
             const registrationLink = `${process.env.ORIGIN_URL}/auth/complete-registration/?token=${token}`;
 

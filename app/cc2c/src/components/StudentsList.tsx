@@ -15,7 +15,11 @@ import {
     FormGroup,
     FormControlLabel,
     Checkbox,
+    Tooltip,
 } from '@mui/material';
+import CircleIcon from '@mui/icons-material/Circle';
+import PersonIcon from '@mui/icons-material/Person';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
 import DoneIcon from '@mui/icons-material/Done';
 import DownloadIcon from '@mui/icons-material/Download';
 import PendingIcon from '@mui/icons-material/Pending';
@@ -135,6 +139,13 @@ export function StudentsList({ students, classId }: StudentsListProps) {
             <List>
                 {students.map((student) => (
                     <ListItem key={student.userId}>
+                        <Tooltip title='Registration Status'>
+                            {student.user.shadowAccount ? (
+                                <PersonIcon color='warning' />
+                            ) : (
+                                <HowToRegIcon color='success' />
+                            )}
+                        </Tooltip>
                         <ListItemButton onClick={handleSelectStudent(student.userId)}>
                             <Avatar>{student.user.firstName[0]}</Avatar>
                             <div style={{ width: '1rem' }} />
@@ -143,12 +154,16 @@ export function StudentsList({ students, classId }: StudentsListProps) {
                             <Typography variant='body1' fontWeight='bold' paddingRight='1rem'>
                                 Pre:
                             </Typography>
-                            <ListItemText primary={student.preWriting === '' ? <PendingIcon /> : <DoneIcon />} />
+                            <ListItemText
+                                primary={student.preWriting === '' ? <PendingIcon /> : <DoneIcon color='success' />}
+                            />
                             <div style={{ width: '1rem' }} />
                             <Typography variant='body1' fontWeight='bold' paddingRight='1rem'>
                                 Post:
                             </Typography>
-                            <ListItemText primary={student.postWriting === '' ? <PendingIcon /> : <DoneIcon />} />
+                            <ListItemText
+                                primary={student.postWriting === '' ? <PendingIcon /> : <DoneIcon color='success' />}
+                            />
                         </ListItemButton>
                         <IconButton disabled={isLoading} onClick={handleDownloadWritings(student)}>
                             <DownloadIcon />

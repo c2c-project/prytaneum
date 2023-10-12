@@ -12,8 +12,13 @@ interface Props {
 }
 
 export function useThemeMode() {
-    const [theme, setTheme] = React.useState<Theme>(localStorage.getItem('theme') === 'dark' ? darkTheme : lightTheme);
-    const [darkMode, setDarkMode] = React.useState<boolean>(localStorage.getItem('theme') === 'dark');
+    const [theme, setTheme] = React.useState<Theme | undefined>();
+    const [darkMode, setDarkMode] = React.useState<boolean | undefined>();
+
+    React.useEffect(() => {
+        setTheme(localStorage.getItem('theme') === 'dark' ? darkTheme : lightTheme);
+        setDarkMode(localStorage.getItem('theme') === 'dark');
+    }, []);
 
     const toggleTheme = () => {
         if (darkMode) {
@@ -37,6 +42,8 @@ export function Providers({ children }: Props) {
     const onClickDismiss = (key: string | number) => () => {
         notistackRef?.current?.closeSnackbar(key);
     };
+
+    if (!theme) return null;
 
     return (
         <SessionProvider>
