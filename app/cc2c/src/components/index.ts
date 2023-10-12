@@ -12,6 +12,7 @@ export * from './TemporaryDrawer';
 export * from './Providers';
 export * from './ResponsiveDialog';
 export * from './StudentsList';
+export * from './StudentsTable';
 export * from './TablePaginationActions';
 export * from './PageLoading';
 export * from './upload/UploadPostWriting';
