@@ -160,7 +160,7 @@ export function StudentsTable({ students, classId }: StudentsTableProps) {
                                         </Tooltip>
                                     ) : (
                                         <Tooltip title='Not Registered'>
-                                            <PendingOutlinedIcon />
+                                            <PendingOutlinedIcon color='warning' />
                                         </Tooltip>
                                     )}
                                 </TableCell>
@@ -171,7 +171,7 @@ export function StudentsTable({ students, classId }: StudentsTableProps) {
                                 <TableCell align='center'>
                                     {student.preWriting === '' ? (
                                         <Tooltip title='Not Submitted'>
-                                            <PendingOutlinedIcon />
+                                            <PendingOutlinedIcon color='warning' />
                                         </Tooltip>
                                     ) : (
                                         <Tooltip title='Submitted'>
@@ -182,7 +182,7 @@ export function StudentsTable({ students, classId }: StudentsTableProps) {
                                 <TableCell align='center'>
                                     {student.postWriting === '' ? (
                                         <Tooltip title='Not Submitted'>
-                                            <PendingOutlinedIcon />
+                                            <PendingOutlinedIcon color='warning' />
                                         </Tooltip>
                                     ) : (
                                         <Tooltip title='Submitted'>
