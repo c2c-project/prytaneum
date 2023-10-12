@@ -56,7 +56,7 @@ export async function middleware(request: NextRequest, _next: NextFetchEvent) {
         }
     }
 
-    const facultyPaths = ['/class/*'];
+    const facultyPaths = ['/class', '/class/*'];
     const matchesFacultyPath = facultyPaths.some((path) => pathname.startsWith(path));
     if (matchesFacultyPath) {
         const token = await getToken({ req: request });
