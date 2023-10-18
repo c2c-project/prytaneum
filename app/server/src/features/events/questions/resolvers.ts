@@ -8,6 +8,8 @@ import type { EventQuestionEdgeContainer } from '@local/graphql-types';
 const toQuestionId = toGlobalId('EventQuestion');
 const toUserId = toGlobalId('User');
 
+const LOCK_EXPIRE_TIME = 5; // 5 seconds
+
 export const resolvers: Resolvers = {
     Query: {
         async questionsByEventId(parent, args, ctx, info) {
@@ -43,8 +45,20 @@ export const resolvers: Resolvers = {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: questionId } = fromGlobalId(args.input.questionId);
+
+                // Check cache to see if question is currently being modified
+                const result = await ctx.redis.get(`question-lock:${questionId}`);
+                if (result !== null)
+                    throw new ProtectedError({
+                        userMessage: 'Question currently being modified by another moderator, please try again shortly',
+                    });
+
                 const enqueued = await Question.isEnqueued(questionId, ctx.prisma);
                 if (enqueued) throw new ProtectedError({ userMessage: 'Cannot delete an enqueued question' });
+
+                // Set the semaphore lock
+                await ctx.redis.set(`question-lock:${questionId}`, 'true', 'EX', LOCK_EXPIRE_TIME);
+
                 const deletedQuestion = await Question.updateQuestionVisibility(
                     questionId,
                     args.input.isVisible,
@@ -64,6 +78,8 @@ export const resolvers: Resolvers = {
                     },
                 });
 
+                // Delete the semaphore lock
+                await ctx.redis.del(`question-lock:${questionId}`);
                 return edge;
             });
         },
