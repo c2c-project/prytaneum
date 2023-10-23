@@ -2,8 +2,8 @@
 
 import { prisma } from '@local/core';
 
-export async function getClassByTeacherId(userId: string) {
-    const _class = await prisma.class.findFirst({
+export async function getClassesByTeacherId(userId: string) {
+    const classes = await prisma.class.findMany({
         where: {
             teachers: {
                 some: {
@@ -13,7 +13,11 @@ export async function getClassByTeacherId(userId: string) {
                 },
             },
         },
+        select: {
+            id: true,
+            name: true,
+        },
     });
 
-    return _class?.id || '';
+    return classes;
 }

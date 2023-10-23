@@ -1,14 +1,14 @@
 import React from 'react';
-import { Button, Grid, Typography } from '@mui/material';
+import { Button, Grid, List, ListItem, Typography } from '@mui/material';
 
 import { UploadRoster } from '@local/components';
 import Link from 'next/link';
 
 interface Props {
-    classId: string;
+    classes: Array<{ id: string; name: string }>;
 }
 
-export function TeacherDashboard({ classId }: Props) {
+export function TeacherDashboard({ classes }: Props) {
     return (
         <Grid container direction='column' alignItems='center' justifyContent='center' spacing='2rem'>
             <Grid item>
@@ -17,11 +17,15 @@ export function TeacherDashboard({ classId }: Props) {
                 </Typography>
             </Grid>
             <Grid item>
-                {classId !== '' && (
-                    <Link style={{ textDecoration: 'none' }} href={`/class/${classId}`}>
-                        <Button variant='contained'>View Class</Button>
-                    </Link>
-                )}
+                <List>
+                    {classes.map(({ id, name }) => (
+                        <ListItem key={id} style={{ justifyContent: 'center' }}>
+                            <Link href={`/class/${id}`} style={{ textDecoration: 'none' }}>
+                                <Button variant='contained'>View Class: {name}</Button>
+                            </Link>
+                        </ListItem>
+                    ))}
+                </List>
             </Grid>
             <Grid item>
                 <UploadRoster />
