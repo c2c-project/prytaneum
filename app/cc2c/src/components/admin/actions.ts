@@ -253,7 +253,6 @@ export async function refreshClasses(ammount: number, filter: ClassesTableSearch
 }
 
 export async function addTeacherByEmail(formData: FormData) {
-    'use server';
     const email = formData.get('email') as string;
     const classId = formData.get('classId') as string;
 
@@ -265,6 +264,18 @@ export async function addTeacherByEmail(formData: FormData) {
             },
         });
         if (!user) throw new Error('User not found');
+        const lowerCaseEmail = email.toLowerCase();
+        // Create prytaneum account for user since there is a chance they aren't
+        const response = await fetch(`${process.env.PRYTANEUM_URL}/api/create-account`, {
+            method: 'POST',
+            body: JSON.stringify({ email: lowerCaseEmail, firstName: user.firstName, lastName: user.lastName }),
+        });
+
+        if (response.ok) console.log(`Successfully created Prytaneum account: ${lowerCaseEmail}`);
+        else {
+            console.error(response);
+            console.error(`Error creating Prytaneum account: ${lowerCaseEmail}`);
+        }
         await prisma.teacher.upsert({
             where: {
                 userId_classId: {
@@ -278,6 +289,7 @@ export async function addTeacherByEmail(formData: FormData) {
                 classId,
             },
         });
+
         return { isError: false, message: '' };
     } catch (error) {
         console.error(error);
