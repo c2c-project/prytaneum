@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, Grid, List, ListItem, Typography } from '@mui/material';
 
-import { UploadRoster } from '@local/components';
 import Link from 'next/link';
 
 interface Props {
@@ -26,9 +25,6 @@ export function TeacherDashboard({ classes }: Props) {
                         </ListItem>
                     ))}
                 </List>
-            </Grid>
-            <Grid item>
-                <UploadRoster />
             </Grid>
         </Grid>
     );
