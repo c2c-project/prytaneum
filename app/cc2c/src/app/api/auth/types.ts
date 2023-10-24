@@ -5,8 +5,7 @@ export type User = {
     password: string;
     createdAt: Date;
     updatedAt: Date;
-    isTeacher: boolean;
-    isAdmin: boolean;
+    role: 'ADMIN' | 'TEACHER' | 'USER';
 };
 
 export type UserWithoutPass = Omit<User, 'password'>;
