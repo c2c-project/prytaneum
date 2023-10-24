@@ -56,6 +56,7 @@ model Teacher {
   // Info
   userId String @db.Uuid
   classId String @db.Uuid
+  eventURL String @default("")
 
   // Relations
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
