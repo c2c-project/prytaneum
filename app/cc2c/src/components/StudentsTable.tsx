@@ -106,8 +106,8 @@ export function StudentsTable({ students, classId }: StudentsTableProps) {
         }
         const csvContent =
             'data:text/csv;charset=utf-8,' +
-            'Email,preWriting,postWriting\n' +
-            `${student?.user.email},${student?.preWriting},${student?.postWriting}`;
+            'email|preWriting|postWriting\n' +
+            `${student?.user.email}|${student?.preWriting}|${student?.postWriting}`;
 
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement('a');
@@ -122,9 +122,9 @@ export function StudentsTable({ students, classId }: StudentsTableProps) {
         setIsLoading(true);
         const csvContent =
             'data:text/csv;charset=utf-8,' +
-            'Email,preWriting,postWriting\n' +
+            'email|preWriting|postWriting\n' +
             students
-                .map((student) => `${student?.user.email},${student?.preWriting},${student?.postWriting}`)
+                .map((student) => `${student?.user.email}|${student?.preWriting}|${student?.postWriting}`)
                 .join('\n');
 
         const encodedUri = encodeURI(csvContent);
