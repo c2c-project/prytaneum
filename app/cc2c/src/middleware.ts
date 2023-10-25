@@ -50,8 +50,8 @@ export async function middleware(request: NextRequest, _next: NextFetchEvent) {
             const url = new URL(`/auth/signin`, request.url);
             return NextResponse.redirect(url);
         }
-        if (token.role !== 'TEACHER') {
-            const url = new URL(`/`, request.url);
+        if (token.role === 'ADMIN') {
+            const url = new URL(`/admin/dashboard`, request.url);
             return NextResponse.rewrite(url);
         }
     }
