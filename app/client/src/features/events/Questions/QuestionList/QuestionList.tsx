@@ -122,6 +122,7 @@ export function QuestionList({ fragmentRef, ActionButtons, isVisible }: Question
                         onFilterChange={handleFilterChange}
                         onSearch={handleSearch}
                         length={filteredList.length}
+                        toggleSearch={isModerator ? false : true}
                         // menuIcons={[
                         //     <Tooltip title='Load New'>
                         //         <span>
