@@ -206,6 +206,7 @@ __metadata:
     papaparse: ^5.4.1
     prisma: ^5.0.0
     react: ^18.2.0
+    react-csv-downloader: ^3.0.0
     react-dom: ^18.2.0
     typescript: 5.1.6
     yup: ^1.2.0
@@ -15860,6 +15861,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"file-saver@npm:^2.0.2":
+  version: 2.0.5
+  resolution: "file-saver@npm:2.0.5"
+  checksum: c62d96e5cebc58b4bdf3ae8a60d5cf9607ad82f75f798c33a4ee63435ac2203002584d5256a2a780eda7feb5e19dc3b6351c2212e58b3f529e63d265a7cc79f7
+  languageName: node
+  linkType: hard
+
 "file-system-cache@npm:^1.0.5":
   version: 1.0.5
   resolution: "file-system-cache@npm:1.0.5"
@@ -24917,6 +24925,17 @@ fsevents@^1.2.7:
     react: ">= 15"
     react-dom: ">= 15"
   checksum: 670d7f6f355cd2c862fde2039e3fbaf39dae2925d2dea78c0406c04a9a5c35cca61bbd137de04a965ebdbbbaee5d435a06f06c0786a86d7bfc175b4fd9789e19
+  languageName: node
+  linkType: hard
+
+"react-csv-downloader@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "react-csv-downloader@npm:3.0.0"
+  dependencies:
+    file-saver: ^2.0.2
+  peerDependencies:
+    react: ^16.6.3 || ^17.0.0 || ^18.0.0
+  checksum: 6d7f65125b1a3550d6f1b95489c54b400dfac31dc638ea91e0d32a42b81f087d18257af0671ea96735a7442ec0397b524f8a52c4f48e07d6a09d0631c1b5edae
   languageName: node
   linkType: hard
 

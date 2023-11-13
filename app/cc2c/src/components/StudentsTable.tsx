@@ -24,6 +24,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import DoneIcon from '@mui/icons-material/Done';
 import DownloadIcon from '@mui/icons-material/Download';
 import PendingOutlinedIcon from '@mui/icons-material/PendingOutlined';
+import CsvDownloader from 'react-csv-downloader';
 
 import { ResponsiveDialog, useResponsiveDialog } from './ResponsiveDialog';
 import { updateStudentData } from '@local/server';
@@ -91,49 +92,22 @@ export function StudentsTable({ students, classId }: StudentsTableProps) {
         close();
     };
 
-    const handleDownloadWritings = (student: Student) => () => {
-        setIsLoading(true);
-        // const student = students.find((student) => student.userId === selectedStudent);
-        if (!student) {
-            displaySnack('Student not found', { variant: 'error' });
-            setIsLoading(false);
-            return;
-        }
-        if (student.preWriting === '' && student.postWriting === '') {
-            displaySnack('No writings to download', { variant: 'warning' });
-            setIsLoading(false);
-            return;
-        }
-        const csvContent =
-            'data:text/csv;charset=utf-8,' +
-            'email|preWriting|postWriting\n' +
-            `${student?.user.email}|${student?.preWriting}|${student?.postWriting}`;
+    const studentWritingColumns = [
+        { id: 'sid', displayName: 'Student ID' },
+        { id: 'pre', displayName: 'Pre Writing' },
+        { id: 'post', displayName: 'Post Writing' },
+    ];
 
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement('a');
-        link.setAttribute('href', encodedUri);
-        link.setAttribute('download', `${student.user.email}_writings.csv`);
-        document.body.appendChild(link);
-        link.click();
-        setIsLoading(false);
-    };
-
-    const handleDownloadAllWritings = () => {
-        setIsLoading(true);
-        const csvContent =
-            'data:text/csv;charset=utf-8,' +
-            'email|preWriting|postWriting\n' +
-            students
-                .map((student) => `${student?.user.email}|${student?.preWriting}|${student?.postWriting}`)
-                .join('\n');
-
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement('a');
-        link.setAttribute('href', encodedUri);
-        link.setAttribute('download', `students_writings.csv`);
-        document.body.appendChild(link);
-        link.click();
-        setIsLoading(false);
+    const getAllWritings = () => {
+        return Promise.resolve(
+            students.map((student) => {
+                return {
+                    sid: student.user.studentId,
+                    pre: student.preWriting,
+                    post: student.postWriting,
+                };
+            })
+        );
     };
 
     return (
@@ -202,13 +176,23 @@ export function StudentsTable({ students, classId }: StudentsTableProps) {
                                     </Button>
                                 </TableCell>
                                 <TableCell align='center'>
-                                    <IconButton
-                                        disabled={isLoading}
-                                        onClick={handleDownloadWritings(student)}
-                                        aria-label='download'
+                                    <CsvDownloader
+                                        filename={`Student_${student.user.studentId}_Writings`}
+                                        extension='.csv'
+                                        separator='|'
+                                        columns={studentWritingColumns}
+                                        datas={[
+                                            {
+                                                sid: student.user.studentId,
+                                                pre: student.preWriting,
+                                                post: student.postWriting,
+                                            },
+                                        ]}
                                     >
-                                        <DownloadIcon />
-                                    </IconButton>
+                                        <IconButton disabled={isLoading} aria-label='download'>
+                                            <DownloadIcon />
+                                        </IconButton>
+                                    </CsvDownloader>
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -216,9 +200,17 @@ export function StudentsTable({ students, classId }: StudentsTableProps) {
                 </Table>
             </TableContainer>
             <Grid container justifyContent='center' paddingTop={2} paddingBottom={2}>
-                <Button disabled={isLoading} variant='outlined' onClick={handleDownloadAllWritings}>
-                    Download All Writings
-                </Button>
+                <CsvDownloader
+                    filename={`Class_${classId}_Writings`}
+                    extension='.csv'
+                    separator='|'
+                    columns={studentWritingColumns}
+                    datas={getAllWritings}
+                >
+                    <Button disabled={isLoading} variant='outlined'>
+                        Download All Writings
+                    </Button>
+                </CsvDownloader>
             </Grid>
             <ResponsiveDialog open={isOpen} onClose={handleDialogClose} fullWidth>
                 <DialogContent>

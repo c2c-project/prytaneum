@@ -320,6 +320,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["papaparse", "npm:5.4.1"],\
             ["prisma", "npm:5.0.0"],\
             ["react", "npm:18.2.0"],\
+            ["react-csv-downloader", "virtual:5e19bc5de45bf01aba6cc48a8928ccac9787cef8f9f42f0201eeb1e0b5c9a40c251610026ebe469612106294a3321769df5a06038561ba50c0792239bd7788eb#npm:3.0.0"],\
             ["react-dom", "virtual:5e19bc5de45bf01aba6cc48a8928ccac9787cef8f9f42f0201eeb1e0b5c9a40c251610026ebe469612106294a3321769df5a06038561ba50c0792239bd7788eb#npm:18.2.0"],\
             ["typescript", "patch:typescript@npm%3A5.1.6#~builtin<compat/typescript>::version=5.1.6&hash=a1c5e5"],\
             ["yup", "npm:1.2.0"]\
@@ -22147,6 +22148,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["file-saver", [\
+        ["npm:2.0.5", {\
+          "packageLocation": "./.yarn/cache/file-saver-npm-2.0.5-2c3bc40d53-c62d96e5ce.zip/node_modules/file-saver/",\
+          "packageDependencies": [\
+            ["file-saver", "npm:2.0.5"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["file-system-cache", [\
         ["npm:1.0.5", {\
           "packageLocation": "./.yarn/cache/file-system-cache-npm-1.0.5-df20d3aae8-25dd942d52.zip/node_modules/file-system-cache/",\
@@ -33102,6 +33112,29 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             "@types/react-dom",\
             "@types/react",\
             "react-dom",\
+            "react"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["react-csv-downloader", [\
+        ["npm:3.0.0", {\
+          "packageLocation": "./.yarn/cache/react-csv-downloader-npm-3.0.0-ab42c5e6eb-6d7f65125b.zip/node_modules/react-csv-downloader/",\
+          "packageDependencies": [\
+            ["react-csv-downloader", "npm:3.0.0"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:5e19bc5de45bf01aba6cc48a8928ccac9787cef8f9f42f0201eeb1e0b5c9a40c251610026ebe469612106294a3321769df5a06038561ba50c0792239bd7788eb#npm:3.0.0", {\
+          "packageLocation": "./.yarn/__virtual__/react-csv-downloader-virtual-09b3b8485d/0/cache/react-csv-downloader-npm-3.0.0-ab42c5e6eb-6d7f65125b.zip/node_modules/react-csv-downloader/",\
+          "packageDependencies": [\
+            ["react-csv-downloader", "virtual:5e19bc5de45bf01aba6cc48a8928ccac9787cef8f9f42f0201eeb1e0b5c9a40c251610026ebe469612106294a3321769df5a06038561ba50c0792239bd7788eb#npm:3.0.0"],\
+            ["@types/react", "npm:18.2.15"],\
+            ["file-saver", "npm:2.0.5"],\
+            ["react", "npm:18.2.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/react",\
             "react"\
           ],\
           "linkType": "HARD"\
