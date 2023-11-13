@@ -274,7 +274,7 @@ __metadata:
     eslint-plugin-react-hooks: ^4.3.0
     formik: ^2.2.6
     framer-motion: ^3.10.0
-    graphql: ^16.6.0
+    graphql: ^16.8.1
     jest-environment-jsdom-sixteen: ^1.0.3
     next: ^12.2.2
     notistack: ^2.0.3
@@ -442,7 +442,7 @@ __metadata:
     fastify-multer: ^2.0.3
     fastify-multipart: ^5.4.0
     form-data: ^4.0.0
-    graphql: ^16.6.0
+    graphql: ^16.8.1
     graphql-relay: ^0.10.0
     ioredis: ^5.3.2
     ioredis-mock: ^8.7.0
@@ -17163,10 +17163,17 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"graphql@npm:^16.0.0, graphql@npm:^16.6.0":
+"graphql@npm:^16.0.0":
   version: 16.6.0
   resolution: "graphql@npm:16.6.0"
   checksum: bf1d9e3c1938ce3c1a81e909bd3ead1ae4707c577f91cff1ca2eca474bfbc7873d5d7b942e1e9777ff5a8304421dba57a4b76d7a29eb19de8711cb70e3c2415e
+  languageName: node
+  linkType: hard
+
+"graphql@npm:^16.8.1":
+  version: 16.8.1
+  resolution: "graphql@npm:16.8.1"
+  checksum: 8d304b7b6f708c8c5cc164b06e92467dfe36aff6d4f2cf31dd19c4c2905a0e7b89edac4b7e225871131fd24e21460836b369de0c06532644d15b461d55b1ccc0
   languageName: node
   linkType: hard
 
@@ -24564,7 +24571,7 @@ fsevents@^1.2.7:
     "@types/node": ^20.3.1
     concurrently: ^7.2.2
     eslint: ^8.9.0
-    graphql: ^16.6.0
+    graphql: ^16.8.1
     graphql-tag: ^2.12.6
     husky: ^6.0.0
     prettier: ^2.5.1
