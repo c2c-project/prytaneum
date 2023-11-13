@@ -61,7 +61,7 @@ export async function Class({ classId, user }: ClassProps) {
                 <Typography variant='h4'>Students</Typography>
             </Grid>
             <Box>
-                <StudentsTable students={students} classId={classId} />
+                <StudentsTable students={students} classId={classId} termId={_class.termId} />
             </Box>
         </Grid>
     );

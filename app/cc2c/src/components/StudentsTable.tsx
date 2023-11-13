@@ -47,9 +47,10 @@ type Student = {
 export interface StudentsTableProps {
     students: Student[];
     classId: string;
+    termId: string;
 }
 
-export function StudentsTable({ students, classId }: StudentsTableProps) {
+export function StudentsTable({ students, classId, termId }: StudentsTableProps) {
     const [selectedStudent, setSelectedStudent] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(false);
     const [isOpen, open, close] = useResponsiveDialog();
@@ -180,6 +181,7 @@ export function StudentsTable({ students, classId }: StudentsTableProps) {
                                         filename={`Student_${student.user.studentId}_Writings`}
                                         extension='.csv'
                                         separator='|'
+                                        wrapColumnChar='"'
                                         columns={studentWritingColumns}
                                         datas={[
                                             {
@@ -201,9 +203,10 @@ export function StudentsTable({ students, classId }: StudentsTableProps) {
             </TableContainer>
             <Grid container justifyContent='center' paddingTop={2} paddingBottom={2}>
                 <CsvDownloader
-                    filename={`Class_${classId}_Writings`}
+                    filename={`Class_${termId}_Writings`}
                     extension='.csv'
                     separator='|'
+                    wrapColumnChar='"'
                     columns={studentWritingColumns}
                     datas={getAllWritings}
                 >
