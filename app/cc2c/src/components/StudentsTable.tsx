@@ -48,9 +48,10 @@ export interface StudentsTableProps {
     students: Student[];
     classId: string;
     termId: string;
+    isTeacher: boolean;
 }
 
-export function StudentsTable({ students, classId, termId }: StudentsTableProps) {
+export function StudentsTable({ students, classId, termId, isTeacher }: StudentsTableProps) {
     const [selectedStudent, setSelectedStudent] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(false);
     const [isOpen, open, close] = useResponsiveDialog();
@@ -99,7 +100,44 @@ export function StudentsTable({ students, classId, termId }: StudentsTableProps)
         { id: 'post', displayName: 'Post Writing' },
     ];
 
+    const studentWritingColumnsForTeacher = [
+        { id: 'sid', displayName: 'Student ID' },
+        { id: 'email', displayName: 'Email' },
+        { id: 'pre', displayName: 'Pre Writing' },
+        { id: 'post', displayName: 'Post Writing' },
+    ];
+
+    const getStudentWritings = (student: Student) => {
+        if (isTeacher)
+            return Promise.resolve([
+                {
+                    sid: student.user.studentId,
+                    email: student.user.email,
+                    pre: student.preWriting,
+                    post: student.postWriting,
+                },
+            ]);
+        return Promise.resolve([
+            {
+                sid: student.user.studentId,
+                pre: student.preWriting,
+                post: student.postWriting,
+            },
+        ]);
+    };
+
     const getAllWritings = () => {
+        if (isTeacher)
+            return Promise.resolve(
+                students.map((student) => {
+                    return {
+                        sid: student.user.studentId,
+                        email: student.user.email,
+                        pre: student.preWriting,
+                        post: student.postWriting,
+                    };
+                })
+            );
         return Promise.resolve(
             students.map((student) => {
                 return {
@@ -109,6 +147,37 @@ export function StudentsTable({ students, classId, termId }: StudentsTableProps)
                 };
             })
         );
+    };
+
+    const handleDownloadAllWritingsText = () => {
+        setIsLoading(true);
+        let fileContent = '';
+        if (isTeacher) {
+            fileContent =
+                'data:text;charset=utf-8,' +
+                students
+                    .map(
+                        (student) =>
+                            `Email: ${student?.user.email}\nStudent ID: ${student?.user.studentId}\nPRE WRITING:\n${student?.preWriting}\nPOST WRITING:\n${student?.postWriting}`
+                    )
+                    .join('\n=============\n');
+        } else {
+            fileContent =
+                'data:text;charset=utf-8,' +
+                students
+                    .map(
+                        (student) =>
+                            `Student ID: ${student?.user.studentId}\nPRE WRITING:\n${student?.preWriting}\nPOST WRITING:\n${student?.postWriting}`
+                    )
+                    .join('\n=============\n');
+        }
+        const encodedUri = encodeURI(fileContent);
+        const link = document.createElement('a');
+        link.setAttribute('href', encodedUri);
+        link.setAttribute('download', `Class_${termId}_Writings.txt`);
+        document.body.appendChild(link);
+        link.click();
+        setIsLoading(false);
     };
 
     return (
@@ -182,14 +251,8 @@ export function StudentsTable({ students, classId, termId }: StudentsTableProps)
                                         extension='.csv'
                                         separator='|'
                                         wrapColumnChar='"'
-                                        columns={studentWritingColumns}
-                                        datas={[
-                                            {
-                                                sid: student.user.studentId,
-                                                pre: student.preWriting,
-                                                post: student.postWriting,
-                                            },
-                                        ]}
+                                        columns={isTeacher ? studentWritingColumnsForTeacher : studentWritingColumns}
+                                        datas={getStudentWritings(student)}
                                     >
                                         <IconButton disabled={isLoading} aria-label='download'>
                                             <DownloadIcon />
@@ -202,16 +265,19 @@ export function StudentsTable({ students, classId, termId }: StudentsTableProps)
                 </Table>
             </TableContainer>
             <Grid container justifyContent='center' paddingTop={2} paddingBottom={2}>
+                <Button disabled={isLoading} variant='outlined' onClick={handleDownloadAllWritingsText}>
+                    Download All Writings Text
+                </Button>
                 <CsvDownloader
                     filename={`Class_${termId}_Writings`}
                     extension='.csv'
                     separator='|'
                     wrapColumnChar='"'
-                    columns={studentWritingColumns}
+                    columns={isTeacher ? studentWritingColumnsForTeacher : studentWritingColumns}
                     datas={getAllWritings}
                 >
                     <Button disabled={isLoading} variant='outlined'>
-                        Download All Writings
+                        Download All Writings CSV
                     </Button>
                 </CsvDownloader>
             </Grid>
