@@ -149,6 +149,37 @@ export function StudentsTable({ students, classId, termId, isTeacher }: Students
         );
     };
 
+    const handleDownloadAllWritingsText = () => {
+        setIsLoading(true);
+        let fileContent = '';
+        if (isTeacher) {
+            fileContent =
+                'data:text;charset=utf-8,' +
+                students
+                    .map(
+                        (student) =>
+                            `Email: ${student?.user.email}\nStudent ID: ${student?.user.studentId}\nPRE WRITING:\n${student?.preWriting}\nPOST WRITING:\n${student?.postWriting}`
+                    )
+                    .join('\n=============\n');
+        } else {
+            fileContent =
+                'data:text;charset=utf-8,' +
+                students
+                    .map(
+                        (student) =>
+                            `Student ID: ${student?.user.studentId}\nPRE WRITING:\n${student?.preWriting}\nPOST WRITING:\n${student?.postWriting}`
+                    )
+                    .join('\n=============\n');
+        }
+        const encodedUri = encodeURI(fileContent);
+        const link = document.createElement('a');
+        link.setAttribute('href', encodedUri);
+        link.setAttribute('download', `Class_${termId}_Writings.txt`);
+        document.body.appendChild(link);
+        link.click();
+        setIsLoading(false);
+    };
+
     return (
         <React.Fragment>
             <TableContainer component={Paper}>
@@ -234,6 +265,9 @@ export function StudentsTable({ students, classId, termId, isTeacher }: Students
                 </Table>
             </TableContainer>
             <Grid container justifyContent='center' paddingTop={2} paddingBottom={2}>
+                <Button disabled={isLoading} variant='outlined' onClick={handleDownloadAllWritingsText}>
+                    Download All Writings Text
+                </Button>
                 <CsvDownloader
                     filename={`Class_${termId}_Writings`}
                     extension='.csv'
@@ -243,7 +277,7 @@ export function StudentsTable({ students, classId, termId, isTeacher }: Students
                     datas={getAllWritings}
                 >
                     <Button disabled={isLoading} variant='outlined'>
-                        Download All Writings
+                        Download All Writings CSV
                     </Button>
                 </CsvDownloader>
             </Grid>
