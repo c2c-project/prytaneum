@@ -48,9 +48,10 @@ export interface StudentsTableProps {
     students: Student[];
     classId: string;
     termId: string;
+    isTeacher: boolean;
 }
 
-export function StudentsTable({ students, classId, termId }: StudentsTableProps) {
+export function StudentsTable({ students, classId, termId, isTeacher }: StudentsTableProps) {
     const [selectedStudent, setSelectedStudent] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(false);
     const [isOpen, open, close] = useResponsiveDialog();
@@ -99,7 +100,44 @@ export function StudentsTable({ students, classId, termId }: StudentsTableProps)
         { id: 'post', displayName: 'Post Writing' },
     ];
 
+    const studentWritingColumnsForTeacher = [
+        { id: 'sid', displayName: 'Student ID' },
+        { id: 'email', displayName: 'Email' },
+        { id: 'pre', displayName: 'Pre Writing' },
+        { id: 'post', displayName: 'Post Writing' },
+    ];
+
+    const getStudentWritings = (student: Student) => {
+        if (isTeacher)
+            return Promise.resolve([
+                {
+                    sid: student.user.studentId,
+                    email: student.user.email,
+                    pre: student.preWriting,
+                    post: student.postWriting,
+                },
+            ]);
+        return Promise.resolve([
+            {
+                sid: student.user.studentId,
+                pre: student.preWriting,
+                post: student.postWriting,
+            },
+        ]);
+    };
+
     const getAllWritings = () => {
+        if (isTeacher)
+            return Promise.resolve(
+                students.map((student) => {
+                    return {
+                        sid: student.user.studentId,
+                        email: student.user.email,
+                        pre: student.preWriting,
+                        post: student.postWriting,
+                    };
+                })
+            );
         return Promise.resolve(
             students.map((student) => {
                 return {
@@ -182,14 +220,8 @@ export function StudentsTable({ students, classId, termId }: StudentsTableProps)
                                         extension='.csv'
                                         separator='|'
                                         wrapColumnChar='"'
-                                        columns={studentWritingColumns}
-                                        datas={[
-                                            {
-                                                sid: student.user.studentId,
-                                                pre: student.preWriting,
-                                                post: student.postWriting,
-                                            },
-                                        ]}
+                                        columns={isTeacher ? studentWritingColumnsForTeacher : studentWritingColumns}
+                                        datas={getStudentWritings(student)}
                                     >
                                         <IconButton disabled={isLoading} aria-label='download'>
                                             <DownloadIcon />
@@ -207,7 +239,7 @@ export function StudentsTable({ students, classId, termId }: StudentsTableProps)
                     extension='.csv'
                     separator='|'
                     wrapColumnChar='"'
-                    columns={studentWritingColumns}
+                    columns={isTeacher ? studentWritingColumnsForTeacher : studentWritingColumns}
                     datas={getAllWritings}
                 >
                     <Button disabled={isLoading} variant='outlined'>
