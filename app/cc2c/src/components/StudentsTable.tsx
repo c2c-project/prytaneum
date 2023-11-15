@@ -151,25 +151,15 @@ export function StudentsTable({ students, classId, termId, isTeacher }: Students
 
     const handleDownloadAllWritingsText = () => {
         setIsLoading(true);
-        let fileContent = '';
+        let fileContent = 'data:text;charset=utf-8,';
         if (isTeacher) {
-            fileContent =
-                'data:text;charset=utf-8,' +
-                students
-                    .map(
-                        (student) =>
-                            `Email: ${student?.user.email}\nStudent ID: ${student?.user.studentId}\nPRE WRITING:\n${student?.preWriting}\nPOST WRITING:\n${student?.postWriting}`
-                    )
-                    .join('\n=============\n');
+            students.forEach((student) => {
+                fileContent += `Email: ${student.user.email}\nStudent ID: ${student.user.studentId}\nPRE WRITING:\n${student.preWriting}\nPOST WRITING:\n${student.postWriting}\n=============\n`;
+            });
         } else {
-            fileContent =
-                'data:text;charset=utf-8,' +
-                students
-                    .map(
-                        (student) =>
-                            `Student ID: ${student?.user.studentId}\nPRE WRITING:\n${student?.preWriting}\nPOST WRITING:\n${student?.postWriting}`
-                    )
-                    .join('\n=============\n');
+            students.forEach((student) => {
+                fileContent += `Student ID: ${student.user.studentId}\nPRE WRITING:\n${student.preWriting}\nPOST WRITING:\n${student.postWriting}\n=============\n`;
+            });
         }
         const encodedUri = encodeURI(fileContent);
         const link = document.createElement('a');
