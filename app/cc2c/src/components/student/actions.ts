@@ -13,7 +13,7 @@ export const handlePreWritingSubmit = async (formData: FormData) => {
 
         await prisma.student.update({
             where: { userId_classId: { userId: userId as string, classId: classId as string } },
-            data: { preWriting: preWriting as string },
+            data: { preWriting: preWriting as string, preWritingSubmissionTime: new Date() },
         });
 
         return { isError: false, message: '' };
@@ -34,7 +34,7 @@ export const handlePostWritingSubmit = async (formData: FormData) => {
 
         await prisma.student.update({
             where: { userId_classId: { userId: userId as string, classId: classId as string } },
-            data: { postWriting: postWriting as string },
+            data: { postWriting: postWriting as string, postWritingSubmissionTime: new Date() },
         });
 
         return { isError: false, message: '' };

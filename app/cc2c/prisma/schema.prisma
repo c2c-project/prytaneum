@@ -69,7 +69,9 @@ model Student {
   userId String @db.Uuid
   classId String @db.Uuid
   preWriting String @default("")
+  preWritingSubmissionTime DateTime?
   postWriting String @default("")
+  postWritingSubmissionTime DateTime?
   eventURL String @default("")
 
   // Relations
