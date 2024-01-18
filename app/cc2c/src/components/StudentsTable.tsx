@@ -27,7 +27,7 @@ import PendingOutlinedIcon from '@mui/icons-material/PendingOutlined';
 import CsvDownloader from 'react-csv-downloader';
 
 import { ResponsiveDialog, useResponsiveDialog } from './ResponsiveDialog';
-import { updateStudentData } from '@local/server';
+import { updateStudentData, sendRegistrationEmails } from '@local/server';
 import { useSnack } from '@local/lib';
 
 type Student = {
@@ -170,6 +170,27 @@ export function StudentsTable({ students, classId, termId, isTeacher }: Students
         setIsLoading(false);
     };
 
+    const handleSendRegistrationEmails = () => async () => {
+        setIsLoading(true);
+        const unregisteredStudents = students
+            .filter((student) => student.user.shadowAccount)
+            .map((student) => ({
+                id: student.userId,
+                studentId: student.user.studentId,
+                email: student.user.email,
+                firstName: student.user.firstName,
+            }));
+
+        const formData = new FormData();
+        formData.append('classId', classId);
+        formData.append('unregisteredStudents', JSON.stringify(unregisteredStudents));
+        const { isError, message } = await sendRegistrationEmails(formData);
+        if (isError) {
+            displaySnack(message, { variant: 'error' });
+        }
+        setIsLoading(false);
+    };
+
     return (
         <React.Fragment>
             <TableContainer component={Paper}>
@@ -254,6 +275,11 @@ export function StudentsTable({ students, classId, termId, isTeacher }: Students
                     </TableBody>
                 </Table>
             </TableContainer>
+            <Grid container justifyContent='center' paddingTop={2} paddingBottom={2}>
+                <Button disabled={isLoading} variant='outlined' onClick={handleSendRegistrationEmails()}>
+                    Send Registration Emails
+                </Button>
+            </Grid>
             <Grid container justifyContent='center' paddingTop={2} paddingBottom={2}>
                 <Button disabled={isLoading} variant='outlined' onClick={handleDownloadAllWritingsText}>
                     Download All Writings Text
