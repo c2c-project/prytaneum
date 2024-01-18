@@ -125,20 +125,20 @@ export async function POST(request: NextRequest) {
         }
     }
 
-    try {
-        await mg.messages.create(process.env.MAILGUN_DOMAIN, {
-            from: `CC2C <${process.env.MAILGUN_FROM_EMAIL}>`,
-            to: emails,
-            'recipient-variables': JSON.stringify(recipiantVariables),
-            subject: 'Welcome to the Connecting Classrooms to Congress project!',
-            template: 'cc2c-complete-registration',
-            'v:complete-registration-url': '%recipient.registrationLink%',
-            'v:first-name': '%recipient.first%',
-        });
-    } catch (error) {
-        console.error(error);
-        return new NextResponse('Error sending emails', { status: 400 });
-    }
+    // try {
+    //     await mg.messages.create(process.env.MAILGUN_DOMAIN, {
+    //         from: `CC2C <${process.env.MAILGUN_FROM_EMAIL}>`,
+    //         to: emails,
+    //         'recipient-variables': JSON.stringify(recipiantVariables),
+    //         subject: 'Welcome to the Connecting Classrooms to Congress project!',
+    //         template: 'cc2c-complete-registration',
+    //         'v:complete-registration-url': '%recipient.registrationLink%',
+    //         'v:first-name': '%recipient.first%',
+    //     });
+    // } catch (error) {
+    //     console.error(error);
+    //     return new NextResponse('Error sending emails', { status: 400 });
+    // }
 
     return new NextResponse('OK', { status: 200 });
 }
