@@ -34,6 +34,7 @@ input CreateFeedback {
 }
 
 input CreateFeedbackPrompt {
+  choices: [String!]!
   eventId: ID!
   feedbackType: String!
   prompt: String!
@@ -41,6 +42,7 @@ input CreateFeedbackPrompt {
 
 input CreateFeedbackPromptResponse {
   eventId: ID!
+  multipleChoiceResponse: String!
   promptId: ID!
   response: String!
   vote: String!
@@ -343,8 +345,10 @@ type EventLiveFeedbackPrompt implements Node {
   createdAt: Date
   event: Event
   id: ID!
+  isMultipleChoice: Boolean
   isOpenEnded: Boolean
   isVote: Boolean
+  multipleChoiceOptions: [String!]
   prompt: String!
   responses(after: String, first: Int): EventLiveFeedbackPromptResponseConnection
 }
@@ -365,8 +369,10 @@ type EventLiveFeedbackPromptResponse implements Node {
   createdById: ID
   event: Event
   id: ID!
+  isMultipleChoice: Boolean
   isOpenEnded: Boolean
   isVote: Boolean
+  multipleChoiceResponse: String
   prompt: EventLiveFeedbackPrompt
   promptId: ID
   response: String

@@ -1047,6 +1047,8 @@ export type EventLiveFeedbackPrompt = Node & {
     createdAt?: Maybe<Scalars['Date']>;
     isVote?: Maybe<Scalars['Boolean']>;
     isOpenEnded?: Maybe<Scalars['Boolean']>;
+    isMultipleChoice?: Maybe<Scalars['Boolean']>;
+    multipleChoiceOptions?: Maybe<Array<Scalars['String']>>;
     responses?: Maybe<EventLiveFeedbackPromptResponseConnection>;
 };
 
@@ -1068,6 +1070,8 @@ export type EventLiveFeedbackPromptResponse = Node & {
     response?: Maybe<Scalars['String']>;
     isVote?: Maybe<Scalars['Boolean']>;
     vote?: Maybe<Scalars['String']>;
+    isMultipleChoice?: Maybe<Scalars['Boolean']>;
+    multipleChoiceResponse?: Maybe<Scalars['String']>;
     event?: Maybe<Event>;
     createdAt?: Maybe<Scalars['Date']>;
     createdBy?: Maybe<User>;
@@ -1156,6 +1160,7 @@ export type CreateFeedbackPrompt = {
     prompt: Scalars['String'];
     eventId: Scalars['ID'];
     feedbackType: Scalars['String'];
+    choices: Array<Scalars['String']>;
 };
 
 export type CreateFeedbackPromptResponse = {
@@ -1163,6 +1168,7 @@ export type CreateFeedbackPromptResponse = {
     promptId: Scalars['ID'];
     response: Scalars['String'];
     vote: Scalars['String'];
+    multipleChoiceResponse: Scalars['String'];
 };
 
 export type Votes = {
@@ -2853,6 +2859,8 @@ export type EventLiveFeedbackPromptResolvers<
     createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
     isVote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     isOpenEnded?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    isMultipleChoice?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    multipleChoiceOptions?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
     responses?: Resolver<
         Maybe<ResolversTypes['EventLiveFeedbackPromptResponseConnection']>,
         ParentType,
@@ -2871,6 +2879,8 @@ export type EventLiveFeedbackPromptResponseResolvers<
     response?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     isVote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     vote?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    isMultipleChoice?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    multipleChoiceResponse?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     event?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType>;
     createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
     createdBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
@@ -3545,6 +3555,8 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         createdAt?: LoaderResolver<Maybe<Scalars['Date']>, EventLiveFeedbackPrompt, {}, TContext>;
         isVote?: LoaderResolver<Maybe<Scalars['Boolean']>, EventLiveFeedbackPrompt, {}, TContext>;
         isOpenEnded?: LoaderResolver<Maybe<Scalars['Boolean']>, EventLiveFeedbackPrompt, {}, TContext>;
+        isMultipleChoice?: LoaderResolver<Maybe<Scalars['Boolean']>, EventLiveFeedbackPrompt, {}, TContext>;
+        multipleChoiceOptions?: LoaderResolver<Maybe<Array<Scalars['String']>>, EventLiveFeedbackPrompt, {}, TContext>;
         responses?: LoaderResolver<
             Maybe<EventLiveFeedbackPromptResponseConnection>,
             EventLiveFeedbackPrompt,
@@ -3559,6 +3571,13 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         response?: LoaderResolver<Maybe<Scalars['String']>, EventLiveFeedbackPromptResponse, {}, TContext>;
         isVote?: LoaderResolver<Maybe<Scalars['Boolean']>, EventLiveFeedbackPromptResponse, {}, TContext>;
         vote?: LoaderResolver<Maybe<Scalars['String']>, EventLiveFeedbackPromptResponse, {}, TContext>;
+        isMultipleChoice?: LoaderResolver<Maybe<Scalars['Boolean']>, EventLiveFeedbackPromptResponse, {}, TContext>;
+        multipleChoiceResponse?: LoaderResolver<
+            Maybe<Scalars['String']>,
+            EventLiveFeedbackPromptResponse,
+            {},
+            TContext
+        >;
         event?: LoaderResolver<Maybe<Event>, EventLiveFeedbackPromptResponse, {}, TContext>;
         createdAt?: LoaderResolver<Maybe<Scalars['Date']>, EventLiveFeedbackPromptResponse, {}, TContext>;
         createdBy?: LoaderResolver<Maybe<User>, EventLiveFeedbackPromptResponse, {}, TContext>;
