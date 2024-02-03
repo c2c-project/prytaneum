@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<22a53736e7f027464412e270628bb8a6>>
+ * @generated SignedSource<<3526446ea9acc144ad562529dc9ee236>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,6 +10,7 @@
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type CreateFeedbackPrompt = {
+  choices: ReadonlyArray<string>;
   eventId: string;
   feedbackType: string;
   prompt: string;
