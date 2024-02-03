@@ -65,6 +65,8 @@ export async function createFeedbackPrompt(
             prompt,
             isVote: feedbackType === 'vote',
             isOpenEnded: feedbackType === 'open-ended',
+            isMultipleChoice: feedbackType === 'multiple-choice',
+            multipleChoiceOptions: input.choices,
         },
     });
 }
@@ -75,11 +77,11 @@ export async function createFeedbackPromptResponse(
     prisma: PrismaClient,
     input: CreateFeedbackPromptResponse
 ) {
-    const { response, vote } = input;
+    const { response, vote, multipleChoiceResponse } = input;
 
     const promptData = await prisma.eventLiveFeedbackPrompt.findUnique({
         where: { id: promptId },
-        select: { isOpenEnded: true, isVote: true },
+        select: { isOpenEnded: true, isVote: true, isMultipleChoice: true },
     });
 
     if (!promptData) {
@@ -97,6 +99,8 @@ export async function createFeedbackPromptResponse(
             response,
             isVote: promptData.isVote,
             vote: vote in Vote ? (vote as Vote) : 'CONFLICTED',
+            isMultipleChoice: promptData.isMultipleChoice,
+            multipleChoiceResponse: multipleChoiceResponse,
         },
     });
 }
@@ -155,12 +159,14 @@ export async function findSubmitterByResponseId(responseId: string, prisma: Pris
 export async function countPromptResponseVotes(promptId: string, prisma: PrismaClient) {
     const queryResult = await prisma.eventLiveFeedbackPrompt.findUnique({
         where: { id: promptId },
-        select: { responses: true, isVote: true },
+        select: { responses: true, isVote: true, isMultipleChoice: true },
     });
 
     if (!queryResult) throw new ProtectedError({ userMessage: 'Prompt not found' });
-    if (!queryResult.isVote)
-        throw new ProtectedError({ userMessage: 'Can only currently share vote type prompt results' });
+    if (!queryResult.isVote && !queryResult.isMultipleChoice)
+        throw new ProtectedError({
+            userMessage: 'Can only currently share vote and multiple choice type prompt results',
+        });
 
     const votes = { for: 0, against: 0, conflicted: 0 };
     queryResult.responses.forEach((response) => {
