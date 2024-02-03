@@ -8,6 +8,7 @@ import { useEnvironment } from '@local/core';
 import { Prompt } from '../LiveFeedbackPrompt/LiveFeedbackPromptList';
 import { PromptResponseAuthorCardHeader } from './PromptResponseAuthorCardHeader';
 import { VoteResponseChart } from '../LiveFeedbackPromptResponse/VoteResponseChart';
+import { MultipleChoiceResponseChart } from '../LiveFeedbackPromptResponse';
 
 export const LIVE_FEEDBACK_PROMPT_RESPONSE_LIST_QUERY = graphql`
     query LiveFeedbackPromptResponseListQuery($promptId: ID!) {
@@ -15,6 +16,7 @@ export const LIVE_FEEDBACK_PROMPT_RESPONSE_LIST_QUERY = graphql`
             id
             response
             vote
+            multipleChoiceResponse
             createdAt
             createdBy {
                 id
@@ -30,6 +32,7 @@ export type PromptResponse = {
     readonly id: string;
     readonly response: string | null;
     readonly vote: string | null;
+    readonly multipleChoiceResponse: string | null;
     readonly createdAt: Date | null;
     readonly createdBy: {
         readonly id: string;
@@ -44,6 +47,8 @@ export type PromptData = {
     prompt: string;
     isVote: boolean;
     isOpenEnded: boolean;
+    isMultipleChoice: boolean;
+    multipleChoiceOptions: string[];
 };
 
 interface PromptListProps {
@@ -63,7 +68,18 @@ function PromptResponseList({ promptResponses, promptData }: PromptListProps) {
     const [chartVisiblity, setChartVisiblity] = React.useState<boolean>(false);
     const MAX_VISIBLE_RESPONSES = 50;
 
-    const toggleChartVisiblity = () => setChartVisiblity(!chartVisiblity);
+    const toggleChartVisiblity = () => {
+        const updatedChartVisiblity = !chartVisiblity;
+        setChartVisiblity(updatedChartVisiblity);
+        localStorage.setItem('chartVisiblity', JSON.stringify(updatedChartVisiblity));
+    };
+
+    React.useEffect(() => {
+        const result = localStorage.getItem('chartVisiblity');
+        if (result !== null) {
+            setChartVisiblity(JSON.parse(result));
+        }
+    }, []);
 
     // Counts votes for each response categorized by vote type (For, Against, Conflicted)
     const voteCount = React.useMemo(() => {
@@ -79,28 +95,44 @@ function PromptResponseList({ promptResponses, promptData }: PromptListProps) {
 
     const responses = React.useMemo(() => promptResponses.slice(0, MAX_VISIBLE_RESPONSES), [promptResponses]);
 
+    const multipleChoiceResponses = React.useMemo(() => {
+        return promptResponses.map((response) =>
+            response.multipleChoiceResponse !== null ? response.multipleChoiceResponse : ''
+        );
+    }, [promptResponses]);
+
+    const DisplayChart = () => {
+        if (promptData.isVote)
+            return zeroVotes ? (
+                <Typography>No Votes To Display</Typography>
+            ) : (
+                <VoteResponseChart
+                    votes={{ for: voteCount.for, against: voteCount.against, conflicted: voteCount.conflicted }}
+                />
+            );
+
+        if (promptData.isMultipleChoice)
+            return (
+                <MultipleChoiceResponseChart
+                    multipleChoiceOptions={promptData.multipleChoiceOptions}
+                    responses={multipleChoiceResponses}
+                />
+            );
+        return <React.Fragment />;
+    };
+
     return (
         <React.Fragment>
             <Grid container justifyContent='center' paddingBottom='1rem'>
-                {promptData.isVote ? (
+                {promptData.isVote || promptData.isMultipleChoice ? (
                     <Button onClick={toggleChartVisiblity}>{chartVisiblity ? 'Hide Chart' : 'Show Chart'}</Button>
                 ) : (
                     <React.Fragment />
                 )}
             </Grid>
-            {chartVisiblity && (
-                <React.Fragment>
-                    {zeroVotes ? (
-                        <Typography>No Votes Yet</Typography>
-                    ) : (
-                        <VoteResponseChart
-                            votes={{ for: voteCount.for, against: voteCount.against, conflicted: voteCount.conflicted }}
-                        />
-                    )}
-                </React.Fragment>
-            )}
+            {chartVisiblity && <DisplayChart />}
             <List id='live-feedback-prompt-response-list'>
-                {responses.map(({ id, response, vote, createdAt, createdBy }) => (
+                {responses.map(({ id, response, vote, multipleChoiceResponse, createdAt, createdBy }) => (
                     <ListItem key={id} style={{ paddingBottom: '.5rem', paddingTop: '.5rem' }}>
                         <Grid
                             container
@@ -119,7 +151,7 @@ function PromptResponseList({ promptResponses, promptData }: PromptListProps) {
                                 />
                                 <CardContent sx={{ margin: (theme) => theme.spacing(-2, 0, -1, 0) }}>
                                     <Typography variant='inherit' sx={{ wordBreak: 'break-word' }}>
-                                        {response}
+                                        {promptData.isMultipleChoice ? multipleChoiceResponse : response}
                                     </Typography>
                                 </CardContent>
                             </Card>
@@ -155,12 +187,14 @@ export function PreloadedLiveFeedbackPromptResponseList({ prompt }: PreloadedLiv
     );
     const [isRefreshing, setIsRefreshing] = React.useState(false);
     const { env } = useEnvironment();
-    const REFRESH_INTERVAL = 10000; // 10 seconds
+    const REFRESH_INTERVAL = 30000; // 30 seconds
     const promptData = {
         promptId: prompt.id,
         prompt: prompt.prompt,
         isVote: !!prompt.isVote,
         isOpenEnded: !!prompt.isOpenEnded,
+        isMultipleChoice: !!prompt.isMultipleChoice,
+        multipleChoiceOptions: prompt.multipleChoiceOptions ? [...prompt.multipleChoiceOptions] : [],
     };
     const { promptId } = promptData;
 

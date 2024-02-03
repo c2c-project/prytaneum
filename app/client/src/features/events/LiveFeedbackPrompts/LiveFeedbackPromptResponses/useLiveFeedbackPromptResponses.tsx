@@ -16,6 +16,8 @@ export const USE_LIVE_FEEDBACK_PROMPT_RESPONSES = graphql`
                     response
                     isVote
                     vote
+                    isMultipleChoice
+                    multipleChoiceResponse
                     createdAt
                     createdBy {
                         id

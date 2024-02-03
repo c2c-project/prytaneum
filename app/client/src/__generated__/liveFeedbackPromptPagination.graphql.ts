@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<22868cd94c43bce00ebb85919103c5f1>>
+ * @generated SignedSource<<20dd5724ae36070c6e31d0d0b86dcb0e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -278,6 +278,20 @@ return {
                                         "name": "vote",
                                         "storageKey": null
                                       },
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "kind": "ScalarField",
+                                        "name": "isMultipleChoice",
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "kind": "ScalarField",
+                                        "name": "multipleChoiceResponse",
+                                        "storageKey": null
+                                      },
                                       (v9/*: any*/),
                                       {
                                         "alias": null,
@@ -363,12 +377,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "8e4298a420663e975dc12f2d6bba0629",
+    "cacheID": "1fd7977d8575d87a747a5dfe3d67c1f4",
     "id": null,
     "metadata": {},
     "name": "liveFeedbackPromptPagination",
     "operationKind": "query",
-    "text": "query liveFeedbackPromptPagination(\n  $after: String = \"\"\n  $first: Int = 100\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useLiveFeedbackPromptsFragment_2HEEH6\n    id\n  }\n}\n\nfragment useLiveFeedbackPromptResponsesFragment on EventLiveFeedbackPrompt {\n  id\n  responses(first: 100, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        isOpenEnded\n        response\n        isVote\n        vote\n        createdAt\n        createdBy {\n          id\n          firstName\n        }\n        prompt {\n          id\n          prompt\n        }\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment useLiveFeedbackPromptsFragment_2HEEH6 on Event {\n  id\n  liveFeedbackPrompts(first: $first, after: $after) {\n    edges {\n      cursor\n      node {\n        id\n        prompt\n        isVote\n        isOpenEnded\n        createdAt\n        ...useLiveFeedbackPromptResponsesFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query liveFeedbackPromptPagination(\n  $after: String = \"\"\n  $first: Int = 100\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useLiveFeedbackPromptsFragment_2HEEH6\n    id\n  }\n}\n\nfragment useLiveFeedbackPromptResponsesFragment on EventLiveFeedbackPrompt {\n  id\n  responses(first: 100, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        isOpenEnded\n        response\n        isVote\n        vote\n        isMultipleChoice\n        multipleChoiceResponse\n        createdAt\n        createdBy {\n          id\n          firstName\n        }\n        prompt {\n          id\n          prompt\n        }\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment useLiveFeedbackPromptsFragment_2HEEH6 on Event {\n  id\n  liveFeedbackPrompts(first: $first, after: $after) {\n    edges {\n      cursor\n      node {\n        id\n        prompt\n        isVote\n        isOpenEnded\n        createdAt\n        ...useLiveFeedbackPromptResponsesFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
