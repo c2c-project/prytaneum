@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e740dd3fb2c7a13b5ab15027e46b0a10>>
+ * @generated SignedSource<<f5a02a6845f0fadb316f7d61fd347a57>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,8 +15,10 @@ export type useLiveFeedbackPromptSubscription$variables = {
 export type useLiveFeedbackPromptSubscription$data = {
   readonly feedbackPrompted: {
     readonly id: string;
+    readonly isMultipleChoice: boolean | null;
     readonly isOpenEnded: boolean | null;
     readonly isVote: boolean | null;
+    readonly multipleChoiceOptions: ReadonlyArray<string> | null;
     readonly prompt: string;
   };
 };
@@ -75,6 +77,20 @@ v1 = [
         "kind": "ScalarField",
         "name": "isOpenEnded",
         "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "isMultipleChoice",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "multipleChoiceOptions",
+        "storageKey": null
       }
     ],
     "storageKey": null
@@ -98,16 +114,16 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "fbd4ebf38f5303652759ebe476ff1fd7",
+    "cacheID": "1922549799038c80e3d921b84a25e7a7",
     "id": null,
     "metadata": {},
     "name": "useLiveFeedbackPromptSubscription",
     "operationKind": "subscription",
-    "text": "subscription useLiveFeedbackPromptSubscription(\n  $eventId: ID!\n) {\n  feedbackPrompted(eventId: $eventId) {\n    id\n    prompt\n    isVote\n    isOpenEnded\n  }\n}\n"
+    "text": "subscription useLiveFeedbackPromptSubscription(\n  $eventId: ID!\n) {\n  feedbackPrompted(eventId: $eventId) {\n    id\n    prompt\n    isVote\n    isOpenEnded\n    isMultipleChoice\n    multipleChoiceOptions\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "371411fc1c653237598c9438c60bcd0f";
+(node as any).hash = "630834bac36a26e4c55a6efec64f6c87";
 
 export default node;

@@ -46,6 +46,7 @@ export type CreateFeedback = {
 };
 
 export type CreateFeedbackPrompt = {
+  choices: Array<Scalars['String']>;
   eventId: Scalars['ID'];
   feedbackType: Scalars['String'];
   prompt: Scalars['String'];
@@ -53,6 +54,7 @@ export type CreateFeedbackPrompt = {
 
 export type CreateFeedbackPromptResponse = {
   eventId: Scalars['ID'];
+  multipleChoiceResponse: Scalars['String'];
   promptId: Scalars['ID'];
   response: Scalars['String'];
   vote: Scalars['String'];
@@ -393,8 +395,10 @@ export type EventLiveFeedbackPrompt = Node & {
   createdAt?: Maybe<Scalars['Date']>;
   event?: Maybe<Event>;
   id: Scalars['ID'];
+  isMultipleChoice?: Maybe<Scalars['Boolean']>;
   isOpenEnded?: Maybe<Scalars['Boolean']>;
   isVote?: Maybe<Scalars['Boolean']>;
+  multipleChoiceOptions?: Maybe<Array<Scalars['String']>>;
   prompt: Scalars['String'];
   responses?: Maybe<EventLiveFeedbackPromptResponseConnection>;
 };
@@ -424,8 +428,10 @@ export type EventLiveFeedbackPromptResponse = Node & {
   createdById?: Maybe<Scalars['ID']>;
   event?: Maybe<Event>;
   id: Scalars['ID'];
+  isMultipleChoice?: Maybe<Scalars['Boolean']>;
   isOpenEnded?: Maybe<Scalars['Boolean']>;
   isVote?: Maybe<Scalars['Boolean']>;
+  multipleChoiceResponse?: Maybe<Scalars['String']>;
   prompt?: Maybe<EventLiveFeedbackPrompt>;
   promptId?: Maybe<Scalars['ID']>;
   response?: Maybe<Scalars['String']>;

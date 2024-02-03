@@ -51,10 +51,6 @@ export function LiveFeedbackList({ fragmentRef, ActionButtons, isVisible }: Live
     const { liveFeedback } = useLiveFeedbackList({ fragmentRef });
     const { isModerator } = useEvent();
 
-    React.useEffect(() => {
-        console.log(liveFeedback);
-    }, [liveFeedback]);
-
     const accessors = React.useMemo<Accessors<ArrayElement<typeof liveFeedback>>[]>(
         () => [
             (f) => f?.message || '', // feedback text itself

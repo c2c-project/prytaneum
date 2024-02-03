@@ -8,6 +8,7 @@ import { Prompt } from './useLiveFeedbackPromptResultsShared';
 import { ConditionalRender, Loader, StyledDialog, StyledDialogTitle } from '@local/components';
 import { ViewLiveFeedbackPromptResultsQuery } from '@local/__generated__/ViewLiveFeedbackPromptResultsQuery.graphql';
 import { VoteResponseChart } from '../LiveFeedbackPromptResponse/VoteResponseChart';
+import { MultipleChoiceResponseChart } from '../LiveFeedbackPromptResponse';
 
 const VIEW_LIVE_FEEDBACK_PROMPT_RESULTS = graphql`
     query ViewLiveFeedbackPromptResultsQuery($promptId: ID!) {
@@ -15,6 +16,19 @@ const VIEW_LIVE_FEEDBACK_PROMPT_RESULTS = graphql`
             for
             against
             conflicted
+        }
+        promptResponses(promptId: $promptId) {
+            id
+            response
+            vote
+            multipleChoiceResponse
+        }
+        prompt(promptId: $promptId) {
+            prompt
+            isVote
+            isOpenEnded
+            isMultipleChoice
+            multipleChoiceOptions
         }
     }
 `;
@@ -25,22 +39,59 @@ interface ResultsProps {
         readonly against: number;
         readonly conflicted: number;
     };
+    promptResponses: readonly {
+        readonly id: string;
+        readonly multipleChoiceResponse: string | null;
+        readonly response: string | null;
+        readonly vote: string | null;
+    }[];
+    prompt: {
+        readonly isOpenEnded: boolean | null;
+        readonly isVote: boolean | null;
+        readonly isMultipleChoice: boolean | null;
+        readonly multipleChoiceOptions: readonly string[] | null;
+        readonly prompt: string;
+    };
 }
 
-function Results({ promptResponseVotes }: ResultsProps) {
+function Results({ promptResponseVotes, promptResponses, prompt }: ResultsProps) {
     const { for: forVotes, against: againstVotes, conflicted: conflictedVotes } = promptResponseVotes;
 
     const zeroVotes = React.useMemo(() => {
         return forVotes === 0 && againstVotes === 0 && conflictedVotes === 0;
     }, [againstVotes, conflictedVotes, forVotes]);
 
-    return (
-        <React.Fragment>
-            {zeroVotes ? (
+    const multipleChoiceResponses = React.useMemo(() => {
+        return promptResponses.map((response) =>
+            response.multipleChoiceResponse !== null ? response.multipleChoiceResponse : ''
+        );
+    }, [promptResponses]);
+
+    const multipleChoiceOptions = React.useMemo(() => {
+        return prompt.multipleChoiceOptions ? [...prompt.multipleChoiceOptions] : [];
+    }, [prompt.multipleChoiceOptions]);
+
+    const DisplayChart = () => {
+        if (prompt.isVote)
+            return zeroVotes ? (
                 <Typography>No Votes To Display</Typography>
             ) : (
                 <VoteResponseChart votes={{ for: forVotes, against: againstVotes, conflicted: conflictedVotes }} />
-            )}
+            );
+
+        if (prompt.isMultipleChoice)
+            return (
+                <MultipleChoiceResponseChart
+                    multipleChoiceOptions={multipleChoiceOptions}
+                    responses={multipleChoiceResponses}
+                />
+            );
+        return <React.Fragment />;
+    };
+
+    return (
+        <React.Fragment>
+            <DisplayChart />
         </React.Fragment>
     );
 }
@@ -50,10 +101,13 @@ interface LiveFeedbackPromptResultsProps {
 }
 
 function LiveFeedbackPromptResults({ queryRef }: LiveFeedbackPromptResultsProps) {
-    const { promptResponseVotes } = usePreloadedQuery(VIEW_LIVE_FEEDBACK_PROMPT_RESULTS, queryRef);
+    const { promptResponseVotes, promptResponses, prompt } = usePreloadedQuery(
+        VIEW_LIVE_FEEDBACK_PROMPT_RESULTS,
+        queryRef
+    );
 
-    if (!promptResponseVotes) return <Loader />;
-    return <Results promptResponseVotes={promptResponseVotes} />;
+    if (!promptResponseVotes || !promptResponses || !prompt) return <Loader />;
+    return <Results promptResponseVotes={promptResponseVotes} promptResponses={promptResponses} prompt={prompt} />;
 }
 
 function PreloadedViewLiveFeedbackPromptResults({ promptId }: { promptId: string }) {

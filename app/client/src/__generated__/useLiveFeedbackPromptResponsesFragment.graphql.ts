@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<03ef151a99ca0d80610ece5dc983d5a5>>
+ * @generated SignedSource<<63ee3185c41393b9dec8854bfa1e102e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -23,8 +23,10 @@ export type useLiveFeedbackPromptResponsesFragment$data = {
           readonly id: string;
         } | null;
         readonly id: string;
+        readonly isMultipleChoice: boolean | null;
         readonly isOpenEnded: boolean | null;
         readonly isVote: boolean | null;
+        readonly multipleChoiceResponse: string | null;
         readonly prompt: {
           readonly id: string;
           readonly prompt: string;
@@ -142,6 +144,20 @@ return {
                   "alias": null,
                   "args": null,
                   "kind": "ScalarField",
+                  "name": "isMultipleChoice",
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "multipleChoiceResponse",
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
                   "name": "createdAt",
                   "storageKey": null
                 },
@@ -242,6 +258,6 @@ return {
 };
 })();
 
-(node as any).hash = "e93336d8fc9af9156b4d9482b5c2e7e8";
+(node as any).hash = "0e95ae60d0fbd19a7651e3dcedddaba6";
 
 export default node;

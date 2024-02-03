@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5b67dbbd23734cc9dc8006f340340076>>
+ * @generated SignedSource<<40ef86dfd521fbae000d8461189e7e7c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -22,6 +22,7 @@ export type LiveFeedbackPromptResponseListQuery$data = {
       readonly lastName: string | null;
     } | null;
     readonly id: string;
+    readonly multipleChoiceResponse: string | null;
     readonly response: string | null;
     readonly vote: string | null;
   }> | null;
@@ -74,6 +75,13 @@ v2 = [
         "args": null,
         "kind": "ScalarField",
         "name": "vote",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "multipleChoiceResponse",
         "storageKey": null
       },
       {
@@ -138,16 +146,16 @@ return {
     "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "acb858527e93638b844588b48a761bf5",
+    "cacheID": "086e762243cbaae7b89f1f8220ec955e",
     "id": null,
     "metadata": {},
     "name": "LiveFeedbackPromptResponseListQuery",
     "operationKind": "query",
-    "text": "query LiveFeedbackPromptResponseListQuery(\n  $promptId: ID!\n) {\n  promptResponses(promptId: $promptId) {\n    id\n    response\n    vote\n    createdAt\n    createdBy {\n      id\n      firstName\n      lastName\n      avatar\n    }\n  }\n}\n"
+    "text": "query LiveFeedbackPromptResponseListQuery(\n  $promptId: ID!\n) {\n  promptResponses(promptId: $promptId) {\n    id\n    response\n    vote\n    multipleChoiceResponse\n    createdAt\n    createdBy {\n      id\n      firstName\n      lastName\n      avatar\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "9a7c883ccb3c766a85ae65f87702525c";
+(node as any).hash = "b81dd2a50b8c4158473a494cdf987d6f";
 
 export default node;
