@@ -30,6 +30,8 @@ export const LIVE_FEEDBACK_PROMPT_LIST_QUERY = graphql`
             prompt
             isVote
             isOpenEnded
+            isMultipleChoice
+            multipleChoiceOptions
             createdAt
         }
     }
@@ -40,6 +42,8 @@ export type Prompt = {
     readonly prompt: string;
     readonly isVote: boolean | null;
     readonly isOpenEnded: boolean | null;
+    readonly isMultipleChoice: boolean | null;
+    readonly multipleChoiceOptions: ReadonlyArray<string> | null;
     readonly createdAt: Date | null;
 };
 
@@ -86,7 +90,7 @@ function PromptList({ prompts: readonlyPrompts, handleClick }: PromptListProps) 
     const theme = useTheme();
     // Reverse the prompts so that the most recent are at the top
     const prompts = React.useMemo(() => [...readonlyPrompts].reverse(), [readonlyPrompts]);
-    const [value, setValue] = React.useState<'open-ended' | 'vote'>('open-ended');
+    const [value, setValue] = React.useState<'open-ended' | 'vote' | 'multiple-choice'>('open-ended');
     const MAX_LIST_LENGTH = 100;
 
     const handleChange = (e: React.SyntheticEvent, newValue: 'open-ended' | 'vote') => {
@@ -96,6 +100,7 @@ function PromptList({ prompts: readonlyPrompts, handleClick }: PromptListProps) 
 
     const openEndedPrompts = React.useMemo(() => prompts.filter((prompt) => prompt.isOpenEnded), [prompts]);
     const votePrompts = React.useMemo(() => prompts.filter((prompt) => prompt.isVote), [prompts]);
+    const multipleChoicePrompts = React.useMemo(() => prompts.filter((prompt) => prompt.isMultipleChoice), [prompts]);
 
     return (
         <React.Fragment>
@@ -116,6 +121,7 @@ function PromptList({ prompts: readonlyPrompts, handleClick }: PromptListProps) 
             >
                 <Tab label='Open Ended' value='open-ended' />
                 <Tab label='Vote' value='vote' />
+                <Tab label='Multiple Choice' value='multiple-choice' />
             </Tabs>
             {value === 'open-ended' && (
                 <React.Fragment>
@@ -125,6 +131,7 @@ function PromptList({ prompts: readonlyPrompts, handleClick }: PromptListProps) 
                             sx={{
                                 border: 5,
                                 borderImage: `linear-gradient(${theme.palette.custom.creamCan},white) 10`,
+                                width: '100%',
                             }}
                         >
                             {openEndedPrompts.slice(0, MAX_LIST_LENGTH).map((prompt) => (
@@ -136,7 +143,7 @@ function PromptList({ prompts: readonlyPrompts, handleClick }: PromptListProps) 
                     )}
                 </React.Fragment>
             )}
-            {value === 'vote' && votePrompts.length > 0 && (
+            {value === 'vote' && (
                 <React.Fragment>
                     {votePrompts.length > 0 ? (
                         <List
@@ -144,6 +151,7 @@ function PromptList({ prompts: readonlyPrompts, handleClick }: PromptListProps) 
                             sx={{
                                 border: 5,
                                 borderImage: `linear-gradient(${theme.palette.custom.creamCan},white) 10`,
+                                width: '100%',
                             }}
                         >
                             {votePrompts.map((prompt) => (
@@ -152,6 +160,26 @@ function PromptList({ prompts: readonlyPrompts, handleClick }: PromptListProps) 
                         </List>
                     ) : (
                         <Typography>No Vote Prompts To Display Yet</Typography>
+                    )}
+                </React.Fragment>
+            )}
+            {value === 'multiple-choice' && (
+                <React.Fragment>
+                    {multipleChoicePrompts.length > 0 ? (
+                        <List
+                            id='live-feedback-multiple-choice-prompt-list'
+                            sx={{
+                                border: 5,
+                                borderImage: `linear-gradient(${theme.palette.custom.creamCan},white) 10`,
+                                width: '100%',
+                            }}
+                        >
+                            {multipleChoicePrompts.map((prompt) => (
+                                <PromptItem key={prompt.id} prompt={prompt} handleClick={handleClick} />
+                            ))}
+                        </List>
+                    ) : (
+                        <Typography>No Multiple Choice Prompts To Display Yet</Typography>
                     )}
                 </React.Fragment>
             )}
@@ -217,7 +245,10 @@ function LiveFeedbackPromptList({ queryRef, responsesModalStatusRef }: LiveFeedb
     }, []);
 
     const ShareFeedbackResultsButton = () => {
-        if (selectedPromptRef.current && selectedPromptRef.current.isVote)
+        if (
+            selectedPromptRef.current &&
+            (selectedPromptRef.current.isVote || selectedPromptRef.current.isMultipleChoice)
+        )
             return (
                 <Grid item paddingBottom='1rem'>
                     <ShareFeedbackPromptResults prompt={selectedPromptRef.current} />
@@ -264,7 +295,7 @@ export function PreloadedLiveFeedbackPromptList() {
     const [isRefreshing, setIsRefreshing] = React.useState(false);
     const responsesModalStatusRef = React.useRef<boolean>(false);
     const { env } = useEnvironment();
-    const REFETCH_INTERVAL = 20000; // 20 seconds
+    const REFETCH_INTERVAL = 60000; // 60 seconds
 
     const refresh = React.useCallback(() => {
         if (isRefreshing || responsesModalStatusRef.current) return;
