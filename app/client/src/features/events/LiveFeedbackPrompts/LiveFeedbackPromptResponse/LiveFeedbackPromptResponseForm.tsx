@@ -1,6 +1,15 @@
 import { useMemo } from 'react';
 import type { MutableRefObject } from 'react';
-import { Button, TextField, Radio, RadioGroup, Typography, FormControlLabel } from '@mui/material';
+import {
+    Button,
+    TextField,
+    Radio,
+    RadioGroup,
+    Typography,
+    FormControlLabel,
+    FormControl,
+    FormLabel,
+} from '@mui/material';
 
 import { Form } from '@local/components/Form';
 import { FormTitle } from '@local/components/FormTitle';
@@ -9,9 +18,14 @@ import { FormActions } from '@local/components/FormActions';
 import { useForm } from '@local/core';
 import Grid from '@mui/material/Grid';
 import { Prompt } from '../useLiveFeedbackPrompt';
-import { FEEDBACK_PROMPT_RESPONSE_MAX_LENGTH } from '../../../../utils/rules';
+import { FEEDBACK_PROMPT_RESPONSE_MAX_LENGTH } from '@local/utils/rules';
 
-export type TLiveFeedbackPromptResponseFormState = { response: string; vote: string; promptId: string };
+export type TLiveFeedbackPromptResponseFormState = {
+    response: string;
+    vote: string;
+    promptId: string;
+    multipleChoiceResponse: string;
+};
 
 export interface LiveFeedbackPromptResponseFormProps {
     onSubmit?: (state: TLiveFeedbackPromptResponseFormState) => void;
@@ -25,9 +39,19 @@ export function LiveFeedbackPromptResponseForm({ onSubmit, onCancel, promptRef }
         response: '',
         vote: '',
         promptId: promptRef.current.id,
+        multipleChoiceResponse: '',
     });
 
     const isFeedbackValid = useMemo(() => form.response.trim().length !== 0, [form]);
+    const isValid = useMemo(() => {
+        if (promptRef.current.isVote) {
+            return form.vote !== '' && isFeedbackValid;
+        }
+        if (promptRef.current.isMultipleChoice) {
+            return form.multipleChoiceResponse !== '';
+        }
+        return isFeedbackValid;
+    }, [form, promptRef, isFeedbackValid]);
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -53,27 +77,47 @@ export function LiveFeedbackPromptResponseForm({ onSubmit, onCancel, promptRef }
                         </RadioGroup>
                     </Grid>
                 )}
-                <TextField
-                    id='feedback-prompt-response-field'
-                    name='feedback-prompt-response'
-                    label={
-                        promptRef.current.isOpenEnded ? 'Write your response here...' : 'Write your reasoning here...'
-                    }
-                    autoFocus
-                    error={Boolean(errors.response)}
-                    helperText={errors.response}
-                    required
-                    multiline
-                    value={form.response}
-                    onChange={handleChange('response')}
-                />
-                <Typography
-                    variant='caption'
-                    color={form.response.length > FEEDBACK_PROMPT_RESPONSE_MAX_LENGTH ? 'red' : 'black'}
-                    sx={{ display: 'block', textAlign: 'right' }}
-                >
-                    {form.response.length}/500
-                </Typography>
+                {promptRef.current.isMultipleChoice ? (
+                    <FormControl>
+                        <FormLabel component='legend'>Choose one:</FormLabel>
+                        <RadioGroup
+                            aria-label='feedback-prompt-multiple-choice'
+                            name='feedback-prompt-multiple-choice'
+                            value={form.multipleChoiceResponse}
+                            onChange={handleChange('multipleChoiceResponse')}
+                        >
+                            {promptRef.current.multipleChoiceOptions.map((option, index) => (
+                                <FormControlLabel key={index} value={option} control={<Radio />} label={option} />
+                            ))}
+                        </RadioGroup>
+                    </FormControl>
+                ) : (
+                    <>
+                        <TextField
+                            id='feedback-prompt-response-field'
+                            name='feedback-prompt-response'
+                            label={
+                                promptRef.current.isOpenEnded
+                                    ? 'Write your response here...'
+                                    : 'Write your reasoning here...'
+                            }
+                            autoFocus
+                            error={Boolean(errors.response)}
+                            helperText={errors.response}
+                            required
+                            multiline
+                            value={form.response}
+                            onChange={handleChange('response')}
+                        />
+                        <Typography
+                            variant='caption'
+                            color={form.response.length > FEEDBACK_PROMPT_RESPONSE_MAX_LENGTH ? 'red' : 'black'}
+                            sx={{ display: 'block', textAlign: 'right' }}
+                        >
+                            {form.response.length}/500
+                        </Typography>
+                    </>
+                )}
             </FormContent>
             <FormActions disableGrow gridProps={{ justifyContent: 'flex-end' }}>
                 {onCancel && (
@@ -81,7 +125,7 @@ export function LiveFeedbackPromptResponseForm({ onSubmit, onCancel, promptRef }
                         I wish not to answer
                     </Button>
                 )}
-                <Button disabled={!isFeedbackValid} type='submit' variant='contained' color='primary'>
+                <Button disabled={!isValid} type='submit' variant='contained' color='primary'>
                     Submit
                 </Button>
             </FormActions>

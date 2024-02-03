@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<86527a339910ba2b578c8ea0dec1c27d>>
+ * @generated SignedSource<<8fa42b14fdb5d028ad011d3552321c65>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,6 +11,7 @@
 import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type CreateFeedbackPromptResponse = {
   eventId: string;
+  multipleChoiceResponse: string;
   promptId: string;
   response: string;
   vote: string;
