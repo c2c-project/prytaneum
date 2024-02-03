@@ -148,6 +148,8 @@ model EventLiveFeedbackPrompt {
     prompt String @db.VarChar(500)
     isVote Boolean @default(false)
     isOpenEnded Boolean @default(false)
+    isMultipleChoice Boolean @default(false)
+    multipleChoiceOptions String[] @default([]) // Format is ["option1", "option2"]
     responses EventLiveFeedbackPromptResponse[]
 }
 
@@ -164,6 +166,8 @@ model EventLiveFeedbackPromptResponse {
     createdAt DateTime @default(now())
     isVote Boolean @default(false)
     vote Vote @default(CONFLICTED)
+    isMultipleChoice Boolean @default(false)
+    multipleChoiceResponse String @default("")
     isOpenEnded Boolean @default(false)
     response String @db.VarChar(500)
     createdById String @db.Uuid
