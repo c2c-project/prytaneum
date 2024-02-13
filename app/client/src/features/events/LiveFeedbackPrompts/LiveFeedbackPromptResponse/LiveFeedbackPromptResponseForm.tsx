@@ -77,47 +77,40 @@ export function LiveFeedbackPromptResponseForm({ onSubmit, onCancel, promptRef }
                         </RadioGroup>
                     </Grid>
                 )}
-                {promptRef.current.isMultipleChoice ? (
-                    <FormControl>
-                        <FormLabel component='legend'>Choose one:</FormLabel>
-                        <RadioGroup
-                            aria-label='feedback-prompt-multiple-choice'
-                            name='feedback-prompt-multiple-choice'
-                            value={form.multipleChoiceResponse}
-                            onChange={handleChange('multipleChoiceResponse')}
-                        >
-                            {promptRef.current.multipleChoiceOptions.map((option, index) => (
-                                <FormControlLabel key={index} value={option} control={<Radio />} label={option} />
-                            ))}
-                        </RadioGroup>
-                    </FormControl>
-                ) : (
-                    <>
-                        <TextField
-                            id='feedback-prompt-response-field'
-                            name='feedback-prompt-response'
-                            label={
-                                promptRef.current.isOpenEnded
-                                    ? 'Write your response here...'
-                                    : 'Write your reasoning here...'
-                            }
-                            autoFocus
-                            error={Boolean(errors.response)}
-                            helperText={errors.response}
-                            required
-                            multiline
-                            value={form.response}
-                            onChange={handleChange('response')}
-                        />
-                        <Typography
-                            variant='caption'
-                            color={form.response.length > FEEDBACK_PROMPT_RESPONSE_MAX_LENGTH ? 'red' : 'black'}
-                            sx={{ display: 'block', textAlign: 'right' }}
-                        >
-                            {form.response.length}/500
-                        </Typography>
-                    </>
-                )}
+                <FormControl>
+                    <FormLabel component='legend'>Choose one:</FormLabel>
+                    <RadioGroup
+                        aria-label='feedback-prompt-multiple-choice'
+                        name='feedback-prompt-multiple-choice'
+                        value={form.multipleChoiceResponse}
+                        onChange={handleChange('multipleChoiceResponse')}
+                    >
+                        {promptRef.current.multipleChoiceOptions.map((option, index) => (
+                            <FormControlLabel key={index} value={option} control={<Radio />} label={option} />
+                        ))}
+                    </RadioGroup>
+                </FormControl>
+                <TextField
+                    id='feedback-prompt-response-field'
+                    name='feedback-prompt-response'
+                    label={
+                        promptRef.current.isOpenEnded ? 'Write your response here...' : 'Write your reasoning here...'
+                    }
+                    autoFocus
+                    error={Boolean(errors.response)}
+                    helperText={errors.response}
+                    required
+                    multiline
+                    value={form.response}
+                    onChange={handleChange('response')}
+                />
+                <Typography
+                    variant='caption'
+                    color={form.response.length > FEEDBACK_PROMPT_RESPONSE_MAX_LENGTH ? 'red' : 'black'}
+                    sx={{ display: 'block', textAlign: 'right' }}
+                >
+                    {form.response.length}/500
+                </Typography>
             </FormContent>
             <FormActions disableGrow gridProps={{ justifyContent: 'flex-end' }}>
                 {onCancel && (
