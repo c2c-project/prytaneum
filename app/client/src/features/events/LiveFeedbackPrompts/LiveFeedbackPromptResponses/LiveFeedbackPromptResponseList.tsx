@@ -156,7 +156,7 @@ function PromptResponseList({ promptResponses, promptData }: PromptListProps) {
                                                 Choice: {multipleChoiceResponse}
                                             </Typography>
                                             <Typography variant='inherit' sx={{ wordBreak: 'break-word' }}>
-                                                Response: {response}
+                                                Reasoning: {response}
                                             </Typography>
                                         </React.Fragment>
                                     ) : (
