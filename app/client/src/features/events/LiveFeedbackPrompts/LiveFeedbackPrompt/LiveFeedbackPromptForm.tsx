@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Button, TextField, Radio, RadioGroup, Typography, FormControlLabel } from '@mui/material';
+import { Button, TextField, Radio, RadioGroup, Typography, FormControlLabel, IconButton } from '@mui/material';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 import { Form } from '@local/components/Form';
 import { FormTitle } from '@local/components/FormTitle';
@@ -7,7 +8,12 @@ import { FormContent } from '@local/components/FormContent';
 import { FormActions } from '@local/components/FormActions';
 import { useForm } from '@local/core';
 import Grid from '@mui/material/Grid';
-import { FEEDBACK_PROMPT_MAX_LENGTH, CHOICE_MAX_LENGTH } from '@local/utils/rules';
+import {
+    FEEDBACK_PROMPT_MAX_LENGTH,
+    CHOICE_MAX_LENGTH,
+    CHOICES_MAX_AMOUNT,
+    STARTING_CHOICE_AMOUNT,
+} from '@local/utils/rules';
 
 export type TLiveFeedbackPromptFormState = {
     prompt: string;
@@ -21,7 +27,9 @@ export interface LiveFeedbackPromptFormProps {
 }
 
 export function LiveFeedbackPromptForm({ onSubmit, onCancel }: LiveFeedbackPromptFormProps) {
-    const [choices, setChoices] = React.useState<string[]>(new Array(3).fill('', 0, 3));
+    const [choices, setChoices] = React.useState<string[]>(
+        new Array(STARTING_CHOICE_AMOUNT).fill('', 0, STARTING_CHOICE_AMOUNT)
+    );
     // form related hooks
     const [form, errors, handleSubmit, handleChange] = useForm({
         prompt: '',
@@ -45,6 +53,20 @@ export function LiveFeedbackPromptForm({ onSubmit, onCancel }: LiveFeedbackPromp
         () => (index: number) => choices[index].length <= CHOICE_MAX_LENGTH,
         [choices]
     );
+
+    const maxChoicesReached = React.useMemo(() => choices.length >= CHOICES_MAX_AMOUNT, [choices]);
+
+    const handleAddChoice = () => {
+        if (choices.length >= CHOICES_MAX_AMOUNT) return;
+        setChoices([...choices, '']);
+    };
+
+    const handleRemoveChoice = (index: number) => () => {
+        const newChoices = [...choices];
+        newChoices.splice(index, 1);
+        setChoices(newChoices);
+        form.choices = newChoices;
+    };
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -84,29 +106,50 @@ export function LiveFeedbackPromptForm({ onSubmit, onCancel }: LiveFeedbackPromp
                     {form.prompt.length}/500
                 </Typography>
                 {form.feedbackType === 'multiple-choice' && (
-                    <React.Fragment>
+                    <Grid container direction='row' alignItems='center' justifyContent='center' width='100%'>
                         {choices.map((choice, index) => (
-                            <React.Fragment key={`choice-${index}`}>
-                                <TextField
-                                    key={`choice-${index}`}
-                                    id={`choice-${index}`}
-                                    name={`feedback-multiple-choice-${index}`}
-                                    label={`Choice ${index + 1}`}
-                                    error={!isMultipleChoiceOptionValid(index)}
-                                    required
-                                    value={choice}
-                                    onChange={handleMultipleChoiceChange(index)}
-                                />
-                                <Typography
-                                    variant='caption'
-                                    color={choice.length > CHOICE_MAX_LENGTH ? 'red' : 'black'}
-                                    sx={{ display: 'block', textAlign: 'right' }}
-                                >
-                                    {choice.length}/{CHOICE_MAX_LENGTH}
-                                </Typography>
-                            </React.Fragment>
+                            <Grid container key={`choice-${index}`} alignItems='center'>
+                                <Grid item>
+                                    <IconButton onClick={handleRemoveChoice(index)}>
+                                        <DeleteOutlineIcon />
+                                    </IconButton>
+                                    {/* Padding to align icon with text box */}
+                                    <Grid item height='20px' />
+                                </Grid>
+                                <Grid item></Grid>
+                                <Grid item container flex='1'>
+                                    <TextField
+                                        key={`choice-${index}`}
+                                        id={`choice-${index}`}
+                                        name={`feedback-multiple-choice-${index}`}
+                                        label={`Choice ${index + 1}`}
+                                        error={!isMultipleChoiceOptionValid(index)}
+                                        required
+                                        value={choice}
+                                        onChange={handleMultipleChoiceChange(index)}
+                                    />
+                                    <Grid item container justifyContent='right'>
+                                        <Typography
+                                            variant='caption'
+                                            color={choice.length > CHOICE_MAX_LENGTH ? 'red' : 'black'}
+                                            sx={{ display: 'block', textAlign: 'right' }}
+                                        >
+                                            {choice.length}/{CHOICE_MAX_LENGTH}
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
                         ))}
-                    </React.Fragment>
+                        <Grid item>
+                            {maxChoicesReached ? (
+                                <Typography color='red'>Max choices reached</Typography>
+                            ) : (
+                                <Button disabled={maxChoicesReached} onClick={handleAddChoice}>
+                                    Add Choice
+                                </Button>
+                            )}
+                        </Grid>
+                    </Grid>
                 )}
             </FormContent>
             <FormActions disableGrow gridProps={{ justifyContent: 'flex-end' }}>
