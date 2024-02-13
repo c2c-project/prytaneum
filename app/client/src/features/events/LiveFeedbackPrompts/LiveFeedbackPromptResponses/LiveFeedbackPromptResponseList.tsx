@@ -150,9 +150,20 @@ function PromptResponseList({ promptResponses, promptData }: PromptListProps) {
                                     isVote={promptData.isVote}
                                 />
                                 <CardContent sx={{ margin: (theme) => theme.spacing(-2, 0, -1, 0) }}>
-                                    <Typography variant='inherit' sx={{ wordBreak: 'break-word' }}>
-                                        {promptData.isMultipleChoice ? multipleChoiceResponse : response}
-                                    </Typography>
+                                    {promptData.isMultipleChoice ? (
+                                        <React.Fragment>
+                                            <Typography variant='inherit' sx={{ wordBreak: 'break-word' }}>
+                                                Choice: {multipleChoiceResponse}
+                                            </Typography>
+                                            <Typography variant='inherit' sx={{ wordBreak: 'break-word' }}>
+                                                Response: {response}
+                                            </Typography>
+                                        </React.Fragment>
+                                    ) : (
+                                        <Typography variant='inherit' sx={{ wordBreak: 'break-word' }}>
+                                            {response}
+                                        </Typography>
+                                    )}
                                 </CardContent>
                             </Card>
                         </Grid>
