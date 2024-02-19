@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 import jwt from 'jsonwebtoken';
 
 import mg from '@local/lib/email/client';
+import formData from 'form-data';
 
 export type Student = {
     id: string;
@@ -158,6 +159,26 @@ export async function sendRegistrationEmails(formData: FormData) {
             template: 'cc2c-complete-registration',
             'v:complete-registration-url': '%recipient.registrationLink%',
             'v:first-name': '%recipient.first%',
+        });
+
+        revalidatePath(`/class/${classId}`);
+        return { isError: false, message: '' };
+    } catch (error) {
+        console.error(error);
+        return { isError: true, message: error instanceof Error ? error.message : 'Unknown error' };
+    }
+}
+
+// Remove student from class
+export async function removeStudentFromClass(formData: FormData) {
+    try {
+        const classId = formData.get('classId') as string | null;
+        if (!classId) throw new Error('Class id not found');
+        const studentId = formData.get('studentId') as string | null;
+        if (!studentId) throw new Error('Student id not found');
+
+        await prisma.student.delete({
+            where: { userId_classId: { classId, userId: studentId } },
         });
 
         revalidatePath(`/class/${classId}`);
