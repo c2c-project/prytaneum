@@ -83,7 +83,6 @@ export function UsersTable({}: UsersTableProps) {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-    const date = new Date();
     const FETCH_AMMOUNT = 100;
 
     const [users, setUsers] = React.useState<User[]>([]);
@@ -105,6 +104,7 @@ export function UsersTable({}: UsersTableProps) {
     );
 
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+        event?.preventDefault();
         setPage(newPage);
     };
 
