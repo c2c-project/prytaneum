@@ -297,3 +297,18 @@ export async function addTeacherByEmail(formData: FormData) {
         else return { isError: true, message: 'Something went wrong' };
     }
 }
+
+export async function deleteUser(userId: string) {
+    try {
+        await prisma.user.delete({
+            where: {
+                id: userId,
+            },
+        });
+        console.log(`User ${userId} deleted`);
+        return { isError: false, message: 'User deleted successfully' };
+    } catch (error) {
+        console.error(error);
+        return { isError: true, message: 'Error deleting user' };
+    }
+}
