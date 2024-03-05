@@ -1,0 +1,70 @@
+'use client';
+
+import React from 'react';
+import { Grid, Box, Modal, TextField, Button, Typography } from '@mui/material';
+import { addStudentByEmail } from './actions';
+
+interface AddTeacherFormProps {
+    classId: string;
+}
+
+export function AddStudentFormModal({ classId }: AddTeacherFormProps) {
+    const [modalVisible, setModalVisible] = React.useState(false);
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [error, setError] = React.useState<string>('');
+
+    async function handleSubmit(formData: FormData) {
+        setIsLoading(true);
+        const { isError, message } = await addStudentByEmail(formData);
+        if (isError) setError(message);
+        else setModalVisible(false);
+        setIsLoading(false);
+    }
+
+    return (
+        <React.Fragment>
+            <Button variant='contained' onClick={() => setModalVisible(true)}>
+                Add Student
+            </Button>
+            <Modal open={modalVisible}>
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        maxWidth: 500,
+                        bgcolor: 'background.paper',
+                        border: '2px solid #000',
+                        boxShadow: 24,
+                        padding: '2rem',
+                    }}
+                >
+                    <Typography variant='h3'>Add Student</Typography>
+                    <Grid container direction='column' alignContent='center'>
+                        <form action={handleSubmit}>
+                            <TextField label='email' type='email' name='email' />
+                            <input type='hidden' name='classId' value={classId} />
+                            <div style={{ height: '1rem' }} />
+                            <Grid item>
+                                <Button variant='contained' color='secondary' onClick={() => setModalVisible(false)}>
+                                    Cancel
+                                </Button>
+                                <Button disabled={isLoading} variant='contained' type='submit'>
+                                    Add Student
+                                </Button>
+                            </Grid>
+                            <Grid item>
+                                {error !== '' && (
+                                    <Typography variant='body1' color='red'>
+                                        {error}
+                                    </Typography>
+                                )}
+                            </Grid>
+                        </form>
+                    </Grid>
+                </Box>
+            </Modal>
+        </React.Fragment>
+    );
+}
