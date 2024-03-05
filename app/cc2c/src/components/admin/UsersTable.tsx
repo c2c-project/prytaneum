@@ -15,13 +15,19 @@ import {
     TableFooter,
     TablePagination,
     Button,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
 } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
 
 import { useForm } from '@local/lib';
 import type { User } from '@local/lib';
 import { TablePaginationActions } from '../TablePaginationActions';
-import { demoteUser, getAllUsers, loadNextPageUsers, promoteUser, refreshUsers } from './actions';
+import { deleteUser, demoteUser, getAllUsers, loadNextPageUsers, promoteUser, refreshUsers } from './actions';
+import { useSnackbar } from 'notistack';
 
 export type UsersTableSearchFilter = {
     firstName: string;
@@ -89,6 +95,45 @@ export function UsersTable({}: UsersTableProps) {
     const [isLoadingNext, setIsLoadingNext] = React.useState<boolean>(false);
     const [hasNext, setHasNext] = React.useState<boolean>(false);
     const [filter, setFilter] = React.useState<UsersTableSearchFilter>({ firstName: '', lastName: '', email: '' });
+    const [openDialog, setOpenDialog] = React.useState(false);
+    const [selectedUser, setSelectedUser] = React.useState<User>();
+    const snackbar = useSnackbar();
+
+    const handleOpenDialog = (userId: string) => {
+        const user = users.find((user) => user.id === userId);
+        setSelectedUser(user);
+        setOpenDialog(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    };
+
+    const handleConfirmDeleteUser = async () => {
+        // Get the user id from the selected user
+        const userId = selectedUser?.id;
+        // Call delete user action
+        console.log('Delete user with id: ', userId);
+        if (!userId) {
+            console.error('No selected user id provided');
+            snackbar.enqueueSnackbar('Error deleting user', { variant: 'error' });
+            return;
+        }
+        const { isError, message } = await deleteUser(userId);
+        if (isError) {
+            console.error(message);
+            snackbar.enqueueSnackbar(message, { variant: 'error' });
+            return;
+        }
+        // Success, show snackbar message and refresh users
+        refreshUsers(FETCH_AMMOUNT, filter).then(({ users, hasNextPage }) => {
+            setUsers(users);
+            setHasNext(hasNextPage);
+        });
+        snackbar.enqueueSnackbar(message, { variant: 'success' });
+        // Close the dialog
+        handleCloseDialog();
+    };
 
     React.useEffect(() => {
         getAllUsers(FETCH_AMMOUNT).then(({ users, hasNextPage }) => {
@@ -221,6 +266,9 @@ export function UsersTable({}: UsersTableProps) {
                                             Demote
                                         </Button>
                                     )}
+                                    <Button variant='contained' color='error' onClick={() => handleOpenDialog(user.id)}>
+                                        Delete
+                                    </Button>
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -257,6 +305,20 @@ export function UsersTable({}: UsersTableProps) {
                     </TableFooter>
                 </Table>
             </TableContainer>
+            <Dialog open={openDialog} onClose={handleCloseDialog}>
+                <DialogTitle>Confirm Action</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>Are you sure you want to delete user: {selectedUser?.email}?</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDialog} color='primary'>
+                        Cancel
+                    </Button>
+                    <Button onClick={handleConfirmDeleteUser} color='primary' autoFocus>
+                        Confirm
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </React.Fragment>
     );
 }
