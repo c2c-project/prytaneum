@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, Box, Divider, Typography, Button, Link } from '@mui/material';
 
 import { getClassById, getStudentsByClassId, getTeacherUrl } from '@local/server';
-import { EditClassDialog, StudentsTable, AddTeacherFormModal } from '@local/components';
+import { EditClassDialog, StudentsTable, AddTeacherFormModal, AddStudentFormModal } from '@local/components';
 import type { UserWithoutPass } from '@local/app/api/auth/types';
 
 interface ClassProps {
@@ -54,6 +54,8 @@ export async function Class({ classId, user }: ClassProps) {
                     />
                     <div style={{ width: '1rem' }} />
                     <AddTeacherFormModal classId={classId} />
+                    <div style={{ width: '1rem' }} />
+                    <AddStudentFormModal classId={classId} />
                 </React.Fragment>
             )}
             <Divider />

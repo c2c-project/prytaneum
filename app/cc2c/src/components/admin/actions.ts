@@ -3,6 +3,7 @@
 import { prisma } from '@local/core';
 import type { UsersTableSearchFilter } from './UsersTable';
 import type { ClassesTableSearchFilter } from './ClassesTable';
+import { revalidatePath } from 'next/cache';
 
 export async function promoteUser(userId: string) {
     try {
@@ -291,6 +292,64 @@ export async function addTeacherByEmail(formData: FormData) {
         });
 
         return { isError: false, message: '' };
+    } catch (error) {
+        console.error(error);
+        if (error instanceof Error) return { isError: true, message: error.message };
+        else return { isError: true, message: 'Something went wrong' };
+    }
+}
+
+export async function deleteUser(userId: string) {
+    try {
+        await prisma.user.delete({
+            where: {
+                id: userId,
+            },
+        });
+        console.log(`User ${userId} deleted`);
+        return { isError: false, message: 'User deleted successfully' };
+    } catch (error) {
+        console.error(error);
+        return { isError: true, message: 'Error deleting user' };
+    }
+}
+
+export async function addStudentByEmail(formData: FormData) {
+    const email = formData.get('email') as string;
+    const classId = formData.get('classId') as string;
+
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                email,
+                role: 'STUDENT',
+            },
+        });
+        if (!user) throw new Error('Student not found');
+        // Ensure user is not already a student in this or another class
+        const student = await prisma.student.findFirst({
+            where: {
+                userId: user.id,
+            },
+        });
+        if (student) throw new Error('User is already a student of another class');
+        await prisma.student.upsert({
+            where: {
+                userId_classId: {
+                    userId: user.id,
+                    classId,
+                },
+            },
+            update: {},
+            create: {
+                userId: user.id,
+                classId,
+            },
+        });
+
+        revalidatePath(`/class/${classId}`);
+
+        return { isError: false, message: 'Student added to class successfully' };
     } catch (error) {
         console.error(error);
         if (error instanceof Error) return { isError: true, message: error.message };

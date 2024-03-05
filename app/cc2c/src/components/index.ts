@@ -1,6 +1,7 @@
 export * from './admin/UsersTable';
 export * from './admin/ClassesTable';
 export * from './admin/AddTeacherFormModal';
+export * from './admin/AddStudentFormModal';
 export * from './auth/SignInButton';
 export * from './auth/SignOutButton';
 export * from './auth/RegisterButton';

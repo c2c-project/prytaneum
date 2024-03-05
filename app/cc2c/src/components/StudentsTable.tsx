@@ -27,7 +27,7 @@ import PendingOutlinedIcon from '@mui/icons-material/PendingOutlined';
 import CsvDownloader from 'react-csv-downloader';
 
 import { ResponsiveDialog, useResponsiveDialog } from './ResponsiveDialog';
-import { updateStudentData, sendRegistrationEmails } from '@local/server';
+import { updateStudentData, sendRegistrationEmails, removeStudentFromClass } from '@local/server';
 import { useSnack } from '@local/lib';
 
 type Student = {
@@ -54,7 +54,8 @@ export interface StudentsTableProps {
 export function StudentsTable({ students, classId, termId, isTeacher }: StudentsTableProps) {
     const [selectedStudent, setSelectedStudent] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(false);
-    const [isOpen, open, close] = useResponsiveDialog();
+    const [isEditDialogOpen, openEditDialog, closeEditDialog] = useResponsiveDialog();
+    const [isRemoveDialogOpen, openRemoveDialog, closeRemoveDialog] = useResponsiveDialog();
     const [resetPreWritingChecked, setResetPreWritingChecked] = React.useState(false);
     const [resetPostWritingChecked, setResetPostWritingChecked] = React.useState(false);
     const { displaySnack } = useSnack();
@@ -69,7 +70,7 @@ export function StudentsTable({ students, classId, termId, isTeacher }: Students
 
     const handleSelectStudent = (studentId: string) => () => {
         setSelectedStudent(studentId);
-        open();
+        openEditDialog();
     };
 
     const handleEditStudent = async (formData: FormData) => {
@@ -83,15 +84,40 @@ export function StudentsTable({ students, classId, termId, isTeacher }: Students
         setResetPostWritingChecked(false);
         setResetPreWritingChecked(false);
         setSelectedStudent('');
-        close();
+        closeEditDialog();
         setIsLoading(false);
     };
 
-    const handleDialogClose = () => {
+    const handleEditDialogClose = () => {
         setSelectedStudent('');
         setResetPreWritingChecked(false);
         setResetPostWritingChecked(false);
-        close();
+        closeEditDialog();
+    };
+
+    const handleOpenRemoveDialog = (studentId: string) => () => {
+        setSelectedStudent(studentId);
+        openRemoveDialog();
+    };
+
+    const handleRemoveStudent = (studentId: string) => async () => {
+        setIsLoading(true);
+        const formData = new FormData();
+        formData.append('studentId', studentId);
+        formData.append('classId', classId);
+        const { isError, message } = await removeStudentFromClass(formData);
+        if (isError) {
+            displaySnack(message, { variant: 'error' });
+        } else {
+            displaySnack('Student Removed', { variant: 'success' });
+            closeRemoveDialog();
+        }
+        setIsLoading(false);
+    };
+
+    const handleRemoveDialogClose = () => {
+        setSelectedStudent('');
+        closeRemoveDialog();
     };
 
     const studentWritingColumns = [
@@ -255,6 +281,15 @@ export function StudentsTable({ students, classId, termId, isTeacher }: Students
                                     >
                                         Edit
                                     </Button>
+                                    <Button
+                                        variant='contained'
+                                        color='error'
+                                        disabled={isLoading}
+                                        onClick={handleOpenRemoveDialog(student.userId)}
+                                        aria-label='remove'
+                                    >
+                                        Remove
+                                    </Button>
                                 </TableCell>
                                 <TableCell align='center'>
                                     <CsvDownloader
@@ -297,7 +332,7 @@ export function StudentsTable({ students, classId, termId, isTeacher }: Students
                     </Button>
                 </CsvDownloader>
             </Grid>
-            <ResponsiveDialog open={isOpen} onClose={handleDialogClose} fullWidth>
+            <ResponsiveDialog open={isEditDialogOpen} onClose={handleEditDialogClose} fullWidth>
                 <DialogContent>
                     <form action={handleEditStudent}>
                         <Typography variant='h4' align='center' paddingBottom={2}>
@@ -328,7 +363,7 @@ export function StudentsTable({ students, classId, termId, isTeacher }: Students
                             </FormGroup>
                         </Grid>
                         <Grid container paddingTop='1rem' justifyContent='flex-end'>
-                            <Button color='secondary' onClick={close}>
+                            <Button color='secondary' onClick={closeEditDialog}>
                                 Cancel
                             </Button>
                             <Button disabled={isLoading} type='submit' variant='contained' color='primary'>
@@ -336,6 +371,29 @@ export function StudentsTable({ students, classId, termId, isTeacher }: Students
                             </Button>
                         </Grid>
                     </form>
+                </DialogContent>
+            </ResponsiveDialog>
+            <ResponsiveDialog open={isRemoveDialogOpen} onClose={handleRemoveDialogClose} fullWidth>
+                <DialogContent>
+                    <Typography variant='h4' align='center' paddingBottom={2}>
+                        Remove Student
+                    </Typography>
+                    <Typography variant='body1' align='center'>
+                        Are you sure you want to remove this student from the class?
+                    </Typography>
+                    <Grid container paddingTop='1rem' justifyContent='flex-end'>
+                        <Button color='secondary' onClick={closeRemoveDialog}>
+                            Cancel
+                        </Button>
+                        <Button
+                            disabled={isLoading}
+                            onClick={handleRemoveStudent(selectedStudent)}
+                            variant='contained'
+                            color='primary'
+                        >
+                            Remove
+                        </Button>
+                    </Grid>
                 </DialogContent>
             </ResponsiveDialog>
         </React.Fragment>
