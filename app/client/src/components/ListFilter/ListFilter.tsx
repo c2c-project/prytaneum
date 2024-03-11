@@ -32,6 +32,7 @@ export interface Props<T> {
     menuIcons?: JSX.Element[];
     displayNumResults?: boolean;
     style?: React.CSSProperties;
+    toggleSearch?: boolean;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -48,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(0.5),
     },
     input: {
+        width: '100%',
         '& fieldset': {
             borderRadius: 9999, // rounded text field
         },
@@ -79,12 +81,16 @@ export default function ListFilter<T>({
     // displayNumResults,
     className,
     style,
+    toggleSearch,
 }: Props<T>) {
     const classes = useStyles();
+    const [searchToggled, setSearchToggled] = React.useState(false);
     const [filters, setFilters] = React.useState<Filters>(new Set());
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [search, setSearch] = React.useState('');
     const prevSearch = React.useRef('');
+
+    const toggleSearchBar = () => setSearchToggled((prev) => !prev);
 
     const immutableTransform = (op: Op) => (prevFilters: Filters) => {
         const copy = new Set(prevFilters);
@@ -133,8 +139,14 @@ export default function ListFilter<T>({
     return (
         <div style={style} className={className}>
             <Grid container alignItems='center'>
-                <Grid item xs='auto' className={classes.search}>
+                <Grid item display={toggleSearch ? 'block' : 'none'}>
+                    <IconButton color='inherit' onClick={toggleSearchBar} size='large'>
+                        <SearchIcon />
+                    </IconButton>
+                </Grid>
+                <Grid item className={classes.search} display={toggleSearch && !searchToggled ? 'none' : 'block'}>
                     <TextField
+                        fullWidth
                         label='Search'
                         value={search}
                         onChange={handleSearch}
