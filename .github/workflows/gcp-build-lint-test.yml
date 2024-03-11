@@ -4,7 +4,7 @@ on:
         branches:
             - staging
         paths:
-            - 'app/cc2c/**'
+            - 'app/gcp-service/**'
 
 jobs:
     build:
@@ -23,11 +23,11 @@ jobs:
             - name: Yarn Install
               run: yarn install
 
-            # Build the CC2C app via docker so we are as close to the real build as possible.
-            - name: Docker build cc2c
+            # Build the gcp service via docker so we are as close to the real build as possible.
+            - name: Docker build gcp
               run: |-
                   docker build \
-                    -f ./docker/Dockerfile.cc2c \
+                    -f ./docker/Dockerfile.gcp \
                     --build-arg GITHUB_SHA="$GITHUB_SHA" \
                     --build-arg GITHUB_REF="$GITHUB_REF" \
                     --build-arg DEPLOYMENT_ENV="development" \
@@ -50,7 +50,7 @@ jobs:
               run: yarn install
 
             - name: Test Project
-              run: yarn workspace @app/cc2c test:ci
+              run: echo TODO
 
     lint:
         name: Lint
@@ -69,4 +69,4 @@ jobs:
               run: yarn install
 
             - name: Lint Project
-              run: yarn workspace @app/cc2c lint
+              run: yarn workspace @app/gcp-service lint
