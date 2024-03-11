@@ -252,24 +252,38 @@ export function UsersTable({}: UsersTableProps) {
                                 <TableCell>
                                     <Typography>{user.role.toLocaleLowerCase()}</Typography>
                                 </TableCell>
-                                <TableCell>
-                                    {user.role === 'STUDENT' ? (
+                                {user.role === 'ADMIN' ? (
+                                    <TableCell>
+                                        <React.Fragment />
+                                    </TableCell>
+                                ) : (
+                                    <TableCell>
+                                        {user.role === 'STUDENT' ? (
+                                            <Button
+                                                variant='contained'
+                                                color='primary'
+                                                onClick={handlePromoteUser(user.id)}
+                                            >
+                                                Promote
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                variant='contained'
+                                                color='primary'
+                                                onClick={handleDemoteUser(user.id)}
+                                            >
+                                                Demote
+                                            </Button>
+                                        )}
                                         <Button
                                             variant='contained'
-                                            color='primary'
-                                            onClick={handlePromoteUser(user.id)}
+                                            color='error'
+                                            onClick={() => handleOpenDialog(user.id)}
                                         >
-                                            Promote
+                                            Delete
                                         </Button>
-                                    ) : (
-                                        <Button variant='contained' color='primary' onClick={handleDemoteUser(user.id)}>
-                                            Demote
-                                        </Button>
-                                    )}
-                                    <Button variant='contained' color='error' onClick={() => handleOpenDialog(user.id)}>
-                                        Delete
-                                    </Button>
-                                </TableCell>
+                                    </TableCell>
+                                )}
                             </TableRow>
                         ))}
                         {emptyRows > 0 && (
