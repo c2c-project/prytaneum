@@ -301,11 +301,23 @@ export async function addTeacherByEmail(formData: FormData) {
 
 export async function deleteUser(userId: string) {
     try {
+        const user = await prisma.user.findUnique({
+            where: {
+                id: userId,
+            },
+        });
+
+        if (!user) throw new Error('User not found');
+
+        // Admins cannot delete themselves
+        if (user.role === 'ADMIN') throw new Error('Cannot delete admin account');
+
         await prisma.user.delete({
             where: {
                 id: userId,
             },
         });
+
         console.log(`User ${userId} deleted`);
         return { isError: false, message: 'User deleted successfully' };
     } catch (error) {
