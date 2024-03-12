@@ -66,7 +66,7 @@ export class PlaywrightDashboardPage {
     }
 
     async clickOnLiveFeed() {
-        await this.page.getByRole('button', { name: 'view live feed of current event' }).click();
+        await this.page.getByRole('button', { name: 'view live feed of current event' }).first().click();
         await this.page.waitForTimeout(5000); // Using this over waitForNavigation because it was not working with firefox.
     }
 }

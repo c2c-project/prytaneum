@@ -1,10 +1,10 @@
 # Ensures e2e tests are run before merging into production branch
-name: Test end-to-end
+name: Prytaneum Test end-to-end
 
 on:
     pull_request:
         branches:
-            - prod
+            - staging
         paths:
             - 'app/client/**'
             - 'app/server/**'
