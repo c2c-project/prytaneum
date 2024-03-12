@@ -69,7 +69,7 @@ export class PlaywrightLandingPage {
     }
 
     async amLoggedIn() {
-        await this.page.waitForURL('/organizations/me');
+        await this.page.waitForURL('/dashboard');
     }
 
     // Helpers

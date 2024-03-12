@@ -48,7 +48,9 @@ export class PlaywrightRegisterPage {
             'Password missing required complexity: lower case character.'
         );
         this.failedSnackPasswordLength = page.getByText('New passwords must be at least 8 characters.');
-        this.failedSnackInternalError = page.getByText('Internal server error. Please try again.');
+        this.failedSnackInternalError = page.getByText(
+            'A link to activate your account has been emailed to the address provided.'
+        );
         // Logos/Graphics
         this.registerIllustration = page.getByRole('img', { name: 'Register Illustration' });
     }
