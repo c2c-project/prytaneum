@@ -32,7 +32,7 @@ export function useEventDetails({ fragmentRef }: Props) {
         refetch({}, { fetchPolicy: 'store-and-network' });
     }, [refetch]);
 
-    useRefresh({ refreshInterval: REFRESH_INTERVAL, callback: refresh });
+    const { pauseRefresh, resumeRefresh } = useRefresh({ refreshInterval: REFRESH_INTERVAL, callback: refresh });
 
     React.useEffect(() => {
         if (data.isActive) {
@@ -42,5 +42,11 @@ export function useEventDetails({ fragmentRef }: Props) {
         setIsLive(false);
     }, [data.isActive]);
 
-    return { eventData: data, isLive, setIsLive };
+    return {
+        eventData: data,
+        isLive,
+        setIsLive,
+        pauseEventDetailsRefresh: pauseRefresh,
+        resumeEventDetailsRefresh: resumeRefresh,
+    };
 }
