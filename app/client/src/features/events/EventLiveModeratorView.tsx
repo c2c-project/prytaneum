@@ -62,7 +62,9 @@ interface EventLiveProps {
 
 function EventLiveModeratorView({ node }: EventLiveProps) {
     const smallBreakpoint = useMediaQuery('(max-width: 1280px)');
-    const { eventData, isLive, setIsLive } = useEventDetails({ fragmentRef: node });
+    const { eventData, isLive, setIsLive, pauseEventDetailsRefresh, resumeEventDetailsRefresh } = useEventDetails({
+        fragmentRef: node,
+    });
     const { id: eventId } = node;
     type tabs = 'Moderator' | 'Feedback' | 'Broadcast';
     const [tab, setTab] = React.useState<tabs>('Moderator');
@@ -72,7 +74,17 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
         setTab(newTab);
     };
 
-    usePingEvent(eventId);
+    const { pausePingEvent, resumePingEvent } = usePingEvent(eventId);
+
+    const pauseParentRefreshing = React.useCallback(() => {
+        pauseEventDetailsRefresh();
+        pausePingEvent();
+    }, [pauseEventDetailsRefresh, pausePingEvent]);
+
+    const resumeParentRefreshing = React.useCallback(() => {
+        resumeEventDetailsRefresh();
+        resumePingEvent();
+    }, [resumeEventDetailsRefresh, resumePingEvent]);
 
     const feedbackActionButtons = React.useMemo(() => {
         return (
@@ -97,7 +109,14 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
     }, [smallBreakpoint]);
 
     return (
-        <EventContext.Provider value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}>
+        <EventContext.Provider
+            value={{
+                eventId: node.id,
+                isModerator: Boolean(node.isViewerModerator),
+                pauseParentRefreshing,
+                resumeParentRefreshing,
+            }}
+        >
             <Grid
                 container
                 columns={smallBreakpoint ? 6 : 8}
