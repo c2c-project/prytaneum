@@ -201,13 +201,16 @@ function LiveFeedbackPromptList({ queryRef, responsesModalStatusRef }: LiveFeedb
     const { prompts } = usePreloadedQuery(LIVE_FEEDBACK_PROMPT_LIST_QUERY, queryRef);
     const [open, setOpen] = React.useState(false);
     const selectedPromptRef = React.useRef<Prompt | null>(null);
+    const { pauseParentRefreshing, resumeParentRefreshing } = useEvent();
 
     const handleOpen = () => {
         setOpen(true);
+        pauseParentRefreshing();
         responsesModalStatusRef.current = true;
     };
     const handleClose = () => {
         setOpen(false);
+        resumeParentRefreshing();
         responsesModalStatusRef.current = false;
     };
 
