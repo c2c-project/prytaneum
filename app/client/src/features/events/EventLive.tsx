@@ -105,12 +105,24 @@ function EventLive({ node, validateInvite, tokenProvided }: EventLiveProps) {
     const { displaySnack } = useSnack();
     const [routeChecked, setRouteChecked] = React.useState(false);
     const [validationChecked, setValidationChecked] = React.useState(false);
-    const { eventData, isLive, setIsLive } = useEventDetails({ fragmentRef: node });
+    const { eventData, isLive, setIsLive, pauseEventDetailsRefresh, resumeEventDetailsRefresh } = useEventDetails({
+        fragmentRef: node,
+    });
     const isModerator = Boolean(node.isViewerModerator);
     const { user } = useUser();
     const { id: eventId } = eventData;
 
-    usePingEvent(eventId);
+    const { pausePingEvent, resumePingEvent } = usePingEvent(eventId);
+
+    const pauseParentRefreshing = React.useCallback(() => {
+        pauseEventDetailsRefresh();
+        pausePingEvent();
+    }, [pauseEventDetailsRefresh, pausePingEvent]);
+
+    const resumeParentRefreshing = React.useCallback(() => {
+        resumeEventDetailsRefresh();
+        resumePingEvent();
+    }, [resumeEventDetailsRefresh, resumePingEvent]);
 
     // Handle private events and token validation
     React.useEffect(() => {
@@ -191,7 +203,14 @@ function EventLive({ node, validateInvite, tokenProvided }: EventLiveProps) {
     if (!routeChecked || !validationChecked) return <Loader />;
 
     return (
-        <EventContext.Provider value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}>
+        <EventContext.Provider
+            value={{
+                eventId: node.id,
+                isModerator: Boolean(node.isViewerModerator),
+                pauseParentRefreshing,
+                resumeParentRefreshing,
+            }}
+        >
             <Grid component={motion.div} key='townhall-live' container className={classes.root} onScroll={handleScroll}>
                 {!isMdUp && <div ref={topRef} />}
                 <Grid container item md={8} direction='column' wrap='nowrap'>

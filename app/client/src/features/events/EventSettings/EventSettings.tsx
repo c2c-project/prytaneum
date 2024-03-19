@@ -73,7 +73,14 @@ export function EventSettings({ queryRef }: Props) {
     if (!data.node || !canView || isLoading) return <Loader />;
 
     return (
-        <EventContext.Provider value={{ eventId: data.node.id, isModerator: Boolean(data.node.isViewerModerator) }}>
+        <EventContext.Provider
+            value={{
+                eventId: data.node.id,
+                isModerator: Boolean(data.node.isViewerModerator),
+                pauseParentRefreshing: () => {},
+                resumeParentRefreshing: () => {},
+            }}
+        >
             <div style={{ width: lgUpBreakpoint ? '80%' : '100%', marginLeft: lgUpBreakpoint ? '250px' : 0 }}>
                 <Typography variant='h2' margin={theme.spacing(0, 0, 2, 0)}>
                     Event Settings
