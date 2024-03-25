@@ -9,6 +9,8 @@ const toQuestionId = toGlobalId('EventQuestion');
 const toUserId = toGlobalId('User');
 const toEventId = toGlobalId('Event');
 
+const LOCK_EXPIRE_TIME = 5; // seconds
+
 export const resolvers: Resolvers = {
     Mutation: {
         async hideQuestion(parent, args, ctx, info) {
