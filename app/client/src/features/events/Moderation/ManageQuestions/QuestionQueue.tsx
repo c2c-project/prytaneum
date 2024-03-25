@@ -27,6 +27,7 @@ import { useEnqueuedPush } from './useEnqueuedPush';
 import { useEnqueuedRemove } from './useEnqueuedRemove';
 import { useEnqueuedUnshift } from './useEnqueuedUnshift';
 import { QuestionActions } from '../../Questions/QuestionActions';
+import { useSnack } from '@local/core';
 
 const useStyles = makeStyles((theme) => ({
     item: {
@@ -123,6 +124,7 @@ export const QUESTION_QUEUE_MUTATION = graphql`
  */
 function useStyledQueue({ eventId }: { eventId: string }) {
     const theme = useTheme();
+    const { displaySnack } = useSnack();
     const [commit] = useMutation<QuestionQueueMutation>(QUESTION_QUEUE_MUTATION);
     const reorder = React.useCallback(
         (list: readonly QuestionNode[], sourceIdx: number, destinationIdx: number, minPosition: number) => {
@@ -172,9 +174,14 @@ function useStyledQueue({ eventId }: { eventId: string }) {
                         },
                     },
                 },
+                onCompleted: (res) => {
+                    if (res.updateQuestionPosition.isError) {
+                        displaySnack(res.updateQuestionPosition.message, { variant: 'error' });
+                    }
+                },
             });
         },
-        [commit, eventId]
+        [commit, displaySnack, eventId]
     );
     const getListStyle = React.useCallback(
         (isDraggingOver: boolean): React.CSSProperties => ({
