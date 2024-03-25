@@ -198,7 +198,7 @@ export function PreloadedLiveFeedbackPromptResponseList({ prompt }: PreloadedLiv
     );
     const [isRefreshing, setIsRefreshing] = React.useState(false);
     const { env } = useEnvironment();
-    // const REFRESH_INTERVAL = 30000; // 30 seconds
+    const REFRESH_INTERVAL = 30000; // 30 seconds
     const promptData = {
         promptId: prompt.id,
         prompt: prompt.prompt,
@@ -223,13 +223,12 @@ export function PreloadedLiveFeedbackPromptResponseList({ prompt }: PreloadedLiv
         });
     }, [env, isRefreshing, loadQuery, promptId]);
 
-    // TODO: Update to manual refresh button
     React.useEffect(() => {
         // Fetch data from store and network on initial load
         // This Ensures any cached data is displayed right away but will still be kept up to date
         if (!queryRef) loadQuery({ promptId }, { fetchPolicy: 'store-and-network' });
-        // const interval = setInterval(refresh, REFRESH_INTERVAL);
-        // return () => clearInterval(interval);
+        const interval = setInterval(refresh, REFRESH_INTERVAL);
+        return () => clearInterval(interval);
     }, [loadQuery, promptId, queryRef, refresh]);
 
     React.useEffect(() => {

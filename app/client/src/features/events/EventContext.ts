@@ -15,8 +15,6 @@ interface TEventContext {
      * is the current user a moderator
      */
     isModerator: boolean;
-    pauseParentRefreshing: () => void;
-    resumeParentRefreshing: () => void;
 }
 
 // if value is null, then there is no context within the parent tree

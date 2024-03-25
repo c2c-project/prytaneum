@@ -70,14 +70,7 @@ export function EventPre({ fragmentRef }: EventPreProps) {
     };
 
     return (
-        <EventContext.Provider
-            value={{
-                eventId: eventData.id,
-                isModerator: Boolean(eventData.isViewerModerator),
-                pauseParentRefreshing: () => {},
-                resumeParentRefreshing: () => {},
-            }}
-        >
+        <EventContext.Provider value={{ eventId: eventData.id, isModerator: Boolean(eventData.isViewerModerator) }}>
             <Paper style={{ width: '100%', height: '100%', padding: '1rem' }}>
                 <Grid container spacing={2} columns={16} height='100%'>
                     {/* Column 1 */}
