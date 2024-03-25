@@ -21,6 +21,28 @@ export const resolvers: Resolvers = {
                 if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.input.eventId);
                 const { id: questionId } = fromGlobalId(args.input.questionId);
+
+                // Check cache to see if question is currently being modified
+                try {
+                    const result = await ctx.redis.get(`question-lock:${questionId}`);
+                    if (result !== null)
+                        throw new ProtectedError({
+                            userMessage:
+                                'Question currently being modified by another moderator, please try again shortly',
+                        });
+                } catch (error) {
+                    if (error instanceof ProtectedError) throw error;
+                    ctx.app.log.error('Error checking for question lock', error);
+                }
+
+                // Set the semaphore lock
+                try {
+                    ctx.app.log.info(`Setting lock for question: ${questionId}`);
+                    await ctx.redis.set(`question-lock:${questionId}`, 'true', 'EX', LOCK_EXPIRE_TIME);
+                } catch (error) {
+                    ctx.app.log.error(`Error setting lock for question: ${questionId}`, error);
+                }
+
                 const updatedQuestion = await Moderation.updateQuestionPosition(ctx.viewer.id, ctx.prisma, {
                     ...args.input,
                     eventId,
@@ -37,6 +59,14 @@ export const resolvers: Resolvers = {
                         questionUpdated: { edge },
                     },
                 });
+
+                // Release the semaphore lock
+                try {
+                    ctx.app.log.info(`Releasing lock for question: ${questionId}`);
+                    await ctx.redis.del(`question-lock:${questionId}`);
+                } catch (error) {
+                    ctx.app.log.error(`Error releasing lock for question: ${questionId}`, error);
+                }
                 return edge;
             });
         },
@@ -44,6 +74,28 @@ export const resolvers: Resolvers = {
         async nextQuestion(parent, args, ctx, info) {
             if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
             const { id: eventId } = fromGlobalId(args.eventId);
+
+            // Check cache to see if event queue is currently being modified
+            try {
+                const result = await ctx.redis.get(`event-queue-lock:${eventId}`);
+                if (result !== null)
+                    throw new ProtectedError({
+                        userMessage:
+                            'Event queue currently being updated by another moderator, please try again shortly',
+                    });
+            } catch (error) {
+                if (error instanceof ProtectedError) throw error;
+                ctx.app.log.error('Error checking for event queue lock', error);
+            }
+
+            // Set the semaphore lock
+            try {
+                ctx.app.log.info(`Setting lock for event: ${eventId}`);
+                await ctx.redis.set(`event-queue-lock:${eventId}`, 'true', 'EX', LOCK_EXPIRE_TIME);
+            } catch (error) {
+                ctx.app.log.error(`Error setting lock for event: ${eventId}`, error);
+            }
+
             const { event, newCurrentQuestion } = await Moderation.incrementQuestion(
                 ctx.viewer.id,
                 ctx.prisma,
@@ -77,12 +129,41 @@ export const resolvers: Resolvers = {
                     },
                 },
             });
+            // Release the semaphore lock
+            try {
+                ctx.app.log.info(`Releasing lock for event: ${eventId}`);
+                await ctx.redis.del(`event-queue-lock:${eventId}`);
+            } catch (error) {
+                ctx.app.log.error(`Error releasing lock for event: ${eventId}`, error);
+            }
             return eventWithGlobalId;
         },
         // TODO: make this a normal mutation response
         async prevQuestion(parent, args, ctx, info) {
             if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
             const { id: eventId } = fromGlobalId(args.eventId);
+
+            // Check cache to see if event queue is currently being modified
+            try {
+                const result = await ctx.redis.get(`event-queue-lock:${eventId}`);
+                if (result !== null)
+                    throw new ProtectedError({
+                        userMessage:
+                            'Event queue currently being updated by another moderator, please try again shortly',
+                    });
+            } catch (error) {
+                if (error instanceof ProtectedError) throw error;
+                ctx.app.log.error('Error checking for event queue lock', error);
+            }
+
+            // Set the semaphore lock
+            try {
+                ctx.app.log.info(`Setting lock for event: ${eventId}`);
+                await ctx.redis.set(`event-queue-lock:${eventId}`, 'true', 'EX', LOCK_EXPIRE_TIME);
+            } catch (error) {
+                ctx.app.log.error(`Error setting lock for event: ${eventId}`, error);
+            }
+
             const { event, prevCurrentQuestion } = await Moderation.decrementQuestion(
                 ctx.viewer.id,
                 ctx.prisma,
@@ -113,6 +194,14 @@ export const resolvers: Resolvers = {
                     },
                 },
             });
+
+            // Release the semaphore lock
+            try {
+                ctx.app.log.info(`Releasing lock for event: ${eventId}`);
+                await ctx.redis.del(`event-queue-lock:${eventId}`);
+            } catch (error) {
+                ctx.app.log.error(`Error releasing lock for event: ${eventId}`, error);
+            }
             return eventWithGlobalId;
         },
         async createModerator(parent, args, ctx, info) {
@@ -153,6 +242,29 @@ export const resolvers: Resolvers = {
                 if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.input.eventId);
                 const { id: questionId } = fromGlobalId(args.input.questionId);
+
+                // Check cache to see if question is currently being modified
+                try {
+                    const result = await ctx.redis.get(`question-lock:${questionId}`);
+                    if (result !== null) {
+                        throw new ProtectedError({
+                            userMessage:
+                                'Question currently being modified by another moderator, please try again shortly',
+                        });
+                    }
+                } catch (error) {
+                    if (error instanceof ProtectedError) throw error;
+                    ctx.app.log.error('Error checking for question lock', error);
+                }
+
+                // Set the semaphore lock
+                try {
+                    ctx.app.log.info(`Setting lock for question: ${questionId}`);
+                    await ctx.redis.set(`question-lock:${questionId}`, 'true', 'EX', LOCK_EXPIRE_TIME);
+                } catch (error) {
+                    ctx.app.log.error(`Error setting lock for question: ${questionId}`, error);
+                }
+
                 const updatedQuestion = await Moderation.addQuestionToQueue(ctx.viewer.id, ctx.prisma, {
                     ...args.input,
                     eventId,
@@ -175,6 +287,14 @@ export const resolvers: Resolvers = {
                         questionUpdated: { edge },
                     },
                 });
+
+                // Release the semaphore lock
+                try {
+                    ctx.app.log.info(`Releasing lock for question: ${questionId}`);
+                    await ctx.redis.del(`question-lock:${questionId}`);
+                } catch (error) {
+                    ctx.app.log.error(`Error releasing lock for question: ${questionId}`, error);
+                }
                 return edge;
             });
         },
@@ -183,6 +303,29 @@ export const resolvers: Resolvers = {
                 if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.input.eventId);
                 const { id: questionId } = fromGlobalId(args.input.questionId);
+
+                // Check cache to see if question is currently being modified
+                try {
+                    const result = await ctx.redis.get(`question-lock:${questionId}`);
+                    if (result !== null) {
+                        throw new ProtectedError({
+                            userMessage:
+                                'Question currently being modified by another moderator, please try again shortly',
+                        });
+                    }
+                } catch (error) {
+                    if (error instanceof ProtectedError) throw error;
+                    ctx.app.log.error('Error checking for question lock', error);
+                }
+
+                // Set the semaphore lock
+                try {
+                    ctx.app.log.info(`Setting lock for question: ${questionId}`);
+                    await ctx.redis.set(`question-lock:${questionId}`, 'true', 'EX', LOCK_EXPIRE_TIME);
+                } catch (error) {
+                    ctx.app.log.error(`Error setting lock for question: ${questionId}`, error);
+                }
+
                 const updatedQuestion = await Moderation.removeQuestionFromQueue(ctx.viewer.id, ctx.prisma, {
                     ...args.input,
                     eventId,
@@ -205,6 +348,14 @@ export const resolvers: Resolvers = {
                         questionUpdated: { edge },
                     },
                 });
+
+                // Release the semaphore lock
+                try {
+                    ctx.app.log.info(`Releasing lock for question: ${questionId}`);
+                    await ctx.redis.del(`question-lock:${questionId}`);
+                } catch (error) {
+                    ctx.app.log.error(`Error releasing lock for question: ${questionId}`, error);
+                }
                 return edge;
             });
         },
