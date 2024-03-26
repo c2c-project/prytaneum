@@ -366,6 +366,7 @@ export type Mutation = {
      */
     prevQuestion: Event;
     participantPingEvent: ParticipantPingEventMutationResponse;
+    participantLeaveEvent: ParticipantPingEventMutationResponse;
     muteParticipant: MuteParticipantMutationResponse;
     unmuteParticipant: MuteParticipantMutationResponse;
     createQuestion: EventQuestionMutationResponse;
@@ -539,6 +540,10 @@ export type MutationprevQuestionArgs = {
 };
 
 export type MutationparticipantPingEventArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type MutationparticipantLeaveEventArgs = {
     eventId: Scalars['ID'];
 };
 
@@ -2351,6 +2356,12 @@ export type MutationResolvers<
         ParentType,
         ContextType,
         RequireFields<MutationparticipantPingEventArgs, 'eventId'>
+    >;
+    participantLeaveEvent?: Resolver<
+        ResolversTypes['ParticipantPingEventMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationparticipantLeaveEventArgs, 'eventId'>
     >;
     muteParticipant?: Resolver<
         ResolversTypes['MuteParticipantMutationResponse'],

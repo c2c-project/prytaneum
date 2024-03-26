@@ -26,6 +26,14 @@ export const resolvers: Resolvers = {
                 await Participants.joinOrPingEvent(ctx.prisma, eventId, viewerId);
             });
         },
+        async participantLeaveEvent(parent, args, ctx) {
+            return runMutation(async () => {
+                const { id: viewerId } = ctx.viewer;
+                const { id: eventId } = fromGlobalId(args.eventId);
+                if (!viewerId) throw new ProtectedError({ userMessage: errors.noLogin });
+                await Participants.leaveEvent(ctx.prisma, eventId, viewerId);
+            });
+        },
         async muteParticipant(parent, args, ctx) {
             return runMutation(async () => {
                 const { id: viewerId } = ctx.viewer;

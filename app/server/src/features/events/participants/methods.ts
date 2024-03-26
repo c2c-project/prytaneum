@@ -51,6 +51,23 @@ export async function joinOrPingEvent(prisma: PrismaClient, eventId: string, use
     }
 }
 
+export async function leaveEvent(prisma: PrismaClient, eventId: string, userId: string): Promise<void> {
+    try {
+        await prisma.eventParticipant.delete({
+            where: {
+                eventId_userId: {
+                    eventId,
+                    userId,
+                },
+            },
+        });
+    } catch (e) {
+        console.error(e);
+        // no need to throw a protected error here, as when a user is leaving an event they are likely closing the page and won't see/need the error message
+        // Worst case the participant will be removed from the participants list after the expiration time
+    }
+}
+
 // TODO: Add purge messages option
 export async function muteParticipant(
     prisma: PrismaClient,
