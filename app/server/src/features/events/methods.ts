@@ -327,9 +327,9 @@ export async function findAllEvents(viewerId: string, filter: EventsSearchFilter
 }
 
 export async function findParticipantsByEventId(eventId: string, prisma: PrismaClient) {
-    const SIXTY_SECONDS = 1000 * 60;
+    const FIVE_MINUTES = 1000 * 60 * 5; // 5 minutes in milliseconds
     const result = await prisma.eventParticipant.findMany({
-        where: { eventId, lastPingTime: { gte: new Date(Date.now() - SIXTY_SECONDS) } },
+        where: { eventId, lastPingTime: { gte: new Date(Date.now() - FIVE_MINUTES) } },
         select: { user: true, isMuted: true },
         orderBy: { user: { firstName: 'asc' } },
     });

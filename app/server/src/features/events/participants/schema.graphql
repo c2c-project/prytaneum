@@ -29,6 +29,7 @@ type Query {
 
 type Mutation {
     participantPingEvent(eventId: ID!): ParticipantPingEventMutationResponse!
+    participantLeaveEvent(eventId: ID!): ParticipantPingEventMutationResponse!
     muteParticipant(eventId: ID!, userId: ID!): MuteParticipantMutationResponse!
     unmuteParticipant(eventId: ID!, userId: ID!): MuteParticipantMutationResponse!
 }

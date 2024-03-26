@@ -634,6 +634,7 @@ type Mutation {
   TODO: make this an EventMutationResponse
   """
   nextQuestion(eventId: ID!): Event!
+  participantLeaveEvent(eventId: ID!): ParticipantPingEventMutationResponse!
   participantPingEvent(eventId: ID!): ParticipantPingEventMutationResponse!
 
   """

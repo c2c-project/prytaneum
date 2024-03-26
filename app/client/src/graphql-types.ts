@@ -704,6 +704,7 @@ export type Mutation = {
    * TODO: make this an EventMutationResponse
    */
   nextQuestion: Event;
+  participantLeaveEvent: ParticipantPingEventMutationResponse;
   participantPingEvent: ParticipantPingEventMutationResponse;
   /**
    * Go to the previous question
@@ -884,6 +885,11 @@ export type MutationMuteParticipantArgs = {
 
 
 export type MutationNextQuestionArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type MutationParticipantLeaveEventArgs = {
   eventId: Scalars['ID'];
 };
 

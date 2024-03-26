@@ -21,6 +21,7 @@ import { useSnack } from '@local/core';
 import { useUser } from '../accounts';
 import { useEventDetails } from './useEventDetails';
 import { usePingEvent } from './Participants/usePingEvent';
+import { useLeaveEvent } from './Participants/useLeaveEvent';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -113,6 +114,16 @@ function EventLive({ node, validateInvite, tokenProvided }: EventLiveProps) {
     const { id: eventId } = eventData;
 
     const { pausePingEvent, resumePingEvent } = usePingEvent(eventId);
+    const { leaveEvent } = useLeaveEvent(eventId);
+
+    // Ensures that the user is removed from the event participants list when the window is closed
+    React.useEffect(() => {
+        const handleWindowClose = (e: any) => {
+            e.preventDefault();
+            leaveEvent();
+        };
+        window.onbeforeunload = handleWindowClose;
+    }, [leaveEvent]);
 
     const pauseParentRefreshing = React.useCallback(() => {
         pauseEventDetailsRefresh();
