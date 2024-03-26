@@ -16,30 +16,32 @@ export const PING_EVENT_MUTATION = graphql`
 export function usePingEvent(eventId: string) {
     const [commit] = useMutation<usePingEventMutation>(PING_EVENT_MUTATION);
     const [pingPaused, setPingPaused] = React.useState(false);
-    const PING_INTERVAL = 20000; // 20 seconds
+    const PING_INTERVAL = 60000; // 60 seconds
+
+    const pingEvent = React.useCallback(() => {
+        commit({
+            variables: { eventId },
+        });
+    }, [eventId, commit]);
 
     const pausePingEvent = React.useCallback(() => {
         setPingPaused(true);
     }, [setPingPaused]);
+
     const resumePingEvent = React.useCallback(() => {
         setPingPaused(false);
     }, [setPingPaused]);
 
     useEffect(() => {
-        commit({
-            variables: { eventId },
-        });
+        pingEvent();
 
         const pingInterval = setInterval(() => {
             if (pingPaused) return;
-            commit({
-                variables: { eventId },
-            });
+            pingEvent();
         }, PING_INTERVAL);
 
         return () => clearInterval(pingInterval);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pingPaused, eventId, commit]);
+    }, [pingPaused, pingEvent]);
 
-    return { pingEvent: commit, pausePingEvent, resumePingEvent };
+    return { pingEvent, pausePingEvent, resumePingEvent };
 }
