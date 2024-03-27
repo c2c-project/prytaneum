@@ -1,7 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { fromGlobalId } from 'graphql-relay';
 import * as Moderation from './methods';
-import { Resolvers, withFilter, errors, toGlobalId, runMutation } from '@local/features/utils';
+import {
+    Resolvers,
+    withFilter,
+    errors,
+    toGlobalId,
+    runMutation,
+    tryAquireRedisLock,
+    releaseRedisLock,
+    checkForRedisLock,
+} from '@local/features/utils';
 import { ProtectedError } from '@local/lib/ProtectedError';
 import type { EventLiveFeedback } from '@local/graphql-types';
 
@@ -25,78 +34,53 @@ export const resolvers: Resolvers = {
                 const { id: questionId } = fromGlobalId(args.input.questionId);
 
                 // Check cache to see if question is currently being modified
+                const lockExists = await checkForRedisLock(ctx.redis, `question-lock:${questionId}`);
+                if (lockExists) {
+                    throw new ProtectedError({
+                        userMessage: 'Question currently being modified by another moderator, please try again shortly',
+                    });
+                }
+
                 try {
-                    const result = await ctx.redis.get(`question-lock:${questionId}`);
-                    if (result !== null)
+                    const lockAquired = await tryAquireRedisLock(ctx.redis, `question-lock:${questionId}`, {
+                        lockTimeout: 5, // 5 seconds
+                        acquireTimeout: 2000, // 2 seconds
+                        acquireAttemptsLimit: 2,
+                        retryInterval: 1000, // 1 seconds
+                    });
+                    if (!lockAquired)
                         throw new ProtectedError({
-                            userMessage:
-                                'Question currently being modified by another moderator, please try again shortly',
+                            userMessage: errors.unexpected,
+                            internalMessage: `Error acquiring redis lock for question: ${questionId}`,
                         });
+                    const updatedQuestion = await Moderation.updateQuestionPosition(ctx.viewer.id, ctx.prisma, {
+                        ...args.input,
+                        eventId,
+                        questionId,
+                    });
+                    const questionWithGlobalId = toQuestionId(updatedQuestion);
+                    const edge = {
+                        node: questionWithGlobalId,
+                        cursor: questionWithGlobalId.createdAt.getTime().toString(),
+                    };
+                    ctx.pubsub.publish({
+                        topic: 'questionUpdated',
+                        payload: {
+                            questionUpdated: { edge },
+                        },
+                    });
+                    return edge;
                 } catch (error) {
-                    if (error instanceof ProtectedError) throw error;
-                    ctx.app.log.error('Error checking for question lock', error);
+                    throw error;
+                } finally {
+                    releaseRedisLock(ctx.redis, `question-lock:${questionId}`);
                 }
-
-                // Set the semaphore lock
-                try {
-                    ctx.app.log.info(`Setting lock for question: ${questionId}`);
-                    await ctx.redis.set(`question-lock:${questionId}`, 'true', 'EX', LOCK_EXPIRE_TIME);
-                } catch (error) {
-                    ctx.app.log.error(`Error setting lock for question: ${questionId}`, error);
-                }
-
-                const updatedQuestion = await Moderation.updateQuestionPosition(ctx.viewer.id, ctx.prisma, {
-                    ...args.input,
-                    eventId,
-                    questionId,
-                });
-                const questionWithGlobalId = toQuestionId(updatedQuestion);
-                const edge = {
-                    node: questionWithGlobalId,
-                    cursor: questionWithGlobalId.createdAt.getTime().toString(),
-                };
-                ctx.pubsub.publish({
-                    topic: 'questionUpdated',
-                    payload: {
-                        questionUpdated: { edge },
-                    },
-                });
-
-                // Release the semaphore lock
-                try {
-                    ctx.app.log.info(`Releasing lock for question: ${questionId}`);
-                    await ctx.redis.del(`question-lock:${questionId}`);
-                } catch (error) {
-                    ctx.app.log.error(`Error releasing lock for question: ${questionId}`, error);
-                }
-                return edge;
             });
         },
         // TODO: make this a normal mutation response
         async nextQuestion(parent, args, ctx, info) {
             if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
             const { id: eventId } = fromGlobalId(args.eventId);
-
-            // Check cache to see if event queue is currently being modified
-            try {
-                const result = await ctx.redis.get(`event-queue-lock:${eventId}`);
-                if (result !== null)
-                    throw new ProtectedError({
-                        userMessage:
-                            'Event queue currently being updated by another moderator, please try again shortly',
-                    });
-            } catch (error) {
-                if (error instanceof ProtectedError) throw error;
-                ctx.app.log.error('Error checking for event queue lock', error);
-            }
-
-            // Set the semaphore lock
-            try {
-                ctx.app.log.info(`Setting lock for event: ${eventId}`);
-                await ctx.redis.set(`event-queue-lock:${eventId}`, 'true', 'EX', LOCK_EXPIRE_TIME);
-            } catch (error) {
-                ctx.app.log.error(`Error setting lock for event: ${eventId}`, error);
-            }
 
             const { event, newCurrentQuestion } = await Moderation.incrementQuestion(
                 ctx.viewer.id,
@@ -131,40 +115,12 @@ export const resolvers: Resolvers = {
                     },
                 },
             });
-            // Release the semaphore lock
-            try {
-                ctx.app.log.info(`Releasing lock for event: ${eventId}`);
-                await ctx.redis.del(`event-queue-lock:${eventId}`);
-            } catch (error) {
-                ctx.app.log.error(`Error releasing lock for event: ${eventId}`, error);
-            }
             return eventWithGlobalId;
         },
         // TODO: make this a normal mutation response
         async prevQuestion(parent, args, ctx, info) {
             if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
             const { id: eventId } = fromGlobalId(args.eventId);
-
-            // Check cache to see if event queue is currently being modified
-            try {
-                const result = await ctx.redis.get(`event-queue-lock:${eventId}`);
-                if (result !== null)
-                    throw new ProtectedError({
-                        userMessage:
-                            'Event queue currently being updated by another moderator, please try again shortly',
-                    });
-            } catch (error) {
-                if (error instanceof ProtectedError) throw error;
-                ctx.app.log.error('Error checking for event queue lock', error);
-            }
-
-            // Set the semaphore lock
-            try {
-                ctx.app.log.info(`Setting lock for event: ${eventId}`);
-                await ctx.redis.set(`event-queue-lock:${eventId}`, 'true', 'EX', LOCK_EXPIRE_TIME);
-            } catch (error) {
-                ctx.app.log.error(`Error setting lock for event: ${eventId}`, error);
-            }
 
             const { event, prevCurrentQuestion } = await Moderation.decrementQuestion(
                 ctx.viewer.id,
@@ -196,14 +152,6 @@ export const resolvers: Resolvers = {
                     },
                 },
             });
-
-            // Release the semaphore lock
-            try {
-                ctx.app.log.info(`Releasing lock for event: ${eventId}`);
-                await ctx.redis.del(`event-queue-lock:${eventId}`);
-            } catch (error) {
-                ctx.app.log.error(`Error releasing lock for event: ${eventId}`, error);
-            }
             return eventWithGlobalId;
         },
         async createModerator(parent, args, ctx, info) {
@@ -246,58 +194,54 @@ export const resolvers: Resolvers = {
                 const { id: questionId } = fromGlobalId(args.input.questionId);
 
                 // Check cache to see if question is currently being modified
-                try {
-                    const result = await ctx.redis.get(`question-lock:${questionId}`);
-                    if (result !== null) {
-                        throw new ProtectedError({
-                            userMessage:
-                                'Question currently being modified by another moderator, please try again shortly',
-                        });
-                    }
-                } catch (error) {
-                    if (error instanceof ProtectedError) throw error;
-                    ctx.app.log.error('Error checking for question lock', error);
+                const lockExists = await checkForRedisLock(ctx.redis, `question-lock:${questionId}`);
+                if (lockExists) {
+                    throw new ProtectedError({
+                        userMessage: 'Question currently being modified by another moderator, please try again shortly',
+                    });
                 }
 
                 // Set the semaphore lock
                 try {
-                    ctx.app.log.info(`Setting lock for question: ${questionId}`);
-                    await ctx.redis.set(`question-lock:${questionId}`, 'true', 'EX', LOCK_EXPIRE_TIME);
+                    const lockAquired = await tryAquireRedisLock(ctx.redis, `question-lock:${questionId}`, {
+                        lockTimeout: 5, // 5 seconds
+                        acquireTimeout: 2000, // 2 seconds
+                        acquireAttemptsLimit: 2,
+                        retryInterval: 1000, // 1 seconds
+                    });
+                    if (!lockAquired)
+                        throw new ProtectedError({
+                            userMessage: errors.unexpected,
+                            internalMessage: `Error acquiring redis lock for question: ${questionId}`,
+                        });
+                    const updatedQuestion = await Moderation.addQuestionToQueue(ctx.viewer.id, ctx.prisma, {
+                        ...args.input,
+                        eventId,
+                        questionId,
+                    });
+                    const questionWithGlobalId = toQuestionId(updatedQuestion);
+                    const edge = {
+                        cursor: updatedQuestion.createdAt.getTime().toString(),
+                        node: questionWithGlobalId,
+                    };
+                    ctx.pubsub.publish({
+                        topic: 'enqueuedPushQuestion',
+                        payload: {
+                            enqueuedPushQuestion: { edge },
+                        },
+                    });
+                    ctx.pubsub.publish({
+                        topic: 'questionUpdated',
+                        payload: {
+                            questionUpdated: { edge },
+                        },
+                    });
+                    return edge;
                 } catch (error) {
-                    ctx.app.log.error(`Error setting lock for question: ${questionId}`, error);
+                    throw error;
+                } finally {
+                    releaseRedisLock(ctx.redis, `question-lock:${questionId}`);
                 }
-
-                const updatedQuestion = await Moderation.addQuestionToQueue(ctx.viewer.id, ctx.prisma, {
-                    ...args.input,
-                    eventId,
-                    questionId,
-                });
-                const questionWithGlobalId = toQuestionId(updatedQuestion);
-                const edge = {
-                    cursor: updatedQuestion.createdAt.getTime().toString(),
-                    node: questionWithGlobalId,
-                };
-                ctx.pubsub.publish({
-                    topic: 'enqueuedPushQuestion',
-                    payload: {
-                        enqueuedPushQuestion: { edge },
-                    },
-                });
-                ctx.pubsub.publish({
-                    topic: 'questionUpdated',
-                    payload: {
-                        questionUpdated: { edge },
-                    },
-                });
-
-                // Release the semaphore lock
-                try {
-                    ctx.app.log.info(`Releasing lock for question: ${questionId}`);
-                    await ctx.redis.del(`question-lock:${questionId}`);
-                } catch (error) {
-                    ctx.app.log.error(`Error releasing lock for question: ${questionId}`, error);
-                }
-                return edge;
             });
         },
         removeQuestionFromQueue(parent, args, ctx, info) {
@@ -307,58 +251,54 @@ export const resolvers: Resolvers = {
                 const { id: questionId } = fromGlobalId(args.input.questionId);
 
                 // Check cache to see if question is currently being modified
-                try {
-                    const result = await ctx.redis.get(`question-lock:${questionId}`);
-                    if (result !== null) {
-                        throw new ProtectedError({
-                            userMessage:
-                                'Question currently being modified by another moderator, please try again shortly',
-                        });
-                    }
-                } catch (error) {
-                    if (error instanceof ProtectedError) throw error;
-                    ctx.app.log.error('Error checking for question lock', error);
+                const lockExists = await checkForRedisLock(ctx.redis, `question-lock:${questionId}`);
+                if (lockExists) {
+                    throw new ProtectedError({
+                        userMessage: 'Question currently being modified by another moderator, please try again shortly',
+                    });
                 }
 
                 // Set the semaphore lock
                 try {
-                    ctx.app.log.info(`Setting lock for question: ${questionId}`);
-                    await ctx.redis.set(`question-lock:${questionId}`, 'true', 'EX', LOCK_EXPIRE_TIME);
+                    const lockAquired = await tryAquireRedisLock(ctx.redis, `question-lock:${questionId}`, {
+                        lockTimeout: 5, // 5 seconds
+                        acquireTimeout: 2000, // 2 seconds
+                        acquireAttemptsLimit: 2,
+                        retryInterval: 1000, // 1 seconds
+                    });
+                    if (!lockAquired)
+                        throw new ProtectedError({
+                            userMessage: errors.unexpected,
+                            internalMessage: `Error acquiring redis lock for question: ${questionId}`,
+                        });
+                    const updatedQuestion = await Moderation.removeQuestionFromQueue(ctx.viewer.id, ctx.prisma, {
+                        ...args.input,
+                        eventId,
+                        questionId,
+                    });
+                    const questionWithGlobalId = toQuestionId(updatedQuestion);
+                    const edge = {
+                        cursor: updatedQuestion.createdAt.getTime().toString(),
+                        node: questionWithGlobalId,
+                    };
+                    ctx.pubsub.publish({
+                        topic: 'enqueuedRemoveQuestion',
+                        payload: {
+                            enqueuedRemoveQuestion: { edge },
+                        },
+                    });
+                    ctx.pubsub.publish({
+                        topic: 'questionUpdated',
+                        payload: {
+                            questionUpdated: { edge },
+                        },
+                    });
+                    return edge;
                 } catch (error) {
-                    ctx.app.log.error(`Error setting lock for question: ${questionId}`, error);
+                    throw error;
+                } finally {
+                    releaseRedisLock(ctx.redis, `question-lock:${questionId}`);
                 }
-
-                const updatedQuestion = await Moderation.removeQuestionFromQueue(ctx.viewer.id, ctx.prisma, {
-                    ...args.input,
-                    eventId,
-                    questionId,
-                });
-                const questionWithGlobalId = toQuestionId(updatedQuestion);
-                const edge = {
-                    cursor: updatedQuestion.createdAt.getTime().toString(),
-                    node: questionWithGlobalId,
-                };
-                ctx.pubsub.publish({
-                    topic: 'enqueuedRemoveQuestion',
-                    payload: {
-                        enqueuedRemoveQuestion: { edge },
-                    },
-                });
-                ctx.pubsub.publish({
-                    topic: 'questionUpdated',
-                    payload: {
-                        questionUpdated: { edge },
-                    },
-                });
-
-                // Release the semaphore lock
-                try {
-                    ctx.app.log.info(`Releasing lock for question: ${questionId}`);
-                    await ctx.redis.del(`question-lock:${questionId}`);
-                } catch (error) {
-                    ctx.app.log.error(`Error releasing lock for question: ${questionId}`, error);
-                }
-                return edge;
             });
         },
     },
