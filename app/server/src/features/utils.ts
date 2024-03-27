@@ -124,8 +124,9 @@ export async function runMutation<TReturn>(cb: TCallback<TReturn>): TRunMutation
 
 export async function checkForRedisLock(redis: Redis | Cluster, key: string) {
     const server = getOrCreateServer();
+    server.log.debug(`Checking for Lock: ${key}...`);
     const result = await redis.get(key);
-    server.log.debug(`Result of checking for lock ${key}: ${result}`);
+    server.log.debug(result ? `Lock: ${key} found` : `Lock: ${key} not found`);
     return result === 'true';
 }
 
@@ -143,11 +144,14 @@ export async function tryAquireRedisLock(redis: Redis | Cluster, key: string, op
     let attempts = 0;
     const endTime = Date.now() + options.acquireTimeout;
 
+    server.log.debug(`Attempting to acquire lock for key: ${key}...`);
     while (attempts < options.acquireAttemptsLimit && Date.now() < endTime) {
         const result = await redis.set(key, 'true', 'EX', options.lockTimeout || DEFAULT_LOCK_TIMEOUT, 'NX');
         if (result === 'OK') {
+            server.log.debug(`Lock: ${key} acquired`);
             return true;
         }
+        server.log.debug(`Failed to acquire lock for key: ${key}, retrying... Attempt: ${attempts + 1}`);
         attempts++;
         await new Promise((resolve) => setTimeout(resolve, options.retryInterval));
     }
@@ -157,7 +161,7 @@ export async function tryAquireRedisLock(redis: Redis | Cluster, key: string, op
 
 export async function releaseRedisLock(redis: Redis | Cluster, key: string) {
     const server = getOrCreateServer();
-    server.log.debug(`Releasing lock: ${key}`);
+    server.log.debug(`Releasing Lock: ${key}...`);
     const result = await redis.del(key);
-    getOrCreateServer().log.debug(`Result of releasing lock ${key}: ${result}`);
+    server.log.debug(result ? `Lock: ${key} released` : `Lock: ${key} failed to release`);
 }
