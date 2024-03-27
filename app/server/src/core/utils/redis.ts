@@ -1,4 +1,4 @@
-import type { FastifyLoggerInstance } from 'fastify';
+import type { FastifyBaseLogger } from 'fastify';
 import { Redis, Cluster } from 'ioredis';
 // @ts-ignore - MockRedis is not typed
 import MockRedis from 'ioredis-mock';
@@ -6,7 +6,7 @@ import MockRedis from 'ioredis-mock';
 // Redis client must be a singleton
 let _redis: Redis | Cluster | null = null;
 
-function generateNewRedisClient(logger: FastifyLoggerInstance) {
+function generateNewRedisClient(logger: FastifyBaseLogger) {
     if (process.env.NODE_ENV === 'test') {
         logger.info('Using mock redis client.');
         return new MockRedis() as Redis;
@@ -57,7 +57,7 @@ function generateNewRedisClient(logger: FastifyLoggerInstance) {
     });
 }
 
-export function getRedisClient(logger: FastifyLoggerInstance) {
+export function getRedisClient(logger: FastifyBaseLogger) {
     const redis = _redis ?? generateNewRedisClient(logger);
 
     if (!_redis) {
