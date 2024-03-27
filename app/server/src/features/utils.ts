@@ -5,6 +5,8 @@ import * as Relay from 'graphql-relay';
 import type { Node, ResolversParentTypes, MutationResponse, Maybe } from '@local/graphql-types';
 import { getOrCreateServer } from '@local/core/server';
 import { ProtectedError } from '@local/lib/ProtectedError';
+import type { Redis, Cluster } from 'ioredis';
+import { DEFAULT_LOCK_TIMEOUT } from '@local/lib/rules';
 
 /**
  * Resolver type used for making resolvers
@@ -38,6 +40,7 @@ export const errors = {
     email: 'Emailed failed to send due to an unexpected error',
     jwt: 'Invalid Token',
     muted: 'You are muted and cannot perform this action',
+    unexpected: 'An unexpected error occurred, please try again later',
 };
 interface TFilterFieldArgs<TObj extends Record<string, unknown>, TKeys extends keyof TObj> {
     input: TObj;
@@ -117,4 +120,44 @@ export async function runMutation<TReturn>(cb: TCallback<TReturn>): TRunMutation
             body: null,
         };
     }
+}
+
+export async function checkForRedisLock(redis: Redis | Cluster, key: string) {
+    const server = getOrCreateServer();
+    const result = await redis.get(key);
+    server.log.debug(`Result of checking for lock ${key}: ${result}`);
+    return result === 'true';
+}
+
+export interface LockOptions {
+    lockTimeout?: number;
+    acquireTimeout: number;
+    acquireAttemptsLimit: number;
+    retryInterval: number;
+}
+
+// Attempts to acquire a semaphore lock using redis
+// Returns true if lock was acquired successfully, false otherwise
+export async function tryAquireRedisLock(redis: Redis | Cluster, key: string, options: LockOptions) {
+    const server = getOrCreateServer();
+    let attempts = 0;
+    const endTime = Date.now() + options.acquireTimeout;
+
+    while (attempts < options.acquireAttemptsLimit && Date.now() < endTime) {
+        const result = await redis.set(key, 'true', 'EX', options.lockTimeout || DEFAULT_LOCK_TIMEOUT, 'NX');
+        if (result === 'OK') {
+            return true;
+        }
+        attempts++;
+        await new Promise((resolve) => setTimeout(resolve, options.retryInterval));
+    }
+    server.log.error(`Failed to acquire lock for key: ${key}, timeout reached.`);
+    return false;
+}
+
+export async function releaseRedisLock(redis: Redis | Cluster, key: string) {
+    const server = getOrCreateServer();
+    server.log.debug(`Releasing lock: ${key}`);
+    const result = await redis.del(key);
+    getOrCreateServer().log.debug(`Result of releasing lock ${key}: ${result}`);
 }
