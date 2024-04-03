@@ -112,7 +112,8 @@ function EventLive({ node, validateInvite, tokenProvided }: EventLiveProps) {
     const { user } = useUser();
     const { id: eventId } = eventData;
 
-    const { pausePingEvent, resumePingEvent } = usePingEvent(eventId);
+    // NOTE: Defaults to paused, will resume after validation is checked
+    const { pausePingEvent, resumePingEvent, startPingEvent } = usePingEvent(eventId);
 
     const pauseParentRefreshing = React.useCallback(() => {
         pauseEventDetailsRefresh();
@@ -123,6 +124,10 @@ function EventLive({ node, validateInvite, tokenProvided }: EventLiveProps) {
         resumeEventDetailsRefresh();
         resumePingEvent();
     }, [resumeEventDetailsRefresh, resumePingEvent]);
+
+    React.useEffect(() => {
+        if (validationChecked) startPingEvent();
+    }, [startPingEvent, validationChecked]);
 
     // Handle private events and token validation
     React.useEffect(() => {
@@ -142,7 +147,7 @@ function EventLive({ node, validateInvite, tokenProvided }: EventLiveProps) {
         // Ensure user is logged in if invite is valid (Do not reload if user is already logged in)
         if (user === null && validateInvite?.valid && validateInvite?.user !== null) router.reload();
         else setValidationChecked(true);
-    }, [displaySnack, eventData, router, tokenProvided, user, validateInvite]);
+    }, [displaySnack, eventData, startPingEvent, router, tokenProvided, user, validateInvite]);
 
     React.useEffect(() => {
         if (!validationChecked) return;
