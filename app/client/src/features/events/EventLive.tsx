@@ -112,7 +112,10 @@ function EventLive({ node, validateInvite, tokenProvided }: EventLiveProps) {
     const { user } = useUser();
     const { id: eventId } = eventData;
 
-    const { pausePingEvent, resumePingEvent } = usePingEvent(eventId);
+    // NOTE: Defaults to paused, use startPingEvent to start pinging once participant is validated
+    // since we only want participants on the live page to ping the server, thus avoiding unnecessary pings on pre/post event pages
+    // If this was defaulted to true, it would ping the server even if the user is redirected to a different page after validation
+    const { pausePingEvent, resumePingEvent, startPingEvent } = usePingEvent(eventId);
 
     const pauseParentRefreshing = React.useCallback(() => {
         pauseEventDetailsRefresh();
@@ -123,6 +126,10 @@ function EventLive({ node, validateInvite, tokenProvided }: EventLiveProps) {
         resumeEventDetailsRefresh();
         resumePingEvent();
     }, [resumeEventDetailsRefresh, resumePingEvent]);
+
+    React.useEffect(() => {
+        if (validationChecked) startPingEvent();
+    }, [startPingEvent, validationChecked]);
 
     // Handle private events and token validation
     React.useEffect(() => {
