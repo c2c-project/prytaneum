@@ -286,7 +286,7 @@ __metadata:
     react-dom: 17.0.2
     react-google-charts: ^4.0.0
     react-is: ^16.13.1
-    react-pdf: 7.7.1
+    react-pdf: 7.7.3
     react-player: ^2.12.0
     react-relay: ^13.0.2
     react-resizable-panels: ^2.0.18
@@ -24987,9 +24987,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-pdf@npm:7.7.1":
-  version: 7.7.1
-  resolution: "react-pdf@npm:7.7.1"
+"react-pdf@npm:7.7.3":
+  version: 7.7.3
+  resolution: "react-pdf@npm:7.7.3"
   dependencies:
     clsx: ^2.0.0
     dequal: ^2.0.3
@@ -25007,7 +25007,7 @@ fsevents@^1.2.7:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 8c43cbc844362028e4cff0c4ac95f1f59a58ca578a620ef5711bc8f5166f7a3df4f3c321367e74cddc3e46e29b990f3a6d01f9a5d46e0833e5f97f475913c895
+  checksum: c8fba8ca542275ec7f284fd43b2dc0bca01fe20fa9d1684ff8b95ea1ba2537f3b2bb48ddd43aa68b6972857ce3a309e2ccf63790c8d3541135d3f186fc9ea335
   languageName: node
   linkType: hard
 
