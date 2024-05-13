@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { Card, CardContent, Grid, List, ListItem, Typography, CardActions, Paper, IconButton } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import { Card, CardContent, Grid, List, ListItem, Typography, CardActions } from '@mui/material';
 
 import { useLiveFeedbackListFragment$key } from '@local/__generated__/useLiveFeedbackListFragment.graphql';
 import ListFilter, { useFilters, Accessors } from '@local/components/ListFilter';
@@ -11,23 +10,18 @@ import { LiveFeedbackAuthor } from './LiveFeedbackAuthor';
 import { useEvent } from '../useEvent';
 import { LiveFeedbackReplyAction } from './LiveFeedbackReplyAction';
 import { LiveFeedbackReply } from './LiveFeedbackReply';
-import { SubmitLiveFeedbackPrompt } from '../LiveFeedbackPrompts/LiveFeedbackPrompt';
-import { ShareFeedbackResults } from '../LiveFeedbackPrompts';
-import { SubmitLiveFeedback } from './SubmitLiveFeedback';
 
 interface LiveFeedbackListProps {
     fragmentRef: useLiveFeedbackListFragment$key;
+    ActionButtons: React.ReactNode;
     isVisible: boolean;
 }
 
-export function LiveFeedbackList({ fragmentRef, isVisible }: LiveFeedbackListProps) {
+export function LiveFeedbackList({ fragmentRef, ActionButtons, isVisible }: LiveFeedbackListProps) {
     const { user } = useUser();
     const [displayLiveFeedback, setDisplayLiveFeedback] = React.useState(false);
-    const [isSearchOpen, setIsSearchOpen] = React.useState(false);
     const { liveFeedback } = useLiveFeedbackList({ fragmentRef });
-    const { isModerator, eventId } = useEvent();
-
-    const toggleSearch = React.useCallback(() => setIsSearchOpen((prev) => !prev), [setIsSearchOpen]);
+    const { isModerator } = useEvent();
 
     const accessors = React.useMemo<Accessors<ArrayElement<typeof liveFeedback>>[]>(
         () => [
@@ -39,57 +33,6 @@ export function LiveFeedbackList({ fragmentRef, isVisible }: LiveFeedbackListPro
 
     const [filteredList, handleSearch, handleFilterChange] = useFilters(liveFeedback, accessors);
 
-    const ActionButtons = React.useMemo(() => {
-        if (isModerator) {
-            return (
-                <Grid
-                    container
-                    direction='row'
-                    justifyContent='space-evenly'
-                    alignItems='center'
-                    marginBottom={isSearchOpen ? '.5rem' : '0rem'}
-                >
-                    <Grid item xs='auto'>
-                        <IconButton color={isSearchOpen ? 'primary' : 'default'} onClick={toggleSearch}>
-                            <SearchIcon />
-                        </IconButton>
-                    </Grid>
-                    <Grid item xs='auto'>
-                        <SubmitLiveFeedbackPrompt eventId={eventId} />
-                    </Grid>
-                    <Grid item xs='auto'>
-                        <ShareFeedbackResults />
-                    </Grid>
-                    {/* <Grid item>
-                        <SubmitLiveFeedback eventId={eventId} />
-                    </Grid> */}
-                </Grid>
-            );
-        } else {
-            return (
-                <Grid
-                    container
-                    direction='row'
-                    justifyContent='space-between'
-                    alignItems='center'
-                    marginBottom={isSearchOpen ? '.5rem' : '0rem'}
-                >
-                    <Grid item xs='auto'>
-                        <IconButton color={isSearchOpen ? 'primary' : 'default'} onClick={toggleSearch}>
-                            <SearchIcon />
-                        </IconButton>
-                    </Grid>
-                    <Grid item xs='auto'>
-                        <SubmitLiveFeedback eventId={eventId} />
-                    </Grid>
-                    <Grid item xs='auto'>
-                        <div style={{ display: 'none' }} />
-                    </Grid>
-                </Grid>
-            );
-        }
-    }, [eventId, isModerator, isSearchOpen, toggleSearch]);
-
     React.useEffect(() => {
         if (!user) setDisplayLiveFeedback(false);
         else setDisplayLiveFeedback(true);
@@ -99,17 +42,15 @@ export function LiveFeedbackList({ fragmentRef, isVisible }: LiveFeedbackListPro
 
     return (
         <Grid container height={0} flex='1 1 100%' justifyContent='center'>
-            <Grid item width='100%'>
-                <Paper sx={{ padding: '1rem', marginX: '8px' }}>
-                    {ActionButtons}
-                    <ListFilter
-                        onFilterChange={handleFilterChange}
-                        onSearch={handleSearch}
-                        isSearchOpen={isSearchOpen}
-                        length={filteredList.length}
-                        displayNumResults={Boolean(user)} // only display for users logged in
-                    />
-                </Paper>
+            <Grid item paddingTop='1rem' width='100%'>
+                {ActionButtons}
+                <ListFilter
+                    style={{ flex: 1, paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
+                    onFilterChange={handleFilterChange}
+                    onSearch={handleSearch}
+                    length={filteredList.length}
+                    displayNumResults={Boolean(user)} // only display for users logged in
+                />
                 <List disablePadding>
                     {displayLiveFeedback ? (
                         filteredList.map((feedback) => (

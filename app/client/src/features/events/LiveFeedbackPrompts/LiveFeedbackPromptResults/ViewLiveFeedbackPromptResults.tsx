@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { graphql } from 'relay-runtime';
 import { useQueryLoader, PreloadedQuery, usePreloadedQuery } from 'react-relay';
-import { DialogContent, Grid, Typography, useMediaQuery } from '@mui/material';
+import { Button, DialogContent, Grid, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 import { Prompt } from './useLiveFeedbackPromptResultsShared';
@@ -130,53 +130,57 @@ function PreloadedViewLiveFeedbackPromptResults({ promptId }: { promptId: string
 interface ViewLiveFeedbackPromptResultsProps {
     promptRef: React.MutableRefObject<Prompt>;
     closeSnack: () => void;
-    open: boolean;
-    setOpen: (value: boolean) => void;
-    close: () => void;
 }
 
-export function ViewLiveFeedbackPromptResults({ promptRef, open, setOpen, close }: ViewLiveFeedbackPromptResultsProps) {
+export function ViewLiveFeedbackPromptResults({ promptRef, closeSnack }: ViewLiveFeedbackPromptResultsProps) {
     const theme = useTheme();
     const fullscreen = useMediaQuery(theme.breakpoints.down('md'));
+    const [open, setOpen] = React.useState<boolean>(false);
+    const handleOpen = () => setOpen(true);
     const handleClose = () => {
         setOpen(false);
-        close();
+        closeSnack();
     };
 
     return (
-        <StyledDialog
-            fullScreen={fullscreen}
-            maxWidth='lg'
-            fullWidth={true}
-            scroll='paper'
-            open={open}
-            onClose={handleClose}
-            aria-labelledby='feedback-results-dialog'
-        >
-            <StyledDialogTitle id='feedback-results-dialog-title' onClose={handleClose}>
-                Feedback Results
-            </StyledDialogTitle>
-            <DialogContent dividers>
-                <Grid container direction='column' alignItems='center' alignContent='center'>
-                    <Grid container padding='1rem'>
-                        <Grid item xs>
-                            <Typography
-                                className='modal-prompt'
-                                variant='h5'
-                                paddingY='1.5rem'
-                                style={{ overflowWrap: 'break-word' }}
-                            >
-                                Prompt: {promptRef.current.prompt}
-                            </Typography>
+        <React.Fragment>
+            <Button variant='contained' color='primary' onClick={handleOpen}>
+                View Results
+            </Button>
+            <StyledDialog
+                fullScreen={fullscreen}
+                maxWidth='lg'
+                fullWidth={true}
+                scroll='paper'
+                open={open}
+                onClose={handleClose}
+                aria-labelledby='feedback-results-dialog'
+            >
+                <StyledDialogTitle id='feedback-results-dialog-title' onClose={handleClose}>
+                    Feedback Results
+                </StyledDialogTitle>
+                <DialogContent dividers>
+                    <Grid container direction='column' alignItems='center' alignContent='center'>
+                        <Grid container padding='1rem'>
+                            <Grid item xs>
+                                <Typography
+                                    className='modal-prompt'
+                                    variant='h5'
+                                    paddingY='1.5rem'
+                                    style={{ overflowWrap: 'break-word' }}
+                                >
+                                    Prompt: {promptRef.current.prompt}
+                                </Typography>
+                            </Grid>
                         </Grid>
+                        <ConditionalRender client>
+                            <React.Suspense fallback={<Loader />}>
+                                <PreloadedViewLiveFeedbackPromptResults promptId={promptRef.current.id} />
+                            </React.Suspense>
+                        </ConditionalRender>
                     </Grid>
-                    <ConditionalRender client>
-                        <React.Suspense fallback={<Loader />}>
-                            <PreloadedViewLiveFeedbackPromptResults promptId={promptRef.current.id} />
-                        </React.Suspense>
-                    </ConditionalRender>
-                </Grid>
-            </DialogContent>
-        </StyledDialog>
+                </DialogContent>
+            </StyledDialog>
+        </React.Fragment>
     );
 }

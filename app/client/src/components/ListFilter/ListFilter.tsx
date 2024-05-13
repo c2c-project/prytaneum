@@ -30,7 +30,6 @@ export interface Props<T> {
     menuIcons?: JSX.Element[];
     displayNumResults?: boolean;
     style?: React.CSSProperties;
-    isSearchOpen: boolean;
 }
 
 type Filters = Set<string>;
@@ -49,7 +48,16 @@ export function ListFilterSkeleton(props: SkeletonProps) {
 }
 
 // FIXME: delete dead code
-export default function ListFilter<T>({ filterMap, onSearch, onFilterChange, menuIcons, isSearchOpen }: Props<T>) {
+export default function ListFilter<T>({
+    filterMap,
+    onSearch,
+    // length,
+    onFilterChange,
+    menuIcons,
+    // displayNumResults,
+    className,
+    style,
+}: Props<T>) {
     const [filters, setFilters] = React.useState<Filters>(new Set());
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [search, setSearch] = React.useState('');
@@ -100,15 +108,9 @@ export default function ListFilter<T>({ filterMap, onSearch, onFilterChange, men
     };
 
     return (
-        <>
-            <Grid container justifyContent='center' alignSelf='center'>
-                <Grid
-                    item
-                    xs='auto'
-                    style={{ flex: 1 }}
-                    sx={{ marginBottom: (theme) => theme.spacing(2) }}
-                    display={!isSearchOpen ? 'none' : 'block'}
-                >
+        <div style={style} className={className}>
+            <Grid container alignItems='center'>
+                <Grid item xs='auto' style={{ flex: 1 }} sx={{ marginBottom: (theme) => theme.spacing(2) }}>
                     <TextField
                         label='Search'
                         value={search}
@@ -180,6 +182,6 @@ export default function ListFilter<T>({ filterMap, onSearch, onFilterChange, men
                     ))}
                 </Menu>
             )}
-        </>
+        </div>
     );
 }

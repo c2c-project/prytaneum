@@ -11,18 +11,8 @@ import type {
     useQuestionQueueFragment$key,
 } from '@local/__generated__/useQuestionQueueFragment.graphql';
 import { ArrayElement } from '@local/utils/ts-utils';
-import {
-    closestCenter,
-    DndContext,
-    DragEndEvent,
-    useSensors,
-    PointerSensor,
-    useSensor,
-    DragStartEvent,
-    DragOverlay,
-    UniqueIdentifier,
-} from '@dnd-kit/core';
-import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { closestCenter, DndContext, DragEndEvent, useSensors, PointerSensor, useSensor } from '@dnd-kit/core';
+import { SortableContext, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
 import { QuestionAuthor, QuestionStats, QuestionContent, QuestionQuote } from '../../Questions';
@@ -207,7 +197,6 @@ interface QuestionQueueProps {
 export function QuestionQueue({ fragmentRef, isVisible }: QuestionQueueProps) {
     const theme = useTheme();
     const { displaySnack } = useSnack();
-    const [activeId, setActiveId] = React.useState<UniqueIdentifier | null>(null);
     const sensors = useSensors(
         useSensor(PointerSensor, {
             activationConstraint: {
@@ -308,14 +297,9 @@ export function QuestionQueue({ fragmentRef, isVisible }: QuestionQueueProps) {
         }));
     }, [filteredList]);
 
-    const onDragStart = React.useCallback((event: DragStartEvent) => {
-        setActiveId(event.active.id);
-    }, []);
-
     const onDragEnd = React.useCallback(
         (event: DragEndEvent) => {
             const { active, over } = event;
-            setActiveId(null);
             if (!over) return;
             if (active.id === over.id) return;
             if (filteredList.length !== enqueuedQuestions.length) {
@@ -373,7 +357,6 @@ export function QuestionQueue({ fragmentRef, isVisible }: QuestionQueueProps) {
                         style={{ flex: 1, marginLeft: theme.spacing(0.5) }}
                         onFilterChange={queueIndex === 0 ? () => handleFilterChange : () => prevHandleFilterChange}
                         onSearch={queueIndex === 0 ? handleSearch : prevHandleSearch}
-                        isSearchOpen={true}
                         length={queueIndex === 0 ? filteredList.length : prevFilteredList.length}
                     />
                 </Grid>
@@ -389,13 +372,8 @@ export function QuestionQueue({ fragmentRef, isVisible }: QuestionQueueProps) {
                         >
                             <Typography variant='caption'>Drag and drop questions to re-order queue</Typography>
                         </Grid>
-                        <DndContext
-                            collisionDetection={closestCenter}
-                            onDragEnd={onDragEnd}
-                            onDragStart={onDragStart}
-                            sensors={sensors}
-                        >
-                            <SortableContext items={processedList} strategy={verticalListSortingStrategy}>
+                        <DndContext collisionDetection={closestCenter} onDragEnd={onDragEnd} sensors={sensors}>
+                            <SortableContext items={processedList}>
                                 {processedList.map((question) => (
                                     <SortableQuestion
                                         key={question.node.id}
@@ -404,19 +382,6 @@ export function QuestionQueue({ fragmentRef, isVisible }: QuestionQueueProps) {
                                     />
                                 ))}
                             </SortableContext>
-                            <DragOverlay>
-                                {activeId ? (
-                                    <SortableQuestion
-                                        key={activeId}
-                                        question={
-                                            processedList.find(
-                                                (question) => question.id === activeId
-                                            ) as ProcessedQuestion
-                                        }
-                                        connections={connections}
-                                    />
-                                ) : null}
-                            </DragOverlay>
                         </DndContext>
                     </React.Fragment>
                 ) : (

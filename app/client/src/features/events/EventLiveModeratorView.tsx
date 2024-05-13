@@ -24,6 +24,9 @@ import { QuestionList } from './Questions';
 import { LiveFeedbackList } from './LiveFeedback';
 import { CurrentQuestionCard } from './Moderation/ManageQuestions/CurrentQuestionCard';
 import { BroadcastMessageList } from './BroadcastMessages/BroadcastMessageList';
+import { SubmitLiveFeedbackPrompt } from './LiveFeedbackPrompts/LiveFeedbackPrompt';
+import { ShareFeedbackResults } from './LiveFeedbackPrompts';
+import { SubmitLiveFeedback } from './LiveFeedback/SubmitLiveFeedback';
 
 export const EVENT_LIVE_MODERATOR_VIEW_QUERY = graphql`
     query EventLiveModeratorViewQuery($eventId: ID!) {
@@ -82,6 +85,22 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
         resumeEventDetailsRefresh();
         resumePingEvent();
     }, [resumeEventDetailsRefresh, resumePingEvent]);
+
+    const feedbackActionButtons = React.useMemo(() => {
+        return (
+            <Grid container direction='row' justifyContent='space-evenly' alignItems='center'>
+                <Grid item paddingBottom='1rem'>
+                    <SubmitLiveFeedbackPrompt eventId={eventId} />
+                </Grid>
+                <Grid item paddingBottom='1rem'>
+                    <ShareFeedbackResults />
+                </Grid>
+                <Grid item paddingBottom='1rem'>
+                    <SubmitLiveFeedback eventId={eventId} />
+                </Grid>
+            </Grid>
+        );
+    }, [eventId]);
 
     return (
         <EventContext.Provider
@@ -148,7 +167,11 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
                                             />
                                         </Grid>
                                     )}
-                                    <LiveFeedbackList fragmentRef={node} isVisible={tab === 'Feedback'} />
+                                    <LiveFeedbackList
+                                        fragmentRef={node}
+                                        ActionButtons={feedbackActionButtons}
+                                        isVisible={tab === 'Feedback'}
+                                    />
                                     <BroadcastMessageList fragmentRef={node} isVisible={tab === 'Broadcast'} />
                                 </StyledColumnGrid>
                             </Grid>
@@ -204,7 +227,7 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
                                 width: '98%',
                             }}
                         >
-                            <QuestionList fragmentRef={node} isVisible={true} />
+                            <QuestionList fragmentRef={node} ActionButtons={true} isVisible={true} />
                         </StyledColumnGrid>
                     </Grid>
                 </Panel>

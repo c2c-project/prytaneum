@@ -68,7 +68,6 @@ export function BroadcastMessageList({ fragmentRef, isVisible }: MessageListProp
                             style={{ flex: 1, paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
                             onFilterChange={handleFilterChange}
                             onSearch={handleSearch}
-                            isSearchOpen={true}
                             length={filteredList.length}
                         />
                     </Grid>

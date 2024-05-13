@@ -67,7 +67,6 @@ export function ParticipantsList({ node, isVisible }: ParticipantsListProps) {
                     style={{ flex: 1, marginLeft: '1rem', marginBottom: '-1rem' }}
                     onFilterChange={handleFilterChange}
                     onSearch={handleSearch}
-                    isSearchOpen={true}
                     length={filteredList.length}
                 />
             )}

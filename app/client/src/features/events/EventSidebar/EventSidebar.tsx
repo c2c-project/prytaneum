@@ -7,21 +7,19 @@ import { graphql, useFragment } from 'react-relay';
 import { EventSidebarFragment$key } from '@local/__generated__/EventSidebarFragment.graphql';
 import { QuestionList } from '@local/features/events/Questions/QuestionList';
 import { QuestionQueue } from '@local/features/events/Moderation/ManageQuestions';
+import AskQuestion from '@local/features/events/Questions/AskQuestion';
 import { LiveFeedbackList } from '@local/features/events/LiveFeedback/LiveFeedbackList';
 import { BroadcastMessageList } from '@local/features/events/BroadcastMessages/BroadcastMessageList';
+import { SubmitLiveFeedback } from '@local/features/events/LiveFeedback/SubmitLiveFeedback';
 import { QuestionCarousel } from '../Questions/QuestionCarousel';
 import { CurrentQuestionCard } from '../Moderation/ManageQuestions/CurrentQuestionCard';
-import { useLiveFeedbackPrompt } from '../LiveFeedbackPrompts';
-import {
-    useLiveFeedbackPromptResultsShared,
-    ViewLiveFeedbackPromptResults,
-} from '../LiveFeedbackPrompts/LiveFeedbackPromptResults';
+import { ShareFeedbackResults, useLiveFeedbackPrompt } from '../LiveFeedbackPrompts';
+import { SubmitLiveFeedbackPrompt } from '../LiveFeedbackPrompts/LiveFeedbackPrompt/SubmitLiveFeedbackPrompt';
+import { useLiveFeedbackPromptResultsShared } from '../LiveFeedbackPrompts/LiveFeedbackPromptResults';
 import { PreloadedParticipantsList } from '../Participants/ParticipantsList';
 import { StyledTabs } from '@local/components/StyledTabs';
 import { StyledColumnGrid } from '@local/components/StyledColumnGrid';
 import { ModeratorActions } from '../Moderation/ModeratorActions';
-import { SubmitLiveFeedbackPromptResponse } from '../LiveFeedbackPrompts/LiveFeedbackPromptResponse';
-import { useResponsiveDialog } from '@local/components/ResponsiveDialog';
 
 export const EVENT_SIDEBAR_FRAGMENT = graphql`
     fragment EventSidebarFragment on Event {
@@ -58,16 +56,11 @@ export const EventSidebar = ({ fragmentRef, isViewerModerator, isLive, setIsLive
     const [topTab, setTopTab] = React.useState<sidebarTopTabs>('Moderator');
     const [bottomTab, setBottomTab] = React.useState<SidebarBottomTabs>('Questions');
     const [topSectionVisible, setTopSectionVisible] = React.useState(true);
-    const [isFeedbackPromptResponseOpen, openFeedbackPromptResponse, closeFeedbackPromptResponse] =
-        useResponsiveDialog();
-    const [isFeedbackPromptResultsOpen, openFeedbackPromptResults, closeFeedbackPromptResults] = useResponsiveDialog();
     const eventId = data.id;
 
     // Subscribe to live feedback prompts
-    const { feedbackPromptRef, closeFeedbackPromptSnack } = useLiveFeedbackPrompt({ openFeedbackPromptResponse });
-    const { feedbackPromptResultsRef, closeFeedbackPromptResultsSnack } = useLiveFeedbackPromptResultsShared({
-        openFeedbackPromptResults,
-    });
+    useLiveFeedbackPrompt();
+    useLiveFeedbackPromptResultsShared();
 
     const toggleTopSectionVisibility = React.useCallback(() => {
         setTopSectionVisible((prev) => !prev);
@@ -82,6 +75,42 @@ export const EventSidebar = ({ fragmentRef, isViewerModerator, isLive, setIsLive
         e.preventDefault();
         setBottomTab(newTab);
     };
+
+    const displayActionButtons = React.useMemo(() => {
+        if (data.isViewerModerator) {
+            if (bottomTab === 'Queue') return null;
+            if (bottomTab === 'Questions') return null;
+            if (bottomTab === 'Feedback')
+                return (
+                    <Grid container direction='row' justifyContent='space-evenly' alignItems='center'>
+                        <Grid item paddingBottom='1rem'>
+                            <SubmitLiveFeedbackPrompt eventId={eventId} />
+                        </Grid>
+                        <Grid item paddingBottom='1rem'>
+                            <ShareFeedbackResults />
+                        </Grid>
+                        <Grid item paddingBottom='1rem'>
+                            <SubmitLiveFeedback eventId={eventId} />
+                        </Grid>
+                    </Grid>
+                );
+            return null;
+        } else {
+            if (bottomTab === 'Questions')
+                return (
+                    <Grid container paddingBottom='1rem' justifyContent='center'>
+                        <AskQuestion eventId={eventId} />
+                    </Grid>
+                );
+            if (bottomTab === 'Feedback')
+                return (
+                    <Grid container paddingBottom='1rem' justifyContent='center'>
+                        <SubmitLiveFeedback eventId={eventId} />
+                    </Grid>
+                );
+            return null;
+        }
+    }, [data.isViewerModerator, bottomTab, eventId]);
 
     return (
         <Grid
@@ -100,21 +129,6 @@ export const EventSidebar = ({ fragmentRef, isViewerModerator, isLive, setIsLive
             alignItems='flex-start'
             wrap='nowrap'
         >
-            <SubmitLiveFeedbackPromptResponse
-                eventId={eventId}
-                promptRef={feedbackPromptRef}
-                closeSnack={closeFeedbackPromptSnack}
-                isOpen={isFeedbackPromptResponseOpen}
-                open={openFeedbackPromptResponse}
-                close={closeFeedbackPromptResponse}
-            />
-            <ViewLiveFeedbackPromptResults
-                promptRef={feedbackPromptResultsRef}
-                closeSnack={closeFeedbackPromptResultsSnack}
-                open={isFeedbackPromptResultsOpen}
-                setOpen={openFeedbackPromptResults}
-                close={closeFeedbackPromptResults}
-            />
             <Grid item>
                 {!isViewerModerator && <QuestionCarousel fragmentRef={data} />}
                 {isViewerModerator && (
@@ -196,8 +210,16 @@ export const EventSidebar = ({ fragmentRef, isViewerModerator, isLive, setIsLive
                     {isViewerModerator === true && (
                         <QuestionQueue fragmentRef={data} isVisible={bottomTab === 'Queue'} />
                     )}
-                    <QuestionList fragmentRef={data} isVisible={bottomTab === 'Questions'} />
-                    <LiveFeedbackList fragmentRef={data} isVisible={bottomTab === 'Feedback'} />
+                    <QuestionList
+                        fragmentRef={data}
+                        ActionButtons={displayActionButtons}
+                        isVisible={bottomTab === 'Questions'}
+                    />
+                    <LiveFeedbackList
+                        fragmentRef={data}
+                        ActionButtons={displayActionButtons}
+                        isVisible={bottomTab === 'Feedback'}
+                    />
                     {isViewerModerator === true && (
                         <BroadcastMessageList fragmentRef={data} isVisible={bottomTab === 'Broadcast'} />
                     )}

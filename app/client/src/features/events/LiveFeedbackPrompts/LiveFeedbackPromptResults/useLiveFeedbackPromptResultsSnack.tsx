@@ -2,26 +2,17 @@ import { useCallback } from 'react';
 import { useSnackbar, OptionsObject, SnackbarKey } from 'notistack';
 import { Button } from '@mui/material';
 import Close from '@mui/icons-material/Close';
+import { ViewLiveFeedbackPromptResults } from './ViewLiveFeedbackPromptResults';
+import { Prompt } from './useLiveFeedbackPromptResultsShared';
 
-interface Props {
-    openFeedbackPromptResults: () => void;
-}
-
-export function useLiveFeedbackPromptResultsSnack({ openFeedbackPromptResults }: Props) {
+export function useLiveFeedbackPromptResultsSnack(promptRef: React.MutableRefObject<Prompt>) {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-
-    const onClick = useCallback(() => {
-        openFeedbackPromptResults();
-        closeSnackbar();
-    }, [closeSnackbar, openFeedbackPromptResults]);
 
     const feedbackPromptAction = useCallback(
         (key: SnackbarKey) => (
             <div style={{ display: 'flex' }}>
                 <div>
-                    <Button variant='contained' color='primary' onClick={onClick}>
-                        View Results
-                    </Button>
+                    <ViewLiveFeedbackPromptResults promptRef={promptRef} closeSnack={() => closeSnackbar(key)} />
                 </div>
                 <div>
                     <Button
@@ -34,7 +25,7 @@ export function useLiveFeedbackPromptResultsSnack({ openFeedbackPromptResults }:
                 </div>
             </div>
         ),
-        [closeSnackbar, onClick]
+        [closeSnackbar, promptRef]
     );
 
     const makeSnack = useCallback(

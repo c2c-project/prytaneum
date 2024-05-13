@@ -38,7 +38,6 @@ export function QuestionForm({ quote, onSubmit, onCancel }: QuestionFormProps) {
                     helperText={errors.question}
                     required
                     multiline
-                    minRows={4}
                     value={form.question}
                     onChange={handleChange('question')}
                 />
