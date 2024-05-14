@@ -25,7 +25,6 @@ type Event implements Node {
     endDateTime: Date
     description: String
     topic: String
-    issueGuideUrl: String
 
     """
     Whether or not the Event is live

@@ -47,8 +47,6 @@ const isValidRedisPassword = isString(process.env.REDIS_PASSWORD);
 
 const isValidRedisUrl = isString(process.env.REDIS_URL);
 
-const isValidGCPReadingMaterialsBucket = isString(process.env.GCLOUD_READING_MATERIALS_STORAGE_BUCKET);
-
 // This only needs to be defined in production.
 const isValidGcpProjectId = isProduction || isStaging ? isString(process.env.GCP_PROJECT_ID) : true;
 
@@ -65,5 +63,4 @@ export function checkEnv() {
     if (!isValidRedisUsername) throw new Error('REDIS_USERNAME is not valid');
     if (!isValidRedisPassword) throw new Error('REDIS_PASSWORD is not valid');
     if (!isValidRedisUrl) throw new Error('REDIS_URL is not valid');
-    if (!isValidGCPReadingMaterialsBucket) throw new Error('GCLOUD_READING_MATERIALS_STORAGE_BUCKET is not valid');
 }

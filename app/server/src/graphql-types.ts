@@ -605,7 +605,6 @@ export type Event = Node & {
     endDateTime?: Maybe<Scalars['Date']>;
     description?: Maybe<Scalars['String']>;
     topic?: Maybe<Scalars['String']>;
-    issueGuideUrl?: Maybe<Scalars['String']>;
     /** Whether or not the Event is live */
     isActive?: Maybe<Scalars['Boolean']>;
     /** Let all users see what questions have been submitted */
@@ -2437,7 +2436,6 @@ export type EventResolvers<
     endDateTime?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
     description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     topic?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-    issueGuideUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     isActive?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     isQuestionFeedVisible?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     isCollectRatingsEnabled?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
@@ -3425,7 +3423,6 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         endDateTime?: LoaderResolver<Maybe<Scalars['Date']>, Event, {}, TContext>;
         description?: LoaderResolver<Maybe<Scalars['String']>, Event, {}, TContext>;
         topic?: LoaderResolver<Maybe<Scalars['String']>, Event, {}, TContext>;
-        issueGuideUrl?: LoaderResolver<Maybe<Scalars['String']>, Event, {}, TContext>;
         isActive?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
         isQuestionFeedVisible?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
         isCollectRatingsEnabled?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;

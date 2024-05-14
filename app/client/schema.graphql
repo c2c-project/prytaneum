@@ -203,7 +203,6 @@ type Event implements Node {
 
   """Whether or not the viewer is a moderator"""
   isViewerModerator: Boolean
-  issueGuideUrl: String
 
   """Live Feedback given during the event"""
   liveFeedback(after: String, first: Int): EventLiveFeedbackConnection

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<eb401355e487478feefb15018eb01fe1>>
+ * @generated SignedSource<<6546d7c26cd61aacfd0e769621b0f267>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -158,13 +158,6 @@ return {
                 "kind": "ScalarField",
                 "name": "isViewerInvited",
                 "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "issueGuideUrl",
-                "storageKey": null
               }
             ],
             "type": "Event",
@@ -176,16 +169,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "8fd38090644a2543c23fcadbc9a93523",
+    "cacheID": "e47ff78d7659fecc67dcc31176acfceb",
     "id": null,
     "metadata": {},
     "name": "UseEventDetailsRefetchQuery",
     "operationKind": "query",
-    "text": "query UseEventDetailsRefetchQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useEventDetailsFragment\n    id\n  }\n}\n\nfragment useEventDetailsFragment on Event {\n  id\n  title\n  topic\n  description\n  startDateTime\n  endDateTime\n  isActive\n  isViewerModerator\n  isPrivate\n  isViewerInvited\n  issueGuideUrl\n}\n"
+    "text": "query UseEventDetailsRefetchQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useEventDetailsFragment\n    id\n  }\n}\n\nfragment useEventDetailsFragment on Event {\n  id\n  title\n  topic\n  description\n  startDateTime\n  endDateTime\n  isActive\n  isViewerModerator\n  isPrivate\n  isViewerInvited\n}\n"
   }
 };
 })();
 
-(node as any).hash = "1e3632d245c6365ae65a3d6816792067";
+(node as any).hash = "073430a8907a2978ea1a975cf745f1fd";
 
 export default node;

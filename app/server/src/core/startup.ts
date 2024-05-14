@@ -7,7 +7,6 @@ import * as plugins from './plugins';
 import * as hooks from './hooks';
 
 require('@local/features/accounts/account');
-require('@local/features/events/moderation/issue-guide');
 
 export function startup() {
     const server = getOrCreateServer();

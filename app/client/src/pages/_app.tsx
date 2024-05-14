@@ -14,13 +14,6 @@ import '@local/index.css';
 import { useRouter } from 'next/router';
 import * as ga from '@local/utils/ga/index';
 import { GlobalStyles } from '@mui/material';
-import { pdfjs } from 'react-pdf';
-import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
-import 'react-pdf/dist/esm/Page/TextLayer.css';
-
-export const pdfJsOptions = {
-    cMapUrl: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/cmaps/`,
-};
 
 declare module '@mui/material/styles' {
     // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -52,9 +45,6 @@ const inputGlobalStyles = (
 export default function App({ Component, pageProps }: AppProps & { pageProps: any }) {
     const router = useRouter();
     const { env } = useEnvironment(pageProps.initialRecords);
-
-    // Set up pdfjs worker
-    pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
     // https://arturocampos.dev/blog/nextjs-with-google-analytics <- referenced for the router implementation
     useEffect(() => {

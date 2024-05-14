@@ -1,1 +1,0 @@
-export { PdfViewer } from './PdfViewer';

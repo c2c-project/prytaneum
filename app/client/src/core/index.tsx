@@ -8,4 +8,3 @@ export * from './useIntersectionObserver';
 export * from './useCache';
 export * from './useIsClient';
 export * from './theme';
-export * from './useWindowDimensions';

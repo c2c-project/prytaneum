@@ -17,7 +17,6 @@ declare global {
             REDIS_USERNAME: string;
             REDIS_PASSWORD: string;
             REDIS_URL: string;
-            GCLOUD_READING_MATERIALS_STORAGE_BUCKET: string;
         }
     }
 }
