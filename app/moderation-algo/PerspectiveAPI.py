@@ -11,9 +11,7 @@ def InitPerspectiveAPI(folder=''):
         os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = filepath # Personal key
         print('Google API key set to: ' + os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
     else:
-        NODE_ENV = os.environ.get('NODE_ENV', 'development')
-        if(NODE_ENV != 'production'): 
-            print('Google API key not found at: ' + filepath)
+        print('Google API key not found at: ' + filepath)
 
 def GetToxicityScores(text: str, force=False) -> dict:
     """Get the toxicity scores of a given piece of text from Perspective API.

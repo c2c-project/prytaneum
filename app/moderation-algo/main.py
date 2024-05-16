@@ -9,7 +9,6 @@ from AlgoStages.classifyQuestion import DoesQuestionFitCategory
 from Translation.translation import TranslateText
 from PerspectiveAPI import InitPerspectiveAPI
 from Utilities.logEvents import LogEventConsole
-from redis.cluster import RedisCluster, ClusterNode
 import redis
 import json
 import os
@@ -66,11 +65,6 @@ def ConnectToRedis() -> redis.Redis:
     REDIS_PORT = os.environ.get('REDIS_PORT')
     REDIS_USERNAME = os.environ.get('REDIS_USERNAME')
     REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD')
-    NODE_ENV = os.environ.get('NODE_ENV')
-    if NODE_ENV == 'production':
-        nodes = list()
-        nodes.append(ClusterNode(host=REDIS_HOST, port=REDIS_PORT))
-        return RedisCluster(startup_nodes=nodes, host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD)
     return redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT, username=REDIS_USERNAME, password=REDIS_PASSWORD,
                             charset='utf-8', decode_responses=True)
 
