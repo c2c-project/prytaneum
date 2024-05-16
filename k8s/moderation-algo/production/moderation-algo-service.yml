@@ -11,10 +11,11 @@ metadata:
     name: moderation-algo-service
     namespace: development
 spec:
-    clusterIP: None
     ports:
         - port: 5000
           protocol: TCP
           targetPort: 5000
     selector:
         app: moderation-algo
+    sessionAffinity: 'ClientIP'
+    type: ClusterIP
