@@ -10,11 +10,5 @@ data:
     NODE_ENV: production
     GCP_PROJECT_ID: prytaneum-project
     REDIS_HOST: prod-redis-cluster.development.svc.cluster.local
-    REDIS_HOST_NODE_1: prod-redis-cluster-0.development.svc.cluster.local
-    REDIS_HOST_NODE_2: prod-redis-cluster-1.development.svc.cluster.local
-    REDIS_HOST_NODE_3: prod-redis-cluster-2.development.svc.cluster.local
-    REDIS_HOST_NODE_4: prod-redis-cluster-3.development.svc.cluster.local
-    REDIS_HOST_NODE_5: prod-redis-cluster-4.development.svc.cluster.local
-    REDIS_HOST_NODE_6: prod-redis-cluster-5.development.svc.cluster.local
     REDIS_PORT: '6379'
     REDIS_USERNAME: default
