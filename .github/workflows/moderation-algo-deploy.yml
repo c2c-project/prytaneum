@@ -160,9 +160,10 @@ jobs:
               run: |-
                   docker build \
                     -f ./app/moderation-algo/Dockerfile \
+                    --build-arg REQUIREMENTS_FILE="./app/moderation-algo/requirements.txt" \
                     --build-arg GITHUB_SHA="$GITHUB_SHA" \
                     --build-arg GITHUB_REF="$GITHUB_REF" \
-                    ./app/moderation-algo
+                    .
 
             # Push the Moderation algo image to Google Container Registry
             - name: Publish Moderation Algorithm
