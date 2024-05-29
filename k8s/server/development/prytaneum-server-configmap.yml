@@ -12,12 +12,6 @@ data:
     GCP_PROJECT_ID: prytaneum-project
     PUB_SUB_PREFIX: projects/prytaneum-project/topics/
     REDIS_HOST: staging-redis-cluster.development.svc.cluster.local
-    REDIS_HOST_NODE_1: staging-redis-cluster-0.development.svc.cluster.local
-    REDIS_HOST_NODE_2: staging-redis-cluster-1.development.svc.cluster.local
-    REDIS_HOST_NODE_3: staging-redis-cluster-2.development.svc.cluster.local
-    REDIS_HOST_NODE_4: staging-redis-cluster-3.development.svc.cluster.local
-    REDIS_HOST_NODE_5: staging-redis-cluster-4.development.svc.cluster.local
-    REDIS_HOST_NODE_6: staging-redis-cluster-5.development.svc.cluster.local
     REDIS_PORT: '6379'
     GCLOUD_ISSUE_GUIDES_STORAGE_BUCKET: prytaneum-issue-guides
     MODERATION_URL: http://10.112.10.193:5000

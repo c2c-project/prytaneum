@@ -1,5 +1,5 @@
 import type { FastifyBaseLogger } from 'fastify';
-import { Redis, Cluster, ClusterNode } from 'ioredis';
+import { Redis, Cluster } from 'ioredis';
 // @ts-ignore - MockRedis is not typed
 import MockRedis from 'ioredis-mock';
 
@@ -18,33 +18,33 @@ function generateNewRedisClient(logger: FastifyBaseLogger) {
     logger.info('Generating new redis client.');
     if (process.env.NODE_ENV === 'production') {
         logger.info('Using production redis client.');
-        let clusterNodes: ClusterNode[] = [];
-        for (let i = 0; i < 7; i++) {
-            clusterNodes.push({
-                host: process.env[`REDIS_HOST_${i}`],
-                port: Number(process.env.REDIS_PORT),
-            });
-        }
-        logger.info('Running on cluster mode with nodes: ', JSON.stringify(clusterNodes));
-        return new Redis.Cluster(clusterNodes, {
-            slotsRefreshTimeout: 10000, // 10 seconds
-            clusterRetryStrategy(times) {
-                if (times > 20) return null; // End reconnecting after 20 attempts
-                const delay = Math.min(times * 50, 2000);
-                return delay;
-            },
-            redisOptions: {
-                connectTimeout: 10000, // 10 seconds
-                reconnectOnError(err) {
-                    const targetError = 'READONLY';
-                    if (err.message.includes(targetError)) {
-                        // Only reconnect when the error contains "READONLY"
-                        return true; // or `return 1;`
-                    }
-                    return false;
+        return new Redis.Cluster(
+            [
+                {
+                    host: process.env.REDIS_HOST,
+                    port: Number(process.env.REDIS_PORT),
                 },
-            },
-        });
+            ],
+            {
+                slotsRefreshTimeout: 10000, // 10 seconds
+                clusterRetryStrategy(times) {
+                    if (times > 20) return null; // End reconnecting after 20 attempts
+                    const delay = Math.min(times * 50, 2000);
+                    return delay;
+                },
+                redisOptions: {
+                    connectTimeout: 10000, // 10 seconds
+                    reconnectOnError(err) {
+                        const targetError = 'READONLY';
+                        if (err.message.includes(targetError)) {
+                            // Only reconnect when the error contains "READONLY"
+                            return true; // or `return 1;`
+                        }
+                        return false;
+                    },
+                },
+            }
+        );
     }
     return new Redis({
         host: process.env.REDIS_HOST,
