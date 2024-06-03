@@ -186,7 +186,7 @@ export function ActionsPanels({ node, eventData, isLive, setIsLive }: ActionsPan
                     </StyledTabs>
                     <StyledColumnGrid
                         props={{ width: '100%', display: 'flex', flexGrow: 1, padding: 0 }}
-                        scrollable={tab == 'Participants' || tab == 'Broadcast'}
+                        scrollable={tab == 'Participants'}
                     >
                         {tab === 'Participants' && <PreloadedParticipantsList eventId={eventData.id} />}
                         {tab === 'Moderator' && (

@@ -215,8 +215,7 @@ model EventBroadcastMessage {
     createdByUser User @relation(fields: [createdById], references: [id], onDelete: Cascade)
     broadcastMessage String @db.VarChar(500)
     isVisible Boolean
-    lang String @db.VarChar(30) @default("EN")
-    broadcastMessageTranslations Json @db.Json @default("{}") // { lang: message } example: { "ES": "¿Cómo estás?", "EN": "How are you?"} 
+    lang String @db.VarChar(30)
 }
 
 model EventQuestionLike {

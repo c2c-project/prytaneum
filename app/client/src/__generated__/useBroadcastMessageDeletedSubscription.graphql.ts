@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0c779d5ebcc3148fa02123de9b6911f9>>
+ * @generated SignedSource<<d909f648a11989e30dc489bf9f879d0e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,6 +9,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
 export type useBroadcastMessageDeletedSubscription$variables = {
   connections: ReadonlyArray<string>;
   eventId: string;
@@ -18,7 +19,14 @@ export type useBroadcastMessageDeletedSubscription$data = {
     readonly edge: {
       readonly cursor: string;
       readonly node: {
+        readonly broadcastMessage: string;
+        readonly createdBy: {
+          readonly firstName: string | null;
+        } | null;
         readonly id: string;
+        readonly isVisible: boolean | null;
+        readonly position: number | null;
+        readonly " $fragmentSpreads": FragmentRefs<"BroadcastMessageActionsFragment" | "BroadcastMessageAuthorFragment" | "BroadcastMessageContentFragment">;
       };
     };
   };
@@ -59,6 +67,34 @@ v4 = {
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "broadcastMessage",
+  "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "position",
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isVisible",
+  "storageKey": null
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "firstName",
+  "storageKey": null
 };
 return {
   "fragment": {
@@ -95,7 +131,37 @@ return {
                 "name": "node",
                 "plural": false,
                 "selections": [
-                  (v4/*: any*/)
+                  (v4/*: any*/),
+                  (v5/*: any*/),
+                  (v6/*: any*/),
+                  (v7/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "User",
+                    "kind": "LinkedField",
+                    "name": "createdBy",
+                    "plural": false,
+                    "selections": [
+                      (v8/*: any*/)
+                    ],
+                    "storageKey": null
+                  },
+                  {
+                    "args": null,
+                    "kind": "FragmentSpread",
+                    "name": "BroadcastMessageActionsFragment"
+                  },
+                  {
+                    "args": null,
+                    "kind": "FragmentSpread",
+                    "name": "BroadcastMessageAuthorFragment"
+                  },
+                  {
+                    "args": null,
+                    "kind": "FragmentSpread",
+                    "name": "BroadcastMessageContentFragment"
+                  }
                 ],
                 "storageKey": null
               }
@@ -159,6 +225,44 @@ return {
                         "variableName": "connections"
                       }
                     ]
+                  },
+                  (v5/*: any*/),
+                  (v6/*: any*/),
+                  (v7/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "User",
+                    "kind": "LinkedField",
+                    "name": "createdBy",
+                    "plural": false,
+                    "selections": [
+                      (v8/*: any*/),
+                      (v4/*: any*/),
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "lastName",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "avatar",
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  },
+                  (v4/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "createdAt",
+                    "storageKey": null
                   }
                 ],
                 "storageKey": null
@@ -172,16 +276,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "bfa41a7e289f3deaed444815909b5acc",
+    "cacheID": "07f5bfd6aa5da916b0a544e4a47ab12f",
     "id": null,
     "metadata": {},
     "name": "useBroadcastMessageDeletedSubscription",
     "operationKind": "subscription",
-    "text": "subscription useBroadcastMessageDeletedSubscription(\n  $eventId: ID!\n) {\n  broadcastMessageDeleted(eventId: $eventId) {\n    edge {\n      cursor\n      node {\n        id\n      }\n    }\n  }\n}\n"
+    "text": "subscription useBroadcastMessageDeletedSubscription(\n  $eventId: ID!\n) {\n  broadcastMessageDeleted(eventId: $eventId) {\n    edge {\n      cursor\n      node {\n        id\n        broadcastMessage\n        position\n        isVisible\n        createdBy {\n          firstName\n          id\n        }\n        ...BroadcastMessageActionsFragment\n        ...BroadcastMessageAuthorFragment\n        ...BroadcastMessageContentFragment\n      }\n    }\n  }\n}\n\nfragment BroadcastMessageActionsFragment on EventBroadcastMessage {\n  id\n  ...DeleteBroadcastMessageButtonFragment\n  ...EditBroadcastMessageButtonFragment\n}\n\nfragment BroadcastMessageAuthorFragment on EventBroadcastMessage {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment BroadcastMessageContentFragment on EventBroadcastMessage {\n  broadcastMessage\n}\n\nfragment DeleteBroadcastMessageButtonFragment on EventBroadcastMessage {\n  id\n  position\n}\n\nfragment EditBroadcastMessageButtonFragment on EventBroadcastMessage {\n  id\n}\n"
   }
 };
 })();
 
-(node as any).hash = "825607d1923e6a2136ca2626f83391e9";
+(node as any).hash = "3c283552617e55c7012b960b09aaf887";
 
 export default node;

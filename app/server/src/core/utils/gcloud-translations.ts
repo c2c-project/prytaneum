@@ -28,6 +28,7 @@ export function getTranslationClient() {
 export async function detectLanguage(text: string): Promise<string> {
     const translationClient = getTranslationClient();
     const [detection] = await translationClient.detect(text);
+    console.log('Detected language: ', detection);
     return detection.language;
 }
 

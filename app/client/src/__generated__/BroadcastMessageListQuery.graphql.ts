@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ffe1cd0632c923fe9d9c5a9b639b649e>>
+ * @generated SignedSource<<ec6f5bf69387ec03e35af0d65f43e196>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,7 +12,6 @@ import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type BroadcastMessageListQuery$variables = {
   eventId: string;
-  lang: string;
 };
 export type BroadcastMessageListQuery$data = {
   readonly eventBroadcastMessages: ReadonlyArray<{
@@ -36,11 +35,6 @@ var v0 = [
     "defaultValue": null,
     "kind": "LocalArgument",
     "name": "eventId"
-  },
-  {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "lang"
   }
 ],
 v1 = [
@@ -77,14 +71,7 @@ v5 = {
   "kind": "ScalarField",
   "name": "firstName",
   "storageKey": null
-},
-v6 = [
-  {
-    "kind": "Variable",
-    "name": "lang",
-    "variableName": "lang"
-  }
-];
+};
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
@@ -126,7 +113,7 @@ return {
             "name": "BroadcastMessageAuthorFragment"
           },
           {
-            "args": (v6/*: any*/),
+            "args": null,
             "kind": "FragmentSpread",
             "name": "BroadcastMessageContentFragment"
           }
@@ -194,20 +181,6 @@ return {
             "kind": "ScalarField",
             "name": "createdAt",
             "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "lang",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": (v6/*: any*/),
-            "kind": "ScalarField",
-            "name": "translatedBroadcastMessage",
-            "storageKey": null
           }
         ],
         "storageKey": null
@@ -215,16 +188,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "32f00ea27694c2c24505c418791a39cc",
+    "cacheID": "679a1dc81d0fa4c14a6fd76b736dd01f",
     "id": null,
     "metadata": {},
     "name": "BroadcastMessageListQuery",
     "operationKind": "query",
-    "text": "query BroadcastMessageListQuery(\n  $eventId: ID!\n  $lang: String!\n) {\n  eventBroadcastMessages(eventId: $eventId) {\n    id\n    broadcastMessage\n    isVisible\n    createdBy {\n      firstName\n      id\n    }\n    ...BroadcastMessageActionsFragment\n    ...BroadcastMessageAuthorFragment\n    ...BroadcastMessageContentFragment_3iqx2P\n  }\n}\n\nfragment BroadcastMessageActionsFragment on EventBroadcastMessage {\n  id\n  ...DeleteBroadcastMessageButtonFragment\n  ...EditBroadcastMessageButtonFragment\n}\n\nfragment BroadcastMessageAuthorFragment on EventBroadcastMessage {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment BroadcastMessageContentFragment_3iqx2P on EventBroadcastMessage {\n  broadcastMessage\n  lang\n  translatedBroadcastMessage(lang: $lang)\n}\n\nfragment DeleteBroadcastMessageButtonFragment on EventBroadcastMessage {\n  id\n  position\n}\n\nfragment EditBroadcastMessageButtonFragment on EventBroadcastMessage {\n  id\n}\n"
+    "text": "query BroadcastMessageListQuery(\n  $eventId: ID!\n) {\n  eventBroadcastMessages(eventId: $eventId) {\n    id\n    broadcastMessage\n    isVisible\n    createdBy {\n      firstName\n      id\n    }\n    ...BroadcastMessageActionsFragment\n    ...BroadcastMessageAuthorFragment\n    ...BroadcastMessageContentFragment\n  }\n}\n\nfragment BroadcastMessageActionsFragment on EventBroadcastMessage {\n  id\n  ...DeleteBroadcastMessageButtonFragment\n  ...EditBroadcastMessageButtonFragment\n}\n\nfragment BroadcastMessageAuthorFragment on EventBroadcastMessage {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment BroadcastMessageContentFragment on EventBroadcastMessage {\n  broadcastMessage\n}\n\nfragment DeleteBroadcastMessageButtonFragment on EventBroadcastMessage {\n  id\n  position\n}\n\nfragment EditBroadcastMessageButtonFragment on EventBroadcastMessage {\n  id\n}\n"
   }
 };
 })();
 
-(node as any).hash = "3b8188d1f95c9fd7c3233de2b63fa5ab";
+(node as any).hash = "50dc35e223a8367dad91a2e35666d78c";
 
 export default node;

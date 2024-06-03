@@ -2,16 +2,11 @@ import * as React from 'react';
 import { graphql, usePaginationFragment } from 'react-relay';
 
 import { useBroadcastMessageListFragment$key } from '@local/__generated__/useBroadcastMessageListFragment.graphql';
-import { useUser } from '@local/features/accounts';
 
 export const USE_BROADCAST_MESSAGE_LIST_FRAGMENT = graphql`
     fragment useBroadcastMessageListFragment on Event
     @refetchable(queryName: "broadcastMessagePagination")
-    @argumentDefinitions(
-        first: { type: "Int", defaultValue: 50 }
-        after: { type: "String", defaultValue: "" }
-        lang: { type: "String", defaultValue: "EN" }
-    ) {
+    @argumentDefinitions(first: { type: "Int", defaultValue: 50 }, after: { type: "String", defaultValue: "" }) {
         id
         currentBroadcastMessage
         broadcastMessages(first: $first, after: $after)
@@ -28,7 +23,7 @@ export const USE_BROADCAST_MESSAGE_LIST_FRAGMENT = graphql`
                     }
                     ...BroadcastMessageActionsFragment
                     ...BroadcastMessageAuthorFragment
-                    ...BroadcastMessageContentFragment @arguments(lang: $lang)
+                    ...BroadcastMessageContentFragment
                 }
             }
             pageInfo {
@@ -43,7 +38,6 @@ interface useBroadcastMessageListProps {
     fragmentRef: useBroadcastMessageListFragment$key;
 }
 export function useBroadcastMessageList({ fragmentRef }: useBroadcastMessageListProps) {
-    const { user } = useUser();
     const { data, loadNext, loadPrevious, hasNext, hasPrevious, isLoadingNext, isLoadingPrevious, refetch } =
         usePaginationFragment(USE_BROADCAST_MESSAGE_LIST_FRAGMENT, fragmentRef);
     const { broadcastMessages, id: eventId, currentBroadcastMessage } = data;
@@ -64,15 +58,11 @@ export function useBroadcastMessageList({ fragmentRef }: useBroadcastMessageList
         if (isRefreshing) return;
         setIsRefreshing(true);
         refetch(
-            {
-                first: MAX_MESSAGES_DISPLAYED,
-                after: data.broadcastMessages?.pageInfo?.endCursor,
-                lang: user?.preferredLang ?? 'EN',
-            },
-            { fetchPolicy: 'store-and-network' }
+            { first: MAX_MESSAGES_DISPLAYED, after: data.broadcastMessages?.pageInfo?.endCursor },
+            { fetchPolicy: 'network-only' }
         );
         setIsRefreshing(false);
-    }, [data.broadcastMessages?.pageInfo?.endCursor, isRefreshing, refetch, user?.preferredLang]);
+    }, [data.broadcastMessages?.pageInfo?.endCursor, isRefreshing, refetch]);
 
     return {
         broadcastMessages: broadcastMessageList,

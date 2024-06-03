@@ -103,15 +103,6 @@ export const resolvers: Resolvers = {
         },
     },
     EventBroadcastMessage: {
-        async translatedBroadcastMessage(parent, args, ctx, info) {
-            const { id: broadcastMessageId } = fromGlobalId(parent.id);
-            const translatedBroadcastMessage = await Broadcast.findTranslatedBroadcastMessage(
-                broadcastMessageId,
-                ctx.viewer.id,
-                ctx.prisma
-            );
-            return translatedBroadcastMessage;
-        },
         async createdBy(parent, args, ctx, info) {
             const { id: broadcastMessageId } = fromGlobalId(parent.id);
             const submitter = await Broadcast.findSubmitterByBroadcastMessageId(broadcastMessageId, ctx.prisma);

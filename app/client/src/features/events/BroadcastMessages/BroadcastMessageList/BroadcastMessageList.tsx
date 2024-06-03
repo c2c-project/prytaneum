@@ -16,7 +16,7 @@ import { useBroadcastMessageDeleted } from './useBroadcastMessageDeleted';
 import { useBroadcastMessageListFragment$key } from '@local/__generated__/useBroadcastMessageListFragment.graphql';
 
 export const BROADCAST_MESSAGE_LIST_QUERY = graphql`
-    query BroadcastMessageListQuery($eventId: ID!, $lang: String!) {
+    query BroadcastMessageListQuery($eventId: ID!) {
         eventBroadcastMessages(eventId: $eventId) {
             id
             broadcastMessage
@@ -26,7 +26,7 @@ export const BROADCAST_MESSAGE_LIST_QUERY = graphql`
             }
             ...BroadcastMessageActionsFragment
             ...BroadcastMessageAuthorFragment
-            ...BroadcastMessageContentFragment @arguments(lang: $lang)
+            ...BroadcastMessageContentFragment
         }
     }
 `;

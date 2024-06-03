@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0498bc371fc6fb58c3ea0c2ce9b82006>>
+ * @generated SignedSource<<c74e16a08f4dcf87120329d5cede3357>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -61,11 +61,6 @@ return {
       "defaultValue": 50,
       "kind": "LocalArgument",
       "name": "first"
-    },
-    {
-      "defaultValue": "EN",
-      "kind": "LocalArgument",
-      "name": "lang"
     }
   ],
   "kind": "Fragment",
@@ -179,13 +174,7 @@ return {
                   "name": "BroadcastMessageAuthorFragment"
                 },
                 {
-                  "args": [
-                    {
-                      "kind": "Variable",
-                      "name": "lang",
-                      "variableName": "lang"
-                    }
-                  ],
+                  "args": null,
                   "kind": "FragmentSpread",
                   "name": "BroadcastMessageContentFragment"
                 },
@@ -255,6 +244,6 @@ return {
 };
 })();
 
-(node as any).hash = "574e7af5a07634dc71c52841f5f553c8";
+(node as any).hash = "921be387b6d41335de275a2cbc5f2017";
 
 export default node;

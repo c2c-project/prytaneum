@@ -4,10 +4,9 @@ import { useSubscription, graphql } from 'react-relay';
 
 import type { useBroadcastMessageCreatedSubscription } from '@local/__generated__/useBroadcastMessageCreatedSubscription.graphql';
 import { useEvent } from '../../useEvent';
-import { useUser } from '@local/features/accounts';
 
 export const USE_BROADCAST_MESSAGE_CREATED_SUBSCRIPTION = graphql`
-    subscription useBroadcastMessageCreatedSubscription($eventId: ID!, $connections: [ID!]!, $lang: String!) {
+    subscription useBroadcastMessageCreatedSubscription($eventId: ID!, $connections: [ID!]!) {
         broadcastMessageCreated(eventId: $eventId) {
             edge @prependEdge(connections: $connections) {
                 cursor
@@ -21,7 +20,7 @@ export const USE_BROADCAST_MESSAGE_CREATED_SUBSCRIPTION = graphql`
                     }
                     ...BroadcastMessageActionsFragment
                     ...BroadcastMessageAuthorFragment
-                    ...BroadcastMessageContentFragment @arguments(lang: $lang)
+                    ...BroadcastMessageContentFragment
                 }
             }
         }
@@ -30,18 +29,16 @@ export const USE_BROADCAST_MESSAGE_CREATED_SUBSCRIPTION = graphql`
 
 export function useBroadcastMessageCreated({ connections }: { connections: string[] }) {
     const { eventId } = useEvent();
-    const { user } = useUser();
 
     const createdConfig = useMemo<GraphQLSubscriptionConfig<useBroadcastMessageCreatedSubscription>>(
         () => ({
             variables: {
                 eventId,
                 connections,
-                lang: user?.preferredLang ?? 'EN',
             },
             subscription: USE_BROADCAST_MESSAGE_CREATED_SUBSCRIPTION,
         }),
-        [eventId, connections, user?.preferredLang]
+        [eventId, connections]
     );
 
     useSubscription<useBroadcastMessageCreatedSubscription>(createdConfig);

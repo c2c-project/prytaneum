@@ -278,7 +278,6 @@ type EventBroadcastMessage implements Node {
   """The users who have liked this broadcast message"""
   likedBy: UserConnection
   position: Int
-  translatedBroadcastMessage(lang: String!): String
 }
 
 type EventBroadcastMessageEdge {
