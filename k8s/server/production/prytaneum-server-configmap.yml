@@ -14,4 +14,4 @@ data:
     REDIS_HOST: prod-redis-cluster.production.svc.cluster.local
     REDIS_PORT: '6379'
     GCLOUD_ISSUE_GUIDES_STORAGE_BUCKET: prytaneum-issue-guides
-    MODERATION_URL: http://10.112.10.190:5000
+    MODERATION_URL: http://10.112.10.190:5000/
