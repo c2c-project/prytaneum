@@ -11,6 +11,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   Date: Date;
+  JSON: { [key: string]: any };
 };
 
 export type AddQuestionToOnDeck = {
@@ -457,6 +458,7 @@ export type EventLiveFeedbackPrompt = Node & {
   responses?: Maybe<EventLiveFeedbackPromptResponseConnection>;
   stakeholders?: Maybe<Array<Scalars['String']>>;
   viewpoints?: Maybe<Array<Scalars['String']>>;
+  voteViewpoints?: Maybe<Scalars['JSON']>;
 };
 
 

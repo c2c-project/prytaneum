@@ -381,6 +381,7 @@ type EventLiveFeedbackPrompt implements Node {
   responses(after: String, first: Int): EventLiveFeedbackPromptResponseConnection
   stakeholders: [String!]
   viewpoints: [String!]
+  voteViewpoints: JSON
 }
 
 type EventLiveFeedbackPromptConnection {
@@ -622,6 +623,8 @@ type InviteMutationResponse implements MutationResponse {
   isError: Boolean!
   message: String!
 }
+
+scalar JSON
 
 type Like {
   question: EventQuestion!
