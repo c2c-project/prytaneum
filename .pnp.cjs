@@ -590,6 +590,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["form-data", "npm:4.0.0"],\
             ["graphql", "npm:16.6.0"],\
             ["graphql-relay", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:0.10.0"],\
+            ["graphql-type-json", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:0.3.2"],\
             ["ioredis", "npm:5.3.2"],\
             ["ioredis-mock", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:8.7.0"],\
             ["jest", "virtual:aedf018ff37487bbea07e39ab6922028847ef7476f42fbf184065ed99eff5d24997be06d56f281c73bbc274cfcb741db55884ec3b111f95f482082ce3a2760fe#npm:27.5.1"],\
@@ -23963,6 +23964,28 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/graphql", null],\
             ["graphql", "npm:16.6.0"],\
             ["tslib", "npm:2.4.1"]\
+          ],\
+          "packagePeers": [\
+            "@types/graphql",\
+            "graphql"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["graphql-type-json", [\
+        ["npm:0.3.2", {\
+          "packageLocation": "./.yarn/cache/graphql-type-json-npm-0.3.2-05debc01d8-4162069963.zip/node_modules/graphql-type-json/",\
+          "packageDependencies": [\
+            ["graphql-type-json", "npm:0.3.2"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:0.3.2", {\
+          "packageLocation": "./.yarn/__virtual__/graphql-type-json-virtual-abac8e46d5/0/cache/graphql-type-json-npm-0.3.2-05debc01d8-4162069963.zip/node_modules/graphql-type-json/",\
+          "packageDependencies": [\
+            ["graphql-type-json", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:0.3.2"],\
+            ["@types/graphql", null],\
+            ["graphql", "npm:16.6.0"]\
           ],\
           "packagePeers": [\
             "@types/graphql",\
