@@ -1,6 +1,7 @@
 import { GraphQLScalarType } from 'graphql';
 import { Kind } from 'graphql/language';
 import type { Resolvers } from '@local/graphql-types';
+import GraphQLJSON from 'graphql-type-json';
 
 /**
  * The date type expects a date string from the client
@@ -27,4 +28,5 @@ export const resolvers: Resolvers = {
             return null;
         },
     }),
+    JSON: GraphQLJSON,
 };
