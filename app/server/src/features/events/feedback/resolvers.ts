@@ -175,7 +175,7 @@ export const resolvers: Resolvers = {
                 const { id: promptId } = fromGlobalId(args.promptId);
                 const { id: eventId } = fromGlobalId(args.eventId);
                 // TODO: Pass in option to use ai summary
-                const prompt = await Feedback.summarizePromptResponses(promptId, eventId, ctx.redis, ctx.prisma);
+                const prompt = await Feedback.summarizePromptResponses(promptId, eventId, ctx.prisma);
                 const formattedPrompt = toFeedbackPromptId(prompt);
                 const edge = {
                     node: formattedPrompt,
@@ -201,7 +201,7 @@ export const resolvers: Resolvers = {
                 if (!args.promptId) throw new ProtectedError({ userMessage: errors.invalidArgs });
                 const { id: eventId } = fromGlobalId(args.eventId);
                 const { id: promptId } = fromGlobalId(args.promptId);
-                const prompt = await Feedback.summarizePromptResponses(promptId, eventId, ctx.redis, ctx.prisma);
+                const prompt = await Feedback.summarizePromptResponses(promptId, eventId, ctx.prisma);
                 if (!prompt)
                     throw new ProtectedError({
                         userMessage: 'Inalid Prompt',

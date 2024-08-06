@@ -10,7 +10,6 @@ import { fromGlobalId } from 'graphql-relay';
 import { isModerator } from '../moderation/methods';
 import { ProtectedError } from '../../../lib/ProtectedError';
 import { Vote } from '@local/graphql-types';
-import Redis, { Cluster } from 'ioredis';
 
 export async function myFeedback(userId: string, eventId: string, prisma: PrismaClient) {
     const result = await prisma.eventLiveFeedback.findMany({
@@ -53,15 +52,13 @@ async function generateViewpoints(promptId: string, eventId: string, prisma: Pri
     return viewpoints;
 }
 
-async function generateViewpointsByVote(promptId: string, eventId: string, prisma: PrismaClient) {
+async function generateViewpointsByVote(promptId: string, issue: string, eventId: string, prisma: PrismaClient) {
     const viewpointsByVote: Record<string, string[]> = { FOR: [], AGAINST: [], CONFLICTED: [] };
     const votes = ['FOR', 'AGAINST', 'CONFLICTED'];
     for (const vote of votes) {
         const _responses = await prisma.eventLiveFeedbackPromptResponse.findMany({
             where: { promptId, vote: vote as Vote },
         });
-
-        console.log('TEST: ', _responses);
 
         const responses = _responses.map((response) => response.response);
 
@@ -73,6 +70,7 @@ async function generateViewpointsByVote(promptId: string, eventId: string, prism
                 {
                     prompt_responses: responses,
                     eventId,
+                    issue,
                 },
                 {
                     headers: { 'Content-Type': 'application/json' },
@@ -83,15 +81,14 @@ async function generateViewpointsByVote(promptId: string, eventId: string, prism
             console.error(error);
         }
         const viewpoints = response?.data || [];
-        console.log('TEST Viewpoints: ', viewpoints);
         viewpointsByVote[vote] = viewpoints;
     }
-    console.log('TEST: ', viewpointsByVote);
     return viewpointsByVote;
 }
 
 async function generateViewpointsByMultipleChoice(
     promptId: string,
+    issue: string,
     eventId: string,
     choices: string[],
     prisma: PrismaClient
@@ -127,22 +124,12 @@ async function generateViewpointsByMultipleChoice(
     return viewpointsByChoice;
 }
 
-export async function summarizePromptResponses(
-    promptId: string,
-    eventId: string,
-    redis: Redis | Cluster,
-    prisma: PrismaClient
-) {
-    const moderationIssueEventKey = `moderation_issue_${eventId}}`;
-    const eventIssue = await redis.get(moderationIssueEventKey);
-    if (!eventIssue) {
-        const event = await prisma.event.findUnique({ where: { id: eventId }, select: { issue: true } });
-        if (!event) {
-            throw new ProtectedError({ userMessage: 'Event not found' });
-        }
-        const { issue } = event;
-        redis.set(moderationIssueEventKey, issue);
+export async function summarizePromptResponses(promptId: string, eventId: string, prisma: PrismaClient) {
+    const event = await prisma.event.findUnique({ where: { id: eventId }, select: { issue: true } });
+    if (!event) {
+        throw new ProtectedError({ userMessage: 'Event not found' });
     }
+    const { issue } = event;
 
     const prompt = await prisma.eventLiveFeedbackPrompt.findUnique({ where: { id: promptId } });
     if (!prompt) {
@@ -151,7 +138,7 @@ export async function summarizePromptResponses(
 
     // Handle summary for different types of prompts
     if (prompt.isVote) {
-        const viewpointsByVote = await generateViewpointsByVote(promptId, eventId, prisma);
+        const viewpointsByVote = await generateViewpointsByVote(promptId, issue, eventId, prisma);
 
         return prisma.eventLiveFeedbackPrompt.update({
             where: { id: promptId },
@@ -162,6 +149,7 @@ export async function summarizePromptResponses(
     if (prompt.isMultipleChoice) {
         const viewpointsByChoice = await generateViewpointsByMultipleChoice(
             promptId,
+            issue,
             eventId,
             prompt.multipleChoiceOptions,
             prisma
