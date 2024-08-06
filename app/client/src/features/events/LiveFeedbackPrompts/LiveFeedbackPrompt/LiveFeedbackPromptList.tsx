@@ -31,6 +31,7 @@ export type Prompt = {
     readonly isDraft: boolean | null;
     readonly createdAt: Date | null;
     readonly viewpoints: ReadonlyArray<string> | null;
+    readonly voteViewpoints: Record<string, string[]> | null;
 };
 
 interface PromptItemProps {

@@ -23,6 +23,7 @@ const USE_LIVE_FEEDBACK_PROMPTS = graphql`
                     createdAt
                     isDraft
                     viewpoints
+                    voteViewpoints
                     ...useLiveFeedbackPromptResponsesFragment
                 }
             }
