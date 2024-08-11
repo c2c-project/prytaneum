@@ -16,7 +16,7 @@
         "prisma-migrate-deploy": "prisma migrate deploy",
         "prisma-migrate-diff": "prisma migrate diff",
         "prisma-down-migration": "prisma db execute --file ./down.sql --schema prisma/schema.prisma",
-        "pretest": "yarn g:start-redis",
+        "pretest": "yarn g:start-redis-ci",
         "test:prisma-db-push": "dotenv -c test yarn prisma-db-push",
         "test:unit": "dotenv -c test -- jest \"src/.*\\.unit\\.test\\.ts\" --detectOpenHandles --runInBand",
         "test:integration": "dotenv -c test -- jest \"src/.*\\.integration\\.test\\.ts\" --detectOpenHandles --runInBand",
