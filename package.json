@@ -11,6 +11,7 @@
         "g:dev-docker": "yarn workspace @app/server generate && yarn workspace @app/server prisma-db-push --accept-data-loss && ts-node-dev -- ./scripts/dev-docker.ts",
         "g:dev-test": "yarn workspace @app/server generate && ts-node-dev -- ./scripts/test.ts",
         "g:start-test-db": "yarn exec db/start-test-db.sh",
+        "g:start-test-db-ci": "yarn exec db/start-test-db-ci.sh",
         "g:start-db": "yarn exec db/start-db.sh",
         "g:stop-db": "yarn exec db/stop-db.sh",
         "g:start-redis": "yarn exec redis/start-redis.sh",
