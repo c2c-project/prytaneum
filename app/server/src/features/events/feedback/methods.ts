@@ -24,7 +24,7 @@ export async function promptResponses(promptId: string, prisma: PrismaClient) {
     });
 }
 
-async function generateViewpoints(promptId: string, eventId: string, prisma: PrismaClient) {
+async function generateViewpoints(promptId: string, issue: string, eventId: string, prisma: PrismaClient) {
     const _responses = await prisma.eventLiveFeedbackPromptResponse.findMany({
         where: { promptId },
     });
@@ -38,6 +38,7 @@ async function generateViewpoints(promptId: string, eventId: string, prisma: Pri
             url,
             {
                 prompt_responses: responses,
+                issue_override: issue,
                 eventId,
             },
             {
@@ -69,8 +70,8 @@ async function generateViewpointsByVote(promptId: string, issue: string, eventId
                 url,
                 {
                     prompt_responses: responses,
+                    issue_override: issue,
                     eventId,
-                    issue,
                 },
                 {
                     headers: { 'Content-Type': 'application/json' },
@@ -108,6 +109,7 @@ async function generateViewpointsByMultipleChoice(
                 url,
                 {
                     prompt_responses: responses,
+                    issue_override: issue,
                     eventId,
                 },
                 {
@@ -162,7 +164,7 @@ export async function summarizePromptResponses(promptId: string, eventId: string
     }
 
     // Default to open-ended prompt
-    const viewpoints = await generateViewpoints(promptId, eventId, prisma);
+    const viewpoints = await generateViewpoints(promptId, issue, eventId, prisma);
 
     return prisma.eventLiveFeedbackPrompt.update({
         where: { id: promptId },
