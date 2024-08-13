@@ -2,12 +2,8 @@ import sys
 sys.path.append('../')
 import GoogleGemini as gemini
 
-def SummarizePosts(model: str, topic: str, posts: list, subtopic='', force=False) -> str:
-    if(len(subtopic) > 0):
-        prompt = f'Summarize the viewpoints on "{subtopic}", within the broad topic of "{topic}",'
-    else:
-        prompt = f'Summarize the viewpoints on "{topic}" '
-    prompt += 'in the following comments in just one to five sentences. '
+def SummarizePosts(model: str, topic: str, posts: list, force=False) -> str:
+    prompt = f'Summarize the viewpoints on {topic} in the following comments in just one to five sentences. '
     prompt += 'Start each sentence on a new line with a dash. '
     prompt += 'The comments are:\n'
     for i, post in enumerate(posts):

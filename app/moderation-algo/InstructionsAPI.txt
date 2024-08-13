@@ -61,35 +61,3 @@ response = {
 		...
 	}
 }
-
-Prompt Summarization: Summarize the viewpoints discussed by users in their responses to a prompt
-NOTE: This method is accessed via requests to URL "/promptsummary"
-request = {
-	'issue_override': '(OPTIONAL) The issue to center the prompt analysis around. If not provided, uses issue previously extracted from reading materials.'
-	'subtopic': '(OPTIONAL) The specific subtopic of the prompt'
-	'prompt_responses': [
-		'response1',
-		'response2',
-		...
-	]
-}
-response = [
-	'viewpoint1',
-	'viewpoint2',
-	...
-]
-
-Stakeholder Extraction: Summarize the viewpoints discussed by users in their responses to a prompt
-NOTE: This method is accessed via requests to URL "/stakeholders"
-request = {
-	'prompt_responses': [
-		'response1',
-		'response2',
-		...
-	]
-}
-response = [
-	'stakeholder1',
-	'stakeholder2',
-	...
-]

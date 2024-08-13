@@ -103,8 +103,8 @@ def HandleUserInput():
         # NOTE: Make sure Google API is initialized at this point
         model = 'gemini-pro'
 
-        # Connect to Redis with 12 weeks expiration time for stored data
-        secInAWeek = 7257600
+        # Connect to Redis with a week expiration time for stored data
+        secInAWeek = 604800
         r = ConnectToRedis()
 
         # Get the event ID
@@ -322,53 +322,6 @@ def PromptSummarization():
         
         # Summarize the viewpoints from the prompt
         viewpoints = SummarizePosts(model, issue, promptResponses) # [viewpoint1, viewpoint2, ...]
-
-        # Return the viewpoints with success log message
-        LogEventConsole('Successful run of prompt summarization')
-        return jsonify(viewpoints), 200 # HTTP success
-
-@app.route('/promptsummary', methods=['POST'])
-def PromptSummarization():
-    # Check if the request contains JSON data
-    if request.is_json:
-        # NOTE: Make sure Google API is initialized at this point
-        model = 'gemini-pro'
-
-        # Connect to Redis with 12 weeks expiration time for stored data
-        secInAWeek = 7257600
-        r = ConnectToRedis()
-
-        # Get the event ID
-        eventId = request.get_json().get('eventId')
-        if(not eventId):
-            LogEventConsole('Missing or invalid field "eventId" in request data', 'ERROR')
-            return jsonify({'ERROR': 'Missing or invalid field "eventId" in request data'}), 422 # HTTP unprocessable Entity
-
-        # At this point, the issue should already be available in Redis
-        issue = r.get('moderation_issue_{}'.format(eventId))
-
-        # If issue was provided as parameter, overwrite the stored issue
-        issue_override = request.get_json().get('issue_override')
-        if(issue_override):
-            LogEventConsole(f'Overriding previous issue of "{issue}" with "{issue_override}"', 'INFO')
-            issue = issue_override
-
-        if(issue == 'None'):
-            LogEventConsole('Running prompt summarization with issue set to "None". Please rerun Stage 1 or provide the issue as API parameter "issue_override".', 'WARNING')
-
-        # Get the list of user prompt responses
-        promptResponses = request.get_json().get('prompt_responses')
-        if(not promptResponses):
-            LogEventConsole('Missing field(s) in request data', 'ERROR')
-            return jsonify({'ERROR': 'Missing field(s) in request data'}), 422 # HTTP unprocessable Entity
-        
-        # If subtopic is given, specify to get viewpoints around this subtopic
-        subtopic = request.get_json().get('subtopic')
-        if(not subtopic):
-            subtopic = ''
-            
-        # Summarize the viewpoints from the prompt responses
-        viewpoints = SummarizePosts(model, issue, promptResponses, subtopic) # [viewpoint1, viewpoint2, ...]
 
         # Return the viewpoints with success log message
         LogEventConsole('Successful run of prompt summarization')
