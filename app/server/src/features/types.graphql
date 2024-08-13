@@ -1,5 +1,4 @@
 scalar Date
-scalar JSON
 
 type PageInfo {
     hasNextPage: Boolean!

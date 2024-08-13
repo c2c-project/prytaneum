@@ -157,7 +157,6 @@ model EventLiveFeedbackPrompt {
     multipleChoiceOptions String[] @default([]) // Format is ["option1", "option2"]
     isDraft Boolean @default(false)
     viewpoints String[] @default([]) // Format is ["viewpoint1", "viewpoint2"]
-    voteViewpoints Json @db.Json @default("{}") // { vote: viewpoints } example: { "FOR": ["viewpoint1", "viewpoint2"], "AGAINST": ["viewpoint1", "viewpoint2"] }
     stakeholders String[] @default([]) // Format is ["stakeholder1", "stakeholder2"]
     responses EventLiveFeedbackPromptResponse[]
 }

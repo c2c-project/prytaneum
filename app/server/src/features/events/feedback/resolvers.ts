@@ -175,7 +175,13 @@ export const resolvers: Resolvers = {
                 const { id: promptId } = fromGlobalId(args.promptId);
                 const { id: eventId } = fromGlobalId(args.eventId);
                 // TODO: Pass in option to use ai summary
-                const prompt = await Feedback.summarizePromptResponses(promptId, eventId, ctx.prisma);
+                await Feedback.summarizePromptResponses(promptId, eventId, ctx.redis, ctx.prisma);
+                const prompt = await Feedback.findPromptByPromptId(promptId, ctx.prisma);
+                if (!prompt)
+                    throw new ProtectedError({
+                        userMessage: 'Inalid Prompt',
+                        internalMessage: 'Expected Prompt but got null',
+                    });
                 const formattedPrompt = toFeedbackPromptId(prompt);
                 const edge = {
                     node: formattedPrompt,
@@ -201,7 +207,7 @@ export const resolvers: Resolvers = {
                 if (!args.promptId) throw new ProtectedError({ userMessage: errors.invalidArgs });
                 const { id: eventId } = fromGlobalId(args.eventId);
                 const { id: promptId } = fromGlobalId(args.promptId);
-                const prompt = await Feedback.summarizePromptResponses(promptId, eventId, ctx.prisma);
+                const prompt = await Feedback.summarizePromptResponses(promptId, eventId, ctx.redis, ctx.prisma);
                 if (!prompt)
                     throw new ProtectedError({
                         userMessage: 'Inalid Prompt',
@@ -302,11 +308,6 @@ export const resolvers: Resolvers = {
             const { id: promptId } = fromGlobalId(parent.id);
             const viewpoints = await Feedback.findViewpointsByPromptId(promptId, ctx.prisma);
             return viewpoints;
-        },
-        async voteViewpoints(parent, args, ctx) {
-            const { id: promptId } = fromGlobalId(parent.id);
-            const voteViewpoints = await Feedback.findVoteViewpointsByPromptId(promptId, ctx.prisma);
-            return voteViewpoints;
         },
     },
     EventLiveFeedbackPromptResponse: {

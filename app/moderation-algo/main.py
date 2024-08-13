@@ -311,8 +311,7 @@ def PromptSummarization():
             return jsonify({'ERROR': 'Missing or invalid field "eventId" in request data'}), 422 # HTTP unprocessable Entity
 
         # At this point, the issue should already be available in Redis
-        # issue = r.get('moderation_issue_{}'.format(eventId))
-        issue = request.get_json().get('issue')
+        issue = r.get('moderation_issue_{}'.format(eventId))
 
         # Get the list of user prompt responses
         promptResponses = request.get_json().get('prompt_responses')

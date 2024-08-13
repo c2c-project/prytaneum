@@ -54,7 +54,6 @@ export type PromptData = {
 interface PromptListProps {
     promptResponses: readonly PromptResponse[];
     promptData: PromptData;
-    vote: string;
 }
 
 /**
@@ -65,7 +64,7 @@ interface PromptListProps {
  * TODO: Update pi chart to chart selection (Different ways to visualize data)
  * TODO: Add option to share prompt vote data with audience
  */
-function PromptResponseList({ promptResponses, promptData, vote }: PromptListProps) {
+function PromptResponseList({ promptResponses, promptData }: PromptListProps) {
     const [chartVisiblity, setChartVisiblity] = React.useState<boolean>(false);
     const MAX_VISIBLE_RESPONSES = 50;
 
@@ -94,18 +93,7 @@ function PromptResponseList({ promptResponses, promptData, vote }: PromptListPro
         return voteCount.for === 0 && voteCount.against === 0 && voteCount.conflicted === 0;
     }, [voteCount]);
 
-    // const responses = React.useMemo(() => promptResponses.slice(0, MAX_VISIBLE_RESPONSES), [promptResponses]);
-
-    const filteredResponses = React.useMemo(() => {
-        if (vote === 'default') return promptResponses.slice(0, MAX_VISIBLE_RESPONSES);
-        if (promptData.isMultipleChoice)
-            return promptResponses
-                .filter((response) => response.multipleChoiceResponse === vote)
-                .slice(0, MAX_VISIBLE_RESPONSES);
-        if (promptData.isVote)
-            return promptResponses.filter((response) => response.vote === vote).slice(0, MAX_VISIBLE_RESPONSES);
-        return promptResponses.slice(0, MAX_VISIBLE_RESPONSES);
-    }, [promptResponses, vote, promptData.isMultipleChoice, promptData.isVote]);
+    const responses = React.useMemo(() => promptResponses.slice(0, MAX_VISIBLE_RESPONSES), [promptResponses]);
 
     const multipleChoiceResponses = React.useMemo(() => {
         return promptResponses.map((response) =>
@@ -152,45 +140,43 @@ function PromptResponseList({ promptResponses, promptData, vote }: PromptListPro
             <Typography variant='h4'>Responses</Typography>
             <Divider sx={{ width: '100%', marginBottom: '0.5rem' }} />
             <List id='live-feedback-prompt-response-list'>
-                {filteredResponses.map(
-                    ({ id, response, vote: _vote, multipleChoiceResponse, createdAt, createdBy }) => (
-                        <ListItem key={id} style={{ paddingBottom: '.5rem', paddingTop: '.5rem' }}>
-                            <Grid
-                                container
-                                display='flex'
-                                direction='column'
-                                alignContent='center'
-                                alignItems='stretch'
-                                spacing={1}
-                            >
-                                <Card>
-                                    <PromptResponseAuthorCardHeader
-                                        createdBy={createdBy}
-                                        createdAt={createdAt}
-                                        vote={_vote}
-                                        isVote={promptData.isVote}
-                                    />
-                                    <CardContent sx={{ margin: (theme) => theme.spacing(-2, 0, -1, 0) }}>
-                                        {promptData.isMultipleChoice ? (
-                                            <React.Fragment>
-                                                <Typography variant='inherit' sx={{ wordBreak: 'break-word' }}>
-                                                    Choice: {multipleChoiceResponse}
-                                                </Typography>
-                                                <Typography variant='inherit' sx={{ wordBreak: 'break-word' }}>
-                                                    Reasoning: {response}
-                                                </Typography>
-                                            </React.Fragment>
-                                        ) : (
+                {responses.map(({ id, response, vote, multipleChoiceResponse, createdAt, createdBy }) => (
+                    <ListItem key={id} style={{ paddingBottom: '.5rem', paddingTop: '.5rem' }}>
+                        <Grid
+                            container
+                            display='flex'
+                            direction='column'
+                            alignContent='center'
+                            alignItems='stretch'
+                            spacing={1}
+                        >
+                            <Card>
+                                <PromptResponseAuthorCardHeader
+                                    createdBy={createdBy}
+                                    createdAt={createdAt}
+                                    vote={vote}
+                                    isVote={promptData.isVote}
+                                />
+                                <CardContent sx={{ margin: (theme) => theme.spacing(-2, 0, -1, 0) }}>
+                                    {promptData.isMultipleChoice ? (
+                                        <React.Fragment>
                                             <Typography variant='inherit' sx={{ wordBreak: 'break-word' }}>
-                                                {response}
+                                                Choice: {multipleChoiceResponse}
                                             </Typography>
-                                        )}
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                        </ListItem>
-                    )
-                )}
+                                            <Typography variant='inherit' sx={{ wordBreak: 'break-word' }}>
+                                                Reasoning: {response}
+                                            </Typography>
+                                        </React.Fragment>
+                                    ) : (
+                                        <Typography variant='inherit' sx={{ wordBreak: 'break-word' }}>
+                                            {response}
+                                        </Typography>
+                                    )}
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    </ListItem>
+                ))}
             </List>
         </React.Fragment>
     );
@@ -199,27 +185,22 @@ function PromptResponseList({ promptResponses, promptData, vote }: PromptListPro
 interface LiveFeedbackPromptResponseListProps {
     queryRef: PreloadedQuery<LiveFeedbackPromptResponseListQuery>;
     promptData: PromptData;
-    vote: string;
 }
 
 /**
  * This component is responsible for loading the query and passing the fragment ref to the PromptList component
  */
-export function LiveFeedbackPromptResponseList({ queryRef, promptData, vote }: LiveFeedbackPromptResponseListProps) {
+export function LiveFeedbackPromptResponseList({ queryRef, promptData }: LiveFeedbackPromptResponseListProps) {
     const { promptResponses } = usePreloadedQuery(LIVE_FEEDBACK_PROMPT_RESPONSE_LIST_QUERY, queryRef);
     if (!promptResponses) return <Loader />;
-    return <PromptResponseList promptResponses={promptResponses} promptData={promptData} vote={vote} />;
+    return <PromptResponseList promptResponses={promptResponses} promptData={promptData} />;
 }
 
 interface PreloadedLiveFeedbackPromptResponseListProps {
     prompt: Prompt;
-    vote: string;
 }
 
-export function PreloadedLiveFeedbackPromptResponseList({
-    prompt,
-    vote,
-}: PreloadedLiveFeedbackPromptResponseListProps) {
+export function PreloadedLiveFeedbackPromptResponseList({ prompt }: PreloadedLiveFeedbackPromptResponseListProps) {
     const [queryRef, loadQuery, disposeQuery] = useQueryLoader<LiveFeedbackPromptResponseListQuery>(
         LIVE_FEEDBACK_PROMPT_RESPONSE_LIST_QUERY
     );
@@ -268,7 +249,7 @@ export function PreloadedLiveFeedbackPromptResponseList({
     return (
         <ConditionalRender client>
             <React.Suspense fallback={<Loader />}>
-                <LiveFeedbackPromptResponseList queryRef={queryRef} promptData={promptData} vote={vote} />
+                <LiveFeedbackPromptResponseList queryRef={queryRef} promptData={promptData} />
             </React.Suspense>
         </ConditionalRender>
     );

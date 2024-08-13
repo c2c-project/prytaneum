@@ -1,15 +1,5 @@
 import * as React from 'react';
-import {
-    Typography,
-    Grid,
-    DialogContent,
-    Stack,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
-    SelectChangeEvent,
-} from '@mui/material';
+import { Typography, Grid, DialogContent, Stack } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
@@ -37,32 +27,26 @@ export default function FeedbackResponsesDialog({
 }: Props) {
     const theme = useTheme();
     const fullscreen = useMediaQuery(theme.breakpoints.down('md'));
-    const [voteKey, setVoteKey] = React.useState<string>('');
-
-    const handleSelectionChange = (e: SelectChangeEvent<string>) => {
-        e.preventDefault();
-        setVoteKey(e.target.value);
-    };
 
     const PromptText = React.useCallback(() => {
-        if (selectedPrompt)
+        if (promptRef.current)
             return (
                 <Grid container padding='1rem'>
                     <Grid item xs>
                         <Typography variant='h5' style={{ overflowWrap: 'break-word' }}>
-                            Prompt: {selectedPrompt.prompt}
+                            Prompt: {promptRef.current.prompt}
                         </Typography>
                     </Grid>
                 </Grid>
             );
         return <React.Fragment />;
-    }, [selectedPrompt]);
+    }, [promptRef]);
 
     const ShareFeedbackResultsButton = () => {
-        if (selectedPrompt)
+        if (promptRef.current)
             return (
                 <Grid item paddingBottom='1rem'>
-                    <ShareFeedbackPromptResults prompt={selectedPrompt} />
+                    <ShareFeedbackPromptResults prompt={promptRef.current} />
                 </Grid>
             );
         return <React.Fragment />;
@@ -90,30 +74,8 @@ export default function FeedbackResponsesDialog({
                         ) : null}
                         <ShareFeedbackResultsButton />
                     </Stack>
-                    <FormControl sx={{ m: 1, minWidth: 120 }}>
-                        <InputLabel id='lang-label'>Vote</InputLabel>
-                        <Select
-                            labelId='vote-select-label'
-                            id='vote-select'
-                            label='Vote'
-                            name='vote'
-                            value={voteKey}
-                            onChange={handleSelectionChange}
-                        >
-                            <MenuItem value='default'>default</MenuItem>
-                            {selectedPrompt?.voteViewpoints
-                                ? Object.keys(selectedPrompt.voteViewpoints).map((viewpoint, index) => (
-                                      <MenuItem key={index} value={viewpoint}>
-                                          {viewpoint}
-                                      </MenuItem>
-                                  ))
-                                : null}
-                        </Select>
-                    </FormControl>
-                    {selectedPrompt ? <ViewpointsList prompt={selectedPrompt} vote={voteKey} /> : null}
-                    {selectedPrompt ? (
-                        <PreloadedLiveFeedbackPromptResponseList prompt={selectedPrompt} vote={voteKey} />
-                    ) : null}
+                    {selectedPrompt ? <ViewpointsList viewpoints={selectedPrompt.viewpoints} /> : null}
+                    {promptRef.current ? <PreloadedLiveFeedbackPromptResponseList prompt={promptRef.current} /> : null}
                 </Grid>
             </DialogContent>
         </StyledDialog>

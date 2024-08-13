@@ -23,7 +23,6 @@ type EventLiveFeedbackPrompt implements Node {
     isDraft: Boolean
     responses(first: Int, after: String): EventLiveFeedbackPromptResponseConnection
     viewpoints: [String!]
-    voteViewpoints: JSON # { string: [string!] } - vote: [viewpoints] - multipleChoice: [viewpoints]
     stakeholders: [String!]
 }
 

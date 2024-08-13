@@ -21,8 +21,6 @@ export type Scalars = {
     Float: number;
     /** Date custom scalar type */
     Date: any;
-    /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
-    JSON: any;
     _FieldSet: any;
 };
 
@@ -1239,7 +1237,6 @@ export type EventLiveFeedbackPrompt = Node & {
     isDraft?: Maybe<Scalars['Boolean']>;
     responses?: Maybe<EventLiveFeedbackPromptResponseConnection>;
     viewpoints?: Maybe<Array<Scalars['String']>>;
-    voteViewpoints?: Maybe<Scalars['JSON']>;
     stakeholders?: Maybe<Array<Scalars['String']>>;
 };
 
@@ -1884,7 +1881,6 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
     Date: ResolverTypeWrapper<Scalars['Date']>;
-    JSON: ResolverTypeWrapper<Scalars['JSON']>;
     PageInfo: ResolverTypeWrapper<PageInfo>;
     Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
     String: ResolverTypeWrapper<Scalars['String']>;
@@ -2063,7 +2059,6 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
     Date: Scalars['Date'];
-    JSON: Scalars['JSON'];
     PageInfo: PageInfo;
     Boolean: Scalars['Boolean'];
     String: Scalars['String'];
@@ -2239,10 +2234,6 @@ export type ResolversParentTypes = {
 
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
     name: 'Date';
-}
-
-export interface JSONScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['JSON'], any> {
-    name: 'JSON';
 }
 
 export type PageInfoResolvers<
@@ -3451,7 +3442,6 @@ export type EventLiveFeedbackPromptResolvers<
         Partial<EventLiveFeedbackPromptresponsesArgs>
     >;
     viewpoints?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-    voteViewpoints?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
     stakeholders?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -3962,7 +3952,6 @@ export type EventVideoMutationResponseResolvers<
 
 export type Resolvers<ContextType = MercuriusContext> = {
     Date?: GraphQLScalarType;
-    JSON?: GraphQLScalarType;
     PageInfo?: PageInfoResolvers<ContextType>;
     Node?: NodeResolvers<ContextType>;
     Query?: QueryResolvers<ContextType>;
@@ -4306,7 +4295,6 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
             TContext
         >;
         viewpoints?: LoaderResolver<Maybe<Array<Scalars['String']>>, EventLiveFeedbackPrompt, {}, TContext>;
-        voteViewpoints?: LoaderResolver<Maybe<Scalars['JSON']>, EventLiveFeedbackPrompt, {}, TContext>;
         stakeholders?: LoaderResolver<Maybe<Array<Scalars['String']>>, EventLiveFeedbackPrompt, {}, TContext>;
     };
 

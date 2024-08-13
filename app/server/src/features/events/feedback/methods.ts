@@ -10,6 +10,7 @@ import { fromGlobalId } from 'graphql-relay';
 import { isModerator } from '../moderation/methods';
 import { ProtectedError } from '../../../lib/ProtectedError';
 import { Vote } from '@local/graphql-types';
+import Redis, { Cluster } from 'ioredis';
 
 export async function myFeedback(userId: string, eventId: string, prisma: PrismaClient) {
     const result = await prisma.eventLiveFeedback.findMany({
@@ -24,21 +25,37 @@ export async function promptResponses(promptId: string, prisma: PrismaClient) {
     });
 }
 
-async function generateViewpoints(promptId: string, issue: string, eventId: string, prisma: PrismaClient) {
+export async function summarizePromptResponses(
+    promptId: string,
+    eventId: string,
+    redis: Redis | Cluster,
+    prisma: PrismaClient
+) {
+    const moderationIssueEventKey = `moderation_issue_${eventId}}`;
+    const eventIssue = await redis.get(moderationIssueEventKey);
+    if (!eventIssue) {
+        const event = await prisma.event.findUnique({ where: { id: eventId }, select: { issue: true } });
+        if (!event) {
+            throw new ProtectedError({ userMessage: 'Event not found' });
+        }
+        const { issue } = event;
+        redis.set(moderationIssueEventKey, issue);
+    }
     const _responses = await prisma.eventLiveFeedbackPromptResponse.findMany({
         where: { promptId },
+        select: { response: true },
     });
 
     const responses = _responses.map((response) => response.response);
 
-    let response: AxiosResponse<string[]> | null = null;
+    type ExpectedResponse = string[];
+    let response: AxiosResponse<ExpectedResponse> | null = null;
     try {
         const url = process.env.MODERATION_URL + 'promptsummary';
         response = await axios.post(
             url,
             {
                 prompt_responses: responses,
-                issue_override: issue,
                 eventId,
             },
             {
@@ -50,121 +67,6 @@ async function generateViewpoints(promptId: string, issue: string, eventId: stri
         console.error(error);
     }
     const viewpoints = response?.data || [];
-    return viewpoints;
-}
-
-async function generateViewpointsByVote(promptId: string, issue: string, eventId: string, prisma: PrismaClient) {
-    const viewpointsByVote: Record<string, string[]> = { FOR: [], AGAINST: [], CONFLICTED: [] };
-    const votes = ['FOR', 'AGAINST', 'CONFLICTED'];
-    for (const vote of votes) {
-        const _responses = await prisma.eventLiveFeedbackPromptResponse.findMany({
-            where: { promptId, vote: vote as Vote },
-        });
-
-        const responses = _responses.map((response) => response.response);
-
-        let response: AxiosResponse<string[]> | null = null;
-        try {
-            const url = process.env.MODERATION_URL + 'promptsummary';
-            response = await axios.post(
-                url,
-                {
-                    prompt_responses: responses,
-                    issue_override: issue,
-                    eventId,
-                },
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                }
-            );
-            if (!response) throw new Error('Could not summarize responses, No response from moderation service.');
-        } catch (error) {
-            console.error(error);
-        }
-        const viewpoints = response?.data || [];
-        viewpointsByVote[vote] = viewpoints;
-    }
-    return viewpointsByVote;
-}
-
-async function generateViewpointsByMultipleChoice(
-    promptId: string,
-    issue: string,
-    eventId: string,
-    choices: string[],
-    prisma: PrismaClient
-) {
-    const viewpointsByChoice: Record<string, string[]> = {};
-    for (const choice of choices) {
-        const _responses = await prisma.eventLiveFeedbackPromptResponse.findMany({
-            where: { promptId, multipleChoiceResponse: choice },
-        });
-
-        const responses = _responses.map((response) => response.response);
-
-        let response: AxiosResponse<string[]> | null = null;
-        try {
-            const url = process.env.MODERATION_URL + 'promptsummary';
-            response = await axios.post(
-                url,
-                {
-                    prompt_responses: responses,
-                    issue_override: issue,
-                    eventId,
-                },
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                }
-            );
-            if (!response) throw new Error('Could not summarize responses, No response from moderation service.');
-        } catch (error) {
-            console.error(error);
-        }
-        const viewpoints = response?.data || [];
-        viewpointsByChoice[choice] = viewpoints;
-    }
-    return viewpointsByChoice;
-}
-
-export async function summarizePromptResponses(promptId: string, eventId: string, prisma: PrismaClient) {
-    const event = await prisma.event.findUnique({ where: { id: eventId }, select: { issue: true } });
-    if (!event) {
-        throw new ProtectedError({ userMessage: 'Event not found' });
-    }
-    const { issue } = event;
-
-    const prompt = await prisma.eventLiveFeedbackPrompt.findUnique({ where: { id: promptId } });
-    if (!prompt) {
-        throw new ProtectedError({ userMessage: 'Prompt not found' });
-    }
-
-    // Handle summary for different types of prompts
-    if (prompt.isVote) {
-        const viewpointsByVote = await generateViewpointsByVote(promptId, issue, eventId, prisma);
-
-        return prisma.eventLiveFeedbackPrompt.update({
-            where: { id: promptId },
-            data: { voteViewpoints: viewpointsByVote },
-        });
-    }
-
-    if (prompt.isMultipleChoice) {
-        const viewpointsByChoice = await generateViewpointsByMultipleChoice(
-            promptId,
-            issue,
-            eventId,
-            prompt.multipleChoiceOptions,
-            prisma
-        );
-
-        return prisma.eventLiveFeedbackPrompt.update({
-            where: { id: promptId },
-            data: { voteViewpoints: viewpointsByChoice },
-        });
-    }
-
-    // Default to open-ended prompt
-    const viewpoints = await generateViewpoints(promptId, issue, eventId, prisma);
 
     return prisma.eventLiveFeedbackPrompt.update({
         where: { id: promptId },
@@ -299,15 +201,6 @@ export async function findViewpointsByPromptId(promptId: string, prisma: PrismaC
     });
     if (!queryResult) return null;
     return queryResult.viewpoints;
-}
-
-export async function findVoteViewpointsByPromptId(promptId: string, prisma: PrismaClient) {
-    const queryResult = await prisma.eventLiveFeedbackPrompt.findUnique({
-        where: { id: promptId },
-        select: { voteViewpoints: true },
-    });
-    if (!queryResult) return null;
-    return queryResult.voteViewpoints;
 }
 
 export async function doesEventMatchFeedback(eventId: string, feedbackId: string, prisma: PrismaClient) {

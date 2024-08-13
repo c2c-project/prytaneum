@@ -16,13 +16,13 @@
         "prisma-migrate-deploy": "prisma migrate deploy",
         "prisma-migrate-diff": "prisma migrate diff",
         "prisma-down-migration": "prisma db execute --file ./down.sql --schema prisma/schema.prisma",
-        "pretest": "yarn g:start-redis-ci",
+        "pretest": "yarn g:start-redis",
         "test:prisma-db-push": "dotenv -c test yarn prisma-db-push",
         "test:unit": "dotenv -c test -- jest \"src/.*\\.unit\\.test\\.ts\" --detectOpenHandles --runInBand",
         "test:integration": "dotenv -c test -- jest \"src/.*\\.integration\\.test\\.ts\" --detectOpenHandles --runInBand",
         "test:all": "yarn pretest && dotenv -c test -- jest \"src/.*.test\\.ts\" --detectOpenHandles --runInBand",
         "test:coverage": "dotenv -c test -- jest --coverage",
-        "test:ci": "yarn generate && yarn g:start-test-db-ci && yarn test:prisma-db-push && yarn test:all"
+        "test:ci": "yarn generate && yarn g:start-test-db && yarn test:prisma-db-push && yarn test:all"
     },
     "prisma": {
         "seed": "ts-node-dev ./prisma/seed.ts"
@@ -51,7 +51,6 @@
         "form-data": "^4.0.0",
         "graphql": "^16.6.0",
         "graphql-relay": "^0.10.0",
-        "graphql-type-json": "^0.3.2",
         "ioredis": "^5.3.2",
         "ioredis-mock": "^8.7.0",
         "jsonwebtoken": "^9.0.0",
