@@ -64,15 +64,26 @@ def ProcessQuestion(issue: str, topics: dict, question: str) -> dict:
 def ConnectToRedis() -> redis.Redis:
     "Establish a connection to Redis for temporary persistent memory. Returns the connection object."
     # Get connection details from environment variables
-    REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
-    REDIS_PORT = os.environ.get('REDIS_PORT', 6379)
-    REDIS_USERNAME = os.environ.get('REDIS_USERNAME', None)
-    REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', None)
+    REDIS_HOST = os.environ.get('REDIS_HOST')
+    REDIS_PORT = os.environ.get('REDIS_PORT')
+    REDIS_USERNAME = os.environ.get('REDIS_USERNAME')
+    REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD')
     NODE_ENV = os.environ.get('NODE_ENV')
     if NODE_ENV == 'production':
-        startup_nodes = [ClusterNode(host=REDIS_HOST, port=REDIS_PORT)]
-        return RedisCluster(startup_nodes=startup_nodes, skip_full_coverage_check=True, decode_responses=True, 
-                            socket_timeout=5, socket_connect_timeout=5)
+        nodes = list()
+        REDIS_HOST_NODE_1 = os.environ.get('REDIS_HOST_1')
+        REDIS_HOST_NODE_2 = os.environ.get('REDIS_HOST_2')
+        REDIS_HOST_NODE_3 = os.environ.get('REDIS_HOST_3')
+        REDIS_HOST_NODE_4 = os.environ.get('REDIS_HOST_4')
+        REDIS_HOST_NODE_5 = os.environ.get('REDIS_HOST_5')
+        REDIS_HOST_NODE_6 = os.environ.get('REDIS_HOST_6')
+        nodes.append(ClusterNode(host=REDIS_HOST_NODE_1, port=REDIS_PORT))
+        nodes.append(ClusterNode(host=REDIS_HOST_NODE_2, port=REDIS_PORT))
+        nodes.append(ClusterNode(host=REDIS_HOST_NODE_3, port=REDIS_PORT))
+        nodes.append(ClusterNode(host=REDIS_HOST_NODE_4, port=REDIS_PORT))
+        nodes.append(ClusterNode(host=REDIS_HOST_NODE_5, port=REDIS_PORT))
+        nodes.append(ClusterNode(host=REDIS_HOST_NODE_6, port=REDIS_PORT))
+        return RedisCluster(startup_nodes=nodes, host=REDIS_HOST, port=REDIS_PORT)
     return redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT, username=REDIS_USERNAME, password=REDIS_PASSWORD,
                             charset='utf-8', decode_responses=True)
 

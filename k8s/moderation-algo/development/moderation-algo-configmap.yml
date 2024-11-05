@@ -9,6 +9,12 @@ data:
     HOST: 0.0.0.0
     NODE_ENV: production
     GCP_PROJECT_ID: prytaneum-project
-    REDIS_HOST: 10.128.15.195 # Memstore IP
+    REDIS_HOST: staging-redis-cluster.development.svc.cluster.local
+    REDIS_HOST_NODE_1: staging-redis-cluster-0.development.svc.cluster.local
+    REDIS_HOST_NODE_2: staging-redis-cluster-1.development.svc.cluster.local
+    REDIS_HOST_NODE_3: staging-redis-cluster-2.development.svc.cluster.local
+    REDIS_HOST_NODE_4: staging-redis-cluster-3.development.svc.cluster.local
+    REDIS_HOST_NODE_5: staging-redis-cluster-4.development.svc.cluster.local
+    REDIS_HOST_NODE_6: staging-redis-cluster-5.development.svc.cluster.local
     REDIS_PORT: '6379'
     REDIS_USERNAME: default
