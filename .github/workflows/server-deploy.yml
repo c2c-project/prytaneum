@@ -30,7 +30,6 @@ env:
     GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
     GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
     GOOGLE_REDIRECT_URI: ${{ vars.GOOGLE_REDIRECT_URI }}
-    GOOGLE_ARTIFACT_REPO: ${{ vars.GOOGLE_ARTIFACT_REPO }}
 
 jobs:
     staging:
@@ -60,10 +59,8 @@ jobs:
 
             # Configure Docker to use the gcloud command-line tool as a credential
             # helper for authentication
-            # This is required to push the Docker image to Google Artifact Registry
             - run: |-
-                  gcloud --quiet auth configure-docker \
-                    us-central1-docker.pkg.dev
+                  gcloud --quiet auth configure-docker
             # Get the GKE credentials so we can deploy to the cluster
             - id: 'get-credentials'
               uses: google-github-actions/get-gke-credentials@v0.7.0
@@ -76,7 +73,7 @@ jobs:
               run: |-
                   docker build \
                     -f ./docker/Dockerfile.server \
-                    --tag "$GOOGLE_ARTIFACT_REPO/$SERVER_IMAGE:$GITHUB_SHA" \
+                    --tag "gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA" \
                     --build-arg ORIGIN="$ORIGIN" \
                     --build-arg GITHUB_SHA="$GITHUB_SHA" \
                     --build-arg GITHUB_REF="$GITHUB_REF" \
@@ -87,7 +84,7 @@ jobs:
 
             # Push the Server image to Google Container Registry
             - name: Publish Server
-              run: docker push "$GOOGLE_ARTIFACT_REPO/$SERVER_IMAGE:$GITHUB_SHA"
+              run: docker push "gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA"
 
             # Set up kustomize
             - name: Set up Kustomize
@@ -99,7 +96,7 @@ jobs:
             - name: Kustomize & Deploy Server
               run: |-
                   cd ./k8s/server/development
-                  kustomize edit set image GOOGLE_ARTIFACT_REPO/SERVER_IMAGE:TAG=$GOOGLE_ARTIFACT_REPO/$SERVER_IMAGE:$GITHUB_SHA
+                  kustomize edit set image gcr.io/PROJECT_ID/SERVER_IMAGE:TAG=gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA
                   kustomize edit set namespace $NAMESPACE
                   kustomize build . | kubectl apply -f -
 
@@ -165,7 +162,7 @@ jobs:
               run: |-
                   docker build \
                     -f ./docker/Dockerfile.server \
-                    --tag "$GOOGLE_ARTIFACT_REPO/$SERVER_IMAGE:$GITHUB_SHA" \
+                    --tag "gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA" \
                     --build-arg ORIGIN="$ORIGIN" \
                     --build-arg GITHUB_SHA="$GITHUB_SHA" \
                     --build-arg GITHUB_REF="$GITHUB_REF" \
@@ -176,7 +173,7 @@ jobs:
 
             # Push the Server image to Google Container Registry
             - name: Publish Server
-              run: docker push "$GOOGLE_ARTIFACT_REPO/$SERVER_IMAGE:$GITHUB_SHA"
+              run: docker push "gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA"
 
             # Set up kustomize
             - name: Set up Kustomize
@@ -188,7 +185,7 @@ jobs:
             - name: Kustomize & Deploy Server
               run: |-
                   cd ./k8s/server/production
-                  kustomize edit set image GOOGLE_ARTIFACT_REPO/SERVER_IMAGE:TAG=$GOOGLE_ARTIFACT_REPO/$SERVER_IMAGE:$GITHUB_SHA
+                  kustomize edit set image gcr.io/PROJECT_ID/SERVER_IMAGE:TAG=gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA
                   kustomize edit set namespace $NAMESPACE
                   kustomize build . | kubectl apply -f -
 

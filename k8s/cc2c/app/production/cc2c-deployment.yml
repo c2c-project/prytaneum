@@ -27,7 +27,7 @@ spec:
                       secretName: gcp-storage-credentials
             containers:
                 - name: cc2c
-                  image: GOOGLE_ARTIFACT_REPO/CC2C_IMAGE:TAG
+                  image: gcr.io/PROJECT_ID/CC2C_IMAGE:TAG
                   volumeMounts:
                       - name: google-cloud-key
                         mountPath: /var/secrets/google

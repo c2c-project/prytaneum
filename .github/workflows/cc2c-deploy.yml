@@ -30,7 +30,6 @@ env:
     DATABASE_URL: ${{ secrets.DATABASE_URL }} # Used for prisma migration
     REGISTRATION_AUTHORIZATION_CODE: ${{ secrets.REGISTRATION_AUTHORIZATION_CODE }}
     PRYTANEUM_URL: ${{ vars.PRYTANEUM_URL }}
-    GOOGLE_ARTIFACT_REPO: ${{ vars.GOOGLE_ARTIFACT_REPO }}
 
 jobs:
     staging:
@@ -72,7 +71,7 @@ jobs:
               run: |-
                   docker build \
                     -f ./docker/Dockerfile.cc2c \
-                    --tag "$GOOGLE_ARTIFACT_REPO/$CC2C_IMAGE:$GITHUB_SHA" \
+                    --tag "gcr.io/$PROJECT_ID/$CC2C_IMAGE:$GITHUB_SHA" \
                     --build-arg GITHUB_SHA="$GITHUB_SHA" \
                     --build-arg GITHUB_REF="$GITHUB_REF" \
                     --build-arg DEPLOYMENT_ENV="development" \
@@ -85,7 +84,7 @@ jobs:
 
             # Push the App image to Google Container Registry
             - name: Publish App
-              run: docker push "$GOOGLE_ARTIFACT_REPO/$CC2C_IMAGE:$GITHUB_SHA"
+              run: docker push "gcr.io/$PROJECT_ID/$CC2C_IMAGE:$GITHUB_SHA"
 
             # Set up kustomize
             - name: Set up Kustomize
@@ -97,7 +96,7 @@ jobs:
             - name: Kustomize & Deploy App
               run: |-
                   cd ./k8s/cc2c/app/development
-                  kustomize edit set image GOOGLE_ARTIFACT_REPO/CC2C_IMAGE:TAG=$GOOGLE_ARTIFACT_REPO/$CC2C_IMAGE:$GITHUB_SHA
+                  kustomize edit set image gcr.io/PROJECT_ID/CC2C_IMAGE:TAG=gcr.io/$PROJECT_ID/$CC2C_IMAGE:$GITHUB_SHA
                   kustomize edit set namespace $NAMESPACE
                   kustomize build . | kubectl apply -f -
 
@@ -162,7 +161,7 @@ jobs:
               run: |-
                   docker build \
                     -f ./docker/Dockerfile.cc2c \
-                    --tag "$GOOGLE_ARTIFACT_REPO/$CC2C_IMAGE:$GITHUB_SHA" \
+                    --tag "gcr.io/$PROJECT_ID/$CC2C_IMAGE:$GITHUB_SHA" \
                     --build-arg GITHUB_SHA="$GITHUB_SHA" \
                     --build-arg GITHUB_REF="$GITHUB_REF" \
                     --build-arg DEPLOYMENT_ENV="production" \
@@ -175,7 +174,7 @@ jobs:
 
             # Push the App image to Google Container Registry
             - name: Publish App
-              run: docker push "$GOOGLE_ARTIFACT_REPO/$CC2C_IMAGE:$GITHUB_SHA"
+              run: docker push "gcr.io/$PROJECT_ID/$CC2C_IMAGE:$GITHUB_SHA"
 
             # Set up kustomize
             - name: Set up Kustomize
@@ -187,7 +186,7 @@ jobs:
             - name: Kustomize & Deploy App
               run: |-
                   cd ./k8s/cc2c/app/production
-                  kustomize edit set image GOOGLE_ARTIFACT_REPO/CC2C_IMAGE:TAG=$GOOGLE_ARTIFACT_REPO/$CC2C_IMAGE:$GITHUB_SHA
+                  kustomize edit set image gcr.io/PROJECT_ID/CC2C_IMAGE:TAG=gcr.io/$PROJECT_ID/$CC2C_IMAGE:$GITHUB_SHA
                   kustomize edit set namespace $NAMESPACE
                   kustomize build . | kubectl apply -f -
 
