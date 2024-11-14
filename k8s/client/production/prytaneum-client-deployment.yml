@@ -23,7 +23,7 @@ spec:
         spec:
             containers:
                 - name: prytaneum-client
-                  image: GOOGLE_ARTIFACT_REPO/CLIENT_IMAGE:TAG
+                  image: gcr.io/PROJECT_ID/CLIENT_IMAGE:TAG
                   imagePullPolicy: IfNotPresent
                   resources:
                       limits:

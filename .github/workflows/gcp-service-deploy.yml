@@ -24,7 +24,6 @@ env:
     GKE_ZONE: ${{ vars.GKE_ZONE }}
     GCP_SERVICE_IMAGE: ${{ vars.GCP_SERVICE_IMAGE }}
     NAMESPACE: ${{ vars.NAMESPACE }}
-    GOOGLE_ARTIFACT_REPO: ${{ vars.GOOGLE_ARTIFACT_REPO }}
 
 jobs:
     staging:
@@ -53,8 +52,7 @@ jobs:
             # Configure Docker to use the gcloud command-line tool as a credential
             # helper for authentication
             - run: |-
-                  gcloud --quiet auth configure-docker \
-                    us-central1-docker.pkg.dev
+                  gcloud --quiet auth configure-docker
             # Get the GKE credentials so we can deploy to the cluster
             - id: 'get-credentials'
               uses: google-github-actions/get-gke-credentials@v0.7.0
@@ -67,7 +65,7 @@ jobs:
               run: |-
                   docker build \
                     -f ./docker/Dockerfile.gcp \
-                    --tag "$GOOGLE_ARTIFACT_REPO/$GCP_SERVICE_IMAGE:$GITHUB_SHA" \
+                    --tag "gcr.io/$PROJECT_ID/$GCP_SERVICE_IMAGE:$GITHUB_SHA" \
                     --build-arg GITHUB_SHA="$GITHUB_SHA" \
                     --build-arg GITHUB_REF="$GITHUB_REF" \
                     --build-arg DEPLOYMENT_ENV="development" \
@@ -75,13 +73,13 @@ jobs:
 
             # Push the App image to Google Container Registry
             - name: Publish GCP Service
-              run: docker push "$GOOGLE_ARTIFACT_REPO/$GCP_SERVICE_IMAGE:$GITHUB_SHA"
+              run: docker push "gcr.io/$PROJECT_ID/$GCP_SERVICE_IMAGE:$GITHUB_SHA"
 
             # Deploy the Docker image to the GKE cluster
             - name: Kustomize & Deploy GCP Service
               run: |-
                   cd ./k8s/cc2c/gcp/development
-                  kustomize edit set image GOOGLE_ARTIFACT_REPO/GCP_SERVICE_IMAGE:TAG=$GOOGLE_ARTIFACT_REPO/$GCP_SERVICE_IMAGE:$GITHUB_SHA
+                  kustomize edit set image gcr.io/PROJECT_ID/GCP_SERVICE_IMAGE:TAG=gcr.io/$PROJECT_ID/$GCP_SERVICE_IMAGE:$GITHUB_SHA
                   kustomize edit set namespace $NAMESPACE
                   kustomize build . | kubectl apply -f -
 
@@ -121,8 +119,7 @@ jobs:
             # Configure Docker to use the gcloud command-line tool as a credential
             # helper for authentication
             - run: |-
-                  gcloud --quiet auth configure-docker \
-                    us-central1-docker.pkg.dev
+                  gcloud --quiet auth configure-docker
             # Get the GKE credentials so we can deploy to the cluster
             - id: 'get-credentials'
               uses: google-github-actions/get-gke-credentials@v0.7.0
@@ -135,7 +132,7 @@ jobs:
               run: |-
                   docker build \
                     -f ./docker/Dockerfile.gcp \
-                    --tag "$GOOGLE_ARTIFACT_REPO/$GCP_SERVICE_IMAGE:$GITHUB_SHA" \
+                    --tag "gcr.io/$PROJECT_ID/$GCP_SERVICE_IMAGE:$GITHUB_SHA" \
                     --build-arg GITHUB_SHA="$GITHUB_SHA" \
                     --build-arg GITHUB_REF="$GITHUB_REF" \
                     --build-arg DEPLOYMENT_ENV="production" \
@@ -143,13 +140,13 @@ jobs:
 
             # Push the App image to Google Container Registry
             - name: Publish GCP Service
-              run: docker push "$GOOGLE_ARTIFACT_REPO/$GCP_SERVICE_IMAGE:$GITHUB_SHA"
+              run: docker push "gcr.io/$PROJECT_ID/$GCP_SERVICE_IMAGE:$GITHUB_SHA"
 
             # Deploy the Docker image to the GKE cluster
             - name: Kustomize & Deploy GCP Service
               run: |-
                   cd ./k8s/cc2c/gcp/production
-                  kustomize edit set image GOOGLE_ARTIFACT_REPO/GCP_SERVICE_IMAGE:TAG=$GOOGLE_ARTIFACT_REPO/$GCP_SERVICE_IMAGE:$GITHUB_SHA
+                  kustomize edit set image gcr.io/PROJECT_ID/GCP_SERVICE_IMAGE:TAG=gcr.io/$PROJECT_ID/$GCP_SERVICE_IMAGE:$GITHUB_SHA
                   kustomize edit set namespace $NAMESPACE
                   kustomize build . | kubectl apply -f -
 

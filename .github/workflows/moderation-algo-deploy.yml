@@ -25,7 +25,6 @@ env:
     MODERATION_ALGO_IMAGE: ${{ vars.MODERATION_ALGO_IMAGE }}
     NAMESPACE: ${{ vars.NAMESPACE }}
     ORIGIN: ${{ vars.ORIGIN }}
-    GOOGLE_ARTIFACT_REPO: ${{ vars.GOOGLE_ARTIFACT_REPO }}
 
 jobs:
     staging:
@@ -56,8 +55,7 @@ jobs:
             # Configure Docker to use the gcloud command-line tool as a credential
             # helper for authentication
             - run: |-
-                  gcloud --quiet auth configure-docker \
-                    us-central1-docker.pkg.dev
+                  gcloud --quiet auth configure-docker
             # Get the GKE credentials so we can deploy to the cluster
             - id: 'get-credentials'
               uses: google-github-actions/get-gke-credentials@v0.7.0
@@ -74,14 +72,14 @@ jobs:
               run: |-
                   docker build \
                     -f ./app/moderation-algo/Dockerfile \
-                    --tag "$GOOGLE_ARTIFACT_REPO/$MODERATION_ALGO_IMAGE:$GITHUB_SHA" \
+                    --tag "gcr.io/$PROJECT_ID/$MODERATION_ALGO_IMAGE:$GITHUB_SHA" \
                     --build-arg GITHUB_SHA="$GITHUB_SHA" \
                     --build-arg GITHUB_REF="$GITHUB_REF" \
                     ./app/moderation-algo
 
             # Push the Moderation algo image to Google Container Registry
             - name: Publish Moderation Algorithm
-              run: docker push "$GOOGLE_ARTIFACT_REPO/$MODERATION_ALGO_IMAGE:$GITHUB_SHA"
+              run: docker push "gcr.io/$PROJECT_ID/$MODERATION_ALGO_IMAGE:$GITHUB_SHA"
 
             # Set up kustomize
             - name: Set up Kustomize
@@ -93,7 +91,7 @@ jobs:
             - name: Kustomize & Deploy Moderation Algorithm
               run: |-
                   cd ./k8s/moderation-algo/development
-                  kustomize edit set image GOOGLE_ARTIFACT_REPO/MODERATION_ALGO_IMAGE:TAG=$GOOGLE_ARTIFACT_REPO/$MODERATION_ALGO_IMAGE:$GITHUB_SHA
+                  kustomize edit set image gcr.io/PROJECT_ID/MODERATION_ALGO_IMAGE:TAG=gcr.io/$PROJECT_ID/$MODERATION_ALGO_IMAGE:$GITHUB_SHA
                   kustomize edit set namespace $NAMESPACE
                   kustomize build . | kubectl apply -f -
 
@@ -135,8 +133,7 @@ jobs:
             # Configure Docker to use the gcloud command-line tool as a credential
             # helper for authentication
             - run: |-
-                  gcloud --quiet auth configure-docker \
-                    us-central1-docker.pkg.dev
+                  gcloud --quiet auth configure-docker
             # Get the GKE credentials so we can deploy to the cluster
             - id: 'get-credentials'
               uses: google-github-actions/get-gke-credentials@v0.7.0
@@ -163,14 +160,14 @@ jobs:
               run: |-
                   docker build \
                     -f ./app/moderation-algo/Dockerfile \
-                    --tag "$GOOGLE_ARTIFACT_REPO/$MODERATION_ALGO_IMAGE:$GITHUB_SHA" \
+                    --tag "gcr.io/$PROJECT_ID/$MODERATION_ALGO_IMAGE:$GITHUB_SHA" \
                     --build-arg GITHUB_SHA="$GITHUB_SHA" \
                     --build-arg GITHUB_REF="$GITHUB_REF" \
                     ./app/moderation-algo
 
             # Push the Moderation algo image to Google Container Registry
             - name: Publish Moderation Algorithm
-              run: docker push "$GOOGLE_ARTIFACT_REPO/$MODERATION_ALGO_IMAGE:$GITHUB_SHA"
+              run: docker push "gcr.io/$PROJECT_ID/$MODERATION_ALGO_IMAGE:$GITHUB_SHA"
 
             # Set up kustomize
             - name: Set up Kustomize
@@ -182,7 +179,7 @@ jobs:
             - name: Kustomize & Deploy Moderation Algorithm
               run: |-
                   cd ./k8s/moderation-algo/production
-                  kustomize edit set image GOOGLE_ARTIFACT_REPO/MODERATION_ALGO_IMAGE:TAG=$GOOGLE_ARTIFACT_REPO/$MODERATION_ALGO_IMAGE:$GITHUB_SHA
+                  kustomize edit set image gcr.io/PROJECT_ID/MODERATION_ALGO_IMAGE:TAG=gcr.io/$PROJECT_ID/$MODERATION_ALGO_IMAGE:$GITHUB_SHA
                   kustomize edit set namespace $NAMESPACE
                   kustomize build . | kubectl apply -f -
 

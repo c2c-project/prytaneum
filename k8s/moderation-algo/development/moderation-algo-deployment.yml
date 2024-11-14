@@ -23,7 +23,7 @@ spec:
         spec:
             containers:
                 - name: moderation-algo
-                  image: GOOGLE_ARTIFACT_REPO/MODERATION_ALGO_IMAGE:TAG
+                  image: gcr.io/PROJECT_ID/MODERATION_ALGO_IMAGE:TAG
                   imagePullPolicy: IfNotPresent
                   resources:
                       limits:
