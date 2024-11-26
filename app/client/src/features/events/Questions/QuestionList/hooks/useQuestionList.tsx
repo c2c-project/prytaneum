@@ -1,7 +1,10 @@
 import * as React from 'react';
 import { graphql, usePaginationFragment } from 'react-relay';
 
-import type { useQuestionListFragment$key } from '@local/__generated__/useQuestionListFragment.graphql';
+import type {
+    useQuestionListFragment$data,
+    useQuestionListFragment$key,
+} from '@local/__generated__/useQuestionListFragment.graphql';
 
 export const USE_QUESTION_LIST_FRAGMENT = graphql`
     fragment useQuestionListFragment on Event
@@ -38,23 +41,26 @@ export const USE_QUESTION_LIST_FRAGMENT = graphql`
     }
 `;
 
-interface TArgs {
+export type FormattedQuestionData = NonNullable<
+    NonNullable<useQuestionListFragment$data['questions']>['edges']
+>[number]['node'] & {
+    readonly cursor: string;
+};
+
+interface useQuestionListProps {
     fragmentRef: useQuestionListFragment$key;
 }
 
-export function useQuestionList({ fragmentRef }: TArgs) {
+export function useQuestionList({ fragmentRef }: useQuestionListProps) {
     const { data, loadNext, loadPrevious, hasNext, hasPrevious, isLoadingNext, isLoadingPrevious, refetch } =
         usePaginationFragment(USE_QUESTION_LIST_FRAGMENT, fragmentRef);
     const { questions, id: eventId, currentQuestion } = data;
-    const questionList = React.useMemo(
-        () =>
-            questions?.edges
-                ? questions.edges.map(({ node, cursor }) => {
-                      return { ...node, cursor };
-                  })
-                : [],
-        [questions]
-    );
+    const questionList: FormattedQuestionData[] = React.useMemo(() => {
+        if (!questions?.edges) return [];
+        return questions.edges.map(({ node, cursor }) => {
+            return { ...node, cursor };
+        });
+    }, [questions]);
 
     const connections = React.useMemo(() => (questions?.__id ? [questions.__id] : []), [questions?.__id]);
 

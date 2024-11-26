@@ -17,11 +17,11 @@ import { EventDetailsCard } from './EventDetailsCard';
 import { SpeakerList } from './Speakers';
 import { useEventDetails } from './useEventDetails';
 import { PreloadedLiveMessages } from './BroadcastMessages/LiveMessages';
-import { ViewerOnlyQuestionList } from './Questions/ViewerOnlyQuestionList/ViewerOnlyQuestionList';
 import { StyledTabs } from '@local/components/StyledTabs';
 import { StyledColumnGrid } from '@local/components/StyledColumnGrid';
 import { EventIssueGuideViewer } from './EventIssueGuide/EventIssueGuideViewer';
 import { useUser } from '../accounts';
+import { ViewerOnlyQuestionListContainer } from './Questions/ViewerOnlyQuestionList/ViewerOnlyQuestionList';
 
 const EVENT_PRE_QUERY = graphql`
     query EventPreQuery($eventId: ID!, $lang: String!) {
@@ -217,7 +217,10 @@ export function EventPre({ fragmentRef }: EventPreProps) {
                             }}
                             scrollable={false}
                         >
-                            <ViewerOnlyQuestionList fragmentRef={fragmentRef} isVisible={tab === 'Questions'} />
+                            <ViewerOnlyQuestionListContainer
+                                fragmentRef={fragmentRef}
+                                isVisible={tab === 'Questions'}
+                            />
                             <LiveFeedbackList
                                 fragmentRef={fragmentRef}
                                 isVisible={tab === 'Feedback'}

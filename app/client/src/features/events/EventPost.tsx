@@ -13,7 +13,7 @@ import { FragmentRefs } from 'relay-runtime';
 import { EventDetailsCard } from './EventDetailsCard';
 import { SpeakerList } from './Speakers';
 import { useEventDetails } from './useEventDetails';
-import { QuestionList } from './Questions/QuestionList/QuestionList';
+import { QuestionListContainer } from './Questions/QuestionList/QuestionList';
 import { VideoModal } from './Videos/VideoModal';
 import PostEventFeedback from './PostEventFeedback/PostEventFeedback';
 import { StyledTabs } from '@local/components/StyledTabs';
@@ -167,7 +167,7 @@ export function EventPost({ node }: EventPostProps) {
                             }}
                             scrollable={false}
                         >
-                            <QuestionList
+                            <QuestionListContainer
                                 fragmentRef={node}
                                 isVisible={tab === 'Questions'}
                                 askQuestionEnabled={false}

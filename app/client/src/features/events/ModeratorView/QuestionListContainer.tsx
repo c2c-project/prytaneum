@@ -26,7 +26,7 @@ import type { MeasuredCellParent } from 'react-virtualized/dist/es/CellMeasurer'
 
 import ListFilter, { useFilters, Accessors } from '@local/components/ListFilter';
 import { ArrayElement } from '@local/utils/ts-utils';
-import { useQuestionUpdated } from '@local/features/events/Questions/QuestionList/useQuestionUpdated';
+import { useQuestionUpdated } from '@local/features/events/Questions/QuestionList/hooks/useQuestionUpdated';
 import { useQuestionsByTopic } from './hooks/useQuestionsByTopic';
 import { useQuestionsByTopicFragment$key } from '@local/__generated__/useQuestionsByTopicFragment.graphql';
 import EventQuestion from './EventQuestion';

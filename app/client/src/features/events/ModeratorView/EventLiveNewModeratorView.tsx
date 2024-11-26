@@ -122,6 +122,8 @@ export interface PreloadedEventLiveModratorViewProps {
 }
 
 export function PreloadedEventLiveNewModratorView({ eventId }: PreloadedEventLiveModratorViewProps) {
+    const theme = useTheme();
+    const lgDownBreakpoint = useMediaQuery(theme.breakpoints.down('lg'));
     const { user, isLoading: isUserLoading } = useUser();
     const [queryRef, loadEventQuery, disposeQuery] = useQueryLoader<EventLiveNewModeratorViewQuery>(
         EVENT_LIVE_MODERATOR_VIEW_QUERY
@@ -146,14 +148,22 @@ export function PreloadedEventLiveNewModratorView({ eventId }: PreloadedEventLiv
 
     if (!queryRef) return <Loader />;
     return (
-        <React.Suspense
-            fallback={
-                <Backdrop open={true}>
-                    <CircularProgress color='inherit' />
-                </Backdrop>
-            }
+        <div
+            style={{
+                width: '100%',
+                height: '100%',
+                padding: lgDownBreakpoint ? theme.spacing(3, 3, 0, 3) : theme.spacing(0, 3), // add top padding so event video doesn't touch navbar
+            }}
         >
-            <EventLiveNewModeratorViewContainer queryRef={queryRef} eventId={eventId} refresh={refresh} />
-        </React.Suspense>
+            <React.Suspense
+                fallback={
+                    <Backdrop open={true}>
+                        <CircularProgress color='inherit' />
+                    </Backdrop>
+                }
+            >
+                <EventLiveNewModeratorViewContainer queryRef={queryRef} eventId={eventId} refresh={refresh} />
+            </React.Suspense>
+        </div>
     );
 }

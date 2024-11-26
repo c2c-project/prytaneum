@@ -16,7 +16,7 @@ import { QuestionQueue } from './Moderation/ManageQuestions';
 import { EventLiveModeratorViewQuery } from '@local/__generated__/EventLiveModeratorViewQuery.graphql';
 import { StyledColumnGrid } from '@local/components/StyledColumnGrid';
 import { StyledTabs } from '@local/components/StyledTabs';
-import { QuestionList } from './Questions';
+import { QuestionListContainer } from './Questions';
 import { CurrentQuestionCard } from './Moderation/ManageQuestions/CurrentQuestionCard';
 import { PreloadedActionsPanels } from './ModeratorView/ActionsPanels';
 import { EventTopicContext } from './ModeratorView/EventTopicContext';
@@ -126,7 +126,7 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
                                 }}
                                 scrollable={false}
                             >
-                                <QuestionList fragmentRef={node} isVisible={true} />
+                                <QuestionListContainer fragmentRef={node} isVisible={true} />
                             </StyledColumnGrid>
                         </Grid>
                     </Panel>

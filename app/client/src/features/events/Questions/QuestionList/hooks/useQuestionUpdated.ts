@@ -3,7 +3,7 @@ import { GraphQLSubscriptionConfig } from 'relay-runtime';
 import { useSubscription, graphql } from 'react-relay';
 
 import type { useQuestionUpdatedSubscription } from '@local/__generated__/useQuestionUpdatedSubscription.graphql';
-import { useEvent } from '../../useEvent';
+import { useEvent } from '../../../useEvent';
 import { useUser } from '@local/features/accounts';
 
 export const USE_QUESTION_UPDATED_SUBSCRIPTION = graphql`

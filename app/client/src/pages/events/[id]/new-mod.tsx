@@ -1,53 +1,30 @@
-import * as React from 'react';
-import { NextPage } from 'next';
-import { useRouter } from 'next/router';
-import { Backdrop, CircularProgress, useMediaQuery } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { Fragment } from 'react';
+import { GetServerSidePropsContext, NextPage } from 'next';
 
-import { ConditionalRender } from '@local/components';
-import { EventLiveLoader } from '@local/features/events';
+import { ConditionalRender, Loader } from '@local/components';
 import { PreloadedEventLiveNewModratorView } from '@local/features/events/ModeratorView/EventLiveNewModeratorView';
 
-export async function getServerSideProps() {
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
     const baseProps = {
         hideSideNav: true,
         containerProps: { maxWidth: '100%' },
         disablePadding: true,
     };
+    const eventId = ctx.params?.id as string;
 
-    return { props: baseProps };
+    return { props: { ...baseProps, eventId } };
 }
 
-const Mod: NextPage = () => {
-    const theme = useTheme();
-    const lgDownBreakpoint = useMediaQuery(theme.breakpoints.down('lg'));
-    const router = useRouter();
-
-    if (!router.isReady) return <EventLiveLoader />;
-
+const Mod: NextPage<{ eventId: string }> = ({ eventId }) => {
     return (
-        <div
-            style={{
-                width: '100%',
-                height: '100%',
-                padding: lgDownBreakpoint ? theme.spacing(3, 3, 0, 3) : theme.spacing(0, 3), // add top padding so event video doesn't touch navbar
-            }}
-        >
+        <Fragment>
             <ConditionalRender client>
-                <React.Suspense
-                    fallback={
-                        <Backdrop open={true}>
-                            <CircularProgress color='inherit' />
-                        </Backdrop>
-                    }
-                >
-                    <PreloadedEventLiveNewModratorView eventId={router.query.id as string} />
-                </React.Suspense>
+                <PreloadedEventLiveNewModratorView eventId={eventId} />
             </ConditionalRender>
             <ConditionalRender server>
-                <EventLiveLoader />
+                <Loader />
             </ConditionalRender>
-        </div>
+        </Fragment>
     );
 };
 

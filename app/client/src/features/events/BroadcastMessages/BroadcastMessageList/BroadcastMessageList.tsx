@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
 import { graphql } from 'relay-runtime';
-import { Card, Grid, IconButton, List, ListItem, Paper, Stack, Tooltip, Typography } from '@mui/material';
+import { Card, Grid, IconButton, List, ListItem, Tooltip, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -15,6 +15,7 @@ import { useBroadcastMessageCreated } from './useBroadcastMessageCreated';
 import { useBroadcastMessageList } from './useBroadcastMessageList';
 import { useBroadcastMessageDeleted } from './useBroadcastMessageDeleted';
 import { useBroadcastMessageListFragment$key } from '@local/__generated__/useBroadcastMessageListFragment.graphql';
+import { ListActionsContainer, ListContainer, ListToolbar } from '@local/components/ui/List';
 
 export const BROADCAST_MESSAGE_LIST_QUERY = graphql`
     query BroadcastMessageListQuery($eventId: ID!, $lang: String!) {
@@ -61,87 +62,62 @@ export function BroadcastMessageList({ fragmentRef, isVisible }: MessageListProp
     if (!isVisible) return <React.Fragment />;
 
     return (
-        <Grid container height={0} flex='1 1 100%'>
-            <Grid item xs={12}>
-                <Paper sx={{ padding: '1rem', marginX: '8px', marginBottom: '0.5rem' }}>
-                    <Stack
-                        direction='row'
-                        justifyContent='space-between'
-                        alignItems='center'
-                        marginBottom={isSearchOpen ? '.5rem' : '0rem'}
-                    >
-                        <Grid item xs='auto'>
-                            <IconButton color={isSearchOpen ? 'primary' : 'default'} onClick={toggleSearch}>
-                                <Tooltip title='Search Bar' placement='top'>
-                                    <SearchIcon fontSize='large' />
-                                </Tooltip>
-                            </IconButton>
-                        </Grid>
-                        <BroadcastMessageInput />
-                    </Stack>
-                    <ListFilter
-                        style={{ flex: 1, paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
-                        onFilterChange={handleFilterChange}
-                        onSearch={handleSearch}
-                        isSearchOpen={isSearchOpen}
-                        length={filteredList.length}
-                    />
-                </Paper>
-                {/* <Grid container direction='row' justifyContent='space-evenly' paddingBottom='1rem'>
-                        <Grid item>
-                            <BroadcastMessageInput />
-                        </Grid>
+        <ListContainer sx={{ height: '100%' }}>
+            <ListToolbar>
+                <ListActionsContainer>
+                    <Grid item xs='auto'>
+                        <IconButton color={isSearchOpen ? 'primary' : 'default'} onClick={toggleSearch}>
+                            <Tooltip title='Search Bar' placement='top'>
+                                <SearchIcon fontSize='large' />
+                            </Tooltip>
+                        </IconButton>
                     </Grid>
-                    <Grid item xs={12}>
-                        <ListFilter
-                            style={{ flex: 1, paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
-                            onFilterChange={handleFilterChange}
-                            onSearch={handleSearch}
-                            isSearchOpen={true}
-                            length={filteredList.length}
-                        />
-                    </Grid> */}
-                <Grid item xs={12}>
-                    <List disablePadding>
-                        {filteredList.map((broadcastMessage) => (
-                            <React.Fragment key={broadcastMessage.id}>
-                                <ListItem disableGutters sx={{ paddingX: '0.5rem' }}>
-                                    <Card
-                                        style={{
-                                            flex: 1,
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            paddingTop: theme.spacing(0.5),
-                                            borderRadius: '10px',
-                                        }}
-                                    >
-                                        <BroadcastMessageAuthor fragmentRef={broadcastMessage} />
-                                        <BroadcastMessageContent fragmentRef={broadcastMessage} />
-                                        <Grid container alignItems='center' justifyContent='space-between'>
-                                            <BroadcastMessageActions
-                                                deleteEnabled={true}
-                                                // TODO: Reinstate edit functionality once updated to dialog
-                                                editEnabled={false}
-                                                fragmentRef={broadcastMessage}
-                                            />
-                                        </Grid>
-                                    </Card>
-                                </ListItem>
-                            </React.Fragment>
-                        ))}
-                        {filteredList.length === 0 && broadcastMessages.length !== 0 && (
-                            <Typography align='center' variant='body2'>
-                                No results to display
-                            </Typography>
-                        )}
-                        {broadcastMessages.length === 0 && (
-                            <Typography align='center' variant='h5'>
-                                No broadcasted messages to display
-                            </Typography>
-                        )}
-                    </List>
-                </Grid>
-            </Grid>
-        </Grid>
+                    <BroadcastMessageInput />
+                </ListActionsContainer>
+                <ListFilter
+                    style={{ flex: 1, paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
+                    onFilterChange={handleFilterChange}
+                    onSearch={handleSearch}
+                    isSearchOpen={isSearchOpen}
+                    length={filteredList.length}
+                />
+            </ListToolbar>
+            <List disablePadding sx={{ overflowY: 'scroll' }}>
+                {filteredList.map((broadcastMessage) => (
+                    <ListItem key={broadcastMessage.id} disableGutters sx={{ paddingX: '0.5rem' }}>
+                        <Card
+                            style={{
+                                flex: 1,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                paddingTop: theme.spacing(0.5),
+                                borderRadius: '10px',
+                            }}
+                        >
+                            <BroadcastMessageAuthor fragmentRef={broadcastMessage} />
+                            <BroadcastMessageContent fragmentRef={broadcastMessage} />
+                            <Grid container alignItems='center' justifyContent='space-between'>
+                                <BroadcastMessageActions
+                                    deleteEnabled={true}
+                                    // TODO: Reinstate edit functionality once updated to dialog
+                                    editEnabled={false}
+                                    fragmentRef={broadcastMessage}
+                                />
+                            </Grid>
+                        </Card>
+                    </ListItem>
+                ))}
+                {filteredList.length === 0 && broadcastMessages.length !== 0 && (
+                    <Typography align='center' variant='body2'>
+                        No results to display
+                    </Typography>
+                )}
+                {broadcastMessages.length === 0 && (
+                    <Typography align='center' variant='h5'>
+                        No broadcasted messages to display
+                    </Typography>
+                )}
+            </List>
+        </ListContainer>
     );
 }

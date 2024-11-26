@@ -13,3 +13,4 @@ export const EVENT_ISSUE_GUIDE_URL_MAX_LENGTH = 500;
 export const EVENT_READING_MATERIALS_MAX_LENGTH = 120000; // 120,000 characters (Gemini Limit for now)
 export const EVENT_TOPIC_TOPIC_MAX_LENGTH = 75;
 export const EVENT_TOPIC_DESCRIPTION_MAX_LENGTH = 500;
+export const QUESTIONS_BATCH_SIZE = 10;

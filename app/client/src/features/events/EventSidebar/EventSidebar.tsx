@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles';
 import { graphql, useFragment } from 'react-relay';
 
 import { EventSidebarFragment$key } from '@local/__generated__/EventSidebarFragment.graphql';
-import { QuestionList } from '@local/features/events/Questions/QuestionList';
+import { QuestionListContainer } from '@local/features/events/Questions/QuestionList';
 import { LiveFeedbackList } from '@local/features/events/LiveFeedback/LiveFeedbackList';
 import { QuestionCarousel } from '../Questions/QuestionCarousel';
 import { useLiveFeedbackPrompt } from '../LiveFeedbackPrompts';
@@ -180,7 +180,7 @@ export const EventSidebar = ({ fragmentRef, participants }: EventSidebarProps) =
                         ref={questionTabRef}
                         sx={{
                             zIndex: currentPopper === EventInfoPopperStage.Questions ? theme.zIndex.drawer + 2 : 0,
-                            'aria-controls': 'question-tabpanel-0',
+                            ariaControls: 'question-tabpanel-0',
                         }}
                     />
                     <Tab
@@ -190,7 +190,7 @@ export const EventSidebar = ({ fragmentRef, participants }: EventSidebarProps) =
                         ref={feedbackTabRef}
                         sx={{
                             zIndex: currentPopper === EventInfoPopperStage.Feedback ? theme.zIndex.drawer + 2 : 0,
-                            'aria-controls': 'feedback-tabpanel-1',
+                            ariaControls: 'feedback-tabpanel-1',
                             overflow: 'visible', // Prevents badge from being cut off
                         }}
                     />
@@ -201,7 +201,7 @@ export const EventSidebar = ({ fragmentRef, participants }: EventSidebarProps) =
                         }
                         value={2}
                         sx={{
-                            'aria-controls': 'participants-tabpanel-2',
+                            ariaControls: 'participants-tabpanel-2',
                             overflow: 'visible', // Prevents badge from being cut off
                         }}
                     />
@@ -218,7 +218,7 @@ export const EventSidebar = ({ fragmentRef, participants }: EventSidebarProps) =
                     }}
                     scrollable={selectedTab === 2}
                 >
-                    <QuestionList fragmentRef={data} isVisible={selectedTab === 0} searchOnly={false} />
+                    <QuestionListContainer fragmentRef={data} isVisible={selectedTab === 0} searchOnly={false} />
                     <LiveFeedbackList
                         fragmentRef={data}
                         isVisible={selectedTab === 1}

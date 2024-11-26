@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card, CardContent, Grid, Typography, CardActions, Paper, IconButton, Stack, Tooltip } from '@mui/material';
+import { Card, CardContent, Grid, Typography, CardActions, IconButton, Tooltip } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import InfoIcon from '@mui/icons-material/Info';
 import { AutoSizer, List as VirtualizedList, CellMeasurer, CellMeasurerCache } from 'react-virtualized';
@@ -15,6 +15,7 @@ import { useEvent } from '../useEvent';
 import { LiveFeedbackReplyAction } from './LiveFeedbackReplyAction';
 import { LiveFeedbackReply } from './LiveFeedbackReply';
 import { SubmitLiveFeedback } from './SubmitLiveFeedback';
+import { ListActionsContainer, ListContainer, ListToolbar } from '@local/components/ui/List';
 
 interface LiveFeedbackListProps {
     fragmentRef: useLiveFeedbackListFragment$key;
@@ -102,39 +103,19 @@ export function LiveFeedbackList({ fragmentRef, isVisible, setNumOfFeedbackMsgs 
         );
     }
 
-    const ActionButtons = React.useMemo(() => {
-        if (isModerator) {
-            return (
-                <Stack
-                    direction='row'
-                    justifyContent='space-between'
-                    alignItems='center'
-                    marginBottom={isSearchOpen ? '.5rem' : '0rem'}
-                >
+    React.useEffect(() => {
+        if (!user) setDisplayLiveFeedback(false);
+        else setDisplayLiveFeedback(true);
+    }, [user, isModerator]);
+
+    if (!isVisible) return <React.Fragment />;
+
+    return (
+        <ListContainer>
+            <ListToolbar>
+                <ListActionsContainer isExpanded={isSearchOpen}>
                     <Grid item xs='auto'>
-                        <IconButton
-                            color={isSearchOpen ? 'primary' : 'default'}
-                            aria-label='search-icon-button'
-                            onClick={toggleSearch}
-                        >
-                            <Tooltip title='Search Bar' placement='top'>
-                                <SearchIcon fontSize='large' />
-                            </Tooltip>
-                        </IconButton>
-                    </Grid>
-                    <SubmitLiveFeedback eventId={eventId} connections={connections} />
-                </Stack>
-            );
-        } else {
-            return (
-                <Stack
-                    direction='row'
-                    justifyContent='space-between'
-                    alignItems='center'
-                    marginBottom={isSearchOpen ? '.5rem' : '0rem'}
-                >
-                    <Grid item xs='auto'>
-                        {user && (
+                        {user ? (
                             <IconButton
                                 color={isSearchOpen ? 'primary' : 'default'}
                                 aria-label='search-icon-button'
@@ -144,28 +125,17 @@ export function LiveFeedbackList({ fragmentRef, isVisible, setNumOfFeedbackMsgs 
                                     <SearchIcon fontSize='large' />
                                 </Tooltip>
                             </IconButton>
+                        ) : (
+                            <React.Fragment />
                         )}
                     </Grid>
                     <SubmitLiveFeedback eventId={eventId} connections={connections} />
-                    <Tooltip title='Submit any feedback or questions directly to the event moderators.'>
-                        <InfoIcon sx={{ color: 'primary.main' }} />
-                    </Tooltip>
-                </Stack>
-            );
-        }
-    }, [connections, eventId, isModerator, isSearchOpen, toggleSearch, user]);
-
-    React.useEffect(() => {
-        if (!user) setDisplayLiveFeedback(false);
-        else setDisplayLiveFeedback(true);
-    }, [user, isModerator]);
-
-    if (!isVisible) return <React.Fragment />;
-
-    return (
-        <Stack direction='column' alignItems='stretch' width='100%' paddingRight={0}>
-            <Paper sx={{ padding: '1rem', marginX: '8px', marginBottom: '0.5rem' }}>
-                {ActionButtons}
+                    {isModerator ? null : (
+                        <Tooltip title='Submit any feedback or questions directly to the event moderators.'>
+                            <InfoIcon sx={{ color: 'primary.main' }} />
+                        </Tooltip>
+                    )}
+                </ListActionsContainer>
                 <ListFilter
                     onFilterChange={handleFilterChange}
                     onSearch={handleSearch}
@@ -173,7 +143,7 @@ export function LiveFeedbackList({ fragmentRef, isVisible, setNumOfFeedbackMsgs 
                     length={filteredList.length}
                     displayNumResults={Boolean(user)} // only display for users logged in
                 />
-            </Paper>
+            </ListToolbar>
             {displayLiveFeedback && filteredList.length === 0 && (
                 <Typography align='center' variant='h5' marginTop='1rem'>
                     No feedback to display
@@ -199,6 +169,6 @@ export function LiveFeedbackList({ fragmentRef, isVisible, setNumOfFeedbackMsgs 
                     Sign in to submit Live Feedback
                 </Typography>
             )}
-        </Stack>
+        </ListContainer>
     );
 }
