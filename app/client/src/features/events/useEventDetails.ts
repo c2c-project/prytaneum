@@ -49,6 +49,12 @@ export function useEventDetails({ fragmentRef }: Props) {
         setIsLive(false);
     }, [data.isActive]);
 
+    // Relay will use cache (if avaliable) on initial load, refresh the after 1 second to ensure the data is up to date
+    React.useEffect(() => {
+        setTimeout(refresh, 1000);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return {
         eventData: data,
         isLive,
