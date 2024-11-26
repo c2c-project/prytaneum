@@ -1,16 +1,10 @@
 import * as React from 'react';
-import { Grid, Chip, Typography, Stack, Tooltip } from '@mui/material';
+import { Grid, Chip, Typography, Stack, Tooltip, Card } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 
 import type { useOnDeckFragment$key } from '@local/__generated__/useOnDeckFragment.graphql';
-import {
-    QuestionAuthor,
-    QuestionContent,
-    QuestionQuote,
-    QuestionTopics,
-    QuestionCard,
-} from '@local/components/ui/Question';
+import { QuestionAuthor, QuestionContent, QuestionQuote, QuestionTopics } from '@local/components/ui/Question';
 import { NextQuestionButton } from './NextQuestionButton';
 import { PreviousQuestionButton } from './PreviousQuestionButton';
 import { useRecordPush } from './useRecordPush';
@@ -81,7 +75,7 @@ export function CurrentQuestionCard({ isViewerModerator, fragmentRef }: Question
                     <NextQuestionButton disabled={!canGoForward} />
                 </Stack>
             )}
-            <QuestionCard
+            <Card
                 sx={{
                     minHeight: '190px',
                     maxHeight: '300px',
@@ -100,7 +94,7 @@ export function CurrentQuestionCard({ isViewerModerator, fragmentRef }: Question
                 )}
                 {currentQuestion && <QuestionContent fragmentRef={currentQuestion} />}
                 {isViewerModerator && currentQuestion && <QuestionTopics fragmentRef={currentQuestion} />}
-            </QuestionCard>
+            </Card>
         </React.Fragment>
     );
 }
