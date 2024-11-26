@@ -1,13 +1,18 @@
 import * as React from 'react';
-import { Grid, Chip, Card, Typography, Stack, Tooltip } from '@mui/material';
+import { Grid, Chip, Typography, Stack, Tooltip } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 
 import type { useOnDeckFragment$key } from '@local/__generated__/useOnDeckFragment.graphql';
-import { QuestionAuthor, QuestionContent, QuestionQuote } from '../../Questions';
+import {
+    QuestionAuthor,
+    QuestionContent,
+    QuestionQuote,
+    QuestionTopics,
+    QuestionCard,
+} from '@local/components/ui/Question';
 import { NextQuestionButton } from './NextQuestionButton';
 import { PreviousQuestionButton } from './PreviousQuestionButton';
-// import { useQuestionQueue } from './useQuestionQueue';
 import { useRecordPush } from './useRecordPush';
 import { useRecordRemove } from './useRecordRemove';
 import { useRecordUnshift } from './useRecordUnshift';
@@ -15,7 +20,6 @@ import { useEnqueuedPush } from './useEnqueuedPush';
 import { useEnqueuedRemove } from './useEnqueuedRemove';
 import { useEnqueuedUnshift } from './useEnqueuedUnshift';
 import { useOnDeck } from '../../ModeratorView/hooks/OnDeck/useOnDeck';
-import { QuestionTopics } from '../../Questions/QuestionTopics';
 
 interface QuestionQueueProps {
     isViewerModerator: boolean;
@@ -77,7 +81,7 @@ export function CurrentQuestionCard({ isViewerModerator, fragmentRef }: Question
                     <NextQuestionButton disabled={!canGoForward} />
                 </Stack>
             )}
-            <Card
+            <QuestionCard
                 sx={{
                     minHeight: '190px',
                     maxHeight: '300px',
@@ -96,7 +100,7 @@ export function CurrentQuestionCard({ isViewerModerator, fragmentRef }: Question
                 )}
                 {currentQuestion && <QuestionContent fragmentRef={currentQuestion} />}
                 {isViewerModerator && currentQuestion && <QuestionTopics fragmentRef={currentQuestion} />}
-            </Card>
+            </QuestionCard>
         </React.Fragment>
     );
 }

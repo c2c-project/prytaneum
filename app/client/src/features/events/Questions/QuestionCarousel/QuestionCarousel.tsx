@@ -4,11 +4,9 @@ import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { graphql, useFragment } from 'react-relay';
 
 import type { QuestionCarouselFragment$key } from '@local/__generated__/QuestionCarouselFragment.graphql';
-import { QuestionAuthor } from '../QuestionAuthor';
-import { QuestionContent } from '../QuestionContent';
-import { useRecordPush } from '../../Moderation/ManageQuestions/useRecordPush';
-import { useRecordRemove } from '../../Moderation/ManageQuestions/useRecordRemove';
-import { QuestionQuote } from '../QuestionQuote';
+import { QuestionAuthor, QuestionContent, QuestionQuote } from '@local/components/ui/Question';
+import { useRecordPush } from '@local/features/events/Moderation/ManageQuestions/useRecordPush';
+import { useRecordRemove } from '@local/features/events/Moderation/ManageQuestions/useRecordRemove';
 
 const QUESTION_CAROUSEL_FRAGMENT = graphql`
     fragment QuestionCarouselFragment on Event

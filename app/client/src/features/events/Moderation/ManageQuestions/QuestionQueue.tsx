@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
-import { Select, MenuItem, Grid, Typography, Card, List, ListItem, IconButton, SelectProps } from '@mui/material';
+import { Select, MenuItem, Grid, Typography, List, ListItem, IconButton, SelectProps } from '@mui/material';
 import { graphql, useMutation } from 'react-relay';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import ListFilter, { useFilters, Accessors } from '@local/components/ListFilter';
@@ -25,7 +25,13 @@ import {
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
-import { QuestionAuthor, QuestionStats, QuestionContent, QuestionQuote } from '../../Questions';
+import {
+    QuestionAuthor,
+    QuestionStats,
+    QuestionContent,
+    QuestionQuote,
+    QuestionCard,
+} from '@local/components/ui/Question';
 import { useEvent } from '../../useEvent';
 import { useQuestionQueue } from './useQuestionQueue';
 import { useRecordPush } from './useRecordPush';
@@ -90,7 +96,7 @@ const SortableQuestion = ({ question, connections }: { question: ProcessedQuesti
             {...listeners}
             style={{ ...style, padding: '0.5rem', width: '100%', borderRadius: '10px', position: 'relative' }}
         >
-            <Card sx={{ paddingBottom: '.5rem' }}>
+            <QuestionCard sx={{ paddingBottom: '.5rem' }}>
                 <QuestionAuthor fragmentRef={question.node} />
                 {question.node.refQuestion && <QuestionQuote fragmentRef={question.node.refQuestion} />}
                 <QuestionContent fragmentRef={question.node} />
@@ -105,11 +111,8 @@ const SortableQuestion = ({ question, connections }: { question: ProcessedQuesti
                         connections={connections}
                         fragmentRef={question.node}
                     />
-                    <span style={{ visibility: 'hidden' }}>
-                        <QuestionStats fragmentRef={question.node} />
-                    </span>
                 </Grid>
-            </Card>
+            </QuestionCard>
         </div>
     );
 };
@@ -423,21 +426,14 @@ export function QuestionQueue({ fragmentRef, isVisible }: QuestionQueueProps) {
                     <List>
                         {prevFilteredList.reverse().map((question) => (
                             <ListItem key={question.node.id} disableGutters>
-                                <Card
-                                    sx={{
-                                        width: '100%',
-                                        paddingTop: theme.spacing(0.5),
-                                        borderRadius: '10px',
-                                        paddingBottom: theme.spacing(2),
-                                    }}
-                                >
+                                <QuestionCard sx={{ width: '100%', paddingBottom: theme.spacing(2) }}>
                                     <QuestionAuthor fragmentRef={question.node} />
                                     {question.node.refQuestion && (
                                         <QuestionQuote fragmentRef={question.node.refQuestion} />
                                     )}
                                     <QuestionContent fragmentRef={question.node} />
                                     <QuestionStats fragmentRef={question.node} />
-                                </Card>
+                                </QuestionCard>
                             </ListItem>
                         )) ?? []}
                     </List>

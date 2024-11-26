@@ -1,17 +1,23 @@
 import * as React from 'react';
 import { useFragment } from 'react-relay';
-import { Card, Stack, Menu, MenuItem, IconButton, Typography, useMediaQuery } from '@mui/material';
+import { Stack, Menu, MenuItem, IconButton, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-import { QuestionAuthor, QuestionStats, QuestionContent, QuestionQuote } from '../Questions';
+import {
+    QuestionAuthor,
+    QuestionStats,
+    QuestionContent,
+    QuestionQuote,
+    QuestionTopics,
+    QuestionCard,
+} from '@local/components/ui/Question';
 import { QUESTION_ACTIONS_FRAGMENT } from '../Questions/QuestionActions';
 import { Question } from './types';
 import { QueueButton } from '../Questions/QuestionActions/QueueButton';
 import { QuestionActionsFragment$key } from '@local/__generated__/QuestionActionsFragment.graphql';
 import { useHideQuestion } from '../Questions/QuestionActions/useHideQuestion';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { QuestionTopics } from '../Questions/QuestionTopics';
 
 interface Props {
     question: Question;
@@ -53,13 +59,8 @@ export default function EventQuestion({
     };
 
     return (
-        <Card
+        <QuestionCard
             sx={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                paddingTop: theme.spacing(0.5),
-                borderRadius: '10px',
                 opacity: heldQuestion ? 0.9 : 1,
                 backdropFilter: heldQuestion ? 'blur(20px)' : 'none',
             }}
@@ -91,6 +92,6 @@ export default function EventQuestion({
             {question?.refQuestion && <QuestionQuote fragmentRef={question.refQuestion} />}
             <QuestionContent fragmentRef={question} measure={measure} />
             <QuestionTopics fragmentRef={question} />
-        </Card>
+        </QuestionCard>
     );
 }
