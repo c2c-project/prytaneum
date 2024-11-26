@@ -41,36 +41,40 @@ export function OnDeckContainer({ id, questions, questionRecord, connections }: 
         [questionRecord]
     );
 
+    const OnDeckEmptyBox = () => {
+        return (
+            <Grid container paddingRight={1}>
+                <Box
+                    ref={setNodeRef}
+                    sx={{
+                        display: 'flex',
+                        flexGrow: 1,
+                        width: '100%',
+                        minHeight: '250px',
+                        maxHeight: '100%',
+                        borderRadius: 1,
+                        bgcolor: (theme) => theme.palette.grey[300],
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        padding: '2rem',
+                        borderWidth: 3,
+                        borderColor: (theme) => theme.palette.grey[500],
+                        borderStyle: 'dashed',
+                        marginLeft: '0.5rem',
+                        marginTop: '0.5rem',
+                    }}
+                >
+                    <Typography align='center' variant='body1' marginTop='1rem'>
+                        Drag and drop questions from the question queue to here to start the On Deck Queue.
+                    </Typography>
+                </Box>
+            </Grid>
+        );
+    };
+
     const ListHeader = () => {
         if (onDeckSelection === 'upcoming' && questions.length === 0) {
-            return (
-                <Grid container paddingRight={1}>
-                    <Box
-                        ref={setNodeRef}
-                        sx={{
-                            display: 'flex',
-                            flexGrow: 1,
-                            width: '100%',
-                            minHeight: '250px',
-                            maxHeight: '100%',
-                            borderRadius: 1,
-                            bgcolor: (theme) => theme.palette.grey[300],
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            padding: '2rem',
-                            borderWidth: 3,
-                            borderColor: (theme) => theme.palette.grey[500],
-                            borderStyle: 'dashed',
-                            marginLeft: '0.5rem',
-                            marginTop: '0.5rem',
-                        }}
-                    >
-                        <Typography align='center' variant='body1' marginTop='1rem'>
-                            Drag and drop questions from the question queue to here to start the On Deck Queue.
-                        </Typography>
-                    </Box>
-                </Grid>
-            );
+            return <OnDeckEmptyBox />;
         }
         if (onDeckSelection === 'upcoming') {
             return (
