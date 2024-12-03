@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, DialogContent } from '@mui/material';
+import { Button, Grid, DialogContent } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -41,20 +41,16 @@ export function FeedbackDashboard({ fragmentRef }: FeedbackDashboardProps) {
                 open={open}
                 onClose={handleClose}
                 aria-labelledby='share-feedback-results-dialog'
-                PaperProps={{
-                    sx: {
-                        maxHeight: fullscreen ? '100%' : '80%',
-                        minHeight: fullscreen ? '100%' : '80%',
-                    },
-                }}
             >
                 <StyledDialogTitle id='share-feedback-results-dialog-title' onClose={handleClose}>
                     Feedback Dashboard
                 </StyledDialogTitle>
                 <DialogContent dividers>
-                    <React.Suspense fallback={<Loader />}>
-                        <LiveFeedbackPromptsList fragmentRef={fragmentRef} />
-                    </React.Suspense>
+                    <Grid container direction='column' alignItems='center'>
+                        <React.Suspense fallback={<Loader />}>
+                            <LiveFeedbackPromptsList fragmentRef={fragmentRef} />
+                        </React.Suspense>
+                    </Grid>
                 </DialogContent>
             </StyledDialog>
         </React.Fragment>

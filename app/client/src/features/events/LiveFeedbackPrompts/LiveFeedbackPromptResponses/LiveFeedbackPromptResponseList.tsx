@@ -152,48 +152,44 @@ function PromptResponseList({ promptResponses, promptData, vote }: PromptListPro
             <Typography variant='h4'>Responses</Typography>
             <Divider sx={{ width: '100%', marginBottom: '0.5rem' }} />
             <List id='live-feedback-prompt-response-list'>
-                {filteredResponses.length > 0 ? (
-                    filteredResponses.map(
-                        ({ id, response, vote: _vote, multipleChoiceResponse, createdAt, createdBy }) => (
-                            <ListItem key={id} style={{ paddingBottom: '.5rem', paddingTop: '.5rem' }}>
-                                <Grid
-                                    container
-                                    display='flex'
-                                    direction='column'
-                                    alignContent='center'
-                                    alignItems='stretch'
-                                    spacing={1}
-                                >
-                                    <Card>
-                                        <PromptResponseAuthorCardHeader
-                                            createdBy={createdBy}
-                                            createdAt={createdAt}
-                                            vote={_vote}
-                                            isVote={promptData.isVote}
-                                        />
-                                        <CardContent sx={{ margin: (theme) => theme.spacing(-2, 0, -1, 0) }}>
-                                            {promptData.isMultipleChoice ? (
-                                                <React.Fragment>
-                                                    <Typography variant='inherit' sx={{ wordBreak: 'break-word' }}>
-                                                        Choice: {multipleChoiceResponse}
-                                                    </Typography>
-                                                    <Typography variant='inherit' sx={{ wordBreak: 'break-word' }}>
-                                                        Reasoning: {response}
-                                                    </Typography>
-                                                </React.Fragment>
-                                            ) : (
+                {filteredResponses.map(
+                    ({ id, response, vote: _vote, multipleChoiceResponse, createdAt, createdBy }) => (
+                        <ListItem key={id} style={{ paddingBottom: '.5rem', paddingTop: '.5rem' }}>
+                            <Grid
+                                container
+                                display='flex'
+                                direction='column'
+                                alignContent='center'
+                                alignItems='stretch'
+                                spacing={1}
+                            >
+                                <Card>
+                                    <PromptResponseAuthorCardHeader
+                                        createdBy={createdBy}
+                                        createdAt={createdAt}
+                                        vote={_vote}
+                                        isVote={promptData.isVote}
+                                    />
+                                    <CardContent sx={{ margin: (theme) => theme.spacing(-2, 0, -1, 0) }}>
+                                        {promptData.isMultipleChoice ? (
+                                            <React.Fragment>
                                                 <Typography variant='inherit' sx={{ wordBreak: 'break-word' }}>
-                                                    {response}
+                                                    Choice: {multipleChoiceResponse}
                                                 </Typography>
-                                            )}
-                                        </CardContent>
-                                    </Card>
-                                </Grid>
-                            </ListItem>
-                        )
+                                                <Typography variant='inherit' sx={{ wordBreak: 'break-word' }}>
+                                                    Reasoning: {response}
+                                                </Typography>
+                                            </React.Fragment>
+                                        ) : (
+                                            <Typography variant='inherit' sx={{ wordBreak: 'break-word' }}>
+                                                {response}
+                                            </Typography>
+                                        )}
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        </ListItem>
                     )
-                ) : (
-                    <Typography textAlign='center'>No responses yet.</Typography>
                 )}
             </List>
         </React.Fragment>

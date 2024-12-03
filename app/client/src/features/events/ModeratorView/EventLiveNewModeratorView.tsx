@@ -18,7 +18,6 @@ import { PreloadedActionsPanels } from './ActionsPanels';
 import { QuestionModerationPanels } from './QuestionModerationPanels';
 import { VerticalPanelResizeHandle } from '@local/components/PanelHandle';
 import { useUser } from '@local/features/accounts';
-import { useEventUpdates } from '@local/features/dashboard/useEventUpdates';
 
 export const EVENT_LIVE_MODERATOR_VIEW_QUERY = graphql`
     query EventLiveNewModeratorViewQuery($eventId: ID!, $userLang: String!) {
@@ -66,7 +65,6 @@ function EventLiveNewModeratorView({ node, refresh }: EventLiveProps) {
     const { id: eventId } = node;
 
     usePingEvent(eventId);
-    useEventUpdates();
 
     // TODO: Improve suspense loading with skeletons that match the panel sizes
     return (

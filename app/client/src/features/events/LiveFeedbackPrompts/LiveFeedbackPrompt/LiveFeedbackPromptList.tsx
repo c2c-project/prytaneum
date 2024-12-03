@@ -12,7 +12,6 @@ import {
     CardHeader,
     Stack,
     Tooltip,
-    Button,
 } from '@mui/material';
 import DescriptionIcon from '@mui/icons-material/Description';
 import { OpenInNew as OpenInNewIcon } from '@mui/icons-material';
@@ -46,16 +45,6 @@ interface PromptItemProps {
 }
 
 function PromptItem({ prompt, handleClick }: PromptItemProps) {
-    const ViewResponses = () => {
-        return (
-            <Tooltip title='View Responses' placement='top'>
-                <Button variant='contained' startIcon={<OpenInNewIcon />} onClick={() => handleClick(prompt)}>
-                    View Responses
-                </Button>
-            </Tooltip>
-        );
-    };
-
     return (
         <Card sx={{ margin: '0.25rem' }}>
             {prompt.isDraft ? (
@@ -82,8 +71,13 @@ function PromptItem({ prompt, handleClick }: PromptItemProps) {
                     <ShareFeedbackPromptDraft prompt={prompt} />
                 ) : (
                     <Stack direction='row' spacing={1}>
+                        <Tooltip title='View Responses' placement='top'>
+                            <IconButton onClick={() => handleClick(prompt)}>
+                                <OpenInNewIcon />
+                                <Typography variant='subtitle1'>View Responses</Typography>
+                            </IconButton>
+                        </Tooltip>
                         <ShareFeedbackPrompt prompt={prompt} />
-                        <ViewResponses />
                     </Stack>
                 )}
             </CardActions>
@@ -138,75 +132,64 @@ function PromptList({ prompts: readonlyPrompts, handleClick, selectedTab, setSel
                 <Tab label='Multiple Choice' value='multiple-choice' />
             </Tabs>
             {selectedTab === 'open-ended' && (
-                <List
-                    id='live-feedback-open-ended-prompt-list'
-                    sx={{
-                        border: 5,
-                        borderImage: `linear-gradient(${theme.palette.custom.creamCan},white) 10`,
-                        width: '100%',
-                        height: '100%',
-                    }}
-                >
+                <React.Fragment>
                     {openEndedPrompts.length > 0 ? (
-                        openEndedPrompts
-                            .slice(0, MAX_LIST_LENGTH)
-                            .map((prompt) => <PromptItem key={prompt.id} prompt={prompt} handleClick={handleClick} />)
+                        <List
+                            id='live-feedback-open-ended-prompt-list'
+                            sx={{
+                                border: 5,
+                                borderImage: `linear-gradient(${theme.palette.custom.creamCan},white) 10`,
+                                width: '100%',
+                            }}
+                        >
+                            {openEndedPrompts.slice(0, MAX_LIST_LENGTH).map((prompt) => (
+                                <PromptItem key={prompt.id} prompt={prompt} handleClick={handleClick} />
+                            ))}
+                        </List>
                     ) : (
-                        <Grid height='25vh'>
-                            <Typography textAlign='center' fontWeight='bold'>
-                                No Open Ended Prompts To Display Yet.
-                            </Typography>
-                        </Grid>
+                        <Typography>No Open Ended Prompts To Display Yet</Typography>
                     )}
-                </List>
+                </React.Fragment>
             )}
             {selectedTab === 'vote' && (
                 <React.Fragment>
-                    <List
-                        id='live-feedback-vote-prompt-list'
-                        sx={{
-                            border: 5,
-                            borderImage: `linear-gradient(${theme.palette.custom.creamCan},white) 10`,
-                            width: '100%',
-                            height: '100%',
-                        }}
-                    >
-                        {votePrompts.length > 0 ? (
-                            votePrompts.map((prompt) => (
+                    {votePrompts.length > 0 ? (
+                        <List
+                            id='live-feedback-vote-prompt-list'
+                            sx={{
+                                border: 5,
+                                borderImage: `linear-gradient(${theme.palette.custom.creamCan},white) 10`,
+                                width: '100%',
+                            }}
+                        >
+                            {votePrompts.map((prompt) => (
                                 <PromptItem key={prompt.id} prompt={prompt} handleClick={handleClick} />
-                            ))
-                        ) : (
-                            <Grid height='25vh'>
-                                <Typography textAlign='center' fontWeight='bold'>
-                                    No Vote Prompts To Display Yet.
-                                </Typography>
-                            </Grid>
-                        )}
-                    </List>
+                            ))}
+                        </List>
+                    ) : (
+                        <Typography>No Vote Prompts To Display Yet</Typography>
+                    )}
                 </React.Fragment>
             )}
             {selectedTab === 'multiple-choice' && (
-                <List
-                    id='live-feedback-multiple-choice-prompt-list'
-                    sx={{
-                        border: 5,
-                        borderImage: `linear-gradient(${theme.palette.custom.creamCan},white) 10`,
-                        width: '100%',
-                        height: '100%',
-                    }}
-                >
+                <React.Fragment>
                     {multipleChoicePrompts.length > 0 ? (
-                        multipleChoicePrompts.map((prompt) => (
-                            <PromptItem key={prompt.id} prompt={prompt} handleClick={handleClick} />
-                        ))
+                        <List
+                            id='live-feedback-multiple-choice-prompt-list'
+                            sx={{
+                                border: 5,
+                                borderImage: `linear-gradient(${theme.palette.custom.creamCan},white) 10`,
+                                width: '100%',
+                            }}
+                        >
+                            {multipleChoicePrompts.map((prompt) => (
+                                <PromptItem key={prompt.id} prompt={prompt} handleClick={handleClick} />
+                            ))}
+                        </List>
                     ) : (
-                        <Grid height='25vh'>
-                            <Typography textAlign='center' fontWeight='bold'>
-                                No Multiple Choice Prompts To Display Yet.
-                            </Typography>
-                        </Grid>
+                        <Typography>No Multiple Choice Prompts To Display Yet</Typography>
                     )}
-                </List>
+                </React.Fragment>
             )}
         </React.Fragment>
     );
@@ -246,7 +229,7 @@ export function LiveFeedbackPromptsList({ fragmentRef }: LiveFeedbackPromptsList
     }, []);
 
     return (
-        <Grid container direction='column' alignItems='center'>
+        <React.Fragment>
             <SubmitLiveFeedbackPrompt connections={connections} selectedTab={selectedTab} />
             <Typography variant='h6'>Select view on a prompt to see its responses</Typography>
             <PromptList
@@ -262,6 +245,6 @@ export function LiveFeedbackPromptsList({ fragmentRef }: LiveFeedbackPromptsList
                 selectedPrompt={selectedPrompt}
                 setSelectedPrompt={setSelectedPrompt}
             />
-        </Grid>
+        </React.Fragment>
     );
 }

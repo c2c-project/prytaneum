@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { Button, TextField, Radio, RadioGroup, Typography, FormControlLabel, IconButton } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import ScheduleSendIcon from '@mui/icons-material/ScheduleSend';
-import SendIcon from '@mui/icons-material/Send';
 
 import { Form } from '@local/components/Form';
 import { FormTitle } from '@local/components/FormTitle';
@@ -192,7 +190,7 @@ export function LiveFeedbackPromptForm({ onSubmit, onCancel, selectedTab }: Live
             </FormContent>
             <FormActions disableGrow gridProps={{ justifyContent: 'flex-end' }}>
                 {onCancel && (
-                    <Button variant='outlined' color='primary' onClick={onCancel}>
+                    <Button color='primary' onClick={onCancel}>
                         Cancel
                     </Button>
                 )}
@@ -201,18 +199,11 @@ export function LiveFeedbackPromptForm({ onSubmit, onCancel, selectedTab }: Live
                     onClick={onSaveDraft}
                     variant='contained'
                     color='primary'
-                    startIcon={<ScheduleSendIcon />}
                 >
                     Save as Draft
                 </Button>
-                <Button
-                    disabled={!isPromptValidForSubmission()}
-                    type='submit'
-                    variant='contained'
-                    color='primary'
-                    startIcon={<SendIcon />}
-                >
-                    Prompt
+                <Button disabled={!isPromptValidForSubmission()} type='submit' variant='contained' color='primary'>
+                    Create
                 </Button>
             </FormActions>
         </Form>

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<46f13ed54bf6c46e3da509b42999d9b4>>
+ * @generated SignedSource<<d3f3ac98c6f5d7d03dc5a62b17e4ffbc>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,21 +16,13 @@ export type useEventUpdatesSubscription$data = {
   readonly eventUpdates: {
     readonly description: string | null;
     readonly endDateTime: Date | null;
-    readonly eventType: string | null;
     readonly id: string;
-    readonly isActive: boolean | null;
-    readonly isPrivate: boolean | null;
-    readonly isViewerInvited: boolean | null;
     readonly isViewerModerator: boolean | null;
-    readonly issueGuideUrl: string | null;
+    readonly organization: {
+      readonly name: string;
+    } | null;
     readonly startDateTime: Date | null;
     readonly title: string | null;
-    readonly topic: string | null;
-    readonly topics: ReadonlyArray<{
-      readonly description: string;
-      readonly id: string;
-      readonly topic: string;
-    }> | null;
   };
 };
 export type useEventUpdatesSubscription = {
@@ -46,133 +38,99 @@ var v0 = [
     "name": "userId"
   }
 ],
-v1 = {
+v1 = [
+  {
+    "kind": "Variable",
+    "name": "userId",
+    "variableName": "userId"
+  }
+],
+v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v2 = {
+v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "topic",
+  "name": "title",
   "storageKey": null
 },
-v3 = {
+v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "description",
   "storageKey": null
 },
-v4 = [
-  {
-    "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "userId",
-        "variableName": "userId"
-      }
-    ],
-    "concreteType": "Event",
-    "kind": "LinkedField",
-    "name": "eventUpdates",
-    "plural": false,
-    "selections": [
-      (v1/*: any*/),
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "title",
-        "storageKey": null
-      },
-      (v2/*: any*/),
-      (v3/*: any*/),
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "startDateTime",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "endDateTime",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "isActive",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "isViewerModerator",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "isPrivate",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "isViewerInvited",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "issueGuideUrl",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": "EventTopic",
-        "kind": "LinkedField",
-        "name": "topics",
-        "plural": true,
-        "selections": [
-          (v1/*: any*/),
-          (v2/*: any*/),
-          (v3/*: any*/)
-        ],
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "eventType",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
-  }
-];
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "startDateTime",
+  "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "endDateTime",
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isViewerModerator",
+  "storageKey": null
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "name",
+  "storageKey": null
+};
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
     "name": "useEventUpdatesSubscription",
-    "selections": (v4/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "Event",
+        "kind": "LinkedField",
+        "name": "eventUpdates",
+        "plural": false,
+        "selections": [
+          (v2/*: any*/),
+          (v3/*: any*/),
+          (v4/*: any*/),
+          (v5/*: any*/),
+          (v6/*: any*/),
+          (v7/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Organization",
+            "kind": "LinkedField",
+            "name": "organization",
+            "plural": false,
+            "selections": [
+              (v8/*: any*/)
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Subscription",
     "abstractKey": null
   },
@@ -181,19 +139,50 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "useEventUpdatesSubscription",
-    "selections": (v4/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "Event",
+        "kind": "LinkedField",
+        "name": "eventUpdates",
+        "plural": false,
+        "selections": [
+          (v2/*: any*/),
+          (v3/*: any*/),
+          (v4/*: any*/),
+          (v5/*: any*/),
+          (v6/*: any*/),
+          (v7/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Organization",
+            "kind": "LinkedField",
+            "name": "organization",
+            "plural": false,
+            "selections": [
+              (v8/*: any*/),
+              (v2/*: any*/)
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "0513f35c5b7a080144bb91ec7c1ee9a1",
+    "cacheID": "02a35f1e7b0d96709245ee041f1a5e5f",
     "id": null,
     "metadata": {},
     "name": "useEventUpdatesSubscription",
     "operationKind": "subscription",
-    "text": "subscription useEventUpdatesSubscription(\n  $userId: ID!\n) {\n  eventUpdates(userId: $userId) {\n    id\n    title\n    topic\n    description\n    startDateTime\n    endDateTime\n    isActive\n    isViewerModerator\n    isPrivate\n    isViewerInvited\n    issueGuideUrl\n    topics {\n      id\n      topic\n      description\n    }\n    eventType\n  }\n}\n"
+    "text": "subscription useEventUpdatesSubscription(\n  $userId: ID!\n) {\n  eventUpdates(userId: $userId) {\n    id\n    title\n    description\n    startDateTime\n    endDateTime\n    isViewerModerator\n    organization {\n      name\n      id\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "03a5c99d11cd41d4da9fd091a4b2aa2b";
+(node as any).hash = "3dd1158566498a01cdcd0a255015375a";
 
 export default node;

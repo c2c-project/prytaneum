@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Button, DialogContent, Grid, Tooltip, Typography } from '@mui/material';
-import ReplayIcon from '@mui/icons-material/Replay';
+import { Button, DialogContent, Grid, IconButton, Tooltip, Typography } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
 import { useMutation, graphql } from 'react-relay';
 
 import type { ShareFeedbackPromptMutation } from '@local/__generated__/ShareFeedbackPromptMutation.graphql';
@@ -58,7 +58,7 @@ export function ShareFeedbackPrompt({ prompt }: Props) {
         <React.Fragment>
             <ResponsiveDialog open={isOpen} onClose={close}>
                 <DialogContent>
-                    <Typography variant='h6'>Are you sure you want to reshare this prompt?</Typography>
+                    <Typography variant='h6'>Are you sure you want to re-share this prompt?</Typography>
                     <Typography variant='subtitle2'>
                         NOTE: Only shares with participants that have not yet responded to the prompt.
                     </Typography>
@@ -73,10 +73,11 @@ export function ShareFeedbackPrompt({ prompt }: Props) {
                     </Grid>
                 </DialogContent>
             </ResponsiveDialog>
-            <Tooltip title="Share with anyone who hasn't responded yet." placement='top'>
-                <Button variant='contained' startIcon={<ReplayIcon />} onClick={open}>
-                    Reshare Prompt
-                </Button>
+            <Tooltip title='Share Prompt' placement='top'>
+                <IconButton onClick={open}>
+                    <SendIcon />
+                    <Typography variant='subtitle1'>Re-Share Prompt</Typography>
+                </IconButton>
             </Tooltip>
         </React.Fragment>
     );

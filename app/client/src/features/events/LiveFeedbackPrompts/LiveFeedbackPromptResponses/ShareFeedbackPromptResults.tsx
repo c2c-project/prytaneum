@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { graphql } from 'relay-runtime';
 import { useMutation } from 'react-relay';
-import ShareIcon from '@mui/icons-material/Share';
 
 import { Prompt } from '../LiveFeedbackPrompt/LiveFeedbackPromptList';
 import Button from '@mui/material/Button';
@@ -77,7 +76,7 @@ export function ShareFeedbackPromptResults({ prompt }: ShareFeedbackResultsProps
                 </DialogContent>
             </ResponsiveDialog>
             <Grid item paddingBottom='1rem'>
-                <Button variant='contained' startIcon={<ShareIcon />} color='primary' onClick={open}>
+                <Button variant='contained' color='primary' onClick={open}>
                     Share Results
                 </Button>
             </Grid>

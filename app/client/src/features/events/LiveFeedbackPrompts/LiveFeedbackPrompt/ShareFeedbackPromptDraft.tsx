@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, DialogContent, Grid, Typography } from '@mui/material';
+import { Button, DialogContent, Grid, IconButton, Typography } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { useMutation, graphql } from 'react-relay';
 
@@ -74,9 +74,10 @@ export function ShareFeedbackPromptDraft({ prompt }: Props) {
                     </Grid>
                 </DialogContent>
             </ResponsiveDialog>
-            <Button variant='contained' startIcon={<SendIcon />} onClick={open}>
-                Share Draft
-            </Button>
+            <IconButton onClick={open}>
+                <SendIcon />
+                <Typography variant='subtitle1'>Share Draft</Typography>
+            </IconButton>
         </React.Fragment>
     );
 }
