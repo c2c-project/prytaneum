@@ -2,22 +2,22 @@ import sys
 sys.path.append('../')
 import GoogleGemini as gemini
 
-def GetPostViewpoint(model: str, topic: str, post: str, subtopic='', force=False) -> list[str]:
+def GetPostViewpoint(topic: str, post: str, subtopic='', force=False) -> list[str]:
     "Return the viewpoint of the given post on the given topic and optionally the given subtopic"
     prompt = 'Rephrase the following statement concisely:\n'
     prompt += f'"{post}"\n'
 
-    response, safety_ratings = gemini.AskGoogleGemini(model, prompt, force=force)
+    response = gemini.AskGoogleGemini(prompt, force=force)
     return response
 
 # TODO: DELETE THIS remove anything with fixNum
-def SummarizePosts(model: str, topic: str, posts: list, subtopic='', force=False) -> list[str]:
+def SummarizePosts(topic: str, posts: list, subtopic='', force=False) -> list[str]:
     "Return a list of the viewpoints discussed by the given posts on the given topic, or its subtopic if provided"
     # If 5 or less posts are provided simply return reworded versions of them
     if(len(posts) <= 5):
         viewpoints = []
         for post in posts:
-            viewpoint = GetPostViewpoint(model, topic, post, subtopic, force)
+            viewpoint = GetPostViewpoint(topic, post, subtopic, force)
             viewpoints.append(viewpoint)
         return viewpoints
 
@@ -33,7 +33,7 @@ def SummarizePosts(model: str, topic: str, posts: list, subtopic='', force=False
     prompt += 'The viewpoints are:\n'
 
     # Get response and change it to list format
-    response, safety_ratings = gemini.AskGoogleGemini(model, prompt, force=force)
+    response = gemini.AskGoogleGemini(prompt, force=force)
     response = response.replace('\n', '')
     response = response.split('- ')
     response = response[1:]

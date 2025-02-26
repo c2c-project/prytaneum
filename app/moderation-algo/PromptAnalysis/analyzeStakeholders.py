@@ -3,7 +3,7 @@ sys.path.append('../')
 import GoogleGemini as gemini
 import json
 
-def ExtractShareholders(model: str, posts: list):
+def ExtractShareholders(posts: list):
     "Extract the shareholders from the given posts"
     prompt = 'I will give you a list of online comments. You will provide me a list describing the demographics of the person writing each comment.'
     prompt += 'For example, if a comment says "As a mother of five, I am having trouble looking for jobs in between taking care of my kids.", '
@@ -13,7 +13,7 @@ def ExtractShareholders(model: str, posts: list):
     prompt += 'The comments are: \n'
     for i, post in enumerate(posts):
         prompt += f'Comment {i+1}: "{post}"\n'
-    prompt += 'Your list of descriptions for each comment: '
+    prompt += 'Your list of descriptions for each comment:\n'
 
-    response, safety_ratings = gemini.AskGoogleGemini(model, prompt)
+    response = gemini.AskGoogleGemini(prompt)
     return json.loads(response)

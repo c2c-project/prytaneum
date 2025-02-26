@@ -231,7 +231,7 @@ def RemoveMany(allTopics: dict, lockedTopics: list, topics: list) -> dict | set 
             return allTopics, lockedTopics, error
     return temp_allTopics, temp_lockedTopics, ''
 
-def Regenerate(allTopics: dict, lockedTopics: list, reading_materials: str, model='gemini-pro') -> dict | set | str:
+def Regenerate(allTopics: dict, lockedTopics: list, reading_materials: str) -> dict | set | str:
     """Regenerate all unlocked topics from the given reading materials. Returns all topics, locked topics, and error.
     @Param allTopics = {
         'topic1': 'definition1',
@@ -244,7 +244,6 @@ def Regenerate(allTopics: dict, lockedTopics: list, reading_materials: str, mode
         ...
     ]
     @Param reading_materials = A single string of the reading materials.
-    @Param model = The Google Gemini model to use, default is "gemini-pro".
     @Return allTopics = Dictionary of all available topics and their definitions.
     @Return lockedTopics = List of topic names that have been locked.
     @Return error = Either '', 'input', or 'duplicate', where:
@@ -261,7 +260,7 @@ def Regenerate(allTopics: dict, lockedTopics: list, reading_materials: str, mode
         del allTopics[topic]
 
     # Add the newly generated topics
-    newTopicsDesc = RM.RegenerateTopicsDescriptions(model, reading_materials, lockedTopics, force=True)
+    newTopicsDesc = RM.RegenerateTopicsDescriptions(reading_materials, lockedTopics, force=True)
     for topic, desc in newTopicsDesc.items():
         allTopics[topic] = desc
     return allTopics, lockedTopics, ''

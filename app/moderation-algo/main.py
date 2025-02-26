@@ -24,7 +24,6 @@ def ProcessQuestion(issue: str, topics: dict, question: str) -> dict:
     @Param: question = User question or comment to process
     @Return: response = {'substantive': bool, 'offensive': bool, 'relevant': bool, 'topics': {'topic0': bool, 'topic1': bool, ...}}"""
     # Make sure Google API is initialized
-    model = 'gemini-pro'
 
     # First translate the question into English and Spanish. The algorithm is built to process on English questions
     question_en, question_es, original_lang = TranslateText(question)
@@ -41,7 +40,7 @@ def ProcessQuestion(issue: str, topics: dict, question: str) -> dict:
     }
 
     # Check for substantiveness
-    response['substantive'] = IsSubstantive(model, question_en)
+    response['substantive'] = IsSubstantive(question_en)
 
     # Check for offensiveness
     response['offensive'] = IsOffensive(question_en)
@@ -52,12 +51,12 @@ def ProcessQuestion(issue: str, topics: dict, question: str) -> dict:
 
     # Check for relevancy if an issue was provided
     if(issue):
-        response['relevant'] = IsRelevant(model, question_en, issue)
+        response['relevant'] = IsRelevant(question_en, issue)
 
     # Classify into topics if any were provided
     if(topics):
         for topic, description in topics.items():
-            response['topics'][topic] = DoesQuestionFitCategory(model, question_en, topic, description)
+            response['topics'][topic] = DoesQuestionFitCategory(question_en, topic, description)
 
     return response
 
@@ -88,7 +87,6 @@ def HandleUserInput():
     # Check if the request contains JSON data
     if request.is_json:
         # NOTE: Make sure Google API is initialized at this point
-        model = 'gemini-pro'
 
         # Connect to Redis with 12 weeks expiration time for stored data
         secInAWeek = 7257600
@@ -110,8 +108,8 @@ def HandleUserInput():
             if(not reading_materials):
                 LogEventConsole('Missing field "reading_materials" in request data', 'ERROR')
                 return jsonify({'ERROR': 'Missing field "reading_materials" in request data'}), 422 # HTTP unprocessable Entity
-            issue = ExtractIssueFromReadingMaterials(model, reading_materials)
-            topics = ExtractTopicsDescriptions(model, reading_materials)
+            issue = ExtractIssueFromReadingMaterials(reading_materials)
+            topics = ExtractTopicsDescriptions(reading_materials)
 
             # Save them for later use, expiring in a week
             r.set('moderation_issue_{}'.format(eventId), issue, ex=secInAWeek)
@@ -285,7 +283,6 @@ def PromptSummarization():
     # Check if the request contains JSON data
     if request.is_json:
         # NOTE: Make sure Google API is initialized at this point
-        model = 'gemini-pro'
 
         # Connect to Redis with 12 weeks expiration time for stored data
         secInAWeek = 7257600
@@ -326,7 +323,7 @@ def PromptSummarization():
             force = False
             
         # Summarize the viewpoints from the prompt responses
-        viewpoints = SummarizePosts(model, issue, promptResponses, subtopic, force) # [viewpoint1, viewpoint2, ...]
+        viewpoints = SummarizePosts(issue, promptResponses, subtopic, force) # [viewpoint1, viewpoint2, ...]
 
         # Return the viewpoints with success log message
         LogEventConsole('Successful run of prompt summarization')
@@ -337,7 +334,6 @@ def StakeholderExtraction():
     # Check if the request contains JSON data
     if request.is_json:
         # NOTE: Make sure Google API is initialized at this point
-        model = 'gemini-pro'
 
         # Get the list of user prompt responses
         promptResponses = request.get_json().get('prompt_responses')
@@ -346,7 +342,7 @@ def StakeholderExtraction():
             return jsonify({'ERROR': 'Missing field(s) in request data'}), 422 # HTTP unprocessable Entity
 
         # Identify the stakeholders from the prompt responses
-        stakeholders = ExtractShareholders(model, promptResponses) # [stakeholder1, stakeholder2, ...]
+        stakeholders = ExtractShareholders(promptResponses) # [stakeholder1, stakeholder2, ...]
 
         # Return the stakeholders with success log message
         LogEventConsole('Successful run of stakeholder extraction')

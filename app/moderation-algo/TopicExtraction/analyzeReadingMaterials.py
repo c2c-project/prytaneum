@@ -3,18 +3,18 @@ sys.path.append('../')
 import GoogleGemini as gemini
 import json
 
-def ExtractIssueFromReadingMaterials(model: str, reading_materials: str, force=False) -> str:
+def ExtractIssueFromReadingMaterials(reading_materials: str, force=False) -> str:
     "Use Google Gemini to extract the overall topic that the given reading material discusses"
     prompt = 'Write the overall topic that the following article deals with as a short phrase. '
     prompt += 'If it is impossible to find the overall topic, output "none":\n'
     prompt += 'Article: """' + reading_materials.replace('\n', ' ') + '"""\n'
     prompt += 'Topic:'
     
-    response, safety_ratings = gemini.AskGoogleGemini(model, prompt, force=force)
+    response = gemini.AskGoogleGemini(prompt, force=force)
     
     return response
 
-def ExtractTopicsDescriptions(model: str, reading_materials: str, force=False) -> dict:
+def ExtractTopicsDescriptions(reading_materials: str, force=False) -> dict:
     """Returns a list of topics and their descriptions gathered from given reading materials
 
     Args:
@@ -33,17 +33,20 @@ def ExtractTopicsDescriptions(model: str, reading_materials: str, force=False) -
     prompt += '"\n'
     prompt += 'Topics and definitions: '
     
-    response, safety_ratings = gemini.AskGoogleGemini(model, prompt, force=force)
+    response = gemini.AskGoogleGemini(prompt, force=force)
     
     # Convert the response to python dict and return
     try:
+        startIndex = response.find('{')
+        endIndex = response.rfind('}')
+        response = response[startIndex:endIndex+1]
         allTopicsDesc = json.loads(response)
     # If no topics were found, return an empty list
     except:
         allTopicsDesc = {}
     return allTopicsDesc
 
-def RegenerateTopicsDescriptions(model: str, reading_materials: str, lockedTopics: set, force=False) -> dict:
+def RegenerateTopicsDescriptions(reading_materials: str, lockedTopics: set, force=False) -> dict:
     """Returns a list of topics and their descriptions gathered from given reading materials that
     are not similar to the provided set of locked topics.
 
@@ -75,7 +78,7 @@ def RegenerateTopicsDescriptions(model: str, reading_materials: str, lockedTopic
     prompt += '"\n'
     prompt += 'Topics and definitions: '
     
-    response, safety_ratings = gemini.AskGoogleGemini(model, prompt, force=force)
+    response = gemini.AskGoogleGemini(prompt, force=force)
     
     # Convert the response to python dict and return
     try:

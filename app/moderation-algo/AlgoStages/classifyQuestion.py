@@ -2,18 +2,16 @@ import sys
 sys.path.append('../')
 import GoogleGemini as gemini
 
-def DoesQuestionFitCategory(model: str, question: str, category: str, description: str) -> list:
+def DoesQuestionFitCategory(question: str, category: str, description: str) -> list:
     "Use Google Gemini to see if the question fits the given category or not"
-    prompt = 'Does the text fit into the category? '
-    if(len(description) > 0):
-        prompt += 'A description of the category is provided. '
+    prompt = 'Does the following comment pertain to the given topic?'
     prompt += 'Provide your answer as either "yes" or "no".\n'
-    prompt += 'Category: "' + category + '"\n'
     if(len(description) > 0):
-        prompt += 'Category description: "' + description + '"\n'
-    prompt += 'Text: "' + question + '"\n'
-    prompt += 'Answer: '
-    response, safety_ratings = gemini.AskGoogleGemini(model, prompt)
+        prompt += f'Topic: "{category}", which means: {description}\n'
+    else:
+        prompt += f'Topic: "{category}"\n'
+    prompt += f'Comment: "{question}"'
+    response = gemini.AskGoogleGemini(prompt)
     if('yes' in response.lower()):
         return True
     else:

@@ -1,6 +1,6 @@
 import GoogleGemini as gemini
 
-def IsRelevant(model: str, text: str, topic: str) -> bool:
+def IsRelevant(text: str, topic: str) -> bool:
     "Asks Google Gemini if the question is relevant to the given topic. Returns True/False."
     prompt = 'Could the given text be relevant in any way in a discussion about the given topic? '
     #prompt += 'Comments that discuss subjects related to the topic are still relevant. '
@@ -9,7 +9,7 @@ def IsRelevant(model: str, text: str, topic: str) -> bool:
     prompt += 'Topic: {}\n'.format(topic)
     prompt += 'Your answer: '
     
-    response, safety_ratings = gemini.AskGoogleGemini(model, prompt)
+    response = gemini.AskGoogleGemini(prompt)
     
     if('yes' in response.lower()):
         return True
