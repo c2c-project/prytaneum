@@ -129,8 +129,8 @@ export async function createMember(userId: string, prisma: PrismaClient, input: 
     // then we'll have to check if the user exists
     // if they don't exist create a "shadow" account
     // if they do exist proceed as normal
-    let user = await prisma.user.findUnique({ where: { email: input.email } });
-    if (!user) user = await register(prisma, { email: input.email });
+    let user = await prisma.user.findUnique({ where: { email: input.email.toLowerCase() } });
+    if (!user) user = await register(prisma, { email: input.email.toLowerCase() });
 
     // check if user is already a member
     const isUserMember = await isMemberOfOrg(user.id, input.orgId, prisma);

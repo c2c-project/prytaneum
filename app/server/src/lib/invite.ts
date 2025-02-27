@@ -36,7 +36,7 @@ const generateInviteLink = async (
     const { email, first, last } = invitee;
     const { id: globalEventId } = fromGlobalId(eventId);
     let user: User;
-    const result = await prisma.user.findFirst({ where: { email: email } });
+    const result = await prisma.user.findFirst({ where: { email: email.toLowerCase() } });
     if (result === null) {
         const randomPassword =
             Math.random().toString(36).slice(-8) + 'zZ' + Math.floor(Math.random() * 10).toString() + '!';

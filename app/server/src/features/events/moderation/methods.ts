@@ -95,12 +95,12 @@ export async function createModerator(userId: string, prisma: PrismaClient, inpu
     if (!hasPermissions) throw new ProtectedError({ userMessage: errors.permissions });
 
     // check if email already exists
-    let userResult = await prisma.user.findFirst({ where: { email } });
+    let userResult = await prisma.user.findFirst({ where: { email: email.toLowerCase() } });
 
     // create user if email is not in accounts system
     let modUserId = userResult?.id;
     if (!modUserId) {
-        userResult = await register(prisma, { email: input.email });
+        userResult = await register(prisma, { email: input.email.toLowerCase() });
         modUserId = userResult.id;
     }
 
@@ -599,7 +599,7 @@ export async function removeQuestionFromQueue(userId: string, prisma: PrismaClie
 
 export async function findUserIdByEmail(email: string, prisma: PrismaClient) {
     return prisma.user.findUnique({
-        where: { email },
+        where: { email: email.toLowerCase() },
         select: { id: true },
     });
 }

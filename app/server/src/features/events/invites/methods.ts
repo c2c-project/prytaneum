@@ -26,7 +26,7 @@ export async function invite(viewerId: string, prisma: PrismaClient, { email, ev
     if (!canUserModify(viewerId, globalEventId, prisma)) throw new ProtectedError({ userMessage: errors.permissions });
 
     // check if email already exists
-    let userResult = await prisma.user.findFirst({ where: { email } });
+    let userResult = await prisma.user.findFirst({ where: { email: email.toLowerCase() } });
 
     // create user if email is not in accounts system
     let invitedUser = userResult;
@@ -108,7 +108,7 @@ export async function validateInvite(
         // Ensure token is being used for the correct event
         if (eventId !== globalEventId) return { valid: false, user: null };
         // Get user if valid
-        const user = await prisma.user.findUnique({ where: { email: result.email } });
+        const user = await prisma.user.findUnique({ where: { email: result.email.toLowerCase() } });
         if (!user) throw new Error('User not found.');
         // Ensure user is invited to event
         const invitedResult = await prisma.eventInvited.findFirst({

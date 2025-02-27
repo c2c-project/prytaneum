@@ -19,7 +19,10 @@ export async function createSpeaker(userId: string, prisma: PrismaClient, input:
     if (!hasPermissions) throw new ProtectedError({ userMessage: errors.permissions });
 
     // find user by email
-    const speakerAccount = await prisma.user.findUnique({ where: { email }, select: { id: true } });
+    const speakerAccount = await prisma.user.findUnique({
+        where: { email: email.toLowerCase() },
+        select: { id: true },
+    });
     let speakerId = speakerAccount?.id;
 
     // register the speaker with an account if they're not already in the database

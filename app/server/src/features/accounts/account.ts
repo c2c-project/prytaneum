@@ -45,7 +45,7 @@ server.route({
         const { email, eventId } = JSON.parse(req.body as string) as ExpectedBody;
         const prisma = getPrismaClient(server.log);
         try {
-            const user = await prisma.user.findFirst({ where: { email } });
+            const user = await prisma.user.findFirst({ where: { email: email.toLowerCase() } });
             if (!user) throw new Error('User not found');
             const { id: globalEventId } = fromGlobalId(eventId);
             const event = await prisma.event.findUnique({ where: { id: globalEventId } });

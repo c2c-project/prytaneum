@@ -29,7 +29,7 @@ type MinimalUser = Pick<RegistrationForm, 'email'> & Partial<Pick<RegistrationFo
  * If the authentication attempt is valid, then the user object will be returned.
  */
 async function validateAuthenticationAttempt(prisma: PrismaClient, email: string, password: string) {
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({ where: { email: email.toLowerCase() } });
 
     // If there is no password set, the user likely needs to finish registering their account.
     // TODO: In order not to let an attacker know that this is the case, it's best to send
@@ -125,7 +125,7 @@ export async function register(prisma: PrismaClient, userData: MinimalUser, text
     const { email, firstName, lastName } = userData;
 
     // validiation if no other user exists with the new email
-    const user = await prisma.user.findUnique({ where: { email: email } });
+    const user = await prisma.user.findUnique({ where: { email: email.toLowerCase() } });
 
     // https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html#account-creation
     // This could technically be an attack vector. Say a user creates an account and is trying to see
@@ -148,7 +148,7 @@ export async function register(prisma: PrismaClient, userData: MinimalUser, text
     if (!textPassword)
         return prisma.user.create({
             data: {
-                email,
+                email: email.toLowerCase(),
                 firstName: firstName || null,
                 lastName: lastName || null,
                 fullName: firstName && lastName ? `${firstName} ${lastName}` : null,
@@ -161,12 +161,12 @@ export async function register(prisma: PrismaClient, userData: MinimalUser, text
     const encryptedPassword = await maybeValidateAndHashPassword(textPassword);
     return prisma.user.create({
         data: {
-            email,
+            email: email.toLowerCase(),
             firstName: firstName || null,
             lastName: lastName || null,
             fullName: firstName && lastName ? `${firstName} ${lastName}` : null,
             password: encryptedPassword,
-            preferredLang: 'EN', // TODO:
+            preferredLang: 'EN',
         },
     });
 }
@@ -194,7 +194,7 @@ export async function findAllUsers(viewerId: string, filter: UsersSearchFilter, 
         where: {
             firstName: { contains: filter.firstName },
             lastName: { contains: filter.lastName },
-            email: { contains: filter.email },
+            email: { contains: filter.email.toLowerCase() },
         },
     });
 }
@@ -300,7 +300,7 @@ export async function updateEmail(prisma: PrismaClient, input: UpdateEmailForm) 
     // TODO: Require email validation via link with token to confirm the update
 
     // validiation if no other user exists with the new email
-    const user = await prisma.user.findUnique({ where: { email: newEmail } });
+    const user = await prisma.user.findUnique({ where: { email: newEmail.toLowerCase() } });
 
     // https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html#account-creation
     // This could technically be an attack vector. Say a user creates an account and is trying to see
@@ -321,8 +321,8 @@ export async function updateEmail(prisma: PrismaClient, input: UpdateEmailForm) 
 
     // update user email
     const updatedUser = await prisma.user.update({
-        where: { email: currentEmail },
-        data: { email: newEmail },
+        where: { email: currentEmail.toLowerCase() },
+        data: { email: newEmail.toLowerCase() },
     });
 
     // generate token
@@ -346,7 +346,7 @@ export async function updatePassword(prisma: PrismaClient, input: UpdatePassword
 
     // update user password
     const updatedUser = await prisma.user.update({
-        where: { email },
+        where: { email: email.toLowerCase() },
         data: { password: encryptedPassword },
     });
 
@@ -370,7 +370,7 @@ export async function deleteAccount(prisma: PrismaClient, input: DeleteAccountFo
     await validateAuthenticationAttempt(prisma, email, password);
 
     // delete user by email
-    const deletedUser = await prisma.user.delete({ where: { email } });
+    const deletedUser = await prisma.user.delete({ where: { email: email.toLowerCase() } });
 
     // return deleted user
     return { deletedUser };
@@ -378,7 +378,7 @@ export async function deleteAccount(prisma: PrismaClient, input: DeleteAccountFo
 
 export async function resetPasswordRequest(prisma: PrismaClient, input: ResetPasswordRequestForm) {
     const result = await prisma.user.findUnique({
-        where: { email: input.email },
+        where: { email: input.email.toLowerCase() },
     });
 
     const accountFound = !!result;
@@ -431,7 +431,7 @@ export async function resetPassword(prisma: PrismaClient, input: ResetPasswordFo
 
     // update user password
     await prisma.user.update({
-        where: { email },
+        where: { email: email.toLowerCase() },
         data: { password: encryptedPassword },
     });
 }
@@ -466,7 +466,7 @@ export async function makeOrganizer(prisma: PrismaClient, input: OrganizerForm, 
     if (!queryResult.canMakeOrgs) throw new ProtectedError({ userMessage: errors.permissions });
 
     const updatedUser = await prisma.user.update({
-        where: { email },
+        where: { email: email.toLowerCase() },
         data: { canMakeOrgs: true },
     });
     return updatedUser;
@@ -485,7 +485,7 @@ export async function removeOrganizer(prisma: PrismaClient, input: OrganizerForm
     if (!queryResult.canMakeOrgs) throw new ProtectedError({ userMessage: errors.permissions });
 
     const updatedUser = await prisma.user.update({
-        where: { email },
+        where: { email: email.toLowerCase() },
         data: { canMakeOrgs: false },
     });
     return updatedUser;
