@@ -23,6 +23,7 @@ model User {
     canMakeOrgs Boolean @default(false)
     isAdmin Boolean @default(false)
     oAuthRefreshToken String? // Google OAuth refresh token
+    picture String? @db.VarChar(200) // URL to user picture
 
     settings UserSettings[]
     memberOf OrgMember[]
