@@ -1,5 +1,4 @@
 import { Button } from '@mui/material';
-import { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 
 const GoogleButton = styled(Button)(({}) => ({
@@ -43,23 +42,6 @@ const GoogleIcon = () => (
 );
 
 export function GoogleLogin() {
-    const [accessToken, setAccessToken] = useState<string | null>(null);
-
-    console.log(accessToken);
-    console.log(window.location.href);
-
-    useEffect(() => {
-        // Parse URL query parameters to check for an access token
-        const params = new URLSearchParams(window.location.search);
-        const token = params.get('access_token');
-        if (token) {
-            setAccessToken(token);
-            // Optionally store the token for later use
-            localStorage.setItem('access_token', token);
-            // Optionally clear the query string from the URL
-            window.history.replaceState({}, document.title, window.location.pathname);
-        }
-    }, []);
     const handleLogin = () => {
         const currentUrl = window.location.href;
         // Redirect to your Fastify endpoint that starts the OAuth flow
