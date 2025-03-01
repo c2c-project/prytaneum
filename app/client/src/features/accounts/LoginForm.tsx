@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { InputAdornment, IconButton, Link as MUILink, Grid, Typography, TextField } from '@mui/material';
+import { InputAdornment, IconButton, Link as MUILink, Grid, Typography, TextField, Divider } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Link from 'next/link';
@@ -10,6 +10,7 @@ import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { LoadingButton } from '@local/components/LoadingButton';
 import { useSnack, useForm } from '@local/core';
+import { GoogleLogin } from './GoogleLogin';
 
 interface TLoginForm {
     [index: string]: string;
@@ -150,6 +151,10 @@ export function LoginForm({ onSuccess, close, secondaryActions }: Props) {
                             {secondaryActions}
                         </>
                     )}
+                    <div style={{ width: '100%', marginTop: '1rem' }}>
+                        <Divider textAlign='center'>or</Divider>
+                    </div>
+                    <GoogleLogin />
                 </Grid>
             </Form>
         </Grid>
