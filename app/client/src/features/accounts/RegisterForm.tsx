@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-curly-newline */
 import * as React from 'react';
-import { IconButton, InputAdornment, Grid, Typography, TextField } from '@mui/material';
+import { IconButton, InputAdornment, Grid, Typography, TextField, Divider } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { graphql, useMutation } from 'react-relay';
@@ -13,6 +13,7 @@ import { LoadingButton } from '@local/components/LoadingButton';
 import { useUser } from '@local/features/accounts';
 import { useSnack } from '@local/core';
 import { useFormik } from 'formik';
+import { GoogleLogin } from './GoogleLogin';
 
 export type TRegisterForm = {
     email: string;
@@ -226,6 +227,10 @@ export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) 
                         Create Account
                     </LoadingButton>
                     {secondaryActions && <>{secondaryActions}</>}
+                    <div style={{ width: '100%', marginTop: '1rem' }}>
+                        <Divider textAlign='center'>or</Divider>
+                    </div>
+                    <GoogleLogin />
                 </Grid>
             </Form>
         </Grid>
