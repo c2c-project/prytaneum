@@ -22,7 +22,8 @@ import { fromGlobalId } from 'graphql-relay';
 
 const toUserId = toGlobalId('User');
 
-type MinimalUser = Pick<RegistrationForm, 'email'> & Partial<Pick<RegistrationForm, 'firstName' | 'lastName'>>;
+type MinUser = Pick<RegistrationForm, 'email'> & Partial<Pick<RegistrationForm, 'firstName' | 'lastName'>>;
+type MinimalUser = MinUser & { picture?: string };
 
 /**
  * Helper function for when we're trying to validate the input credentials match ones in our records.
@@ -167,8 +168,15 @@ export async function register(prisma: PrismaClient, userData: MinimalUser, text
             fullName: firstName && lastName ? `${firstName} ${lastName}` : null,
             password: encryptedPassword,
             preferredLang: 'EN', // TODO:
+            picture: userData.picture || null,
         },
     });
+}
+
+export async function registerWithGoogleOAuth(prisma: PrismaClient, userData: MinimalUser) {
+    const registeredUser = await register(prisma, userData);
+    const token = await jwt.sign({ id: toUserId(registeredUser).id });
+    return { user: registeredUser, token };
 }
 
 /**
