@@ -24,6 +24,7 @@ const userData = {
     isAdmin: false,
     canMakeOrgs: false,
     oAuthRefreshToken: null,
+    picture: '',
 };
 
 beforeAll(async () => {
