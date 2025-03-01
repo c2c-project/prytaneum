@@ -25,11 +25,12 @@ export function useGoogleMeet({ fragmentRef }: GoogleMeetProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
     const [isError, setIsError] = React.useState<boolean>(false);
     const [isConnected, setIsConnected] = React.useState<boolean>(false);
+    const [isCallEnded, setIsCallEnded] = React.useState<boolean>(false);
     const { displaySnack } = useSnack();
 
     const displayReloadButton = React.useMemo(() => {
-        return !isLoading && !isConnected && !isError;
-    }, [isConnected, isError, isLoading]);
+        return !isLoading && !isConnected && !isError && isCallEnded;
+    }, [isCallEnded, isConnected, isError, isLoading]);
 
     const buildMeetApp = React.useCallback(() => {
         setIsLoading(true);
@@ -52,18 +53,22 @@ export function useGoogleMeet({ fragmentRef }: GoogleMeetProps) {
         // Configure event handlers
         builder.on('showToast', ({ message }) => {
             console.log('Toast:', message);
+            displaySnack(message, { variant: 'info' });
         });
         builder.on('linkClicked', ({ url: _url }) => {
             console.log(_url);
         });
         builder.on('callStarted', () => {
             console.log('callStarted');
+            setIsCallEnded(false);
         });
         builder.on('callEnded', () => {
             console.log('callEnded');
+            setIsCallEnded(true);
             setIsConnected(false);
         });
         builder.on('error', (error) => {
+            console.log('ERROR has occurred');
             console.error(error);
         });
 
@@ -72,10 +77,21 @@ export function useGoogleMeet({ fragmentRef }: GoogleMeetProps) {
         builder.setPreferredAnonymousUserName(user ? user.firstName + ' ' + user.lastName : 'Anonymous Participant');
         builder.setHostUrlSharing(true);
         builder.setIgnoreBrowserCompatibilityChecks(true);
+        // TODO: Add option to toggle theme (or use site theme to determine)
+        builder.setTheme('light');
+        // builder.setAuthUser('');
+        // builder.setOidcIdToken('');
         // builder.setShowMeetingInfo(false);
         // builder.setEnableEndCallRating(false);
+        // TODO: Allow this to be configurable by moderator/organizer
+        const enum PresentationSupport {
+            UNKNOWN,
+            NONE,
+            THIS_TAB,
+            ANYTHING,
+        }
+        builder.setPresentationSupport(PresentationSupport.ANYTHING);
 
-        // TODO: Update elements
         const frameSet = {
             dialog: {
                 element: DIALOG_ELEMENT,
@@ -100,16 +116,31 @@ export function useGoogleMeet({ fragmentRef }: GoogleMeetProps) {
         builder.useRetryOptions({
             onDialogRequest: () => {
                 console.log('Dialog request');
+                setIsLoading(true);
             },
             onDialogSuccess: () => {
                 console.log('Dialog success');
+                setIsConnected(true);
+                setIsLoading(false);
             },
             onDialogTimeout: () => {
                 console.log('Dialog timeout');
+                setIsConnected(false);
+                setIsLoading(false);
+                setIsError(true);
             },
             onPipSuccess: () => {
                 console.log('Pip success');
+                setIsConnected(true);
+                setIsLoading(false);
             },
+            onPipTimeout: () => {
+                console.log('Pip timeout');
+                setIsConnected(false);
+                setIsLoading(false);
+                setIsError(true);
+            },
+            pipRetryIntervalsMs: [2000, 4000, 8000],
         });
 
         try {
@@ -138,8 +169,11 @@ export function useGoogleMeet({ fragmentRef }: GoogleMeetProps) {
                         .then((result) => {
                             if (result === 1) {
                                 console.log('Successfully joined call');
-                                setIsConnected(true);
-                            } else console.error('Failed to join call');
+                            } else {
+                                console.error('Failed to join call');
+                                displaySnack('Error joining call', { variant: 'error' });
+                                setIsError(true);
+                            }
                             setIsLoading(false);
                         })
                         .catch((err) => {
@@ -160,5 +194,5 @@ export function useGoogleMeet({ fragmentRef }: GoogleMeetProps) {
         [buildMeetApp, data.googleMeetUrl, displaySnack]
     );
 
-    return { connectToMeeting, displayReloadButton, isLoading, isError };
+    return { connectToMeeting, displayReloadButton, isLoading, isConnected, isCallEnded, isError };
 }

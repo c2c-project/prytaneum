@@ -71,14 +71,16 @@ function ActionsPanels({ node }: ActionsPanelProps) {
         <PanelGroup autoSaveId='mod-panels-child-persistence' direction='vertical'>
             <Panel defaultSize={25} minSize={20}>
                 <Grid
-                    id='google-meet'
+                    id='event-video'
                     sx={{
                         overflow: 'auto',
                         height: '100%',
                     }}
                 >
                     {eventData.eventType === 'GOOGLE_MEET' ? (
-                        <GoogleMeet fragmentRef={node} />
+                        <div id='google-meet' className='meet-frame' style={{ height: '100%', width: '100%' }}>
+                            <GoogleMeet fragmentRef={node} />
+                        </div>
                     ) : (
                         <EventVideo fragmentRef={node} />
                     )}

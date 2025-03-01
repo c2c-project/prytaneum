@@ -226,11 +226,11 @@ function EventLive({ node, validateInvite, tokenProvided }: EventLiveProps) {
                                 },
                                 display: eventData.eventType === 'GOOGLE_MEET' ? 'flex' : 'inline',
                                 flex: eventData.eventType === 'GOOGLE_MEET' ? 1 : 'none',
-                                minHeight: eventData.eventType === 'GOOGLE_MEET' ? '600px' : '0px',
+                                minHeight: eventData.eventType === 'GOOGLE_MEET' ? '700px' : '0px',
                             }}
                         >
                             {eventData.eventType === 'GOOGLE_MEET' ? (
-                                <div id='google-meet' className='meet-frame'>
+                                <div id='google-meet' className='meet-frame' style={{ height: '100%', width: '100%' }}>
                                     <GoogleMeet fragmentRef={node} />
                                 </div>
                             ) : (
