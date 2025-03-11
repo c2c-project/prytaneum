@@ -131,3 +131,8 @@ state/
 screenshots/
 *.csv
 *credentials.json
+
+
+# Macos specific files
+.yarn/cache/fsevents*
+.yarn/cache/@next-swc-darwin-arm64*
