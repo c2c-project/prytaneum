@@ -3,6 +3,7 @@ module.exports = {
     extends: ['next/core-web-vitals', 'airbnb-typescript', 'prettier'],
     parserOptions: {
         project: './tsconfig.json',
+        tsconfigRootDir: __dirname,
     },
     rules: {
         quotes: ['error', 'single'],
