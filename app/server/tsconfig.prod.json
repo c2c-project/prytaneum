@@ -1,5 +1,5 @@
 {
     "extends": "./tsconfig.json",
-    "exclude": ["**/*.test.ts", "**/graphql-types.ts"],
+    "exclude": ["**/*.test.ts", "**/graphql-types.ts", "**/__generated__/**"],
     "include": ["src/**/*.ts"]
 }
