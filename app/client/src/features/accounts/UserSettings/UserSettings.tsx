@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material/styles';
 
 import { SettingsMenu } from '@local/components/SettingsMenu/SettingsMenu';
 
-import { ModifyUserEmail, ModifyUserPassword, DeleteAccount } from './components';
+import { ModifyUserEmail, ModifyUserPassword, DeleteAccount, ModifyUserName } from './components';
 import { useUserFragment$data } from '@local/__generated__/useUserFragment.graphql';
 
 interface Props {
@@ -40,6 +40,11 @@ export default function UserSettings({ user }: Props) {
             </Typography>
             <SettingsMenu
                 config={[
+                    {
+                        title: 'Username',
+                        description: 'Update your name',
+                        component: <ModifyUserName user={user} />,
+                    },
                     {
                         title: 'Email',
                         description: 'Update your email',

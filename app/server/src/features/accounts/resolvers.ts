@@ -111,6 +111,16 @@ export const resolvers: Resolvers = {
                 return toUserId(updatedUser);
             });
         },
+        async updateUserName(parent, args, ctx, info) {
+            return runMutation(async () => {
+                // Get viewer id
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+                const viewerId = ctx.viewer.id;
+                console.log('viewerId', viewerId, args.input);
+                const { updatedUser } = await User.updateName(ctx.prisma, viewerId, args.input);
+                return toUserId(updatedUser);
+            });
+        },
         async updatePassword(parent, args, ctx, info) {
             return runMutation(async () => {
                 const { updatedUser, token } = await User.updatePassword(ctx.prisma, args.input);

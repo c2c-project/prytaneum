@@ -14,6 +14,7 @@ import type {
     ResetPasswordForm,
     OrganizerForm,
     UpdateOrganizerForm,
+    UpdateUserNameForm,
 } from '@local/graphql-types';
 
 import { getOrCreateServer } from '@local/core/server';
@@ -338,6 +339,19 @@ export async function updateEmail(prisma: PrismaClient, input: UpdateEmailForm) 
 
     // return update user and token
     return { updatedUser, token };
+}
+
+export async function updateName(prisma: PrismaClient, viewerId: string, input: UpdateUserNameForm) {
+    const { firstName, lastName } = input;
+
+    const updatedUser = await prisma.user.update({
+        where: { id: viewerId },
+        data: {
+            firstName: firstName || undefined,
+            lastName: lastName || undefined,
+        },
+    });
+    return { updatedUser };
 }
 
 /**

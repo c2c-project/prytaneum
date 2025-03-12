@@ -870,6 +870,7 @@ export type Mutation = {
   updateSpeaker: EventSpeakerMutationResponse;
   updateTopic?: Maybe<TopicMutationResponse>;
   updateTopicQueuePosition: EventQuestionMutationResponse;
+  updateUserName: UserMutationResponse;
   updateVideo: EventVideoMutationResponse;
 };
 
@@ -1261,6 +1262,11 @@ export type MutationUpdateTopicArgs = {
 
 export type MutationUpdateTopicQueuePositionArgs = {
   input: UpdateTopicQueuePosition;
+};
+
+
+export type MutationUpdateUserNameArgs = {
+  input: UpdateUserNameForm;
 };
 
 
@@ -1836,6 +1842,11 @@ export type UpdateTopicQueuePosition = {
   newPosition: Scalars['String'];
   questionId: Scalars['ID'];
   topic: Scalars['String'];
+};
+
+export type UpdateUserNameForm = {
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
 };
 
 export type UpdateVideo = {

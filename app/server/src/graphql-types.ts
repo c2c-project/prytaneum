@@ -259,6 +259,11 @@ export type UpdatePasswordForm = {
     confirmNewPassword: Scalars['String'];
 };
 
+export type UpdateUserNameForm = {
+    firstName: Scalars['String'];
+    lastName: Scalars['String'];
+};
+
 export type DeleteAccountForm = {
     email: Scalars['String'];
     password: Scalars['String'];
@@ -325,6 +330,7 @@ export type Mutation = {
     login: UserMutationResponse;
     updateEmail: UserMutationResponse;
     updatePassword: UserMutationResponse;
+    updateUserName: UserMutationResponse;
     /**
      * send a reset password request if the account exists
      * returns false if an account with the provided email cannot be found
@@ -438,6 +444,10 @@ export type MutationupdateEmailArgs = {
 
 export type MutationupdatePasswordArgs = {
     input: UpdatePasswordForm;
+};
+
+export type MutationupdateUserNameArgs = {
+    input: UpdateUserNameForm;
 };
 
 export type MutationresetPasswordRequestArgs = {
@@ -1978,6 +1988,7 @@ export type ResolversTypes = {
     RegistrationForm: RegistrationForm;
     UpdateEmailForm: UpdateEmailForm;
     UpdatePasswordForm: UpdatePasswordForm;
+    UpdateUserNameForm: UpdateUserNameForm;
     DeleteAccountForm: DeleteAccountForm;
     UpdateOrganizerForm: UpdateOrganizerForm;
     LoginForm: LoginForm;
@@ -2161,6 +2172,7 @@ export type ResolversParentTypes = {
     RegistrationForm: RegistrationForm;
     UpdateEmailForm: UpdateEmailForm;
     UpdatePasswordForm: UpdatePasswordForm;
+    UpdateUserNameForm: UpdateUserNameForm;
     DeleteAccountForm: DeleteAccountForm;
     UpdateOrganizerForm: UpdateOrganizerForm;
     LoginForm: LoginForm;
@@ -2590,6 +2602,12 @@ export type MutationResolvers<
         ParentType,
         ContextType,
         RequireFields<MutationupdatePasswordArgs, 'input'>
+    >;
+    updateUserName?: Resolver<
+        ResolversTypes['UserMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationupdateUserNameArgs, 'input'>
     >;
     resetPasswordRequest?: Resolver<
         ResolversTypes['ResetPasswordRequestMutationResponse'],

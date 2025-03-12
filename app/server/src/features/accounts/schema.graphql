@@ -111,6 +111,11 @@ input UpdatePasswordForm {
     confirmNewPassword: String!
 }
 
+input UpdateUserNameForm {
+    firstName: String!
+    lastName: String!
+}
+
 input DeleteAccountForm {
     email: String!
     password: String!
@@ -180,6 +185,7 @@ type Mutation {
     login(input: LoginForm!): UserMutationResponse!
     updateEmail(input: UpdateEmailForm!): UserMutationResponse!
     updatePassword(input: UpdatePasswordForm!): UserMutationResponse!
+    updateUserName(input: UpdateUserNameForm!): UserMutationResponse!
     """
     send a reset password request if the account exists
     returns false if an account with the provided email cannot be found

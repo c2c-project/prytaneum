@@ -37,15 +37,28 @@ import { UPDATE_EMAIL_FORM_MUTATION } from './UpdateEmailForm';
 import { UPDATE_PASSWORD_FORM_MUTATION } from './UpdatePasswordForm';
 import { DELETE_ACCOUNT_FORM_MUTATION } from './DeleteAccountForm';
 import text from './help-text';
+import { UPDATE_USER_NAME_FORM_MUTATION } from './UpdateUserNameForm';
+import { UpdateUserNameFormMutation } from '@local/__generated__/UpdateUserNameFormMutation.graphql';
 
 // used for modifying user email
 export type TUpdateEmailForm = { newEmail: string };
+
+export type TUpdateUserNameForm = { firstName: string; lastName: string };
+
+type TUpdateUserNameSchema = {
+    [key in keyof TUpdateUserNameForm]: Yup.AnySchema;
+};
 
 type TUpdateEmailSchema = {
     [key in keyof TUpdateEmailForm]: Yup.AnySchema;
 };
 const updateEmailValidationSchema = Yup.object().shape<TUpdateEmailSchema>({
     newEmail: Yup.string().email('Please enter a valid email'),
+});
+
+const updateUserNameValidationSchema = Yup.object().shape<TUpdateUserNameSchema>({
+    firstName: Yup.string(),
+    lastName: Yup.string(),
 });
 
 const initialModifyUserEmail: TUpdateEmailForm = { newEmail: '' };
@@ -136,6 +149,82 @@ export function NotificationSettings({ settings }: { settings: UserSettings }) {
                 </SettingsItem>
             </Collapse>
         </SettingsList>
+    );
+}
+
+export function ModifyUserName({ user, demo }: { user: User; demo?: boolean }) {
+    // form state hooks
+    const [commit] = useMutation<UpdateUserNameFormMutation>(UPDATE_USER_NAME_FORM_MUTATION);
+
+    // user feedback
+    const { displaySnack } = useSnack();
+
+    const { setUser } = useUser();
+
+    // styling hook
+    const theme = useTheme();
+
+    const { handleSubmit, handleChange, values, errors } = useFormik<TUpdateUserNameForm>({
+        initialValues: {
+            firstName: user.firstName ? user.firstName : '',
+            lastName: user.lastName ? user.lastName : '',
+        },
+        validationSchema: updateUserNameValidationSchema,
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        onSubmit: handleCommit,
+    });
+
+    function handleCommit(submittedForm: TUpdateUserNameForm) {
+        commit({
+            variables: { input: submittedForm },
+            onCompleted({ updateUserName }) {
+                console.log(updateUserName);
+                if (updateUserName.isError) {
+                    displaySnack(updateUserName.message, { variant: 'error' });
+                } else {
+                    displaySnack('Name changed successfully!', { variant: 'success' });
+                    setUser(updateUserName.body);
+                }
+            },
+        });
+    }
+
+    return (
+        <Grid container spacing={2} marginTop={theme.spacing(2)}>
+            <Form styles={{ margin: theme.spacing(0, 1, 0, 1) }} onSubmit={!demo ? handleSubmit : () => {}}>
+                <FormContent>
+                    <TextField
+                        inputProps={{ 'aria-label': 'Enter your first name' }}
+                        label='Enter your first name'
+                        helperText={errors.firstName}
+                        error={Boolean(errors.firstName)}
+                        required
+                        type='text'
+                        variant='outlined'
+                        value={values.firstName}
+                        onChange={handleChange('firstName')}
+                        spellCheck={false}
+                    />
+                    <TextField
+                        inputProps={{ 'aria-label': 'Enter your last name' }}
+                        label='Enter your last name'
+                        helperText={errors.lastName}
+                        error={Boolean(errors.lastName)}
+                        required={false}
+                        type='text'
+                        variant='outlined'
+                        value={values.lastName}
+                        onChange={handleChange('lastName')}
+                        spellCheck={false}
+                    />
+                </FormContent>
+                <Grid component='span' item xs={12}>
+                    <Button type='submit' variant='outlined' color='primary'>
+                        Update Name
+                    </Button>
+                </Grid>
+            </Form>
+        </Grid>
     );
 }
 
