@@ -97,6 +97,7 @@ server.route({
             });
             res.redirect(authorizationUri);
         } catch (error) {
+            server.log.error(`error generating authorization URI: ${error}`);
             res.code(500).send({ error: 'Could not generate authorization URI' });
         }
     },
@@ -109,6 +110,8 @@ server.route({
     url: '/api/auth/callback/google',
     handler: async (req, res) => {
         try {
+            server.log.info('Google OAuth callback received');
+            server.log.info(`Google OAuth Query parameters: ${JSON.stringify(req.query)}`);
             const {
                 error,
                 state: reqState,
@@ -144,6 +147,7 @@ server.route({
                 token = result.token;
                 user = result.user;
             } else {
+                server.log.info(`Existing user detected, logging in with oauth email: ${userProfile.email}`);
                 token = await jwt.sign({ id: toUserId(user).id });
                 if (tokens.refresh_token) {
                     await prisma.user.update({
@@ -165,21 +169,23 @@ server.route({
             res.setCookie('jwt', token, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-                sameSite: 'lax', // Adjust based on your requirements
+                sameSite: 'none', // Adjust based on your requirements
                 path: '/', // Cookie is valid for the entire site
                 maxAge: 60 * 60 * 24 * 30, // 30 days expiration
             });
+            server.log.info(`JWT cookie set: ${token}`);
+
             let redirectUrl = process.env.ORIGIN || 'http://localhost:8080';
             try {
                 type State = { postAuthRedirectUrl: string };
                 const { postAuthRedirectUrl } = JSON.parse(reqState) as State;
                 redirectUrl = postAuthRedirectUrl;
             } catch (err) {
-                server.log.error(err);
+                server.log.error(`error parsing state: ${err}`);
             }
             res.redirect(redirectUrl);
         } catch (error) {
-            server.log.error(error);
+            server.log.error(`Google OAuth callback error: ${error}`);
             return res.code(500).send('Error authenticating');
         }
     },
@@ -223,7 +229,7 @@ server.route({
             await googleAuthClient.getToken(code);
             res.redirect(postAuthRedirectUrl);
         } catch (error) {
-            server.log.error(error);
+            server.log.error(`error authenticating with Google: ${error}`);
             return res.code(500).send('Error authenticating');
         }
     },
