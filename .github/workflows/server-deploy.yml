@@ -29,7 +29,6 @@ env:
     DATABASE_URL: ${{ secrets.DATABASE_URL }} # Used for prisma migration
     GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
     GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-    GOOGLE_REDIRECT_URI: ${{ vars.GOOGLE_REDIRECT_URI }}
     GOOGLE_ARTIFACT_REPO: ${{ vars.GOOGLE_ARTIFACT_REPO }}
 
 jobs:
@@ -39,6 +38,8 @@ jobs:
         environment:
             name: development
             url: ${{ env.ORIGIN }}
+        env:
+            GOOGLE_REDIRECT_URI: ${{ vars.STAGING_GOOGLE_REDIRECT_URI }}
 
         steps:
             - name: Checkout
@@ -129,6 +130,8 @@ jobs:
         environment:
             name: production
             url: ${{ env.ORIGIN }}
+        env:
+            GOOGLE_REDIRECT_URI: ${{ vars.PROD_GOOGLE_REDIRECT_URI }}
         needs: [staging]
 
         steps:
