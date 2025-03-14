@@ -85,7 +85,10 @@ server.route({
     handler: async (req, res) => {
         try {
             const { postAuthRedirectUrl } = req.query as { postAuthRedirectUrl: string };
-            console.log('postAuthRedirectUrl', postAuthRedirectUrl);
+            server.log.debug({
+                message: 'Google OAuth aredirect',
+                postAuthRedirectUrl,
+            });
             const googleAuthClient = createAndGetGoogleOAuthClient();
             const authorizationUri = googleAuthClient.generateAuthUrl({
                 access_type: 'offline',
@@ -110,8 +113,11 @@ server.route({
     url: '/api/auth/callback/google',
     handler: async (req, res) => {
         try {
-            server.log.info('Google OAuth callback received');
-            server.log.info(`Google OAuth Query parameters: ${JSON.stringify(req.query)}`);
+            server.log.debug('Google OAuth callback received');
+            server.log.debug({
+                message: 'Google OAuth callback query',
+                query: req.query,
+            });
             const {
                 error,
                 state: reqState,
@@ -131,13 +137,20 @@ server.route({
 
             const oauth2 = google.oauth2('v2');
             const userInfoResponse = await oauth2.userinfo.get({ auth: googleAuthClient });
+            server.log.debug({
+                message: 'Google OAuth callback userInfoResponse',
+                userInfoResponse: userInfoResponse.data,
+            });
             const userProfile = userInfoResponse.data;
 
             // Check if the user exists in your database; if not, register a new user.
             let user = await prisma.user.findUnique({ where: { email: userProfile.email! } });
             let token;
             if (!user) {
-                server.log.info(`New user detected, registering new user with oauth email: ${userProfile.email}`);
+                server.log.debug({
+                    message: 'User not found, registering new user',
+                    userProfile,
+                });
                 const result = await registerWithGoogleOAuth(prisma, {
                     email: userProfile.email!,
                     firstName: userProfile.given_name || 'First',
@@ -147,7 +160,10 @@ server.route({
                 token = result.token;
                 user = result.user;
             } else {
-                server.log.info(`Existing user detected, logging in with oauth email: ${userProfile.email}`);
+                server.log.debug({
+                    message: 'User already exists, updating user with new refresh token',
+                    user,
+                });
                 token = await jwt.sign({ id: toUserId(user).id });
                 if (tokens.refresh_token) {
                     await prisma.user.update({
@@ -173,7 +189,7 @@ server.route({
                 path: '/', // Cookie is valid for the entire site
                 maxAge: 60 * 60 * 24 * 30, // 30 days expiration
             });
-            server.log.info(`JWT cookie set: ${token}`);
+            server.log.debug(`JWT cookie set: ${token}`);
 
             let redirectUrl = process.env.ORIGIN || 'http://localhost:8080';
             try {
