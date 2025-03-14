@@ -169,7 +169,8 @@ server.route({
             res.setCookie('jwt', token, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-                sameSite: 'lax', // Adjust based on your requirements
+                sameSite: 'none', // Adjust based on your requirements
+                path: '/', // Cookie is valid for the entire site
                 maxAge: 60 * 60 * 24 * 30, // 30 days expiration
             });
             server.log.info(`JWT cookie set: ${token}`);
