@@ -58,6 +58,11 @@ spec:
                             configMapKeyRef:
                                 name: prytaneum-server-config
                                 key: REDIS_PORT
+                      - name: GOOGLE_REDIRECT_URI
+                        valueFrom:
+                            configMapKeyRef:
+                                key: GOOGLE_REDIRECT_URI
+                                name: prytaneum-server-config
                       - name: GCP_PROJECT_ID
                         valueFrom:
                             configMapKeyRef:
@@ -117,6 +122,16 @@ spec:
                             secretKeyRef:
                                 key: jwt
                                 name: prytaneum-client-secrets
+                      - name: GOOGLE_CLIENT_ID
+                        valueFrom:
+                            secretKeyRef:
+                                key: GOOGLE_CLIENT_ID
+                                name: prytaneum-oauth-secrets
+                      - name: GOOGLE_CLIENT_SECRET
+                        valueFrom:
+                            secretKeyRef:
+                                key: GOOGLE_CLIENT_SECRET
+                                name: prytaneum-oauth-secrets
                       - name: 'GOOGLE_APPLICATION_CREDENTIALS'
                         value: '/var/secrets/google/key.json'
                   volumeMounts:
