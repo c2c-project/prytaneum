@@ -50,8 +50,8 @@ export function CallToAction() {
                 </Typography>
                 <Grid item marginLeft={mdDownBreakpoint ? 0 : 14} marginTop={2}>
                     <Typography variant='h6' textAlign='center'>
-                        This town hall platform leverages AI and big data to enable meaningful democratic engagement
-                        between residents and public officials.
+                        This novel webinar platform leverages AI and big data to enable meaningful democratic engagement
+                        in any speaker-led meeting.
                     </Typography>
                 </Grid>
                 <Grid
