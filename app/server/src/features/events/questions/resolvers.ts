@@ -21,10 +21,19 @@ export const resolvers: Resolvers = {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.input.eventId);
-                const { question, topics } = await Question.createQuestion(ctx.viewer.id, ctx.prisma, ctx.redis, {
+                const { question, offensive } = await Question.createQuestion(ctx.viewer.id, ctx.prisma, ctx.redis, {
                     ...args.input,
                     eventId,
                 });
+
+                if (offensive) {
+                    throw new ProtectedError({
+                        userMessage:
+                            'Your question has been flagged as potentially offensive and will not be displayed',
+                        internalMessage: `Question flagged as offensive: ${question.id}`,
+                    });
+                }
+
                 const formattedQuestion = toQuestionId(question);
                 if (formattedQuestion.refQuestion)
                     formattedQuestion.refQuestion = toQuestionId(formattedQuestion.refQuestion);
