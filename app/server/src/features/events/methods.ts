@@ -247,7 +247,7 @@ export async function findQuestionsByEventId({ eventId, first, after, prisma }: 
     const hasAfterCursor = after !== '' && !!after;
 
     const result = await prisma.eventQuestion.findMany({
-        where: { eventId, isVisible: true, offensive: false },
+        where: { eventId, isVisible: true },
         orderBy: { createdAt: 'desc' },
         take: first ? first + 1 : undefined,
         cursor: hasAfterCursor

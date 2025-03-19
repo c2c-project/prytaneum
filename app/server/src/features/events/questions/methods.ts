@@ -208,7 +208,7 @@ export async function createQuestion(
             refQuestion: true,
         },
     });
-    return { question: newQuestion, topics, offensive };
+    return { question: newQuestion, topics };
 }
 /**
  *  Remove a question from an event
