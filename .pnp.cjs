@@ -533,7 +533,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["dotenv-cli", "npm:5.1.0"],\
             ["dotenv-expand", "npm:5.1.0"],\
             ["express", "npm:4.18.1"],\
-            ["http-proxy-middleware", "virtual:9ce3e1aeb4d7b149f7e8ad3b56dcf9613fa535dca6d9311a058ccb64208667ff7d898ca443cbfdacd6e5e42cbff8ba2e896a254d6809cf37f8b991d790b88442#npm:2.0.6"],\
+            ["http-proxy-middleware", "virtual:0ca33ee6ec6b7927402f9cf060fe4008bf0048743ae2d9a5ec293053a6193ef4a74f16f88d2403c83e3d6c3f1394ca4d820565899c2c4efb04520638d9eba490#npm:2.0.9"],\
             ["ts-node-dev", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.0.0"],\
             ["typescript", "patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=a1c5e5"]\
           ],\
@@ -24918,6 +24918,29 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["http-proxy-middleware", "npm:2.0.6"]\
           ],\
           "linkType": "SOFT"\
+        }],\
+        ["npm:2.0.9", {\
+          "packageLocation": "./.yarn/cache/http-proxy-middleware-npm-2.0.9-c1f4ed8c4d-0ea88609b9.zip/node_modules/http-proxy-middleware/",\
+          "packageDependencies": [\
+            ["http-proxy-middleware", "npm:2.0.9"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:0ca33ee6ec6b7927402f9cf060fe4008bf0048743ae2d9a5ec293053a6193ef4a74f16f88d2403c83e3d6c3f1394ca4d820565899c2c4efb04520638d9eba490#npm:2.0.9", {\
+          "packageLocation": "./.yarn/__virtual__/http-proxy-middleware-virtual-70a1f12ba8/0/cache/http-proxy-middleware-npm-2.0.9-c1f4ed8c4d-0ea88609b9.zip/node_modules/http-proxy-middleware/",\
+          "packageDependencies": [\
+            ["http-proxy-middleware", "virtual:0ca33ee6ec6b7927402f9cf060fe4008bf0048743ae2d9a5ec293053a6193ef4a74f16f88d2403c83e3d6c3f1394ca4d820565899c2c4efb04520638d9eba490#npm:2.0.9"],\
+            ["@types/express", "npm:4.17.14"],\
+            ["@types/http-proxy", "npm:1.17.9"],\
+            ["http-proxy", "npm:1.18.1"],\
+            ["is-glob", "npm:4.0.3"],\
+            ["is-plain-obj", "npm:3.0.0"],\
+            ["micromatch", "npm:4.0.5"]\
+          ],\
+          "packagePeers": [\
+            "@types/express"\
+          ],\
+          "linkType": "HARD"\
         }],\
         ["virtual:9ce3e1aeb4d7b149f7e8ad3b56dcf9613fa535dca6d9311a058ccb64208667ff7d898ca443cbfdacd6e5e42cbff8ba2e896a254d6809cf37f8b991d790b88442#npm:2.0.6", {\
           "packageLocation": "./.yarn/__virtual__/http-proxy-middleware-virtual-f7314a8396/0/cache/http-proxy-middleware-npm-2.0.6-3bb17658ee-2ee85bc878.zip/node_modules/http-proxy-middleware/",\
