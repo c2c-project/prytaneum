@@ -372,7 +372,7 @@ __metadata:
     jest-mock-extended: ^2.0.5
     jsonwebtoken: ^9.0.0
     module-alias: ^2.2.2
-    multer: ^1.4.5-lts.1
+    multer: ^2.0.0
     papaparse: ^5.4.1
     pino-pretty: ^7.1.0
     prettier: ^2.8.0
@@ -471,7 +471,7 @@ __metadata:
     module-alias: ^2.2.2
     mqemitter: ^4.5.0
     mqemitter-redis: ^4.2.0
-    multer: ^1.4.5-lts.1
+    multer: ^2.0.0
     papaparse: ^5.4.1
     pino-pretty: ^7.1.0
     prettier: ^2.8.0
@@ -21963,9 +21963,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"multer@npm:^1.4.5-lts.1":
-  version: 1.4.5-lts.1
-  resolution: "multer@npm:1.4.5-lts.1"
+"multer@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "multer@npm:2.0.0"
   dependencies:
     append-field: ^1.0.0
     busboy: ^1.0.0
@@ -21974,7 +21974,7 @@ fsevents@^1.2.7:
     object-assign: ^4.1.1
     type-is: ^1.6.4
     xtend: ^4.0.0
-  checksum: d6dfa78a6ec592b74890412f8962da8a87a3dcfe20f612e039b735b8e0faa72c735516c447f7de694ee0d981eb0a1b892fb9e2402a0348dc6091d18c38d89ecc
+  checksum: 0a6f7de5e59ea83cbe8c60071b0f2ae4923c0016516ed21bd94119800d434fca37b2cfd4b4c4b19c057e6a1ff2c0a015705b901a34be3e5addea673b7b1a0ba4
   languageName: node
   linkType: hard
 
