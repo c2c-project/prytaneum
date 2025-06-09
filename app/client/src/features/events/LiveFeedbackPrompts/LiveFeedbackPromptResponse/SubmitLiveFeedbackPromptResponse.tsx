@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies -- IDE ESlint issue */
 import * as React from 'react';
 import type { MutableRefObject } from 'react';
 import { DialogContent } from '@mui/material';
@@ -73,7 +74,8 @@ export function SubmitLiveFeedbackPromptResponse({ eventId, promptRef, isOpen, c
                             close();
                         }}
                         onSubmit={handleSubmit}
-                        promptRef={promptRef}
+                        // promptRef={promptRef}
+                        prompt={promptRef.current}
                     />
                 </DialogContent>
             </ResponsiveDialog>

@@ -26,6 +26,7 @@ import {
 import { Participant } from '../Participants/useParticipantList';
 import ParticipantList from '../Participants/ParticipantList';
 import { useBroadcastMessageSnack } from '../BroadcastMessages/useBroadcastMessageSnack';
+import { SubmitLiveFeedbackFlowResponse } from '../LiveFeedbackPrompts/LiveFeedbackFlowResponse/SubmitLiveFeedbackFlowResponse';
 
 export const EVENT_SIDEBAR_FRAGMENT = graphql`
     fragment EventSidebarFragment on Event {
@@ -140,6 +141,7 @@ export const EventSidebar = ({ fragmentRef, participants }: EventSidebarProps) =
             alignItems='flex-start'
             wrap='nowrap'
         >
+            <SubmitLiveFeedbackFlowResponse />
             <SubmitLiveFeedbackPromptResponse
                 eventId={eventId}
                 promptRef={feedbackPromptRef}

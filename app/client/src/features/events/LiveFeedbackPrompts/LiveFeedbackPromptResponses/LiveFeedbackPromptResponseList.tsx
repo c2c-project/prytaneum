@@ -11,8 +11,8 @@ import { VoteResponseChart } from '../LiveFeedbackPromptResponse/VoteResponseCha
 import { MultipleChoiceResponseChart } from '../LiveFeedbackPromptResponse';
 
 export const LIVE_FEEDBACK_PROMPT_RESPONSE_LIST_QUERY = graphql`
-    query LiveFeedbackPromptResponseListQuery($promptId: ID!) {
-        promptResponses(promptId: $promptId) {
+    query LiveFeedbackPromptResponseListQuery($promptId: ID!, $isFlow: Boolean = false) {
+        promptResponses(promptId: $promptId, isFlow: $isFlow) {
             id
             response
             vote
@@ -218,11 +218,13 @@ export function LiveFeedbackPromptResponseList({ queryRef, promptData, vote }: L
 interface PreloadedLiveFeedbackPromptResponseListProps {
     prompt: Prompt;
     vote: string;
+    isFlow?: boolean; // Optional prop to indicate if this is part of a flow
 }
 
 export function PreloadedLiveFeedbackPromptResponseList({
     prompt,
     vote,
+    isFlow = false, // Optional prop to indicate if this is part of a flow
 }: PreloadedLiveFeedbackPromptResponseListProps) {
     const [queryRef, loadQuery, disposeQuery] = useQueryLoader<LiveFeedbackPromptResponseListQuery>(
         LIVE_FEEDBACK_PROMPT_RESPONSE_LIST_QUERY
@@ -246,19 +248,19 @@ export function PreloadedLiveFeedbackPromptResponseList({
         fetchQuery(env, LIVE_FEEDBACK_PROMPT_RESPONSE_LIST_QUERY, { promptId }).subscribe({
             complete: () => {
                 setIsRefreshing(false);
-                loadQuery({ promptId }, { fetchPolicy: 'store-or-network' });
+                loadQuery({ promptId, isFlow }, { fetchPolicy: 'store-or-network' });
             },
             error: () => {
                 setIsRefreshing(false);
             },
         });
-    }, [env, isRefreshing, loadQuery, promptId]);
+    }, [env, isRefreshing, loadQuery, promptId, isFlow]);
 
     // TODO: Update to manual refresh button
     React.useEffect(() => {
         // Fetch data from store and network on initial load
         // This Ensures any cached data is displayed right away but will still be kept up to date
-        if (!queryRef) loadQuery({ promptId }, { fetchPolicy: 'store-and-network' });
+        if (!queryRef) loadQuery({ promptId, isFlow }, { fetchPolicy: 'store-and-network' });
         const interval = setInterval(refresh, REFRESH_INTERVAL);
         // return () => clearInterval(interval);
         return () => {

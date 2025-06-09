@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5b68ab680718591061c5dc8c0b392c39>>
+ * @generated SignedSource<<6f658c77b9ecee23d92a8aab67e9343d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,7 +14,7 @@ export type CreateFeedbackPrompt = {
   choices: ReadonlyArray<string>;
   eventId: string;
   feedbackType: string;
-  isDraft: boolean;
+  isDraft?: boolean | null;
   prompt: string;
   reasoningType: string;
 };
