@@ -93,6 +93,16 @@ type Event implements Node {
     liveFeedbackPrompts(first: Int, after: String): EventLiveFeedbackPromptConnection
 
     """
+    Live Feedback Prompt Flows
+    """
+    feedbackFlows(after: String, first: Int): FeedbackFlowConnection
+
+    """
+    Live Feedback Flow Prompts
+    """
+    feedbackFlowPrompts(after: String, first: Int): FeedbackFlowPromptConnection
+
+    """
     List of moderators for this particular event
     """
     moderators(first: Int, after: String): UserConnection

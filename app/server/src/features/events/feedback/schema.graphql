@@ -126,7 +126,7 @@ input CreateFeedbackPrompt {
     eventId: ID!
     feedbackType: String!
     choices: [String!]!
-    isDraft: Boolean!
+    isDraft: Boolean
     reasoningType: String!
 }
 
@@ -150,6 +150,71 @@ input GenerateViewpointsInput {
     isForcedRegenerate: Boolean
 }
 
+# --- Feedback Flow Types ---
+type FeedbackFlow implements Node {
+    id: ID!
+    eventId: ID!
+    flowName: String!
+    flowDescription: String
+    isDraft: Boolean!
+    prompts: [FeedbackFlowPrompt!]!
+}
+
+type FeedbackFlowEdge {
+    cursor: String!
+    node: FeedbackFlow!
+}
+
+type FeedbackFlowConnection {
+    edges: [FeedbackFlowEdge!]
+    pageInfo: PageInfo!
+}
+
+# --- Feedback Flow Prompt Types ---
+type FeedbackFlowPrompt implements Node {
+    id: ID!
+    prompt: EventLiveFeedbackPrompt!
+    order: Int!
+}
+
+type FeedbackFlowPromptEdge {
+    cursor: String!
+    node: FeedbackFlowPrompt!
+}
+
+type FeedbackFlowPromptConnection {
+    edges: [FeedbackFlowPromptEdge!]
+    pageInfo: PageInfo!
+}
+
+# --- Feedback Flow Input Types ---
+input CreateFeedbackFlowInput {
+    eventId: ID!
+    flowName: String!
+    flowDescription: String
+    isDraft: Boolean!
+    prompts: [CreateFeedbackPrompt!]!
+}
+
+input CreateFeedbackPromptFlowResponseInput {
+    eventId: ID!
+    flowId: ID!
+    responses: [CreateFeedbackPromptResponse!]!
+}
+
+# --- Feedback Flow Mutatation Responses ---
+type FeedbackFlowMutationResponse implements MutationResponse {
+    body: FeedbackFlowEdge
+    isError: Boolean!
+    message: String!
+}
+
+type EventFeedbackPromptFlowResponseMutationResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+    body: Boolean
+}
+
 type Mutation {
     createFeedback(input: CreateFeedback!): EventFeedbackMutationResponse!
     createFeedbackDM(input: CreateFeedbackDM!): EventFeedbackMutationResponse!
@@ -160,19 +225,30 @@ type Mutation {
     shareFeedbackPromptResults(eventId: ID!, promptId: ID!): EventFeedbackPromptMutationResponse!
     submitPostEventFeedback(feedback: String!, eventId: ID!): PostEventFeedbackMutationResponse!
     generateViewpoints(input: GenerateViewpointsInput!): EventFeedbackPromptMutationResponse!
+    # --- Feedback Flow Mutations ---
+    createFeedbackFlow(input: CreateFeedbackFlowInput!): FeedbackFlowMutationResponse!
+    shareFeedbackFlowDraft(flowId: ID!): FeedbackFlowMutationResponse!
+    reshareFeedbackFlow(flowId: ID!): FeedbackFlowMutationResponse!
+    createFeedbackPromptFlowResponse(
+        input: CreateFeedbackPromptFlowResponseInput!
+    ): EventFeedbackPromptFlowResponseMutationResponse!
 }
 
 type Query {
     myFeedback(eventId: ID!): [EventLiveFeedback]
-    promptResponses(promptId: ID!): [EventLiveFeedbackPromptResponse!]
+    promptResponses(promptId: ID!, isFlow: Boolean): [EventLiveFeedbackPromptResponse!]
     prompt(promptId: ID!): EventLiveFeedbackPrompt
     prompts(eventId: ID!): [EventLiveFeedbackPrompt!]
     promptResponseVotes(promptId: ID!): Votes!
     promptResponseViewpoints(promptId: ID!): [String!]
+    feedbackFlow(feedbackFlowId: ID!): FeedbackFlow
+    eventFeedbackFlows(eventId: ID!, after: String, first: Int): FeedbackFlowConnection
 }
 
 type Subscription {
     feedbackCRUD(eventId: ID!): FeedbackOperation!
     feedbackPrompted(eventId: ID!): EventLiveFeedbackPromptEdge!
     feedbackPromptResultsShared(eventId: ID!): EventLiveFeedbackPrompt!
+    # --- Feedback Flow Subscriptions ---
+    feedbackFlowPrompted(eventId: ID!): FeedbackFlowEdge!
 }

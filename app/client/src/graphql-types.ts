@@ -64,13 +64,27 @@ export type CreateFeedbackDm = {
   recipientId: Scalars['ID'];
 };
 
+export type CreateFeedbackFlowInput = {
+  eventId: Scalars['ID'];
+  flowDescription?: InputMaybe<Scalars['String']>;
+  flowName: Scalars['String'];
+  isDraft: Scalars['Boolean'];
+  prompts: Array<CreateFeedbackPrompt>;
+};
+
 export type CreateFeedbackPrompt = {
   choices: Array<Scalars['String']>;
   eventId: Scalars['ID'];
   feedbackType: Scalars['String'];
-  isDraft: Scalars['Boolean'];
+  isDraft?: InputMaybe<Scalars['Boolean']>;
   prompt: Scalars['String'];
   reasoningType: Scalars['String'];
+};
+
+export type CreateFeedbackPromptFlowResponseInput = {
+  eventId: Scalars['ID'];
+  flowId: Scalars['ID'];
+  responses: Array<CreateFeedbackPromptResponse>;
 };
 
 export type CreateFeedbackPromptResponse = {
@@ -199,6 +213,10 @@ export type Event = Node & {
   /** The planned end date time string */
   endDateTime?: Maybe<Scalars['Date']>;
   eventType?: Maybe<Scalars['String']>;
+  /** Live Feedback Flow Prompts */
+  feedbackFlowPrompts?: Maybe<FeedbackFlowPromptConnection>;
+  /** Live Feedback Prompt Flows */
+  feedbackFlows?: Maybe<FeedbackFlowConnection>;
   googleMeetSpace?: Maybe<Scalars['String']>;
   googleMeetUrl?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
@@ -252,6 +270,18 @@ export type Event = Node & {
 
 
 export type EventBroadcastMessagesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type EventFeedbackFlowPromptsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type EventFeedbackFlowsArgs = {
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
 };
@@ -404,6 +434,13 @@ export type EventEdgeContainer = {
 export type EventFeedbackMutationResponse = MutationResponse & {
   __typename?: 'EventFeedbackMutationResponse';
   body?: Maybe<EventLiveFeedbackEdge>;
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
+};
+
+export type EventFeedbackPromptFlowResponseMutationResponse = MutationResponse & {
+  __typename?: 'EventFeedbackPromptFlowResponseMutationResponse';
+  body?: Maybe<Scalars['Boolean']>;
   isError: Scalars['Boolean'];
   message: Scalars['String'];
 };
@@ -717,6 +754,54 @@ export type EventsSearchFilters = {
   orgName?: InputMaybe<Scalars['String']>;
 };
 
+export type FeedbackFlow = Node & {
+  __typename?: 'FeedbackFlow';
+  eventId: Scalars['ID'];
+  flowDescription?: Maybe<Scalars['String']>;
+  flowName: Scalars['String'];
+  id: Scalars['ID'];
+  isDraft: Scalars['Boolean'];
+  prompts: Array<FeedbackFlowPrompt>;
+};
+
+export type FeedbackFlowConnection = {
+  __typename?: 'FeedbackFlowConnection';
+  edges?: Maybe<Array<FeedbackFlowEdge>>;
+  pageInfo: PageInfo;
+};
+
+export type FeedbackFlowEdge = {
+  __typename?: 'FeedbackFlowEdge';
+  cursor: Scalars['String'];
+  node: FeedbackFlow;
+};
+
+export type FeedbackFlowMutationResponse = MutationResponse & {
+  __typename?: 'FeedbackFlowMutationResponse';
+  body?: Maybe<FeedbackFlowEdge>;
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
+};
+
+export type FeedbackFlowPrompt = Node & {
+  __typename?: 'FeedbackFlowPrompt';
+  id: Scalars['ID'];
+  order: Scalars['Int'];
+  prompt: EventLiveFeedbackPrompt;
+};
+
+export type FeedbackFlowPromptConnection = {
+  __typename?: 'FeedbackFlowPromptConnection';
+  edges?: Maybe<Array<FeedbackFlowPromptEdge>>;
+  pageInfo: PageInfo;
+};
+
+export type FeedbackFlowPromptEdge = {
+  __typename?: 'FeedbackFlowPromptEdge';
+  cursor: Scalars['String'];
+  node: FeedbackFlowPrompt;
+};
+
 export type FeedbackOperation = {
   __typename?: 'FeedbackOperation';
   edge: EventLiveFeedbackEdge;
@@ -781,7 +866,9 @@ export type Mutation = {
   createEvent: EventMutationResponse;
   createFeedback: EventFeedbackMutationResponse;
   createFeedbackDM: EventFeedbackMutationResponse;
+  createFeedbackFlow: FeedbackFlowMutationResponse;
   createFeedbackPrompt: EventFeedbackPromptMutationResponse;
+  createFeedbackPromptFlowResponse: EventFeedbackPromptFlowResponseMutationResponse;
   createFeedbackPromptResponse: EventFeedbackPromptResponseMutationResponse;
   createInvite: InviteMutationResponse;
   /** Adds a new member and returns the new user added */
@@ -847,7 +934,9 @@ export type Mutation = {
    * returns false if an account with the provided email cannot be found
    */
   resetPasswordRequest: ResetPasswordRequestMutationResponse;
+  reshareFeedbackFlow: FeedbackFlowMutationResponse;
   reshareFeedbackPrompt: EventFeedbackPromptMutationResponse;
+  shareFeedbackFlowDraft: FeedbackFlowMutationResponse;
   shareFeedbackPromptDraft: EventFeedbackPromptMutationResponse;
   shareFeedbackPromptResults: EventFeedbackPromptMutationResponse;
   /** Start the event so that it is "live" */
@@ -928,8 +1017,18 @@ export type MutationCreateFeedbackDmArgs = {
 };
 
 
+export type MutationCreateFeedbackFlowArgs = {
+  input: CreateFeedbackFlowInput;
+};
+
+
 export type MutationCreateFeedbackPromptArgs = {
   input: CreateFeedbackPrompt;
+};
+
+
+export type MutationCreateFeedbackPromptFlowResponseArgs = {
+  input: CreateFeedbackPromptFlowResponseInput;
 };
 
 
@@ -1146,8 +1245,18 @@ export type MutationResetPasswordRequestArgs = {
 };
 
 
+export type MutationReshareFeedbackFlowArgs = {
+  flowId: Scalars['ID'];
+};
+
+
 export type MutationReshareFeedbackPromptArgs = {
   promptId: Scalars['ID'];
+};
+
+
+export type MutationShareFeedbackFlowDraftArgs = {
+  flowId: Scalars['ID'];
 };
 
 
@@ -1379,10 +1488,12 @@ export type Query = {
   /** Fetch a single event */
   event?: Maybe<Event>;
   eventBroadcastMessages?: Maybe<Array<EventBroadcastMessage>>;
+  eventFeedbackFlows?: Maybe<FeedbackFlowConnection>;
   eventParticipants: Array<Maybe<EventParticipant>>;
   eventTopics?: Maybe<Array<EventTopic>>;
   /** Fetch all events */
   events?: Maybe<Array<Event>>;
+  feedbackFlow?: Maybe<FeedbackFlow>;
   isOrganizer: Scalars['Boolean'];
   /** Fetch user data about the current user */
   me?: Maybe<User>;
@@ -1411,6 +1522,13 @@ export type QueryEventBroadcastMessagesArgs = {
 };
 
 
+export type QueryEventFeedbackFlowsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  eventId: Scalars['ID'];
+  first?: InputMaybe<Scalars['Int']>;
+};
+
+
 export type QueryEventParticipantsArgs = {
   after?: InputMaybe<Scalars['String']>;
   eventId: Scalars['ID'];
@@ -1420,6 +1538,11 @@ export type QueryEventParticipantsArgs = {
 
 export type QueryEventTopicsArgs = {
   eventId: Scalars['String'];
+};
+
+
+export type QueryFeedbackFlowArgs = {
+  feedbackFlowId: Scalars['ID'];
 };
 
 
@@ -1449,6 +1572,7 @@ export type QueryPromptResponseVotesArgs = {
 
 
 export type QueryPromptResponsesArgs = {
+  isFlow?: InputMaybe<Scalars['Boolean']>;
   promptId: Scalars['ID'];
 };
 
@@ -1541,6 +1665,7 @@ export type Subscription = {
   eventLiveFeedbackCreated: EventLiveFeedback;
   eventUpdates: Event;
   feedbackCRUD: FeedbackOperation;
+  feedbackFlowPrompted: FeedbackFlowEdge;
   feedbackPromptResultsShared: EventLiveFeedbackPrompt;
   feedbackPrompted: EventLiveFeedbackPromptEdge;
   /** subscription for whenever a new org is added */
@@ -1612,6 +1737,11 @@ export type SubscriptionEventUpdatesArgs = {
 
 
 export type SubscriptionFeedbackCrudArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionFeedbackFlowPromptedArgs = {
   eventId: Scalars['ID'];
 };
 

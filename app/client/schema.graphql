@@ -51,13 +51,27 @@ input CreateFeedbackDM {
   recipientId: ID!
 }
 
+input CreateFeedbackFlowInput {
+  eventId: ID!
+  flowDescription: String
+  flowName: String!
+  isDraft: Boolean!
+  prompts: [CreateFeedbackPrompt!]!
+}
+
 input CreateFeedbackPrompt {
   choices: [String!]!
   eventId: ID!
   feedbackType: String!
-  isDraft: Boolean!
+  isDraft: Boolean
   prompt: String!
   reasoningType: String!
+}
+
+input CreateFeedbackPromptFlowResponseInput {
+  eventId: ID!
+  flowId: ID!
+  responses: [CreateFeedbackPromptResponse!]!
 }
 
 input CreateFeedbackPromptResponse {
@@ -197,6 +211,12 @@ type Event implements Node {
   """The planned end date time string"""
   endDateTime: Date
   eventType: String
+
+  """Live Feedback Flow Prompts"""
+  feedbackFlowPrompts(after: String, first: Int): FeedbackFlowPromptConnection
+
+  """Live Feedback Prompt Flows"""
+  feedbackFlows(after: String, first: Int): FeedbackFlowConnection
   googleMeetSpace: String
   googleMeetUrl: String
   id: ID!
@@ -333,6 +353,12 @@ type EventEdgeContainer {
 
 type EventFeedbackMutationResponse implements MutationResponse {
   body: EventLiveFeedbackEdge
+  isError: Boolean!
+  message: String!
+}
+
+type EventFeedbackPromptFlowResponseMutationResponse implements MutationResponse {
+  body: Boolean
   isError: Boolean!
   message: String!
 }
@@ -608,6 +634,47 @@ input EventsSearchFilters {
   orgName: String
 }
 
+type FeedbackFlow implements Node {
+  eventId: ID!
+  flowDescription: String
+  flowName: String!
+  id: ID!
+  isDraft: Boolean!
+  prompts: [FeedbackFlowPrompt!]!
+}
+
+type FeedbackFlowConnection {
+  edges: [FeedbackFlowEdge!]
+  pageInfo: PageInfo!
+}
+
+type FeedbackFlowEdge {
+  cursor: String!
+  node: FeedbackFlow!
+}
+
+type FeedbackFlowMutationResponse implements MutationResponse {
+  body: FeedbackFlowEdge
+  isError: Boolean!
+  message: String!
+}
+
+type FeedbackFlowPrompt implements Node {
+  id: ID!
+  order: Int!
+  prompt: EventLiveFeedbackPrompt!
+}
+
+type FeedbackFlowPromptConnection {
+  edges: [FeedbackFlowPromptEdge!]
+  pageInfo: PageInfo!
+}
+
+type FeedbackFlowPromptEdge {
+  cursor: String!
+  node: FeedbackFlowPrompt!
+}
+
 type FeedbackOperation {
   edge: EventLiveFeedbackEdge!
   operationType: Operation!
@@ -672,7 +739,9 @@ type Mutation {
   createEvent(event: CreateEvent!): EventMutationResponse!
   createFeedback(input: CreateFeedback!): EventFeedbackMutationResponse!
   createFeedbackDM(input: CreateFeedbackDM!): EventFeedbackMutationResponse!
+  createFeedbackFlow(input: CreateFeedbackFlowInput!): FeedbackFlowMutationResponse!
   createFeedbackPrompt(input: CreateFeedbackPrompt!): EventFeedbackPromptMutationResponse!
+  createFeedbackPromptFlowResponse(input: CreateFeedbackPromptFlowResponseInput!): EventFeedbackPromptFlowResponseMutationResponse!
   createFeedbackPromptResponse(input: CreateFeedbackPromptResponse!): EventFeedbackPromptResponseMutationResponse!
   createInvite(input: CreateInvite!): InviteMutationResponse!
 
@@ -751,7 +820,9 @@ type Mutation {
   returns false if an account with the provided email cannot be found
   """
   resetPasswordRequest(input: ResetPasswordRequestForm!): ResetPasswordRequestMutationResponse!
+  reshareFeedbackFlow(flowId: ID!): FeedbackFlowMutationResponse!
   reshareFeedbackPrompt(promptId: ID!): EventFeedbackPromptMutationResponse!
+  shareFeedbackFlowDraft(flowId: ID!): FeedbackFlowMutationResponse!
   shareFeedbackPromptDraft(promptId: ID!): EventFeedbackPromptMutationResponse!
   shareFeedbackPromptResults(eventId: ID!, promptId: ID!): EventFeedbackPromptMutationResponse!
 
@@ -870,11 +941,13 @@ type Query {
   """Fetch a single event"""
   event(eventId: ID!): Event
   eventBroadcastMessages(eventId: ID!): [EventBroadcastMessage!]
+  eventFeedbackFlows(after: String, eventId: ID!, first: Int): FeedbackFlowConnection
   eventParticipants(after: String, eventId: ID!, first: Int): [EventParticipant]!
   eventTopics(eventId: String!): [EventTopic!]
 
   """Fetch all events"""
   events: [Event!]
+  feedbackFlow(feedbackFlowId: ID!): FeedbackFlow
   isOrganizer: Boolean!
 
   """Fetch user data about the current user"""
@@ -884,7 +957,7 @@ type Query {
   prompt(promptId: ID!): EventLiveFeedbackPrompt
   promptResponseViewpoints(promptId: ID!): [String!]
   promptResponseVotes(promptId: ID!): Votes!
-  promptResponses(promptId: ID!): [EventLiveFeedbackPromptResponse!]
+  promptResponses(isFlow: Boolean, promptId: ID!): [EventLiveFeedbackPromptResponse!]
   prompts(eventId: ID!): [EventLiveFeedbackPrompt!]
   questionsByEventId(eventId: ID!): [EventQuestion!]
   topics: [EventTopic!]
@@ -965,6 +1038,7 @@ type Subscription {
   eventLiveFeedbackCreated(eventId: ID!): EventLiveFeedback!
   eventUpdates(userId: ID!): Event!
   feedbackCRUD(eventId: ID!): FeedbackOperation!
+  feedbackFlowPrompted(eventId: ID!): FeedbackFlowEdge!
   feedbackPromptResultsShared(eventId: ID!): EventLiveFeedbackPrompt!
   feedbackPrompted(eventId: ID!): EventLiveFeedbackPromptEdge!
 
