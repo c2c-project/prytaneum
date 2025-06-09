@@ -372,7 +372,16 @@ export async function findLiveFeedbackByEventId(eventId: string, prisma: PrismaC
 export async function findLiveFeedbackPromptsByEventId(eventId: string, prisma: PrismaClient) {
     return prisma.event.findUnique({
         where: { id: eventId },
-        select: { feedbackPrompt: { orderBy: { createdAt: 'asc' } } },
+        select: {
+            feedbackPrompt: {
+                orderBy: { createdAt: 'asc' },
+                where: {
+                    flows: {
+                        none: {},
+                    },
+                },
+            },
+        },
     });
 }
 
@@ -503,4 +512,41 @@ export async function findQuestionModQueueByEventId(eventId: string, prisma: Pri
         },
     });
     return questions;
+}
+
+export async function findFeedbackFlowsByEventId(eventId: string, prisma: PrismaClient) {
+    const result = await prisma.feedbackFlow.findMany({
+        where: { eventId },
+        include: {
+            prompts: {
+                include: {
+                    prompt: true,
+                },
+                orderBy: {
+                    order: 'asc',
+                },
+            },
+        },
+    });
+    return result.map((flow) => ({
+        id: flow.id,
+        eventId: flow.eventId,
+        flowName: flow.name,
+        flowDescription: flow.description,
+        prompts: flow.prompts.map((prompt) => ({
+            id: prompt.id,
+            order: prompt.order,
+            prompt: {
+                id: prompt.prompt.id,
+                prompt: prompt.prompt.prompt,
+                isVote: prompt.prompt.isVote,
+                isOpenEnded: prompt.prompt.isOpenEnded,
+                isMultipleChoice: prompt.prompt.isMultipleChoice,
+                multipleChoiceOptions: prompt.prompt.multipleChoiceOptions,
+                isDraft: prompt.prompt.isDraft,
+                reasoningType: prompt.prompt.reasoningType,
+            },
+        })),
+        isDraft: flow.isDraft,
+    }));
 }
