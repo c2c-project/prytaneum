@@ -4,3 +4,4 @@ export * from './Loader';
 export * from './Form';
 export * from './TablePaginationActions';
 export * from './Dialog';
+export * from './EmptyState';
