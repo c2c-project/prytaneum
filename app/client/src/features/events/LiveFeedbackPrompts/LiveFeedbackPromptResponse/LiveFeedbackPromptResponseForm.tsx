@@ -1,5 +1,4 @@
-import { useMemo } from 'react';
-import type { MutableRefObject } from 'react';
+import { useEffect, useMemo } from 'react';
 import {
     Button,
     TextField,
@@ -30,56 +29,90 @@ export type TLiveFeedbackPromptResponseFormState = {
 export interface LiveFeedbackPromptResponseFormProps {
     onSubmit?: (state: TLiveFeedbackPromptResponseFormState) => void;
     onCancel?: () => void;
-    promptRef: MutableRefObject<Prompt>;
+    prompt: Prompt; // Optional prop to pass the prompt directly
+    isFlow?: boolean; // Optional prop to indicate if this is part of a flow
+    isLastFlowPrompt?: boolean; // Optional prop to indicate if this is the last prompt in a flow
+    initialState?: TLiveFeedbackPromptResponseFormState; // Optional initial state for the form
+    promptIndex?: number; // Optional index of the prompt in a flow, used for callbacks
+    onFormUpdate?: (state: TLiveFeedbackPromptResponseFormState, promptIndex: number) => void; // Optional callback for form updates
+    onValidityChange?: (isValid: boolean) => void; // Optional callback for validity changes
 }
 
-export function LiveFeedbackPromptResponseForm({ onSubmit, onCancel, promptRef }: LiveFeedbackPromptResponseFormProps) {
-    // form related hooks
-    const [form, errors, handleSubmit, handleChange] = useForm({
+export function LiveFeedbackPromptResponseForm({
+    onSubmit,
+    onCancel,
+    prompt,
+    isFlow,
+    isLastFlowPrompt = false,
+    initialState = {
+        promptId: prompt.id,
         response: '',
         vote: '',
-        promptId: promptRef.current.id,
         multipleChoiceResponse: '',
-    });
+    },
+    promptIndex = 0,
+    onFormUpdate,
+    onValidityChange,
+}: LiveFeedbackPromptResponseFormProps) {
+    // form related hooks
+    const [form, errors, handleSubmit, handleChange] = useForm(initialState);
+    const currentPrompt = prompt;
 
     const isFeedbackValid = useMemo(() => {
         const trimmedResponse = form.response.trim();
-        if (promptRef.current.reasoningType !== 'REQUIRED') {
-            return trimmedResponse.length <= FEEDBACK_PROMPT_RESPONSE_MAX_LENGTH;
+        if (currentPrompt.reasoningType === 'REQUIRED') {
+            return trimmedResponse.length <= FEEDBACK_PROMPT_RESPONSE_MAX_LENGTH && trimmedResponse.length > 0;
         }
-        return trimmedResponse.length !== 0 && trimmedResponse.length <= FEEDBACK_PROMPT_RESPONSE_MAX_LENGTH;
-    }, [form.response, promptRef]);
+        if (currentPrompt.isOpenEnded) {
+            return trimmedResponse.length <= FEEDBACK_PROMPT_RESPONSE_MAX_LENGTH && trimmedResponse.length > 0;
+        }
+        return trimmedResponse.length <= FEEDBACK_PROMPT_RESPONSE_MAX_LENGTH;
+    }, [form.response, currentPrompt]);
+
     const isValid = useMemo(() => {
-        if (promptRef.current.isVote) {
+        if (currentPrompt.isVote) {
             return form.vote !== '' && isFeedbackValid;
         }
-        if (promptRef.current.isMultipleChoice) {
+        if (currentPrompt.isMultipleChoice) {
             return form.multipleChoiceResponse !== '';
         }
         return isFeedbackValid;
-    }, [form, promptRef, isFeedbackValid]);
+    }, [form, currentPrompt, isFeedbackValid]);
 
     const reasoningType = useMemo(() => {
-        if (promptRef.current.isOpenEnded) return true; // always include reasoning for open ended
-        return promptRef.current.reasoningType;
-    }, [promptRef]);
+        if (currentPrompt.isOpenEnded) return true; // always include reasoning for open ended
+        return currentPrompt.reasoningType;
+    }, [currentPrompt]);
 
     const responseBoxLabel = useMemo(() => {
-        if (promptRef.current.isOpenEnded) return 'Write your response here...';
+        if (currentPrompt.isOpenEnded) return 'Write your response here...';
         if (reasoningType === 'REQUIRED') return 'Write your reasoning here...';
         return 'Feel free to write more here...';
-    }, [promptRef, reasoningType]);
+    }, [currentPrompt, reasoningType]);
+
+    useEffect(() => {
+        if (onValidityChange) {
+            onValidityChange(isValid);
+        }
+    }, [isValid, onValidityChange]);
+
+    useEffect(() => {
+        if (onFormUpdate) {
+            // The 'form' state from useForm already contains promptId if set correctly in initialState
+            onFormUpdate(form, promptIndex);
+        }
+    }, [form, promptIndex, onFormUpdate]); // Dependency array includes form, promptIndex, and the callback
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)}>
-            <FormTitle title='Feedback Response' />
+            {!isFlow && <FormTitle title='Feedback Response' />}
             <FormContent>
                 <Grid container>
                     <Grid item xs>
-                        <Typography style={{ overflowWrap: 'break-word' }}>{promptRef.current.prompt}</Typography>
+                        <Typography style={{ overflowWrap: 'break-word' }}>{currentPrompt.prompt}</Typography>
                     </Grid>
                 </Grid>
-                {promptRef.current.isVote && (
+                {currentPrompt.isVote && (
                     <Grid container alignItems='center' justifyContent='space-around'>
                         <RadioGroup
                             row
@@ -94,7 +127,7 @@ export function LiveFeedbackPromptResponseForm({ onSubmit, onCancel, promptRef }
                         </RadioGroup>
                     </Grid>
                 )}
-                {promptRef.current.isMultipleChoice && (
+                {currentPrompt.isMultipleChoice && (
                     <FormControl>
                         <FormLabel component='legend'>Choose one:</FormLabel>
                         <RadioGroup
@@ -103,7 +136,7 @@ export function LiveFeedbackPromptResponseForm({ onSubmit, onCancel, promptRef }
                             value={form.multipleChoiceResponse}
                             onChange={handleChange('multipleChoiceResponse')}
                         >
-                            {promptRef.current.multipleChoiceOptions.map((option, index) => (
+                            {currentPrompt.multipleChoiceOptions.map((option, index) => (
                                 <FormControlLabel key={index} value={option} control={<Radio />} label={option} />
                             ))}
                         </RadioGroup>
@@ -140,9 +173,11 @@ export function LiveFeedbackPromptResponseForm({ onSubmit, onCancel, promptRef }
                         I wish not to answer
                     </Button>
                 )}
-                <Button disabled={!isValid} type='submit' variant='contained' color='primary'>
-                    Submit
-                </Button>
+                {!isLastFlowPrompt ? (
+                    <Button disabled={!isValid} type='submit' variant='contained' color='primary'>
+                        {isFlow ? 'Next' : 'Submit'}
+                    </Button>
+                ) : null}
             </FormActions>
         </Form>
     );

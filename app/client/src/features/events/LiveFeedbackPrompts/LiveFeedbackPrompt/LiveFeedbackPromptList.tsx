@@ -24,8 +24,14 @@ import { useLiveFeedbackPromptsFragment$key } from '@local/__generated__/useLive
 import FeedbackResponsesDialog from './FeedbackResponsesDialog';
 import { useLiveFeedbackPrompted } from '../useLiveFeedbackPrompted';
 import { ShareFeedbackPrompt } from './ShareFeedbackPrompt';
+import { SubmitLiveFeedbackFlow } from '../LiveFeedbackFlow/SubmitLiveFeedbackFlow';
+import { useLiveFeedbackPromptFlows } from '../LiveFeedbackFlow/useLiveFeedbackPromptFlows';
+import { useLiveFeedbackPromptFlowsFragment$key } from '@local/__generated__/useLiveFeedbackPromptFlowsFragment.graphql';
+import EmptyState from '@local/components/EmptyState';
+import FeedbackFlowResponsesDialog from './FeedbackFlowResponsesDialog';
+import { ShareFeedbackPromptFlow } from '../LiveFeedbackFlow/ShareFeedbackPromptFlow';
 
-export type FeedbackDashboardTab = 'open-ended' | 'vote' | 'multiple-choice';
+export type FeedbackDashboardTab = 'open-ended' | 'vote' | 'multiple-choice' | 'flows';
 
 export type Prompt = {
     readonly id: string;
@@ -38,6 +44,20 @@ export type Prompt = {
     readonly createdAt: Date | null;
     readonly viewpoints: ReadonlyArray<string> | null;
     readonly voteViewpoints: Record<string, string[]> | null;
+};
+
+export type Flow = {
+    cursor: string;
+    eventId: string;
+    flowDescription: string | null;
+    flowName: string;
+    id: string;
+    isDraft: boolean;
+    prompts: readonly {
+        readonly id: string;
+        readonly order: number;
+        readonly prompt: Prompt;
+    }[];
 };
 
 interface PromptItemProps {
@@ -91,9 +111,56 @@ function PromptItem({ prompt, handleClick }: PromptItemProps) {
     );
 }
 
+interface FlowItemProps {
+    flow: Flow;
+    handleClick: (flow: Flow) => void;
+}
+
+function FlowItem({ flow, handleClick }: FlowItemProps) {
+    const ViewResponses = () => {
+        return (
+            <Tooltip title='View Responses' placement='top'>
+                <Button variant='contained' startIcon={<OpenInNewIcon />} onClick={() => handleClick(flow)}>
+                    View Responses
+                </Button>
+            </Tooltip>
+        );
+    };
+
+    return (
+        <Card sx={{ margin: '0.25rem' }}>
+            <CardHeader
+                title={
+                    <IconButton disabled={true}>
+                        <DescriptionIcon />
+                        <Typography>{flow.flowName}</Typography>
+                    </IconButton>
+                }
+            />
+            <CardContent>
+                <Grid container direction='row' alignItems='center' justifyContent='space-around'>
+                    <Grid item>
+                        <Typography variant='inherit' sx={{ wordBreak: 'break-word' }}>
+                            {flow.flowDescription}
+                        </Typography>
+                    </Grid>
+                </Grid>
+            </CardContent>
+            <CardActions sx={{ justifyContent: 'center' }}>
+                <Stack direction='row' spacing={1}>
+                    <ShareFeedbackPromptFlow flow={flow} />
+                    <ViewResponses />
+                </Stack>
+            </CardActions>
+        </Card>
+    );
+}
+
 interface PromptListProps {
     prompts: readonly Prompt[];
-    handleClick: (prompt: Prompt) => void;
+    flows: readonly Flow[];
+    handlePromptClick: (prompt: Prompt) => void;
+    handleFlowClick: (flow: Flow) => void;
     selectedTab: FeedbackDashboardTab;
     setSelectedTab: React.Dispatch<React.SetStateAction<FeedbackDashboardTab>>;
 }
@@ -101,14 +168,21 @@ interface PromptListProps {
 /**
  * This component is responsible for rendering the live feedback prompts using the provided fragment Ref
  */
-function PromptList({ prompts: readonlyPrompts, handleClick, selectedTab, setSelectedTab }: PromptListProps) {
+function PromptList({
+    prompts: readonlyPrompts,
+    flows: readonlyFlows,
+    handlePromptClick,
+    handleFlowClick,
+    selectedTab,
+    setSelectedTab,
+}: PromptListProps) {
     const theme = useTheme();
     // Reverse the prompts so that the most recent are at the top
     const prompts = React.useMemo(() => [...readonlyPrompts].reverse(), [readonlyPrompts]);
+    const flows = React.useMemo(() => [...readonlyFlows].reverse(), [readonlyFlows]);
     const MAX_LIST_LENGTH = 100;
 
     const handleChange = (e: React.SyntheticEvent, newValue: 'open-ended' | 'vote') => {
-        e.preventDefault();
         setSelectedTab(newValue);
     };
 
@@ -136,6 +210,7 @@ function PromptList({ prompts: readonlyPrompts, handleClick, selectedTab, setSel
                 <Tab label='Open Ended' value='open-ended' />
                 <Tab label='Vote' value='vote' />
                 <Tab label='Multiple Choice' value='multiple-choice' />
+                <Tab label='Flows' value='flows' />
             </Tabs>
             {selectedTab === 'open-ended' && (
                 <List
@@ -150,13 +225,11 @@ function PromptList({ prompts: readonlyPrompts, handleClick, selectedTab, setSel
                     {openEndedPrompts.length > 0 ? (
                         openEndedPrompts
                             .slice(0, MAX_LIST_LENGTH)
-                            .map((prompt) => <PromptItem key={prompt.id} prompt={prompt} handleClick={handleClick} />)
+                            .map((prompt) => (
+                                <PromptItem key={prompt.id} prompt={prompt} handleClick={handlePromptClick} />
+                            ))
                     ) : (
-                        <Grid height='25vh'>
-                            <Typography textAlign='center' fontWeight='bold'>
-                                No Open Ended Prompts To Display Yet.
-                            </Typography>
-                        </Grid>
+                        <EmptyState message='No Open Ended Prompts To Display Yet.' />
                     )}
                 </List>
             )}
@@ -173,14 +246,10 @@ function PromptList({ prompts: readonlyPrompts, handleClick, selectedTab, setSel
                     >
                         {votePrompts.length > 0 ? (
                             votePrompts.map((prompt) => (
-                                <PromptItem key={prompt.id} prompt={prompt} handleClick={handleClick} />
+                                <PromptItem key={prompt.id} prompt={prompt} handleClick={handlePromptClick} />
                             ))
                         ) : (
-                            <Grid height='25vh'>
-                                <Typography textAlign='center' fontWeight='bold'>
-                                    No Vote Prompts To Display Yet.
-                                </Typography>
-                            </Grid>
+                            <EmptyState message='No Vote Prompts To Display Yet.' />
                         )}
                     </List>
                 </React.Fragment>
@@ -197,14 +266,27 @@ function PromptList({ prompts: readonlyPrompts, handleClick, selectedTab, setSel
                 >
                     {multipleChoicePrompts.length > 0 ? (
                         multipleChoicePrompts.map((prompt) => (
-                            <PromptItem key={prompt.id} prompt={prompt} handleClick={handleClick} />
+                            <PromptItem key={prompt.id} prompt={prompt} handleClick={handlePromptClick} />
                         ))
                     ) : (
-                        <Grid height='25vh'>
-                            <Typography textAlign='center' fontWeight='bold'>
-                                No Multiple Choice Prompts To Display Yet.
-                            </Typography>
-                        </Grid>
+                        <EmptyState message='No Multiple Choice Prompts To Display Yet.' />
+                    )}
+                </List>
+            )}
+            {selectedTab === 'flows' && (
+                <List
+                    id='live-feedback-flows-prompt-list'
+                    sx={{
+                        border: 5,
+                        borderImage: `linear-gradient(${theme.palette.custom.creamCan},white) 10`,
+                        width: '100%',
+                        height: '100%',
+                    }}
+                >
+                    {flows.length > 0 ? (
+                        flows.map((flow) => <FlowItem key={flow.id} flow={flow} handleClick={handleFlowClick} />)
+                    ) : (
+                        <EmptyState message='No Flows To Display Yet.' />
                     )}
                 </List>
             )}
@@ -214,30 +296,46 @@ function PromptList({ prompts: readonlyPrompts, handleClick, selectedTab, setSel
 
 interface LiveFeedbackPromptsListProps {
     fragmentRef: useLiveFeedbackPromptsFragment$key;
+    flowsFragmentRef: useLiveFeedbackPromptFlowsFragment$key;
 }
 
 /**
  * This component is responsible for loading the query and passing the fragment ref to the PromptList component
  */
-export function LiveFeedbackPromptsList({ fragmentRef }: LiveFeedbackPromptsListProps) {
-    const [open, setOpen] = React.useState(false);
+export function LiveFeedbackPromptsList({ fragmentRef, flowsFragmentRef }: LiveFeedbackPromptsListProps) {
+    const [isFeedbackResponsesOpen, setIsFeedbackResponsesOpen] = React.useState(false);
+    const [isFlowResponsesOpen, setIsFlowResponsesOpen] = React.useState(false);
     const { prompts, connections, refresh } = useLiveFeedbackPrompts({
         fragmentRef,
     });
+    const { flows } = useLiveFeedbackPromptFlows({ fragmentRef: flowsFragmentRef });
     useLiveFeedbackPrompted({ connections });
     const [selectedTab, setSelectedTab] = React.useState<FeedbackDashboardTab>('open-ended');
     const [selectedPrompt, setSelectedPrompt] = React.useState<Prompt | null>(null);
     const selectedPromptRef = React.useRef<Prompt | null>(null);
+    const selectedFlowRef = React.useRef<Flow | null>(null);
 
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleOpenFeedbackResponses = () => setIsFeedbackResponsesOpen(true);
+    const handleCloseFeedbackResponses = () => setIsFeedbackResponsesOpen(false);
+
+    const handleOpenFlowResponses = () => setIsFlowResponsesOpen(true);
+    const handleCloseFlowResponses = () => setIsFlowResponsesOpen(false);
 
     const handlePromptClick = (prompt: Prompt) => {
         // Update the selected prompt ref
         setSelectedPrompt(prompt);
         selectedPromptRef.current = prompt;
         // Open the modal
-        handleOpen();
+        handleOpenFeedbackResponses();
+    };
+
+    const handleFlowClick = (flow: Flow) => {
+        // Update the selected prompt ref
+        setSelectedPrompt(null);
+        selectedPromptRef.current = null;
+        selectedFlowRef.current = flow;
+        // Open the modal
+        handleOpenFlowResponses();
     };
 
     React.useEffect(() => {
@@ -248,19 +346,27 @@ export function LiveFeedbackPromptsList({ fragmentRef }: LiveFeedbackPromptsList
     return (
         <Grid container direction='column' alignItems='center'>
             <SubmitLiveFeedbackPrompt connections={connections} selectedTab={selectedTab} />
+            <SubmitLiveFeedbackFlow />
             <Typography variant='h6'>Select view on a prompt to see its responses</Typography>
             <PromptList
                 prompts={prompts}
-                handleClick={handlePromptClick}
+                flows={flows}
+                handlePromptClick={handlePromptClick}
+                handleFlowClick={handleFlowClick}
                 selectedTab={selectedTab}
                 setSelectedTab={setSelectedTab}
             />
             <FeedbackResponsesDialog
-                open={open}
-                handleClose={handleClose}
+                open={isFeedbackResponsesOpen}
+                handleClose={handleCloseFeedbackResponses}
                 promptRef={selectedPromptRef}
                 selectedPrompt={selectedPrompt}
                 setSelectedPrompt={setSelectedPrompt}
+            />
+            <FeedbackFlowResponsesDialog
+                open={isFlowResponsesOpen}
+                handleClose={handleCloseFlowResponses}
+                selectedFlow={selectedFlowRef.current}
             />
         </Grid>
     );

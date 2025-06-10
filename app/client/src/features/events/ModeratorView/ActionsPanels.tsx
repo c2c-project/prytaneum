@@ -35,6 +35,7 @@ export const ACTIONS_PANELS_QUERY = graphql`
             ...useEventDetailsFragment
             ...useLiveFeedbackListFragment @arguments(eventId: $eventId)
             ...useLiveFeedbackPromptsFragment
+            ...useLiveFeedbackPromptFlowsFragment
         }
     }
 `;
@@ -230,6 +231,7 @@ function ActionsPanels({ node }: ActionsPanelProps) {
                         {tab === 'Moderator' && (
                             <ModeratorActions
                                 fragmentRef={node}
+                                flowsFragmentRef={node}
                                 isLive={isLive}
                                 setIsLive={setIsLive}
                                 eventId={eventData.id}

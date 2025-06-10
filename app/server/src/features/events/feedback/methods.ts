@@ -339,7 +339,6 @@ export async function createFeedbackPrompt(
         });
     }
 
-    console.log('reasoning type:', input.reasoningType);
     let reasoningTypeValue: ReasoningType = 'OPTIONAL';
     switch (reasoningType) {
         case 'required':
@@ -361,7 +360,7 @@ export async function createFeedbackPrompt(
             isOpenEnded: feedbackType === 'open-ended',
             isMultipleChoice: feedbackType === 'multiple-choice',
             multipleChoiceOptions: input.choices,
-            isDraft: input.isDraft,
+            isDraft: input.isDraft || false,
             reasoningType: reasoningTypeValue,
         },
     });

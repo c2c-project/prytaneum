@@ -118,6 +118,7 @@ model Event {
     videos EventVideo[]
     participants EventParticipant[]
     topics EventTopic[]
+    feedbackFlows FeedbackFlow[] // New relation
 }
 
 model EventVideo {
@@ -161,6 +162,28 @@ enum ReasoningType {
     REQUIRED
 }
 
+model FeedbackFlow {
+    id String @id @default(uuid()) @db.Uuid
+    createdAt DateTime @default(now())
+    eventId String @db.Uuid
+    event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+    name String @db.VarChar(100) // Optional name for the flow
+    description String? @db.VarChar(500)
+    isDraft Boolean @default(false)
+    prompts FeedbackFlowPrompt[]
+}
+
+model FeedbackFlowPrompt {
+    id String @id @default(uuid()) @db.Uuid
+    feedbackFlowId String @db.Uuid
+    feedbackFlow FeedbackFlow @relation(fields: [feedbackFlowId], references: [id], onDelete: Cascade)
+    promptId String @db.Uuid
+    prompt EventLiveFeedbackPrompt @relation(fields: [promptId], references: [id], onDelete: Cascade)
+    order Int // To define the order of prompts within the flow
+
+    @@unique([feedbackFlowId, order])
+    @@index([promptId])
+}
 
 model EventLiveFeedbackPrompt {
     id String @id @default(uuid()) @db.Uuid
@@ -178,6 +201,7 @@ model EventLiveFeedbackPrompt {
     voteViewpoints Json @db.Json @default("{}") // { vote: viewpoints } example: { "FOR": ["viewpoint1", "viewpoint2"], "AGAINST": ["viewpoint1", "viewpoint2"] }
     stakeholders String[] @default([]) // Format is ["stakeholder1", "stakeholder2"]
     responses EventLiveFeedbackPromptResponse[]
+    flows FeedbackFlowPrompt[] // Back-relation to see which flows this prompt belongs to
 }
 
 enum Vote {

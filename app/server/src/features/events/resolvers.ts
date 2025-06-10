@@ -21,6 +21,8 @@ const toOrgId = toGlobalId('Organization');
 const toFeedbackId = toGlobalId('EventLiveFeedback');
 const toFeedbackPromptId = toGlobalId('EventLiveFeedbackPrompt');
 const toEventTopicId = toGlobalId('EventTopic');
+const toFeedbackFlowId = toGlobalId('FeedbackFlow');
+const toFeedbackFlowPromptId = toGlobalId('FeedbackFlowPrompt');
 
 export const resolvers: Resolvers = {
     Query: {
@@ -323,6 +325,32 @@ export const resolvers: Resolvers = {
                 },
             };
         },
+        async feedbackFlows(parent, args, ctx, info) {
+            const { id: eventId } = fromGlobalId(parent.id);
+            const { first, after } = args;
+            const feedbackFlows = await Event.findFeedbackFlowsByEventId(eventId, ctx.prisma);
+            const updatedFlows = feedbackFlows.map((flow) => ({
+                ...flow, // Preserve other properties of the flow
+                prompts: flow.prompts.map((promptContainer) => ({
+                    ...promptContainer, // Preserve other properties of the prompt container
+                    // Apply the toFeedbackPromptId transformer to the nested prompt object
+                    prompt: toFeedbackPromptId(promptContainer.prompt),
+                })),
+            }));
+            const edges = updatedFlows.map(toFeedbackFlowId).map((feedbackFlow) => ({
+                node: feedbackFlow,
+                cursor: feedbackFlow.id,
+            }));
+            return {
+                edges,
+                pageInfo: {
+                    hasNextPage: false,
+                    hasPreviousPage: false,
+                    startCursor: edges[0]?.cursor.toString(),
+                    endCursor: edges[feedbackFlows.length - 1]?.cursor.toString(),
+                },
+            };
+        },
         async questionQueue(parent, args, ctx, info) {
             const { id: eventId } = fromGlobalId(parent.id);
             const queryResult = await Event.findQuestionQueueByEventId(eventId, ctx.prisma);
@@ -368,7 +396,6 @@ export const resolvers: Resolvers = {
         },
         async isViewerInvited(parent, args, ctx, info) {
             const { id: eventId } = fromGlobalId(parent.id);
-            ctx.app.log.debug(eventId);
             if (!ctx.viewer.id) return false;
             // Check if user is organizer or moderator (no need to check if invited when they are)
             const isModerator = await Moderation.isModerator(ctx.viewer.id, eventId, ctx.prisma);

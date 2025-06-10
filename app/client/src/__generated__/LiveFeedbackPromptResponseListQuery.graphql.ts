@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<40ef86dfd521fbae000d8461189e7e7c>>
+ * @generated SignedSource<<60f2da54ab2bbbaf739a184112cc9ad7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,6 +10,7 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 export type LiveFeedbackPromptResponseListQuery$variables = {
+  isFlow?: boolean | null;
   promptId: string;
 };
 export type LiveFeedbackPromptResponseListQuery$data = {
@@ -33,24 +34,32 @@ export type LiveFeedbackPromptResponseListQuery = {
 };
 
 const node: ConcreteRequest = (function(){
-var v0 = [
-  {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "promptId"
-  }
-],
+var v0 = {
+  "defaultValue": false,
+  "kind": "LocalArgument",
+  "name": "isFlow"
+},
 v1 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "promptId"
+},
+v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v2 = [
+v3 = [
   {
     "alias": null,
     "args": [
+      {
+        "kind": "Variable",
+        "name": "isFlow",
+        "variableName": "isFlow"
+      },
       {
         "kind": "Variable",
         "name": "promptId",
@@ -62,7 +71,7 @@ v2 = [
     "name": "promptResponses",
     "plural": true,
     "selections": [
-      (v1/*: any*/),
+      (v2/*: any*/),
       {
         "alias": null,
         "args": null,
@@ -99,7 +108,7 @@ v2 = [
         "name": "createdBy",
         "plural": false,
         "selections": [
-          (v1/*: any*/),
+          (v2/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -130,32 +139,38 @@ v2 = [
 ];
 return {
   "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v0/*: any*/),
+      (v1/*: any*/)
+    ],
     "kind": "Fragment",
     "metadata": null,
     "name": "LiveFeedbackPromptResponseListQuery",
-    "selections": (v2/*: any*/),
+    "selections": (v3/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v1/*: any*/),
+      (v0/*: any*/)
+    ],
     "kind": "Operation",
     "name": "LiveFeedbackPromptResponseListQuery",
-    "selections": (v2/*: any*/)
+    "selections": (v3/*: any*/)
   },
   "params": {
-    "cacheID": "086e762243cbaae7b89f1f8220ec955e",
+    "cacheID": "0ce3d904ca889447d8bdb83b8b29b417",
     "id": null,
     "metadata": {},
     "name": "LiveFeedbackPromptResponseListQuery",
     "operationKind": "query",
-    "text": "query LiveFeedbackPromptResponseListQuery(\n  $promptId: ID!\n) {\n  promptResponses(promptId: $promptId) {\n    id\n    response\n    vote\n    multipleChoiceResponse\n    createdAt\n    createdBy {\n      id\n      firstName\n      lastName\n      avatar\n    }\n  }\n}\n"
+    "text": "query LiveFeedbackPromptResponseListQuery(\n  $promptId: ID!\n  $isFlow: Boolean = false\n) {\n  promptResponses(promptId: $promptId, isFlow: $isFlow) {\n    id\n    response\n    vote\n    multipleChoiceResponse\n    createdAt\n    createdBy {\n      id\n      firstName\n      lastName\n      avatar\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "b81dd2a50b8c4158473a494cdf987d6f";
+(node as any).hash = "ecf5f387cca77d1faba45ad01d094351";
 
 export default node;

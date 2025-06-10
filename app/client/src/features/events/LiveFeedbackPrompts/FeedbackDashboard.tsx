@@ -7,9 +7,11 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { StyledDialogTitle, StyledDialog, Loader } from '@local/components';
 import { useLiveFeedbackPromptsFragment$key } from '@local/__generated__/useLiveFeedbackPromptsFragment.graphql';
 import { LiveFeedbackPromptsList } from './LiveFeedbackPrompt/LiveFeedbackPromptList';
+import { useLiveFeedbackPromptFlowsFragment$key } from '@local/__generated__/useLiveFeedbackPromptFlowsFragment.graphql';
 
 interface FeedbackDashboardProps {
     fragmentRef: useLiveFeedbackPromptsFragment$key;
+    flowsFragmentRef: useLiveFeedbackPromptFlowsFragment$key;
 }
 
 /**
@@ -17,7 +19,7 @@ interface FeedbackDashboardProps {
  * A list of previous feedback prompts are displayed, and moderators can click on each one to see the responses
  * A button can be pressed to share the results card for one of the prompts with the audience
  */
-export function FeedbackDashboard({ fragmentRef }: FeedbackDashboardProps) {
+export function FeedbackDashboard({ fragmentRef, flowsFragmentRef }: FeedbackDashboardProps) {
     const theme = useTheme();
     const fullscreen = useMediaQuery(theme.breakpoints.down('md'));
     const [open, setOpen] = React.useState(false);
@@ -53,7 +55,7 @@ export function FeedbackDashboard({ fragmentRef }: FeedbackDashboardProps) {
                 </StyledDialogTitle>
                 <DialogContent dividers>
                     <React.Suspense fallback={<Loader />}>
-                        <LiveFeedbackPromptsList fragmentRef={fragmentRef} />
+                        <LiveFeedbackPromptsList fragmentRef={fragmentRef} flowsFragmentRef={flowsFragmentRef} />
                     </React.Suspense>
                 </DialogContent>
             </StyledDialog>

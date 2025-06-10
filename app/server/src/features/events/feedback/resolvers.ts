@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { connectionFromArray, fromGlobalId } from 'graphql-relay';
 import * as Feedback from './methods';
+import * as FeedbackFlowMethods from './feedbackFlow.methods';
 import { Resolvers, withFilter, errors, toGlobalId, runMutation } from '@local/features/utils';
 import { ProtectedError } from '@local/lib/ProtectedError';
-import type { EventLiveFeedbackPromptEdge, FeedbackOperation } from '@local/graphql-types';
+import type { EventLiveFeedbackPromptEdge, FeedbackFlowEdge, FeedbackOperation } from '@local/graphql-types';
 import { EventLiveFeedbackPrompt } from '../../../graphql-types';
 import { isModerator } from '../moderation/methods';
 
@@ -11,6 +12,8 @@ const toFeedbackId = toGlobalId('EventLiveFeedback');
 const toFeedbackPromptId = toGlobalId('EventLiveFeedbackPrompt');
 const toFeedbackPromptResponseId = toGlobalId('EventLiveFeedbackPromptResponse');
 const toUserId = toGlobalId('User');
+const toFeedbackFlowId = toGlobalId('FeedbackFlow');
+const toFeedbackFlowPromptId = toGlobalId('FeedbackFlowPrompt');
 
 export const resolvers: Resolvers = {
     Query: {
@@ -24,8 +27,17 @@ export const resolvers: Resolvers = {
         async promptResponses(parent, args, ctx) {
             if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
             if (!args.promptId) throw new ProtectedError({ userMessage: errors.invalidArgs });
+            ctx.app.log.debug(`Fetching prompt responses for promptId: ${args.promptId}`);
             const { id: promptId } = fromGlobalId(args.promptId);
+            ctx.app.log.debug(`Converted promptId: ${promptId}`);
+            // const isFlow = args.isFlow || false;
+            // if (isFlow) {
+            //     const flowResponses = await FeedbackFlowMethods.promptFlowResponses(promptId, ctx.prisma);
+            //     return flowResponses.map(toFeedbackPromptResponseId);
+            // }
             const responses = await Feedback.promptResponses(promptId, ctx.prisma);
+            ctx.app.log.debug(`Found ${responses.length} responses for prompt ${promptId}`);
+            ctx.app.log.debug(`Responses: ${JSON.stringify(responses)}`);
             return responses.map(toFeedbackPromptResponseId);
         },
         async prompt(parent, args, ctx) {
@@ -264,6 +276,92 @@ export const resolvers: Resolvers = {
                 return edge;
             });
         },
+        createFeedbackFlow(parent, args, ctx) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+                if (!args.input) throw new ProtectedError({ userMessage: errors.invalidArgs });
+                const { id: eventId } = fromGlobalId(args.input.eventId);
+                const flow = await FeedbackFlowMethods.createFeedbackFlow(ctx.viewer.id, ctx.prisma, args.input);
+                const formattedFlow = toFeedbackFlowId(flow);
+                ctx.app.log.debug(`Created feedback flow ${JSON.stringify(flow)}`);
+                const edge = {
+                    node: formattedFlow,
+                    cursor: formattedFlow.id,
+                };
+                ctx.pubsub.publish({
+                    topic: 'feedbackFlowPrompted',
+                    payload: {
+                        feedbackFlowPrompted: edge,
+                        isDraft: args.input.isDraft,
+                        prompterId: ctx.viewer.id,
+                        eventId,
+                    },
+                });
+                return edge;
+            });
+        },
+        shareFeedbackFlowDraft(parent, args, ctx) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+                if (!args.flowId) throw new ProtectedError({ userMessage: errors.invalidArgs });
+                const { id: flowId } = fromGlobalId(args.flowId);
+                const flow = await FeedbackFlowMethods.findFeedbackFlowByFlowId(flowId, ctx.prisma);
+                const formattedFlow = toFeedbackFlowId(flow);
+                ctx.app.log.debug(`Sharing feedback flow draft ${JSON.stringify(flow)}`);
+                const edge = {
+                    node: formattedFlow,
+                    cursor: formattedFlow.id,
+                };
+                ctx.pubsub.publish({
+                    topic: 'feedbackFlowPrompted',
+                    payload: {
+                        feedbackFlowPrompted: edge,
+                        isDraft: false,
+                        prompterId: ctx.viewer.id,
+                        eventId: flow.eventId,
+                    },
+                });
+                return edge;
+            });
+        },
+        reshareFeedbackFlow(parent, args, ctx) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+                if (!args.flowId) throw new ProtectedError({ userMessage: errors.invalidArgs });
+                const { id: flowId } = fromGlobalId(args.flowId);
+                const flow = await FeedbackFlowMethods.findFeedbackFlowByFlowId(flowId, ctx.prisma);
+                const formattedFlow = toFeedbackFlowId(flow);
+                ctx.app.log.debug(`Resharing feedback flow ${JSON.stringify(flow)}`);
+                const edge = {
+                    node: formattedFlow,
+                    cursor: formattedFlow.id,
+                };
+                ctx.pubsub.publish({
+                    topic: 'feedbackFlowPrompted',
+                    payload: {
+                        feedbackFlowPrompted: edge,
+                        isDraft: false,
+                        prompterId: ctx.viewer.id,
+                        eventId: flow.eventId,
+                    },
+                });
+                return edge;
+            });
+        },
+        createFeedbackPromptFlowResponse(parent, args, ctx) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+                if (!args.input) throw new ProtectedError({ userMessage: errors.invalidArgs });
+                const { id: flowId } = fromGlobalId(args.input.flowId);
+                await FeedbackFlowMethods.createFeedbackPromptFlowResponse(ctx.viewer.id, ctx.prisma, args.input);
+
+                // Cache that user has responded to this prompt
+                const REDIS_EXPIRATION = 60 * 60 * 24; // 1 day in seconds
+                ctx.redis.set(`feedbackPromptFlowResponse:${flowId}:${ctx.viewer.id}`, 'true', 'EX', REDIS_EXPIRATION);
+
+                return true;
+            });
+        },
     },
     Subscription: {
         feedbackCRUD: {
@@ -333,6 +431,33 @@ export const resolvers: Resolvers = {
                 }
             ),
         },
+        feedbackFlowPrompted: {
+            subscribe: withFilter<{
+                feedbackFlowPrompted: FeedbackFlowEdge;
+                isDraft: boolean;
+                prompterId: string;
+                eventId: string;
+            }>(
+                (_parent, _args, ctx) => ctx.pubsub.subscribe('feedbackFlowPrompted'),
+                async (payload, args, ctx) => {
+                    if (!ctx.viewer.id) return false;
+                    const { id: eventId } = fromGlobalId(args.eventId);
+                    // Check that user is not the prompter (already handled by mutation)
+                    const prompterId = payload.prompterId;
+                    if (ctx.viewer.id === prompterId) return false;
+                    const isDraft = payload.isDraft;
+                    if (isDraft) {
+                        // Check if user is a moderator, if so, share the draft prompt with them
+                        return isModerator(ctx.viewer.id, eventId, ctx.prisma);
+                    }
+                    const { id: flowId } = fromGlobalId(payload.feedbackFlowPrompted.node.id);
+                    const hasResponded = await ctx.redis.get(`feedbackPromptFlowResponse:${flowId}:${ctx.viewer.id}`);
+                    if (hasResponded) return false;
+
+                    return payload.eventId === eventId;
+                }
+            ),
+        },
     },
     EventLiveFeedback: {
         async dmRecipientId(parent, args, ctx) {
@@ -380,6 +505,21 @@ export const resolvers: Resolvers = {
             const { id: responseId } = fromGlobalId(parent.id);
             const submitter = await Feedback.findSubmitterByResponseId(responseId, ctx.prisma);
             return toUserId(submitter);
+        },
+    },
+    FeedbackFlow: {
+        async prompts(parent, args, ctx) {
+            const { id: globalFeedbackFlowId } = fromGlobalId(parent.id);
+            const prompts = await FeedbackFlowMethods.findPromptsByFlowId(globalFeedbackFlowId, ctx.prisma);
+            return prompts.map(toFeedbackFlowPromptId);
+        },
+    },
+    FeedbackFlowPrompt: {
+        async prompt(parent, args, ctx) {
+            const { id: promptId } = fromGlobalId(parent.id);
+            const feedbackFlowPrompt = await FeedbackFlowMethods.findFeedbackFlowPromptById(promptId, ctx.prisma);
+            const prompt = feedbackFlowPrompt.prompt;
+            return toFeedbackPromptId(prompt);
         },
     },
 };

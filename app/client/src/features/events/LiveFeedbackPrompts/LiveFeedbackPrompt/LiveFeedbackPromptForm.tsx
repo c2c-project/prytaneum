@@ -37,28 +37,43 @@ export type TLiveFeedbackPromptFormState = {
 };
 
 export interface LiveFeedbackPromptFormProps {
+    intialState?: TLiveFeedbackPromptFormState;
+    onChange?: (state: TLiveFeedbackPromptFormState) => void;
     onSubmit?: (state: TLiveFeedbackPromptFormState, isDraft: boolean) => void;
     onCancel?: () => void;
     selectedTab?: FeedbackDashboardTab;
+    hideActions?: boolean;
+    hideTitle?: boolean;
 }
 
-export function LiveFeedbackPromptForm({ onSubmit, onCancel, selectedTab }: LiveFeedbackPromptFormProps) {
+export function LiveFeedbackPromptForm({
+    intialState,
+    onChange,
+    onSubmit,
+    onCancel,
+    selectedTab,
+    hideActions = false,
+    hideTitle = false,
+}: LiveFeedbackPromptFormProps) {
     const [choices, setChoices] = React.useState<string[]>(
         new Array(STARTING_CHOICE_AMOUNT).fill('', 0, STARTING_CHOICE_AMOUNT)
     );
     // form related hooks
-    const [form, errors, handleSubmit, handleChange, setState] = useForm<TLiveFeedbackPromptFormState>({
-        prompt: '',
-        feedbackType: selectedTab ?? 'open-ended',
-        choices: choices,
-        reasoningType: 'optional',
-    });
+    const [form, errors, handleSubmit, handleChange, setState] = useForm<TLiveFeedbackPromptFormState>(
+        intialState ?? {
+            prompt: '',
+            feedbackType: selectedTab ?? 'open-ended',
+            choices: choices,
+            reasoningType: 'optional',
+        }
+    );
 
     const handleMultipleChoiceChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
         const newChoices = [...choices];
         newChoices[index] = event.target.value;
         setChoices(newChoices);
         form.choices = newChoices;
+        if (onChange) onChange({ ...form, choices: newChoices });
     };
 
     const isFeedbackPromptValid = React.useMemo(() => form.prompt.trim().length !== 0, [form]);
@@ -83,6 +98,7 @@ export function LiveFeedbackPromptForm({ onSubmit, onCancel, selectedTab }: Live
         newChoices.splice(index, 1);
         setChoices(newChoices);
         form.choices = newChoices;
+        if (onChange) onChange({ ...form, choices: newChoices });
     };
 
     const isPromptValidForSubmission = () => {
@@ -100,10 +116,25 @@ export function LiveFeedbackPromptForm({ onSubmit, onCancel, selectedTab }: Live
         if (onSubmit) onSubmit(form, isDraft);
     };
 
+    const handlePromptChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        event.preventDefault();
+        handleChange('prompt')(event);
+        const newPrompt = event.target.value;
+        if (onChange) onChange({ ...form, prompt: newPrompt });
+    };
+
     const handleFeedbackTypeChange = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
         const newFeedbackType = (event.target as HTMLButtonElement).value;
         form.feedbackType = newFeedbackType;
         setState((prev) => ({ ...prev, feedbackType: newFeedbackType }));
+        if (onChange) onChange({ ...form, feedbackType: newFeedbackType });
+    };
+
+    const handleReasoningTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const newReasoningType = event.target.value;
+        form.reasoningType = newReasoningType;
+        setState((prev) => ({ ...prev, reasoningType: newReasoningType }));
+        if (onChange) onChange({ ...form, reasoningType: newReasoningType });
     };
 
     return (
@@ -113,7 +144,7 @@ export function LiveFeedbackPromptForm({ onSubmit, onCancel, selectedTab }: Live
                 if (onSubmit) onSubmit(_form, isDraft);
             })}
         >
-            <FormTitle title='Feedback Prompt' />
+            {!hideTitle && <FormTitle title='Feedback Prompt' />}
             <FormContent>
                 <Grid container alignItems='center' justifyContent='space-around' direction='column'>
                     <Typography>Feedback Type:</Typography>
@@ -137,7 +168,7 @@ export function LiveFeedbackPromptForm({ onSubmit, onCancel, selectedTab }: Live
                             aria-label='reasoning-type'
                             name='reasoning-type'
                             value={form.reasoningType}
-                            onChange={handleChange('reasoningType')}
+                            onChange={handleReasoningTypeChange}
                         >
                             <FormControlLabel
                                 value='disabled'
@@ -198,13 +229,12 @@ export function LiveFeedbackPromptForm({ onSubmit, onCancel, selectedTab }: Live
                     id='feedback-prompt-field'
                     name='feedback-prompt'
                     label='Write your feedback prompt here...'
-                    autoFocus
                     error={Boolean(errors.prompt)}
                     helperText={errors.prompt}
                     required
                     multiline
                     value={form.prompt}
-                    onChange={handleChange('prompt')}
+                    onChange={handlePromptChange}
                 />
                 <Typography
                     variant='caption'
@@ -260,31 +290,33 @@ export function LiveFeedbackPromptForm({ onSubmit, onCancel, selectedTab }: Live
                     </Grid>
                 )}
             </FormContent>
-            <FormActions disableGrow gridProps={{ justifyContent: 'flex-end' }}>
-                {onCancel && (
-                    <Button variant='outlined' color='primary' onClick={onCancel}>
-                        Cancel
+            {!hideActions && (
+                <FormActions disableGrow gridProps={{ justifyContent: 'flex-end' }}>
+                    {onCancel && (
+                        <Button variant='outlined' color='primary' onClick={onCancel}>
+                            Cancel
+                        </Button>
+                    )}
+                    <Button
+                        disabled={!isPromptValidForSubmission()}
+                        onClick={onSaveDraft}
+                        variant='contained'
+                        color='primary'
+                        startIcon={<ScheduleSendIcon />}
+                    >
+                        Save as Draft
                     </Button>
-                )}
-                <Button
-                    disabled={!isPromptValidForSubmission()}
-                    onClick={onSaveDraft}
-                    variant='contained'
-                    color='primary'
-                    startIcon={<ScheduleSendIcon />}
-                >
-                    Save as Draft
-                </Button>
-                <Button
-                    disabled={!isPromptValidForSubmission()}
-                    type='submit'
-                    variant='contained'
-                    color='primary'
-                    startIcon={<SendIcon />}
-                >
-                    Prompt
-                </Button>
-            </FormActions>
+                    <Button
+                        disabled={!isPromptValidForSubmission()}
+                        type='submit'
+                        variant='contained'
+                        color='primary'
+                        startIcon={<SendIcon />}
+                    >
+                        Prompt
+                    </Button>
+                </FormActions>
+            )}
         </Form>
     );
 }

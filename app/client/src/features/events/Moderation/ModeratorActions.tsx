@@ -9,6 +9,7 @@ import { useSnack } from '@local/core';
 import { ConfirmationDialog } from '@local/components/ConfirmationDialog';
 import { useLiveFeedbackPromptsFragment$key } from '@local/__generated__/useLiveFeedbackPromptsFragment.graphql';
 import { FeedbackDashboard } from '../LiveFeedbackPrompts';
+import { useLiveFeedbackPromptFlowsFragment$key } from '@local/__generated__/useLiveFeedbackPromptFlowsFragment.graphql';
 
 export const START_EVENT_MUTATION = graphql`
     mutation ModeratorActionsStartEventMutation($eventId: String!) {
@@ -42,9 +43,10 @@ export interface ModeratorActionsProps {
     setIsLive: React.Dispatch<React.SetStateAction<boolean>>;
     eventId: string;
     fragmentRef: useLiveFeedbackPromptsFragment$key;
+    flowsFragmentRef: useLiveFeedbackPromptFlowsFragment$key;
 }
 
-export function ModeratorActions({ isLive, setIsLive, eventId, fragmentRef }: ModeratorActionsProps) {
+export function ModeratorActions({ isLive, setIsLive, eventId, fragmentRef, flowsFragmentRef }: ModeratorActionsProps) {
     const { displaySnack } = useSnack();
     const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] = React.useState(false);
 
@@ -100,7 +102,7 @@ export function ModeratorActions({ isLive, setIsLive, eventId, fragmentRef }: Mo
                 <Button variant='contained' color={isLive ? 'error' : 'success'} onClick={openConfirmationDialog}>
                     {isLive ? 'End Event' : 'Start Event'}
                 </Button>
-                <FeedbackDashboard fragmentRef={fragmentRef} />
+                <FeedbackDashboard fragmentRef={fragmentRef} flowsFragmentRef={flowsFragmentRef} />
             </ResponsiveStack>
             <ConfirmationDialog
                 title='Update Event Status'

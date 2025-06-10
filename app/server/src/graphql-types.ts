@@ -57,6 +57,8 @@ export type Query = {
     prompts?: Maybe<Array<EventLiveFeedbackPrompt>>;
     promptResponseVotes: Votes;
     promptResponseViewpoints?: Maybe<Array<Scalars['String']>>;
+    feedbackFlow?: Maybe<FeedbackFlow>;
+    eventFeedbackFlows?: Maybe<FeedbackFlowConnection>;
     /** Validates an invite token and logs the user in if they are already registered. */
     validateInvite: ValidateInviteQueryResponse;
     eventParticipants: Array<Maybe<EventParticipant>>;
@@ -87,6 +89,7 @@ export type QuerymyFeedbackArgs = {
 
 export type QuerypromptResponsesArgs = {
     promptId: Scalars['ID'];
+    isFlow?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type QuerypromptArgs = {
@@ -103,6 +106,16 @@ export type QuerypromptResponseVotesArgs = {
 
 export type QuerypromptResponseViewpointsArgs = {
     promptId: Scalars['ID'];
+};
+
+export type QueryfeedbackFlowArgs = {
+    feedbackFlowId: Scalars['ID'];
+};
+
+export type QueryeventFeedbackFlowsArgs = {
+    eventId: Scalars['ID'];
+    after?: InputMaybe<Scalars['String']>;
+    first?: InputMaybe<Scalars['Int']>;
 };
 
 export type QueryvalidateInviteArgs = {
@@ -370,6 +383,10 @@ export type Mutation = {
     shareFeedbackPromptResults: EventFeedbackPromptMutationResponse;
     submitPostEventFeedback: PostEventFeedbackMutationResponse;
     generateViewpoints: EventFeedbackPromptMutationResponse;
+    createFeedbackFlow: FeedbackFlowMutationResponse;
+    shareFeedbackFlowDraft: FeedbackFlowMutationResponse;
+    reshareFeedbackFlow: FeedbackFlowMutationResponse;
+    createFeedbackPromptFlowResponse: EventFeedbackPromptFlowResponseMutationResponse;
     createInvite: InviteMutationResponse;
     uninviteUser: InviteMutationResponse;
     hideQuestion?: Maybe<EventQuestion>;
@@ -566,6 +583,22 @@ export type MutationsubmitPostEventFeedbackArgs = {
 
 export type MutationgenerateViewpointsArgs = {
     input: GenerateViewpointsInput;
+};
+
+export type MutationcreateFeedbackFlowArgs = {
+    input: CreateFeedbackFlowInput;
+};
+
+export type MutationshareFeedbackFlowDraftArgs = {
+    flowId: Scalars['ID'];
+};
+
+export type MutationreshareFeedbackFlowArgs = {
+    flowId: Scalars['ID'];
+};
+
+export type MutationcreateFeedbackPromptFlowResponseArgs = {
+    input: CreateFeedbackPromptFlowResponseInput;
 };
 
 export type MutationcreateInviteArgs = {
@@ -799,6 +832,10 @@ export type Event = Node & {
     liveFeedback?: Maybe<EventLiveFeedbackConnection>;
     /** Live Feedback Prompts w/ responses */
     liveFeedbackPrompts?: Maybe<EventLiveFeedbackPromptConnection>;
+    /** Live Feedback Prompt Flows */
+    feedbackFlows?: Maybe<FeedbackFlowConnection>;
+    /** Live Feedback Flow Prompts */
+    feedbackFlowPrompts?: Maybe<FeedbackFlowPromptConnection>;
     /** List of moderators for this particular event */
     moderators?: Maybe<UserConnection>;
     /** Whether or not the viewer is a moderator */
@@ -871,6 +908,16 @@ export type EventliveFeedbackArgs = {
 export type EventliveFeedbackPromptsArgs = {
     first?: InputMaybe<Scalars['Int']>;
     after?: InputMaybe<Scalars['String']>;
+};
+
+export type EventfeedbackFlowsArgs = {
+    after?: InputMaybe<Scalars['String']>;
+    first?: InputMaybe<Scalars['Int']>;
+};
+
+export type EventfeedbackFlowPromptsArgs = {
+    after?: InputMaybe<Scalars['String']>;
+    first?: InputMaybe<Scalars['Int']>;
 };
 
 export type EventmoderatorsArgs = {
@@ -962,6 +1009,7 @@ export type Subscription = {
     feedbackCRUD: FeedbackOperation;
     feedbackPrompted: EventLiveFeedbackPromptEdge;
     feedbackPromptResultsShared: EventLiveFeedbackPrompt;
+    feedbackFlowPrompted: FeedbackFlowEdge;
     /** Subscribes to the creation of invites for a given event. */
     userInvited: UserEdgeContainer;
     /** Subscribes to the removal of invites for a given event. */
@@ -1016,6 +1064,10 @@ export type SubscriptionfeedbackPromptedArgs = {
 };
 
 export type SubscriptionfeedbackPromptResultsSharedArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptionfeedbackFlowPromptedArgs = {
     eventId: Scalars['ID'];
 };
 
@@ -1387,7 +1439,7 @@ export type CreateFeedbackPrompt = {
     eventId: Scalars['ID'];
     feedbackType: Scalars['String'];
     choices: Array<Scalars['String']>;
-    isDraft: Scalars['Boolean'];
+    isDraft?: InputMaybe<Scalars['Boolean']>;
     reasoningType: Scalars['String'];
 };
 
@@ -1410,6 +1462,75 @@ export type GenerateViewpointsInput = {
     eventId: Scalars['ID'];
     promptId: Scalars['ID'];
     isForcedRegenerate?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type FeedbackFlow = Node & {
+    __typename?: 'FeedbackFlow';
+    id: Scalars['ID'];
+    eventId: Scalars['ID'];
+    flowName: Scalars['String'];
+    flowDescription?: Maybe<Scalars['String']>;
+    isDraft: Scalars['Boolean'];
+    prompts: Array<FeedbackFlowPrompt>;
+};
+
+export type FeedbackFlowEdge = {
+    __typename?: 'FeedbackFlowEdge';
+    cursor: Scalars['String'];
+    node: FeedbackFlow;
+};
+
+export type FeedbackFlowConnection = {
+    __typename?: 'FeedbackFlowConnection';
+    edges?: Maybe<Array<FeedbackFlowEdge>>;
+    pageInfo: PageInfo;
+};
+
+export type FeedbackFlowPrompt = Node & {
+    __typename?: 'FeedbackFlowPrompt';
+    id: Scalars['ID'];
+    prompt: EventLiveFeedbackPrompt;
+    order: Scalars['Int'];
+};
+
+export type FeedbackFlowPromptEdge = {
+    __typename?: 'FeedbackFlowPromptEdge';
+    cursor: Scalars['String'];
+    node: FeedbackFlowPrompt;
+};
+
+export type FeedbackFlowPromptConnection = {
+    __typename?: 'FeedbackFlowPromptConnection';
+    edges?: Maybe<Array<FeedbackFlowPromptEdge>>;
+    pageInfo: PageInfo;
+};
+
+export type CreateFeedbackFlowInput = {
+    eventId: Scalars['ID'];
+    flowName: Scalars['String'];
+    flowDescription?: InputMaybe<Scalars['String']>;
+    isDraft: Scalars['Boolean'];
+    prompts: Array<CreateFeedbackPrompt>;
+};
+
+export type CreateFeedbackPromptFlowResponseInput = {
+    eventId: Scalars['ID'];
+    flowId: Scalars['ID'];
+    responses: Array<CreateFeedbackPromptResponse>;
+};
+
+export type FeedbackFlowMutationResponse = MutationResponse & {
+    __typename?: 'FeedbackFlowMutationResponse';
+    body?: Maybe<FeedbackFlowEdge>;
+    isError: Scalars['Boolean'];
+    message: Scalars['String'];
+};
+
+export type EventFeedbackPromptFlowResponseMutationResponse = MutationResponse & {
+    __typename?: 'EventFeedbackPromptFlowResponseMutationResponse';
+    isError: Scalars['Boolean'];
+    message: Scalars['String'];
+    body?: Maybe<Scalars['Boolean']>;
 };
 
 export type CreateInvite = {
@@ -1944,6 +2065,8 @@ export type ResolversTypes = {
         | ResolversTypes['EventLiveFeedback']
         | ResolversTypes['EventLiveFeedbackPrompt']
         | ResolversTypes['EventLiveFeedbackPromptResponse']
+        | ResolversTypes['FeedbackFlow']
+        | ResolversTypes['FeedbackFlowPrompt']
         | ResolversTypes['EventQuestion']
         | ResolversTypes['EventSpeaker']
         | ResolversTypes['EventTopic']
@@ -1963,6 +2086,8 @@ export type ResolversTypes = {
         | ResolversTypes['EventFeedbackPromptMutationResponse']
         | ResolversTypes['EventFeedbackPromptResponseMutationResponse']
         | ResolversTypes['PostEventFeedbackMutationResponse']
+        | ResolversTypes['FeedbackFlowMutationResponse']
+        | ResolversTypes['EventFeedbackPromptFlowResponseMutationResponse']
         | ResolversTypes['InviteMutationResponse']
         | ResolversTypes['ModeratorMutationResponse']
         | ResolversTypes['UpdateEventTypeMutationResponse']
@@ -2050,6 +2175,16 @@ export type ResolversTypes = {
     CreateFeedbackPromptResponse: CreateFeedbackPromptResponse;
     Votes: ResolverTypeWrapper<Votes>;
     GenerateViewpointsInput: GenerateViewpointsInput;
+    FeedbackFlow: ResolverTypeWrapper<FeedbackFlow>;
+    FeedbackFlowEdge: ResolverTypeWrapper<FeedbackFlowEdge>;
+    FeedbackFlowConnection: ResolverTypeWrapper<FeedbackFlowConnection>;
+    FeedbackFlowPrompt: ResolverTypeWrapper<FeedbackFlowPrompt>;
+    FeedbackFlowPromptEdge: ResolverTypeWrapper<FeedbackFlowPromptEdge>;
+    FeedbackFlowPromptConnection: ResolverTypeWrapper<FeedbackFlowPromptConnection>;
+    CreateFeedbackFlowInput: CreateFeedbackFlowInput;
+    CreateFeedbackPromptFlowResponseInput: CreateFeedbackPromptFlowResponseInput;
+    FeedbackFlowMutationResponse: ResolverTypeWrapper<FeedbackFlowMutationResponse>;
+    EventFeedbackPromptFlowResponseMutationResponse: ResolverTypeWrapper<EventFeedbackPromptFlowResponseMutationResponse>;
     CreateInvite: CreateInvite;
     ValidateInvite: ValidateInvite;
     InviteMutationResponse: ResolverTypeWrapper<InviteMutationResponse>;
@@ -2129,6 +2264,8 @@ export type ResolversParentTypes = {
         | ResolversParentTypes['EventLiveFeedback']
         | ResolversParentTypes['EventLiveFeedbackPrompt']
         | ResolversParentTypes['EventLiveFeedbackPromptResponse']
+        | ResolversParentTypes['FeedbackFlow']
+        | ResolversParentTypes['FeedbackFlowPrompt']
         | ResolversParentTypes['EventQuestion']
         | ResolversParentTypes['EventSpeaker']
         | ResolversParentTypes['EventTopic']
@@ -2148,6 +2285,8 @@ export type ResolversParentTypes = {
         | ResolversParentTypes['EventFeedbackPromptMutationResponse']
         | ResolversParentTypes['EventFeedbackPromptResponseMutationResponse']
         | ResolversParentTypes['PostEventFeedbackMutationResponse']
+        | ResolversParentTypes['FeedbackFlowMutationResponse']
+        | ResolversParentTypes['EventFeedbackPromptFlowResponseMutationResponse']
         | ResolversParentTypes['InviteMutationResponse']
         | ResolversParentTypes['ModeratorMutationResponse']
         | ResolversParentTypes['UpdateEventTypeMutationResponse']
@@ -2232,6 +2371,16 @@ export type ResolversParentTypes = {
     CreateFeedbackPromptResponse: CreateFeedbackPromptResponse;
     Votes: Votes;
     GenerateViewpointsInput: GenerateViewpointsInput;
+    FeedbackFlow: FeedbackFlow;
+    FeedbackFlowEdge: FeedbackFlowEdge;
+    FeedbackFlowConnection: FeedbackFlowConnection;
+    FeedbackFlowPrompt: FeedbackFlowPrompt;
+    FeedbackFlowPromptEdge: FeedbackFlowPromptEdge;
+    FeedbackFlowPromptConnection: FeedbackFlowPromptConnection;
+    CreateFeedbackFlowInput: CreateFeedbackFlowInput;
+    CreateFeedbackPromptFlowResponseInput: CreateFeedbackPromptFlowResponseInput;
+    FeedbackFlowMutationResponse: FeedbackFlowMutationResponse;
+    EventFeedbackPromptFlowResponseMutationResponse: EventFeedbackPromptFlowResponseMutationResponse;
     CreateInvite: CreateInvite;
     ValidateInvite: ValidateInvite;
     InviteMutationResponse: InviteMutationResponse;
@@ -2327,6 +2476,8 @@ export type NodeResolvers<
         | 'EventLiveFeedback'
         | 'EventLiveFeedbackPrompt'
         | 'EventLiveFeedbackPromptResponse'
+        | 'FeedbackFlow'
+        | 'FeedbackFlowPrompt'
         | 'EventQuestion'
         | 'EventSpeaker'
         | 'EventTopic'
@@ -2395,6 +2546,18 @@ export type QueryResolvers<
         ContextType,
         RequireFields<QuerypromptResponseViewpointsArgs, 'promptId'>
     >;
+    feedbackFlow?: Resolver<
+        Maybe<ResolversTypes['FeedbackFlow']>,
+        ParentType,
+        ContextType,
+        RequireFields<QueryfeedbackFlowArgs, 'feedbackFlowId'>
+    >;
+    eventFeedbackFlows?: Resolver<
+        Maybe<ResolversTypes['FeedbackFlowConnection']>,
+        ParentType,
+        ContextType,
+        RequireFields<QueryeventFeedbackFlowsArgs, 'eventId'>
+    >;
     validateInvite?: Resolver<
         ResolversTypes['ValidateInviteQueryResponse'],
         ParentType,
@@ -2445,6 +2608,8 @@ export type MutationResponseResolvers<
         | 'EventFeedbackPromptMutationResponse'
         | 'EventFeedbackPromptResponseMutationResponse'
         | 'PostEventFeedbackMutationResponse'
+        | 'FeedbackFlowMutationResponse'
+        | 'EventFeedbackPromptFlowResponseMutationResponse'
         | 'InviteMutationResponse'
         | 'ModeratorMutationResponse'
         | 'UpdateEventTypeMutationResponse'
@@ -2784,6 +2949,30 @@ export type MutationResolvers<
         ContextType,
         RequireFields<MutationgenerateViewpointsArgs, 'input'>
     >;
+    createFeedbackFlow?: Resolver<
+        ResolversTypes['FeedbackFlowMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationcreateFeedbackFlowArgs, 'input'>
+    >;
+    shareFeedbackFlowDraft?: Resolver<
+        ResolversTypes['FeedbackFlowMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationshareFeedbackFlowDraftArgs, 'flowId'>
+    >;
+    reshareFeedbackFlow?: Resolver<
+        ResolversTypes['FeedbackFlowMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationreshareFeedbackFlowArgs, 'flowId'>
+    >;
+    createFeedbackPromptFlowResponse?: Resolver<
+        ResolversTypes['EventFeedbackPromptFlowResponseMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationcreateFeedbackPromptFlowResponseArgs, 'input'>
+    >;
     createInvite?: Resolver<
         ResolversTypes['InviteMutationResponse'],
         ParentType,
@@ -3114,6 +3303,18 @@ export type EventResolvers<
         ContextType,
         Partial<EventliveFeedbackPromptsArgs>
     >;
+    feedbackFlows?: Resolver<
+        Maybe<ResolversTypes['FeedbackFlowConnection']>,
+        ParentType,
+        ContextType,
+        Partial<EventfeedbackFlowsArgs>
+    >;
+    feedbackFlowPrompts?: Resolver<
+        Maybe<ResolversTypes['FeedbackFlowPromptConnection']>,
+        ParentType,
+        ContextType,
+        Partial<EventfeedbackFlowPromptsArgs>
+    >;
     moderators?: Resolver<
         Maybe<ResolversTypes['UserConnection']>,
         ParentType,
@@ -3239,6 +3440,13 @@ export type SubscriptionResolvers<
         ParentType,
         ContextType,
         RequireFields<SubscriptionfeedbackPromptResultsSharedArgs, 'eventId'>
+    >;
+    feedbackFlowPrompted?: SubscriptionResolver<
+        ResolversTypes['FeedbackFlowEdge'],
+        'feedbackFlowPrompted',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionfeedbackFlowPromptedArgs, 'eventId'>
     >;
     userInvited?: SubscriptionResolver<
         ResolversTypes['UserEdgeContainer'],
@@ -3667,6 +3875,85 @@ export type VotesResolvers<
     for?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
     against?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
     conflicted?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type FeedbackFlowResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['FeedbackFlow'] = ResolversParentTypes['FeedbackFlow']
+> = {
+    id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+    eventId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+    flowName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    flowDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    isDraft?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+    prompts?: Resolver<Array<ResolversTypes['FeedbackFlowPrompt']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type FeedbackFlowEdgeResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['FeedbackFlowEdge'] = ResolversParentTypes['FeedbackFlowEdge']
+> = {
+    cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    node?: Resolver<ResolversTypes['FeedbackFlow'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type FeedbackFlowConnectionResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['FeedbackFlowConnection'] = ResolversParentTypes['FeedbackFlowConnection']
+> = {
+    edges?: Resolver<Maybe<Array<ResolversTypes['FeedbackFlowEdge']>>, ParentType, ContextType>;
+    pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type FeedbackFlowPromptResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['FeedbackFlowPrompt'] = ResolversParentTypes['FeedbackFlowPrompt']
+> = {
+    id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+    prompt?: Resolver<ResolversTypes['EventLiveFeedbackPrompt'], ParentType, ContextType>;
+    order?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type FeedbackFlowPromptEdgeResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['FeedbackFlowPromptEdge'] = ResolversParentTypes['FeedbackFlowPromptEdge']
+> = {
+    cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    node?: Resolver<ResolversTypes['FeedbackFlowPrompt'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type FeedbackFlowPromptConnectionResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['FeedbackFlowPromptConnection'] = ResolversParentTypes['FeedbackFlowPromptConnection']
+> = {
+    edges?: Resolver<Maybe<Array<ResolversTypes['FeedbackFlowPromptEdge']>>, ParentType, ContextType>;
+    pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type FeedbackFlowMutationResponseResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['FeedbackFlowMutationResponse'] = ResolversParentTypes['FeedbackFlowMutationResponse']
+> = {
+    body?: Resolver<Maybe<ResolversTypes['FeedbackFlowEdge']>, ParentType, ContextType>;
+    isError?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+    message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EventFeedbackPromptFlowResponseMutationResponseResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['EventFeedbackPromptFlowResponseMutationResponse'] = ResolversParentTypes['EventFeedbackPromptFlowResponseMutationResponse']
+> = {
+    isError?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+    message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    body?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4101,6 +4388,14 @@ export type Resolvers<ContextType = MercuriusContext> = {
     EventFeedbackPromptResponseMutationResponse?: EventFeedbackPromptResponseMutationResponseResolvers<ContextType>;
     PostEventFeedbackMutationResponse?: PostEventFeedbackMutationResponseResolvers<ContextType>;
     Votes?: VotesResolvers<ContextType>;
+    FeedbackFlow?: FeedbackFlowResolvers<ContextType>;
+    FeedbackFlowEdge?: FeedbackFlowEdgeResolvers<ContextType>;
+    FeedbackFlowConnection?: FeedbackFlowConnectionResolvers<ContextType>;
+    FeedbackFlowPrompt?: FeedbackFlowPromptResolvers<ContextType>;
+    FeedbackFlowPromptEdge?: FeedbackFlowPromptEdgeResolvers<ContextType>;
+    FeedbackFlowPromptConnection?: FeedbackFlowPromptConnectionResolvers<ContextType>;
+    FeedbackFlowMutationResponse?: FeedbackFlowMutationResponseResolvers<ContextType>;
+    EventFeedbackPromptFlowResponseMutationResponse?: EventFeedbackPromptFlowResponseMutationResponseResolvers<ContextType>;
     InviteMutationResponse?: InviteMutationResponseResolvers<ContextType>;
     ValidateInviteQueryResponse?: ValidateInviteQueryResponseResolvers<ContextType>;
     ModeratorMutationResponse?: ModeratorMutationResponseResolvers<ContextType>;
@@ -4267,6 +4562,13 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
             Maybe<EventLiveFeedbackPromptConnection>,
             Event,
             EventliveFeedbackPromptsArgs,
+            TContext
+        >;
+        feedbackFlows?: LoaderResolver<Maybe<FeedbackFlowConnection>, Event, EventfeedbackFlowsArgs, TContext>;
+        feedbackFlowPrompts?: LoaderResolver<
+            Maybe<FeedbackFlowPromptConnection>,
+            Event,
+            EventfeedbackFlowPromptsArgs,
             TContext
         >;
         moderators?: LoaderResolver<Maybe<UserConnection>, Event, EventmoderatorsArgs, TContext>;
@@ -4505,6 +4807,53 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         for?: LoaderResolver<Scalars['Int'], Votes, {}, TContext>;
         against?: LoaderResolver<Scalars['Int'], Votes, {}, TContext>;
         conflicted?: LoaderResolver<Scalars['Int'], Votes, {}, TContext>;
+    };
+
+    FeedbackFlow?: {
+        id?: LoaderResolver<Scalars['ID'], FeedbackFlow, {}, TContext>;
+        eventId?: LoaderResolver<Scalars['ID'], FeedbackFlow, {}, TContext>;
+        flowName?: LoaderResolver<Scalars['String'], FeedbackFlow, {}, TContext>;
+        flowDescription?: LoaderResolver<Maybe<Scalars['String']>, FeedbackFlow, {}, TContext>;
+        isDraft?: LoaderResolver<Scalars['Boolean'], FeedbackFlow, {}, TContext>;
+        prompts?: LoaderResolver<Array<FeedbackFlowPrompt>, FeedbackFlow, {}, TContext>;
+    };
+
+    FeedbackFlowEdge?: {
+        cursor?: LoaderResolver<Scalars['String'], FeedbackFlowEdge, {}, TContext>;
+        node?: LoaderResolver<FeedbackFlow, FeedbackFlowEdge, {}, TContext>;
+    };
+
+    FeedbackFlowConnection?: {
+        edges?: LoaderResolver<Maybe<Array<FeedbackFlowEdge>>, FeedbackFlowConnection, {}, TContext>;
+        pageInfo?: LoaderResolver<PageInfo, FeedbackFlowConnection, {}, TContext>;
+    };
+
+    FeedbackFlowPrompt?: {
+        id?: LoaderResolver<Scalars['ID'], FeedbackFlowPrompt, {}, TContext>;
+        prompt?: LoaderResolver<EventLiveFeedbackPrompt, FeedbackFlowPrompt, {}, TContext>;
+        order?: LoaderResolver<Scalars['Int'], FeedbackFlowPrompt, {}, TContext>;
+    };
+
+    FeedbackFlowPromptEdge?: {
+        cursor?: LoaderResolver<Scalars['String'], FeedbackFlowPromptEdge, {}, TContext>;
+        node?: LoaderResolver<FeedbackFlowPrompt, FeedbackFlowPromptEdge, {}, TContext>;
+    };
+
+    FeedbackFlowPromptConnection?: {
+        edges?: LoaderResolver<Maybe<Array<FeedbackFlowPromptEdge>>, FeedbackFlowPromptConnection, {}, TContext>;
+        pageInfo?: LoaderResolver<PageInfo, FeedbackFlowPromptConnection, {}, TContext>;
+    };
+
+    FeedbackFlowMutationResponse?: {
+        body?: LoaderResolver<Maybe<FeedbackFlowEdge>, FeedbackFlowMutationResponse, {}, TContext>;
+        isError?: LoaderResolver<Scalars['Boolean'], FeedbackFlowMutationResponse, {}, TContext>;
+        message?: LoaderResolver<Scalars['String'], FeedbackFlowMutationResponse, {}, TContext>;
+    };
+
+    EventFeedbackPromptFlowResponseMutationResponse?: {
+        isError?: LoaderResolver<Scalars['Boolean'], EventFeedbackPromptFlowResponseMutationResponse, {}, TContext>;
+        message?: LoaderResolver<Scalars['String'], EventFeedbackPromptFlowResponseMutationResponse, {}, TContext>;
+        body?: LoaderResolver<Maybe<Scalars['Boolean']>, EventFeedbackPromptFlowResponseMutationResponse, {}, TContext>;
     };
 
     InviteMutationResponse?: {
