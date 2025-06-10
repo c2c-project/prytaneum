@@ -100,6 +100,10 @@ export function useActiveFeedbackFlow({ onFlowPrompted }: UseActiveFeedbackFlowP
                 variant: options?.variant || 'info',
                 action: (key) => options?.action || flowAction(key),
                 persist: true, // Keep it until user interacts
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                },
                 ...options,
             });
         },
