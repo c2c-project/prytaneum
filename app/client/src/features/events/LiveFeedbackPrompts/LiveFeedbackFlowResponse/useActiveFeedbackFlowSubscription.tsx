@@ -128,7 +128,7 @@ export function useActiveFeedbackFlow({ onFlowPrompted }: UseActiveFeedbackFlowP
                         isMultipleChoice: !!_prompt.prompt.isMultipleChoice,
                         multipleChoiceOptions: (_prompt.prompt.multipleChoiceOptions as Array<string>) || [],
                         reasoningType: _prompt.prompt.reasoningType || 'optional',
-                        orderInFlow: _prompt.order || index, // Ensure order in flow
+                        orderInFlow: _prompt.order ?? index, // Ensure order in flow
                     }))
                     .sort((a, b) => a.orderInFlow - b.orderInFlow); // Sort by order
 
