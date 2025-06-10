@@ -73,6 +73,7 @@ export function LiveFeedbackPromptForm({
         newChoices[index] = event.target.value;
         setChoices(newChoices);
         form.choices = newChoices;
+        if (onChange) onChange({ ...form, choices: newChoices });
     };
 
     const isFeedbackPromptValid = React.useMemo(() => form.prompt.trim().length !== 0, [form]);
@@ -97,6 +98,7 @@ export function LiveFeedbackPromptForm({
         newChoices.splice(index, 1);
         setChoices(newChoices);
         form.choices = newChoices;
+        if (onChange) onChange({ ...form, choices: newChoices });
     };
 
     const isPromptValidForSubmission = () => {
@@ -126,6 +128,13 @@ export function LiveFeedbackPromptForm({
         form.feedbackType = newFeedbackType;
         setState((prev) => ({ ...prev, feedbackType: newFeedbackType }));
         if (onChange) onChange({ ...form, feedbackType: newFeedbackType });
+    };
+
+    const handleReasoningTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const newReasoningType = event.target.value;
+        form.reasoningType = newReasoningType;
+        setState((prev) => ({ ...prev, reasoningType: newReasoningType }));
+        if (onChange) onChange({ ...form, reasoningType: newReasoningType });
     };
 
     return (
@@ -159,7 +168,7 @@ export function LiveFeedbackPromptForm({
                             aria-label='reasoning-type'
                             name='reasoning-type'
                             value={form.reasoningType}
-                            onChange={handleChange('reasoningType')}
+                            onChange={handleReasoningTypeChange}
                         >
                             <FormControlLabel
                                 value='disabled'
