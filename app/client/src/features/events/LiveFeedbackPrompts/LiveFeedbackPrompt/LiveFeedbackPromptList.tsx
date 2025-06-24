@@ -30,6 +30,7 @@ import { useLiveFeedbackPromptFlowsFragment$key } from '@local/__generated__/use
 import EmptyState from '@local/components/EmptyState';
 import FeedbackFlowResponsesDialog from './FeedbackFlowResponsesDialog';
 import { ShareFeedbackPromptFlow } from '../LiveFeedbackFlow/ShareFeedbackPromptFlow';
+import { ShareFeedbackPromptFlowDraft } from '../LiveFeedbackFlow/ShareFeedbackPromptFlowDraft';
 
 export type FeedbackDashboardTab = 'open-ended' | 'vote' | 'multiple-choice' | 'surveys';
 
@@ -147,10 +148,14 @@ function FlowItem({ flow, handleClick }: FlowItemProps) {
                 </Grid>
             </CardContent>
             <CardActions sx={{ justifyContent: 'center' }}>
-                <Stack direction='row' spacing={1}>
-                    <ShareFeedbackPromptFlow flow={flow} />
-                    <ViewResponses />
-                </Stack>
+                {flow.isDraft ? (
+                    <ShareFeedbackPromptFlowDraft flow={flow} />
+                ) : (
+                    <Stack direction='row' spacing={1}>
+                        <ShareFeedbackPromptFlow flow={flow} />
+                        <ViewResponses />
+                    </Stack>
+                )}
             </CardActions>
         </Card>
     );

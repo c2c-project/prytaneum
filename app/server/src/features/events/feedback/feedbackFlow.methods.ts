@@ -310,3 +310,25 @@ export async function promptFlowResponses(globalFlowPromptId: string, prisma: Pr
         where: { promptId: feedbackPrompt.promptId },
     });
 }
+
+export async function updateFeedbackFlowDraftStatus(
+    globalFeedbackFlowId: string,
+    isDraft: boolean,
+    prisma: PrismaClient
+) {
+    server.log.debug(`Updating feedback flow draft status for ID: ${globalFeedbackFlowId} to ${isDraft}`);
+    return prisma.feedbackFlow.update({
+        where: { id: globalFeedbackFlowId },
+        data: { isDraft },
+        include: {
+            prompts: {
+                include: {
+                    prompt: true,
+                },
+                orderBy: {
+                    order: 'asc',
+                },
+            },
+        },
+    });
+}
