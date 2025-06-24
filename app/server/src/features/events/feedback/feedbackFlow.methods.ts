@@ -320,15 +320,5 @@ export async function updateFeedbackFlowDraftStatus(
     return prisma.feedbackFlow.update({
         where: { id: globalFeedbackFlowId },
         data: { isDraft },
-        include: {
-            prompts: {
-                include: {
-                    prompt: true,
-                },
-                orderBy: {
-                    order: 'asc',
-                },
-            },
-        },
     });
 }
