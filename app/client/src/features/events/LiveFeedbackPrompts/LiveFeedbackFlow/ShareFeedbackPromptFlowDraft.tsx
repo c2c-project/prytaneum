@@ -34,30 +34,28 @@ export function ShareFeedbackPromptFlowDraft({ flow }: Props) {
     const [commit] = useMutation<ShareFeedbackPromptFlowDraftMutation>(SHARE_PROMPT_DRAFT_MUTATION);
 
     function handleSubmit() {
-        try {
-            commit({
-                variables: { flowId: flow.id },
-                onCompleted(payload) {
-                    try {
-                        if (payload.shareFeedbackFlowDraft.isError)
-                            throw new Error(payload.shareFeedbackFlowDraft.message);
-                        close();
-                        displaySnack('Prompt submitted successfully!', { variant: 'success' });
-                    } catch (err) {
-                        if (err instanceof Error) displaySnack(err.message, { variant: 'error' });
-                        else displaySnack('Something went wrong!');
-                    }
-                },
-                updater(store) {
-                    const promptRecord = store.get(flow.id);
-                    if (!promptRecord) return console.error('Prompt not found in store');
-                    promptRecord.setValue(false, 'isDraft');
-                },
-            });
-        } catch (err) {
-            if (err instanceof Error) displaySnack(err.message, { variant: 'error' });
-            else displaySnack('Something went wrong!');
-        }
+        commit({
+            variables: { flowId: flow.id },
+            onCompleted(payload) {
+                try {
+                    if (payload.shareFeedbackFlowDraft.isError) throw new Error(payload.shareFeedbackFlowDraft.message);
+                    close();
+                    displaySnack('Prompt submitted successfully!', { variant: 'success' });
+                } catch (err) {
+                    if (err instanceof Error) displaySnack(err.message, { variant: 'error' });
+                    else displaySnack('Something went wrong!');
+                }
+            },
+            updater(store) {
+                const promptRecord = store.get(flow.id);
+                if (!promptRecord) return console.error('Prompt not found in store');
+                promptRecord.setValue(false, 'isDraft');
+            },
+            onError(err) {
+                if (err instanceof Error) displaySnack(err.message, { variant: 'error' });
+                else displaySnack('Something went wrong!');
+            },
+        });
     }
 
     return (
