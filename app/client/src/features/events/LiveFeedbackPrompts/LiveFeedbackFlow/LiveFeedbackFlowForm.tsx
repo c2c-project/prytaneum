@@ -120,7 +120,7 @@ export function LiveFeedbackFlowForm({ onSubmit, onCancel, onSaveDraft, initialS
     return (
         <Box component='form' onSubmit={handleSubmit} sx={{ width: '100%' }}>
             <Typography variant='h5' gutterBottom sx={{ textAlign: 'center', mb: 3 }}>
-                Create Feedback Flow
+                Create Survey
             </Typography>
 
             {/* Flow Name and Description Fields */}
@@ -128,7 +128,7 @@ export function LiveFeedbackFlowForm({ onSubmit, onCancel, onSaveDraft, initialS
                 <Grid item xs={12}>
                     <TextField
                         id='flow-name'
-                        label='Flow Name'
+                        label='Survey Name'
                         value={flowName}
                         onChange={handleFlowNameChange}
                         fullWidth
@@ -139,7 +139,7 @@ export function LiveFeedbackFlowForm({ onSubmit, onCancel, onSaveDraft, initialS
                 <Grid item xs={12}>
                     <TextField
                         id='flow-description'
-                        label='Flow Description'
+                        label='Survey Description'
                         value={flowDescription}
                         onChange={handleFlowDescriptionChange}
                         fullWidth
@@ -172,11 +172,11 @@ export function LiveFeedbackFlowForm({ onSubmit, onCancel, onSaveDraft, initialS
                                         promptState.prompt.length > 30 ? '...' : ''
                                     }`}
                                 </Typography>
-                                {prompts.length > 1 && ( // Only show delete if more than one prompt exists
+                                {prompts.length > 1 && (
                                     <IconButton
                                         aria-label='delete prompt'
                                         onClick={(e) => {
-                                            e.stopPropagation(); // Prevent accordion toggle
+                                            e.stopPropagation();
                                             handleRemovePrompt(index)();
                                         }}
                                         size='small'
@@ -218,18 +218,18 @@ export function LiveFeedbackFlowForm({ onSubmit, onCancel, onSaveDraft, initialS
                     color='primary'
                     onClick={handleSaveDraft}
                     startIcon={<SaveIcon />}
-                    disabled={!isFlowInfoValid} // Can save draft even if prompts aren't perfect
+                    disabled={!isFlowInfoValid}
                 >
                     Save as Draft
                 </Button>
                 <Button
-                    type='submit' // Triggers the form's onSubmit
+                    type='submit'
                     variant='contained'
                     color='primary'
                     startIcon={<SendIcon />}
-                    disabled={!canSubmit} // Enable only when basic validation passes
+                    disabled={!canSubmit}
                 >
-                    Prompt Flow
+                    Prompt Survey
                 </Button>
             </Box>
         </Box>
