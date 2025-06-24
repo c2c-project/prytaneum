@@ -101,7 +101,7 @@ export function SubmitLiveFeedbackFlowResponse({}: SubmitLiveFeedbackFlowRespons
         if (currentFlow && currentPromptIndex < currentFlow.prompts.length - 1) {
             setCurrentPromptIndex(currentPromptIndex + 1);
         } else {
-            displaySnack('All prompts answered. Ready to submit flow.', { variant: 'info' });
+            displaySnack('All prompts answered. Ready to submit the survey.', { variant: 'info' });
         }
     }, [currentFlow, currentPromptIndex, displaySnack]);
 
@@ -125,7 +125,7 @@ export function SubmitLiveFeedbackFlowResponse({}: SubmitLiveFeedbackFlowRespons
 
     const handleSubmitEntireFlow = () => {
         if (!currentFlow || collectedResponses.some((r) => r === null)) {
-            displaySnack('Please answer all prompts before submitting the flow.', { variant: 'error' });
+            displaySnack('Please answer all prompts before submitting the survey.', { variant: 'error' });
             return;
         }
 
@@ -152,7 +152,7 @@ export function SubmitLiveFeedbackFlowResponse({}: SubmitLiveFeedbackFlowRespons
             },
             onCompleted: (response, errors) => {
                 if (errors) {
-                    displaySnack(`Error submitting flow responses: ${errors[0].message}`, { variant: 'error' });
+                    displaySnack(`Error submitting survey responses: ${errors[0].message}`, { variant: 'error' });
                     return;
                 }
                 const hasErrors = response.createFeedbackPromptFlowResponse.isError;
@@ -160,7 +160,7 @@ export function SubmitLiveFeedbackFlowResponse({}: SubmitLiveFeedbackFlowRespons
                 if (hasErrors) {
                     displaySnack(errorMessage, { variant: 'error' });
                 } else {
-                    displaySnack('Feedback flow responses submitted successfully!', { variant: 'success' });
+                    displaySnack('Survey responses submitted successfully!', { variant: 'success' });
                 }
                 handleCloseDialog();
             },
@@ -186,7 +186,7 @@ export function SubmitLiveFeedbackFlowResponse({}: SubmitLiveFeedbackFlowRespons
             PaperProps={{ sx: { height: '100%' } }}
         >
             <DialogTitle sx={{ m: 0, p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                {currentFlow.flowName || 'Feedback Flow'}
+                {currentFlow.flowName || 'Feedback Survey'}
                 <IconButton aria-label='close' onClick={handleCloseDialog} sx={{ color: theme.palette.grey[500] }}>
                     <CloseIcon />
                 </IconButton>
@@ -194,7 +194,7 @@ export function SubmitLiveFeedbackFlowResponse({}: SubmitLiveFeedbackFlowRespons
             <DialogContent dividers>
                 <Box>
                     <Typography variant='caption' color='textSecondary'>
-                        {currentFlow.flowDescription || 'No description provided for this flow.'}
+                        {currentFlow.flowDescription || 'No description provided for this survey.'}
                     </Typography>
                 </Box>
                 <Stepper activeStep={currentPromptIndex} alternativeLabel={!isMobile} sx={{ mb: 3 }}>
@@ -218,8 +218,8 @@ export function SubmitLiveFeedbackFlowResponse({}: SubmitLiveFeedbackFlowRespons
                                 onSubmit={handleIndividualPromptSubmit}
                                 isFlow={true}
                                 isLastFlowPrompt={index === currentFlow.prompts.length - 1}
-                                initialState={collectedResponses[currentPromptIndex] || undefined}
-                                promptIndex={currentPromptIndex}
+                                initialState={collectedResponses[index] || undefined}
+                                promptIndex={index}
                                 onFormUpdate={handleFormUpdate}
                                 onValidityChange={(isValid) => {
                                     setIsPromptFormValid(isValid);
@@ -244,7 +244,7 @@ export function SubmitLiveFeedbackFlowResponse({}: SubmitLiveFeedbackFlowRespons
                                     onClick={handleSubmitEntireFlow}
                                     disabled={isSubmittingFlow || !collectedResponses[currentPromptIndex]}
                                 >
-                                    Submit Flow
+                                    Submit Survey
                                     {isSubmittingFlow && <CircularProgress size={18} sx={{ ml: 1 }} />}
                                 </Button>
                             ) : (
