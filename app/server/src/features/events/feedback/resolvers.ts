@@ -306,6 +306,8 @@ export const resolvers: Resolvers = {
                 if (!args.flowId) throw new ProtectedError({ userMessage: errors.invalidArgs });
                 const { id: flowId } = fromGlobalId(args.flowId);
                 const flow = await FeedbackFlowMethods.findFeedbackFlowByFlowId(flowId, ctx.prisma);
+                // Update the flow to be no longer a draft
+                await FeedbackFlowMethods.updateFeedbackFlowDraftStatus(flowId, false, ctx.prisma);
                 const formattedFlow = toFeedbackFlowId(flow);
                 ctx.app.log.debug(`Sharing feedback flow draft ${JSON.stringify(flow)}`);
                 const edge = {

@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, memo } from 'react';
 import {
     Button,
     TextField,
@@ -182,3 +182,5 @@ export function LiveFeedbackPromptResponseForm({
         </Form>
     );
 }
+
+export const MemoizedLiveFeedbackPromptResponseForm = memo(LiveFeedbackPromptResponseForm);

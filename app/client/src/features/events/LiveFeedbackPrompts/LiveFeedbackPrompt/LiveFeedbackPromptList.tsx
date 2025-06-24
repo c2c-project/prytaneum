@@ -30,8 +30,9 @@ import { useLiveFeedbackPromptFlowsFragment$key } from '@local/__generated__/use
 import EmptyState from '@local/components/EmptyState';
 import FeedbackFlowResponsesDialog from './FeedbackFlowResponsesDialog';
 import { ShareFeedbackPromptFlow } from '../LiveFeedbackFlow/ShareFeedbackPromptFlow';
+import { ShareFeedbackPromptFlowDraft } from '../LiveFeedbackFlow/ShareFeedbackPromptFlowDraft';
 
-export type FeedbackDashboardTab = 'open-ended' | 'vote' | 'multiple-choice' | 'flows';
+export type FeedbackDashboardTab = 'open-ended' | 'vote' | 'multiple-choice' | 'surveys';
 
 export type Prompt = {
     readonly id: string;
@@ -147,10 +148,14 @@ function FlowItem({ flow, handleClick }: FlowItemProps) {
                 </Grid>
             </CardContent>
             <CardActions sx={{ justifyContent: 'center' }}>
-                <Stack direction='row' spacing={1}>
-                    <ShareFeedbackPromptFlow flow={flow} />
-                    <ViewResponses />
-                </Stack>
+                {flow.isDraft ? (
+                    <ShareFeedbackPromptFlowDraft flow={flow} />
+                ) : (
+                    <Stack direction='row' spacing={1}>
+                        <ShareFeedbackPromptFlow flow={flow} />
+                        <ViewResponses />
+                    </Stack>
+                )}
             </CardActions>
         </Card>
     );
@@ -210,7 +215,7 @@ function PromptList({
                 <Tab label='Open Ended' value='open-ended' />
                 <Tab label='Vote' value='vote' />
                 <Tab label='Multiple Choice' value='multiple-choice' />
-                <Tab label='Flows' value='flows' />
+                <Tab label='Surveys' value='surveys' />
             </Tabs>
             {selectedTab === 'open-ended' && (
                 <List
@@ -273,7 +278,7 @@ function PromptList({
                     )}
                 </List>
             )}
-            {selectedTab === 'flows' && (
+            {selectedTab === 'surveys' && (
                 <List
                     id='live-feedback-flows-prompt-list'
                     sx={{
@@ -286,7 +291,7 @@ function PromptList({
                     {flows.length > 0 ? (
                         flows.map((flow) => <FlowItem key={flow.id} flow={flow} handleClick={handleFlowClick} />)
                     ) : (
-                        <EmptyState message='No Flows To Display Yet.' />
+                        <EmptyState message='No Surveys To Display Yet.' />
                     )}
                 </List>
             )}

@@ -22,7 +22,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useMutation, graphql } from 'react-relay';
 
 import {
-    LiveFeedbackPromptResponseForm,
+    MemoizedLiveFeedbackPromptResponseForm,
     TLiveFeedbackPromptResponseFormState,
 } from '../LiveFeedbackPromptResponse/LiveFeedbackPromptResponseForm';
 import type { Prompt as SinglePromptType } from '../useLiveFeedbackPrompt';
@@ -57,17 +57,23 @@ export function SubmitLiveFeedbackFlowResponse({}: SubmitLiveFeedbackFlowRespons
     const [currentPromptIndex, setCurrentPromptIndex] = React.useState(0);
     const [collectedResponses, setCollectedResponses] = React.useState<TLiveFeedbackPromptResponseFormState[]>([]);
     const [isPromptFormValid, setIsPromptFormValid] = React.useState<boolean>(false); // Track form validity
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     const [commitFlowResponses, isSubmittingFlow] = useMutation<SubmitLiveFeedbackFlowResponseMutation>(
         SUBMIT_FEEDBACK_FLOW_RESPONSES_MUTATION
     );
 
     const handlePresentFlow = React.useCallback((flow: ActiveFlow) => {
+        setIsLoading(true);
         setCurrentFlow(flow);
         setCurrentPromptIndex(0);
         setCollectedResponses(new Array(flow.prompts.length).fill(null)); // Initialize responses array
         setIsOpen(true);
     }, []);
+
+    React.useEffect(() => {
+        if (isOpen) setIsLoading(false);
+    }, [isOpen]);
 
     useActiveFeedbackFlow({ onFlowPrompted: handlePresentFlow });
 
@@ -101,7 +107,7 @@ export function SubmitLiveFeedbackFlowResponse({}: SubmitLiveFeedbackFlowRespons
         if (currentFlow && currentPromptIndex < currentFlow.prompts.length - 1) {
             setCurrentPromptIndex(currentPromptIndex + 1);
         } else {
-            displaySnack('All prompts answered. Ready to submit flow.', { variant: 'info' });
+            displaySnack('All prompts answered. Ready to submit the survey.', { variant: 'info' });
         }
     }, [currentFlow, currentPromptIndex, displaySnack]);
 
@@ -125,7 +131,7 @@ export function SubmitLiveFeedbackFlowResponse({}: SubmitLiveFeedbackFlowRespons
 
     const handleSubmitEntireFlow = () => {
         if (!currentFlow || collectedResponses.some((r) => r === null)) {
-            displaySnack('Please answer all prompts before submitting the flow.', { variant: 'error' });
+            displaySnack('Please answer all prompts before submitting the survey.', { variant: 'error' });
             return;
         }
 
@@ -152,7 +158,7 @@ export function SubmitLiveFeedbackFlowResponse({}: SubmitLiveFeedbackFlowRespons
             },
             onCompleted: (response, errors) => {
                 if (errors) {
-                    displaySnack(`Error submitting flow responses: ${errors[0].message}`, { variant: 'error' });
+                    displaySnack(`Error submitting survey responses: ${errors[0].message}`, { variant: 'error' });
                     return;
                 }
                 const hasErrors = response.createFeedbackPromptFlowResponse.isError;
@@ -160,7 +166,7 @@ export function SubmitLiveFeedbackFlowResponse({}: SubmitLiveFeedbackFlowRespons
                 if (hasErrors) {
                     displaySnack(errorMessage, { variant: 'error' });
                 } else {
-                    displaySnack('Feedback flow responses submitted successfully!', { variant: 'success' });
+                    displaySnack('Survey responses submitted successfully!', { variant: 'success' });
                 }
                 handleCloseDialog();
             },
@@ -186,48 +192,56 @@ export function SubmitLiveFeedbackFlowResponse({}: SubmitLiveFeedbackFlowRespons
             PaperProps={{ sx: { height: '100%' } }}
         >
             <DialogTitle sx={{ m: 0, p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                {currentFlow.flowName || 'Feedback Flow'}
+                {currentFlow.flowName || 'Feedback Survey'}
                 <IconButton aria-label='close' onClick={handleCloseDialog} sx={{ color: theme.palette.grey[500] }}>
                     <CloseIcon />
                 </IconButton>
             </DialogTitle>
             <DialogContent dividers>
-                <Box>
-                    <Typography variant='caption' color='textSecondary'>
-                        {currentFlow.flowDescription || 'No description provided for this flow.'}
-                    </Typography>
-                </Box>
-                <Stepper activeStep={currentPromptIndex} alternativeLabel={!isMobile} sx={{ mb: 3 }}>
-                    {currentFlow.prompts.map((prompt, index) => (
-                        <Step key={prompt.id}>
-                            <StepLabel>
-                                {isMobile ? `Prompt ${index + 1}` : prompt.prompt.substring(0, 20) + '...'}
-                            </StepLabel>
-                        </Step>
-                    ))}
-                </Stepper>
-
-                <Box sx={{ minHeight: '300px' }}>
-                    {currentFlow.prompts.map((prompt, index) => (
-                        <Box
-                            key={prompt.id} // Key for the wrapper div
-                            style={{ display: index === currentPromptIndex ? 'block' : 'none' }}
-                        >
-                            <LiveFeedbackPromptResponseForm
-                                prompt={prompt}
-                                onSubmit={handleIndividualPromptSubmit}
-                                isFlow={true}
-                                isLastFlowPrompt={index === currentFlow.prompts.length - 1}
-                                initialState={collectedResponses[currentPromptIndex] || undefined}
-                                promptIndex={currentPromptIndex}
-                                onFormUpdate={handleFormUpdate}
-                                onValidityChange={(isValid) => {
-                                    setIsPromptFormValid(isValid);
-                                }}
-                            />
+                {isLoading ? (
+                    <Box display='flex' justifyContent='center' alignItems='center' sx={{ minHeight: '300px' }}>
+                        <CircularProgress />
+                    </Box>
+                ) : (
+                    <React.Fragment>
+                        <Box>
+                            <Typography variant='caption' color='textSecondary'>
+                                {currentFlow.flowDescription || 'No description provided for this survey.'}
+                            </Typography>
                         </Box>
-                    ))}
-                </Box>
+                        <Stepper activeStep={currentPromptIndex} alternativeLabel={!isMobile} sx={{ mb: 3 }}>
+                            {currentFlow.prompts.map((prompt, index) => (
+                                <Step key={prompt.id}>
+                                    <StepLabel>
+                                        {isMobile ? `Prompt ${index + 1}` : prompt.prompt.substring(0, 20) + '...'}
+                                    </StepLabel>
+                                </Step>
+                            ))}
+                        </Stepper>
+
+                        <Box sx={{ minHeight: '300px' }}>
+                            {currentFlow.prompts.map((prompt, index) => (
+                                <Box
+                                    key={prompt.id} // Key for the wrapper div
+                                    style={{ display: index === currentPromptIndex ? 'block' : 'none' }}
+                                >
+                                    <MemoizedLiveFeedbackPromptResponseForm
+                                        prompt={prompt}
+                                        onSubmit={handleIndividualPromptSubmit}
+                                        isFlow={true}
+                                        isLastFlowPrompt={index === currentFlow.prompts.length - 1}
+                                        initialState={collectedResponses[index] || undefined}
+                                        promptIndex={index}
+                                        onFormUpdate={handleFormUpdate}
+                                        onValidityChange={(isValid) => {
+                                            setIsPromptFormValid(isValid);
+                                        }}
+                                    />
+                                </Box>
+                            ))}
+                        </Box>
+                    </React.Fragment>
+                )}
             </DialogContent>
             <Box sx={{ p: 2, borderTop: '1px solid', borderColor: 'divider' }}>
                 {isMobile ? (
@@ -244,7 +258,7 @@ export function SubmitLiveFeedbackFlowResponse({}: SubmitLiveFeedbackFlowRespons
                                     onClick={handleSubmitEntireFlow}
                                     disabled={isSubmittingFlow || !collectedResponses[currentPromptIndex]}
                                 >
-                                    Submit Flow
+                                    Submit Survey
                                     {isSubmittingFlow && <CircularProgress size={18} sx={{ ml: 1 }} />}
                                 </Button>
                             ) : (

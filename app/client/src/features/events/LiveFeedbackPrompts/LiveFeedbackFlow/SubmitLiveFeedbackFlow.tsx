@@ -105,11 +105,11 @@ export function SubmitLiveFeedbackFlow({ className, connections = [] }: Props) {
                     return;
                 }
                 if (response.createFeedbackFlow?.isError) {
-                    displaySnack(response.createFeedbackFlow.message || 'Failed to create feedback flow.', {
+                    displaySnack(response.createFeedbackFlow.message || 'Failed to create survey.', {
                         variant: 'error',
                     });
                 } else {
-                    displaySnack('Feedback flow created successfully!', { variant: 'success' });
+                    displaySnack('Survey created successfully!', { variant: 'success' });
                     closeDialog();
                 }
             },
@@ -180,7 +180,7 @@ export function SubmitLiveFeedbackFlow({ className, connections = [] }: Props) {
                 <DialogTitle
                     sx={{ m: 0, p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
                 >
-                    Create New Feedback Flow
+                    Create New Survey
                     <IconButton
                         aria-label='close'
                         onClick={handleCancel}
@@ -207,7 +207,7 @@ export function SubmitLiveFeedbackFlow({ className, connections = [] }: Props) {
                 onClick={openDialog}
                 startIcon={user ? <PlaylistAddIcon /> : <LockIcon />}
             >
-                Create Feedback Flow
+                Create Survey
             </Button>
         </React.Fragment>
     );

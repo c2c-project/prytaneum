@@ -64,7 +64,7 @@ export default function FeedbackFlowResponsesDialog({
             }}
         >
             <StyledDialogTitle id='feedback-flow-responses-dialog-title' onClose={handleClose}>
-                Feedback Flow Responses
+                Survey Responses
             </StyledDialogTitle>
             <DialogContent dividers>
                 <FlowInfo />
@@ -117,7 +117,7 @@ export default function FeedbackFlowResponsesDialog({
                             );
                         })
                     ) : (
-                        <Typography sx={{ textAlign: 'center', mt: 2 }}>This flow has no prompts.</Typography>
+                        <Typography sx={{ textAlign: 'center', mt: 2 }}>Survey has no prompts.</Typography>
                     )}
                 </Grid>
             </DialogContent>

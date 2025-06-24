@@ -96,7 +96,7 @@ export function useActiveFeedbackFlow({ onFlowPrompted }: UseActiveFeedbackFlowP
 
     const displayFlowSnack = React.useCallback(
         (flowName: string | null, options?: OptionsObject) => {
-            enqueueSnackbar(`New Feedback Flow available: ${flowName || 'Untitled Flow'}`, {
+            enqueueSnackbar(`New Survey available: ${flowName || 'Untitled Survey'}`, {
                 variant: options?.variant || 'info',
                 action: (key) => options?.action || flowAction(key),
                 persist: true, // Keep it until user interacts
@@ -143,7 +143,7 @@ export function useActiveFeedbackFlow({ onFlowPrompted }: UseActiveFeedbackFlowP
                 displayFlowSnack(newFlow.flowName);
             },
             onError: (error: Error) => {
-                console.error('Error in feedback flow subscription:', error);
+                console.error('Error in survey subscription:', error);
             },
         }),
         [eventId, displayFlowSnack] // Removed showNextFlowInQueue from deps as it's stable
