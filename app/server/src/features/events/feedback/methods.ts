@@ -98,9 +98,14 @@ async function generateViewpoints({ promptId, issue, eventId, prisma, forceRegen
                 headers: { 'Content-Type': 'application/json' },
             }
         );
+        server.log.debug(`Generated viewpoints for prompt ${promptId}: ${JSON.stringify(response?.data)}`);
         if (!response) throw new Error('Could not summarize responses, No response from moderation service.');
     } catch (error) {
         server.log.error(error);
+        throw new ProtectedError({
+            userMessage: 'Failed to generate viewpoints',
+            internalMessage: `Error generating viewpoints for prompt ${promptId}: ${error}`,
+        });
     }
     const viewpoints = response?.data || [];
     await cacheViewpoints(promptId, responses, viewpoints);
