@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Button, DialogContent, DialogTitle, IconButton } from '@mui/material';
-import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
+import { Button, DialogContent, DialogTitle, IconButton, Tooltip } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
 import CloseIcon from '@mui/icons-material/Close';
 import { useMutation, graphql } from 'react-relay';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import PollIcon from '@mui/icons-material/Poll';
 
 import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { useUser } from '@local/features/accounts';
@@ -199,16 +199,23 @@ export function SubmitLiveFeedbackFlow({ className, connections = [] }: Props) {
                 </DialogContent>
             </ResponsiveDialog>
 
-            <Button
-                className={className}
-                disabled={!user || isMutationInFlight}
-                variant='contained'
-                color='secondary'
-                onClick={openDialog}
-                startIcon={user ? <PlaylistAddIcon /> : <LockIcon />}
-            >
-                Create Survey
-            </Button>
+            <Tooltip title='Submit a survey of many prompts' placement='top'>
+                <Button
+                    className={className}
+                    disabled={!user || isMutationInFlight}
+                    variant='contained'
+                    sx={(_theme) => ({
+                        backgroundColor: _theme.palette.custom.green,
+                        '&:hover': {
+                            backgroundColor: _theme.palette.custom.darkGreen,
+                        },
+                    })}
+                    onClick={openDialog}
+                    startIcon={user ? <PollIcon /> : <LockIcon />}
+                >
+                    Create Survey
+                </Button>
+            </Tooltip>
         </React.Fragment>
     );
 }
