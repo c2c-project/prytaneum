@@ -6,6 +6,10 @@ declare module '@mui/material/styles/createPalette' {
         custom: {
             creamCan: string;
             darkCreamCan: string;
+            trustyBlue: string;
+            darkTrustyBlue: string;
+            green: string;
+            darkGreen: string;
             lightBlue: string;
             danger: string;
         };
@@ -14,6 +18,10 @@ declare module '@mui/material/styles/createPalette' {
         custom?: {
             creamCan?: string;
             darkCreamCan?: string;
+            trustyBlue?: string;
+            darkTrustyBlue?: string;
+            green?: string;
+            darkGreen?: string;
             lightBlue?: string;
             danger?: string;
         };
@@ -124,6 +132,10 @@ const base = createTheme({
         custom: {
             creamCan: '#f5c64f',
             darkCreamCan: '#A78100',
+            trustyBlue: '#2A64A8',
+            darkTrustyBlue: '#215086',
+            green: '#228B22',
+            darkGreen: '#196c19',
             lightBlue: '#8eafff',
             danger: '#ff0000',
         },
