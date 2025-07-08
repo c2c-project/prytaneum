@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, DialogContent } from '@mui/material';
+import { Button, DialogContent, Tooltip } from '@mui/material';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import LockIcon from '@mui/icons-material/Lock';
 import { useMutation, graphql } from 'react-relay';
@@ -82,16 +82,18 @@ export function SubmitLiveFeedbackPrompt({ className, connections, selectedTab }
                 </DialogContent>
             </ResponsiveDialog>
 
-            <Button
-                className={className}
-                disabled={!user}
-                variant='contained'
-                color='primary'
-                onClick={open}
-                startIcon={user ? <QuestionAnswerIcon /> : <LockIcon />}
-            >
-                Prompt Feedback
-            </Button>
+            <Tooltip title='Submit a single prompt' placement='top'>
+                <Button
+                    className={className}
+                    disabled={!user}
+                    variant='contained'
+                    color='primary'
+                    onClick={open}
+                    startIcon={user ? <QuestionAnswerIcon /> : <LockIcon />}
+                >
+                    Prompt Feedback
+                </Button>
+            </Tooltip>
         </React.Fragment>
     );
 }

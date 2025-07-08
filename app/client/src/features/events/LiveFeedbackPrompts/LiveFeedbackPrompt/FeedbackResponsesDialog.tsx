@@ -80,6 +80,7 @@ export default function FeedbackResponsesDialog({
                                 <GenerateViewpoints
                                     promptId={promptRef.current.id}
                                     setSelectedPrompt={setSelectedPrompt}
+                                    generateOnLoad={true}
                                 />
                                 <ShareFeedbackPromptResults prompt={promptRef.current} />
                             </React.Fragment>

@@ -77,7 +77,7 @@ export function useActiveFeedbackFlow({ onFlowPrompted }: UseActiveFeedbackFlowP
                     startIcon={<QuestionAnswerIcon />}
                     size='small'
                 >
-                    Respond to Flow
+                    Respond to Survey
                 </Button>
                 <IconButton
                     onClick={() => {
@@ -118,6 +118,7 @@ export function useActiveFeedbackFlow({ onFlowPrompted }: UseActiveFeedbackFlowP
                 if (!data || !data.feedbackFlowPrompted) return;
 
                 const flowPayload = data.feedbackFlowPrompted.node;
+
                 // Transform payload prompts to ensure they have orderInFlow
                 const transformedPrompts = (flowPayload.prompts || [])
                     .map((_prompt, index) => ({
@@ -128,7 +129,7 @@ export function useActiveFeedbackFlow({ onFlowPrompted }: UseActiveFeedbackFlowP
                         isMultipleChoice: !!_prompt.prompt.isMultipleChoice,
                         multipleChoiceOptions: (_prompt.prompt.multipleChoiceOptions as Array<string>) || [],
                         reasoningType: _prompt.prompt.reasoningType || 'optional',
-                        orderInFlow: _prompt.order ?? index, // Ensure order in flow
+                        orderInFlow: _prompt.order ?? index,
                     }))
                     .sort((a, b) => a.orderInFlow - b.orderInFlow); // Sort by order
 
@@ -146,7 +147,7 @@ export function useActiveFeedbackFlow({ onFlowPrompted }: UseActiveFeedbackFlowP
                 console.error('Error in survey subscription:', error);
             },
         }),
-        [eventId, displayFlowSnack] // Removed showNextFlowInQueue from deps as it's stable
+        [eventId, displayFlowSnack]
     );
 
     useSubscription<useActiveFeedbackFlowSubscription>(config);

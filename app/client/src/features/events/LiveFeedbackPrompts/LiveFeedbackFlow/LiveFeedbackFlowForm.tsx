@@ -17,21 +17,15 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import SaveIcon from '@mui/icons-material/Save'; // Icon for Save Draft
 import SendIcon from '@mui/icons-material/Send'; // Icon for Prompt
 
-// Assuming LiveFeedbackPromptForm is adjusted to accept these props:
-// - initialState: TLiveFeedbackPromptFormState
-// - onChange: (newState: TLiveFeedbackPromptFormState) => void
-// - hideActions: boolean
 import { LiveFeedbackPromptForm, TLiveFeedbackPromptFormState } from '../LiveFeedbackPrompt/LiveFeedbackPromptForm';
-import { STARTING_CHOICE_AMOUNT } from '@local/utils/rules'; // Assuming this is accessible
+import { STARTING_CHOICE_AMOUNT } from '@local/utils/rules';
 
-// Define the structure for the entire flow data
 export interface TLiveFeedbackFlowFormData {
     name: string;
     description: string;
     prompts: TLiveFeedbackPromptFormState[];
 }
 
-// Define the props for the Flow Form
 export interface LiveFeedbackFlowFormProps {
     onSubmit: (flowData: TLiveFeedbackFlowFormData) => void;
     onCancel: () => void;
@@ -39,26 +33,22 @@ export interface LiveFeedbackFlowFormProps {
     initialState?: Partial<TLiveFeedbackFlowFormData>; // For potential editing functionality later
 }
 
-// Default state for a new prompt
 const createDefaultPromptState = (): TLiveFeedbackPromptFormState => ({
     prompt: '',
-    feedbackType: 'open-ended', // Default type
+    feedbackType: 'open-ended',
     choices: new Array(STARTING_CHOICE_AMOUNT).fill('', 0, STARTING_CHOICE_AMOUNT),
-    reasoningType: 'optional', // Default reasoning
+    reasoningType: 'optional',
 });
 
 export function LiveFeedbackFlowForm({ onSubmit, onCancel, onSaveDraft, initialState }: LiveFeedbackFlowFormProps) {
-    // State for flow name and description
     const [flowName, setFlowName] = React.useState<string>(initialState?.name ?? '');
     const [flowDescription, setFlowDescription] = React.useState<string>(initialState?.description ?? '');
 
-    // State for the list of prompts within the flow
     const [prompts, setPrompts] = React.useState<TLiveFeedbackPromptFormState[]>(
-        initialState?.prompts ?? [createDefaultPromptState()] // Start with one default prompt if no initial state
+        initialState?.prompts ?? [createDefaultPromptState()]
     );
 
     // --- Handlers ---
-
     const handleFlowNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFlowName(event.target.value);
     };
@@ -67,63 +57,44 @@ export function LiveFeedbackFlowForm({ onSubmit, onCancel, onSaveDraft, initialS
         setFlowDescription(event.target.value);
     };
 
-    // Add a new prompt with default values to the list
     const handleAddPrompt = () => {
         setPrompts([...prompts, createDefaultPromptState()]);
     };
 
-    // Remove a prompt from the list by its index
     const handleRemovePrompt = (indexToRemove: number) => () => {
-        // Prevent removing the last prompt
         if (prompts.length <= 1) {
-            // Optionally, show a snackbar message here
             console.warn('Cannot remove the last prompt.');
             return;
         }
         setPrompts(prompts.filter((_, index) => index !== indexToRemove));
     };
 
-    // Update the state of a specific prompt when its form changes
     const handlePromptChange = (indexToUpdate: number, newState: TLiveFeedbackPromptFormState) => {
         const updatedPrompts = prompts.map((prompt, index) => (index === indexToUpdate ? newState : prompt));
         setPrompts(updatedPrompts);
     };
 
-    // --- Submission Logic ---
-
-    // Prepare the final data structure
     const getFlowData = (): TLiveFeedbackFlowFormData => ({
         name: flowName,
         description: flowDescription,
         prompts: prompts,
     });
 
-    // Handle the final submission (Prompt button)
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         onSubmit(getFlowData());
     };
 
-    // Handle saving as a draft
     const handleSaveDraft = () => {
         onSaveDraft(getFlowData());
     };
 
-    // --- Validation (Basic) ---
-    // Check if flow name and description are filled
     const isFlowInfoValid = flowName.length > 0 && flowDescription.length > 0;
-    // Check if all prompts are individually valid (requires validation logic within LiveFeedbackPromptForm or here)
-    // For now, we'll assume basic validity is enough (e.g., prompt text exists)
     const arePromptsValid = prompts.every((p) => p.prompt.length > 0); // Simplified check
     const canSubmit = isFlowInfoValid && arePromptsValid;
 
     return (
-        <Box component='form' onSubmit={handleSubmit} sx={{ width: '100%' }}>
-            <Typography variant='h5' gutterBottom sx={{ textAlign: 'center', mb: 3 }}>
-                Create Survey
-            </Typography>
-
-            {/* Flow Name and Description Fields */}
+        <Box component='form' onSubmit={handleSubmit} sx={{ width: '100%', height: '100%' }}>
             <Grid container spacing={2} sx={{ mb: 3 }}>
                 <Grid item xs={12}>
                     <TextField
@@ -156,8 +127,6 @@ export function LiveFeedbackFlowForm({ onSubmit, onCancel, onSaveDraft, initialS
                 Prompts
             </Typography>
 
-            {/* Prompts Accordions */}
-
             <Box sx={{ mb: 2 }}>
                 {prompts.map((promptState, index) => (
                     <Accordion key={index} defaultExpanded={index === 0} sx={{ mb: 1 }}>
@@ -189,7 +158,7 @@ export function LiveFeedbackFlowForm({ onSubmit, onCancel, onSaveDraft, initialS
                         </AccordionSummary>
                         <AccordionDetails>
                             <LiveFeedbackPromptForm
-                                // initialState={promptState}
+                                intialState={promptState}
                                 onChange={(newState) => handlePromptChange(index, newState)}
                                 hideTitle={true}
                                 hideActions={true}
@@ -199,7 +168,6 @@ export function LiveFeedbackFlowForm({ onSubmit, onCancel, onSaveDraft, initialS
                 ))}
             </Box>
 
-            {/* Add Prompt Button */}
             <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
                 <Button variant='outlined' onClick={handleAddPrompt} startIcon={<AddCircleOutlineIcon />}>
                     Add Prompt
@@ -208,7 +176,6 @@ export function LiveFeedbackFlowForm({ onSubmit, onCancel, onSaveDraft, initialS
 
             <Divider sx={{ my: 2 }} />
 
-            {/* Form Actions */}
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
                 <Button variant='outlined' color='secondary' onClick={onCancel}>
                     Cancel

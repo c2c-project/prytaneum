@@ -57,9 +57,9 @@ export function ShareFeedbackPromptFlow({ flow }: Props) {
         <React.Fragment>
             <ResponsiveDialog open={isOpen} onClose={close}>
                 <DialogContent>
-                    <Typography variant='h6'>Are you sure you want to reshare this prompt flow?</Typography>
+                    <Typography variant='h6'>Are you sure you want to reshare this survey?</Typography>
                     <Typography variant='subtitle2'>
-                        NOTE: Only shares with participants that have not yet responded to the prompt flow.
+                        NOTE: Only shares with participants that have not yet responded to the survey.
                     </Typography>
                     <Typography variant='body1'>
                         <b>Flow: {flow.flowName}</b>
@@ -77,7 +77,7 @@ export function ShareFeedbackPromptFlow({ flow }: Props) {
             </ResponsiveDialog>
             <Tooltip title="Share with anyone who hasn't responded yet." placement='top'>
                 <Button variant='contained' startIcon={<ReplayIcon />} onClick={open}>
-                    Reshare Prompt Flow
+                    Reshare Survey
                 </Button>
             </Tooltip>
         </React.Fragment>

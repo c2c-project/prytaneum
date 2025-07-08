@@ -11,6 +11,7 @@ import { useEvent } from '@local/features/events';
 import { Prompt } from './LiveFeedbackPromptList';
 import { useSnack } from '@local/core';
 import { LoadingButton } from '@local/components/LoadingButton';
+import { GenerateViewpointsMutation } from '../../../../__generated__/GenerateViewpointsMutation.graphql';
 
 export const GENERATE_VIEWPOINTS_MUTATION = graphql`
     mutation GenerateViewpointsMutation($input: GenerateViewpointsInput!) {
@@ -32,14 +33,22 @@ export const GENERATE_VIEWPOINTS_MUTATION = graphql`
 interface Props {
     promptId: string;
     setSelectedPrompt: React.Dispatch<React.SetStateAction<Prompt | null>>;
+    updateViewpoints?: (viewpoints: string[], voteViewpoints: Record<string, string[]>) => void;
+    generateOnLoad?: boolean; // Optional prop to trigger generation on load
 }
 
-export default function GenerateViewpoints({ promptId, setSelectedPrompt }: Props) {
+export default function GenerateViewpoints({
+    promptId,
+    setSelectedPrompt,
+    updateViewpoints,
+    generateOnLoad = false,
+}: Props) {
     const [isOpen, open, close] = useResponsiveDialog();
-    const [commit] = useMutation(GENERATE_VIEWPOINTS_MUTATION);
+    const [commit] = useMutation<GenerateViewpointsMutation>(GENERATE_VIEWPOINTS_MUTATION);
     const { eventId } = useEvent();
     const { displaySnack } = useSnack();
     const [checked, setChecked] = React.useState(false);
+
     const [isLoading, setIsLoading] = React.useState(false);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,8 +65,14 @@ export default function GenerateViewpoints({ promptId, setSelectedPrompt }: Prop
                     isForcedRegenerate: checked,
                 },
             },
-            onCompleted: () => {
-                displaySnack('Successfully generated viewpoints.', { variant: 'success' });
+            onCompleted: ({ generateViewpoints }, errors) => {
+                if (generateViewpoints.isError) {
+                    displaySnack(`Error generating viewpoints: ${generateViewpoints.message}`, { variant: 'error' });
+                } else if (errors) {
+                    displaySnack(`Error generating viewpoints: ${errors[0].message}`, { variant: 'error' });
+                } else {
+                    if (!generateOnLoad) displaySnack('Successfully generated viewpoints.', { variant: 'success' });
+                }
                 setIsLoading(false);
                 close();
             },
@@ -76,16 +91,16 @@ export default function GenerateViewpoints({ promptId, setSelectedPrompt }: Prop
                     const promptRecord = store.get(promptId);
                     if (!promptRecord) throw new Error('No prompt found in store');
 
-                    promptRecord.setValue(viewpoints, 'viewpoints');
+                    promptRecord.setValue(viewpoints as string[], 'viewpoints');
                     setSelectedPrompt((prev) => {
                         if (!prev) return prev;
                         return { ...prev, viewpoints: viewpoints as string[], voteViewpoints };
                     });
+                    if (updateViewpoints) {
+                        updateViewpoints(viewpoints as string[], voteViewpoints);
+                    }
                 } catch (error) {
                     console.error(error);
-                    let errorMessage = 'Error generating viewpoints';
-                    if (error instanceof Error) errorMessage += `: ${error.message}`;
-                    displaySnack(errorMessage, { variant: 'error' });
                     setIsLoading(false);
                 }
             },
@@ -96,6 +111,13 @@ export default function GenerateViewpoints({ promptId, setSelectedPrompt }: Prop
             },
         });
     };
+
+    React.useEffect(() => {
+        if (generateOnLoad) {
+            handleSubmit();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <React.Fragment>
