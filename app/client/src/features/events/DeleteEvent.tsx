@@ -101,7 +101,7 @@ export const DeleteEvent = ({ fragmentRef }: DeleteEventProps) => {
                     <b>This action is irreversible.</b> Please enter <b>{eventTitle}</b> below twice to confirm.
                 </Typography>
             </Grid>
-            <Form styles={{ margin: theme.spacing(1, 0) }} onSubmit={handleSubmit}>
+            <Form styles={{ margin: '1rem' }} onSubmit={handleSubmit}>
                 <FormContent>
                     <TextField
                         inputProps={{ 'aria-label': `Enter ${eventTitle} to delete event` }}

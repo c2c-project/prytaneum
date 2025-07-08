@@ -13,6 +13,7 @@ import {
     Stack,
     Tooltip,
     Button,
+    Divider,
 } from '@mui/material';
 import DescriptionIcon from '@mui/icons-material/Description';
 import { OpenInNew as OpenInNewIcon } from '@mui/icons-material';
@@ -130,19 +131,21 @@ function FlowItem({ flow, handleClick }: FlowItemProps) {
 
     return (
         <Card sx={{ margin: '0.25rem' }}>
-            <CardHeader
-                title={
-                    <IconButton disabled={true}>
-                        <DescriptionIcon />
-                        <Typography>{flow.flowName}</Typography>
-                    </IconButton>
-                }
-            />
+            {flow.isDraft ? (
+                <CardHeader
+                    title={
+                        <IconButton disabled={true}>
+                            <DescriptionIcon />
+                            <Typography>Draft</Typography>
+                        </IconButton>
+                    }
+                />
+            ) : null}
             <CardContent>
                 <Grid container direction='row' alignItems='center' justifyContent='space-around'>
                     <Grid item>
                         <Typography variant='inherit' sx={{ wordBreak: 'break-word' }}>
-                            {flow.flowDescription}
+                            {flow.flowName}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -349,10 +352,12 @@ export function LiveFeedbackPromptsList({ fragmentRef, flowsFragmentRef }: LiveF
     }, []);
 
     return (
-        <Grid container direction='column' alignItems='center'>
-            <SubmitLiveFeedbackPrompt connections={connections} selectedTab={selectedTab} />
-            <SubmitLiveFeedbackFlow />
-            <Typography variant='h6'>Select view on a prompt to see its responses</Typography>
+        <Grid container direction='column' alignItems='center' height='100%' minHeight='100%'>
+            <Grid container direction='row' alignItems='center' justifyContent='center' sx={{ width: '100%', mb: 2 }}>
+                <SubmitLiveFeedbackPrompt connections={connections} selectedTab={selectedTab} />
+                <Divider orientation='vertical' flexItem sx={{ width: '1rem', marginRight: '1rem' }} />
+                <SubmitLiveFeedbackFlow />
+            </Grid>
             <PromptList
                 prompts={prompts}
                 flows={flows}
