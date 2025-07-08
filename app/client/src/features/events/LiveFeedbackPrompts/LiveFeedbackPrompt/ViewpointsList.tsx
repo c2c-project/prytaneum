@@ -1,6 +1,7 @@
 import { GeminiIcon } from '@local/components/icons';
 import { Chip, Divider, Typography } from '@mui/material';
 import React from 'react';
+import { SummarizedViewpoints } from './FeedbackFlowResponsesDialog';
 import { Prompt } from './LiveFeedbackPromptList';
 
 const StyledViewpoint = ({ viewpoint }: { viewpoint: string }) => {
@@ -22,10 +23,14 @@ const StyledViewpoint = ({ viewpoint }: { viewpoint: string }) => {
 interface ViewpointListProps {
     prompt: Prompt;
     vote: string;
+    summarizedViewpoints?: SummarizedViewpoints;
 }
 
-export default function ViewpointsList({ prompt, vote }: ViewpointListProps) {
-    const { viewpoints, voteViewpoints, isOpenEnded } = prompt;
+export default function ViewpointsList({ prompt, vote, summarizedViewpoints }: ViewpointListProps) {
+    const { viewpoints: promptViewpoints, voteViewpoints: promptVoteViewpoints, isOpenEnded } = prompt;
+
+    const viewpoints = summarizedViewpoints?.viewpoints || promptViewpoints;
+    const voteViewpoints = summarizedViewpoints?.voteViewpoints || promptVoteViewpoints;
 
     const viewpointsGenerated = React.useMemo(() => {
         // Check if viewpoints have been generated for the prompt responses

@@ -1,5 +1,14 @@
 import * as React from 'react';
-import { Typography, Grid, DialogContent, Accordion, AccordionSummary, AccordionDetails, Box } from '@mui/material';
+import {
+    Typography,
+    Grid,
+    DialogContent,
+    Accordion,
+    AccordionSummary,
+    AccordionDetails,
+    Box,
+    Stack,
+} from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -7,6 +16,14 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { StyledDialogTitle, StyledDialog } from '@local/components';
 import { PreloadedLiveFeedbackPromptResponseList } from '../LiveFeedbackPromptResponses/LiveFeedbackPromptResponseList';
 import type { Flow, Prompt as IndividualPromptType } from './LiveFeedbackPromptList';
+import GenerateViewpoints from './GenerateViewpoints';
+import ViewpointsList from './ViewpointsList';
+import { ShareFeedbackPromptResults } from '../LiveFeedbackPromptResponses';
+
+export type SummarizedViewpoints = {
+    viewpoints: string[];
+    voteViewpoints: Record<string, string[]>;
+};
 
 interface FeedbackFlowResponsesDialogProps {
     open: boolean;
@@ -22,11 +39,18 @@ export default function FeedbackFlowResponsesDialog({
     const theme = useTheme();
     const fullscreen = useMediaQuery(theme.breakpoints.down('md'));
     const [expandedAccordion, setExpandedAccordion] = React.useState<string | false>(false);
+    const [promptViewpoints, setPromptViewpoints] = React.useState<SummarizedViewpoints[]>(
+        selectedFlow?.prompts.map(({ prompt }) => ({
+            viewpoints: prompt.viewpoints ? [...prompt.viewpoints] : [],
+            voteViewpoints: prompt.voteViewpoints || {},
+        })) || []
+    );
 
     const handleAccordionChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
         setExpandedAccordion(isExpanded ? panel : false);
     };
 
+    // TODO: Add the number of respondents to the flow info
     const FlowInfo = React.useCallback(() => {
         if (!selectedFlow) return null;
         return (
@@ -39,9 +63,6 @@ export default function FeedbackFlowResponsesDialog({
                         {selectedFlow.flowDescription}
                     </Typography>
                 )}
-                <Typography variant='caption' display='block' color='textSecondary' sx={{ mt: 1 }}>
-                    Total Prompts: {selectedFlow.prompts.length}
-                </Typography>
             </Box>
         );
     }, [selectedFlow, theme.palette.divider]);
@@ -103,8 +124,36 @@ export default function FeedbackFlowResponsesDialog({
                                                 {individualPrompt.prompt}
                                             </Typography>
                                         </AccordionSummary>
-                                        <AccordionDetails sx={{ backgroundColor: theme.palette.action.hover }}>
-                                            <Box sx={{ maxHeight: '400px', overflowY: 'auto', p: 1 }}>
+                                        <AccordionDetails
+                                            sx={{ backgroundColor: theme.palette.action.hover, padding: 0 }}
+                                        >
+                                            <Grid container justifyContent='center'>
+                                                <Stack direction='row' spacing={2}>
+                                                    <GenerateViewpoints
+                                                        promptId={individualPrompt.id}
+                                                        setSelectedPrompt={() => {}}
+                                                        updateViewpoints={(viewpoints, voteViewpoints) => {
+                                                            setPromptViewpoints((prev) => {
+                                                                const updatedViewpoints = [...prev];
+                                                                updatedViewpoints[index] = {
+                                                                    viewpoints,
+                                                                    voteViewpoints,
+                                                                };
+                                                                return updatedViewpoints;
+                                                            });
+                                                        }}
+                                                    />
+                                                    <ShareFeedbackPromptResults prompt={individualPrompt} />
+                                                </Stack>
+                                            </Grid>
+                                            <Box sx={{ p: 1 }}>
+                                                <ViewpointsList
+                                                    prompt={individualPrompt}
+                                                    vote={'default'}
+                                                    summarizedViewpoints={promptViewpoints[index]}
+                                                />
+                                            </Box>
+                                            <Box sx={{ p: 1 }}>
                                                 <PreloadedLiveFeedbackPromptResponseList
                                                     prompt={individualPrompt}
                                                     vote={'default'}
