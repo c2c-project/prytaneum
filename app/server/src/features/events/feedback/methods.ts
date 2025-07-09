@@ -93,6 +93,7 @@ async function generateViewpoints({ promptId, issue, eventId, prisma, forceRegen
                 prompt_responses: responses,
                 issue_override: issue,
                 eventId,
+                force: forceRegenerate,
             },
             {
                 headers: { 'Content-Type': 'application/json' },
@@ -112,6 +113,50 @@ async function generateViewpoints({ promptId, issue, eventId, prisma, forceRegen
     return viewpoints;
 }
 
+async function getViewpointsForVote(
+    vote: string,
+    { promptId, issue, eventId, prisma, forceRegenerate }: TGenerateViewpointsArgs
+): Promise<{ vote: string; viewpoints: string[] }> {
+    const dbResponses = await prisma.eventLiveFeedbackPromptResponse.findMany({
+        where: { promptId, vote: vote as Vote },
+    });
+
+    const responses = dbResponses.map((response) => response.response);
+    if (responses.length === 0) {
+        return { vote, viewpoints: [] };
+    }
+
+    if (!forceRegenerate) {
+        const cachedViewpoints = await checkViewpointsCache(promptId, responses);
+        if (cachedViewpoints) {
+            return { vote, viewpoints: cachedViewpoints };
+        }
+    }
+
+    try {
+        const url = (process.env.MODERATION_URL || '') + 'promptsummary';
+        const response: AxiosResponse<string[]> = await axios.post(
+            url,
+            {
+                prompt_responses: responses,
+                issue_override: issue,
+                eventId,
+                force: forceRegenerate,
+            },
+            {
+                headers: { 'Content-Type': 'application/json' },
+            }
+        );
+
+        const viewpoints = response?.data || [];
+        await cacheViewpoints(promptId, responses, viewpoints);
+        return { vote, viewpoints };
+    } catch (error) {
+        server.log.error(`Failed to summarize responses for vote ${vote}:`, error);
+        return { vote, viewpoints: [] };
+    }
+}
+
 async function generateViewpointsByVote({
     promptId,
     issue,
@@ -119,47 +164,59 @@ async function generateViewpointsByVote({
     prisma,
     forceRegenerate,
 }: TGenerateViewpointsArgs) {
-    const viewpointsByVote: Record<string, string[]> = { FOR: [], AGAINST: [], CONFLICTED: [] };
     const votes = ['FOR', 'AGAINST', 'CONFLICTED'];
-    for (const vote of votes) {
-        const _responses = await prisma.eventLiveFeedbackPromptResponse.findMany({
-            where: { promptId, vote: vote as Vote },
-        });
+    const viewpointPromises = votes.map((vote) =>
+        getViewpointsForVote(vote, { promptId, issue, eventId, prisma, forceRegenerate })
+    );
 
-        const responses = _responses.map((response) => response.response);
-        if (responses.length === 0) continue;
+    const settledViewpoints = await Promise.all(viewpointPromises);
 
-        if (!forceRegenerate) {
-            const cachedViewpoints = await checkViewpointsCache(promptId, responses);
-            if (cachedViewpoints) {
-                viewpointsByVote[vote] = cachedViewpoints;
-                continue;
+    const viewpointsByVote = settledViewpoints.reduce((acc, { vote, viewpoints }) => {
+        acc[vote] = viewpoints;
+        return acc;
+    }, {} as Record<string, string[]>);
+
+    return viewpointsByVote;
+}
+
+async function getViewpointsForMultipleChoice(
+    choice: string,
+    { promptId, issue, eventId, prisma, forceRegenerate }: TGenerateViewpointsArgs
+): Promise<string[]> {
+    const dbResponses = await prisma.eventLiveFeedbackPromptResponse.findMany({
+        where: { promptId, multipleChoiceResponse: choice },
+    });
+
+    const responses = dbResponses.map((response) => response.response);
+    if (responses.length === 0) return [];
+
+    if (!forceRegenerate) {
+        const cachedViewpoints = await checkViewpointsCache(promptId, responses);
+        if (cachedViewpoints) return cachedViewpoints;
+    }
+
+    try {
+        const url = process.env.MODERATION_URL + 'promptsummary';
+        const response: AxiosResponse<string[]> = await axios.post(
+            url,
+            {
+                prompt_responses: responses,
+                issue_override: issue,
+                eventId,
+                force: forceRegenerate,
+            },
+            {
+                headers: { 'Content-Type': 'application/json' },
             }
-        }
+        );
 
-        let response: AxiosResponse<string[]> | null = null;
-        try {
-            const url = process.env.MODERATION_URL + 'promptsummary';
-            response = await axios.post(
-                url,
-                {
-                    prompt_responses: responses,
-                    issue_override: issue,
-                    eventId,
-                },
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                }
-            );
-            if (!response) throw new Error('Could not summarize responses, No response from moderation service.');
-        } catch (error) {
-            server.log.error(error);
-        }
         const viewpoints = response?.data || [];
         await cacheViewpoints(promptId, responses, viewpoints);
-        viewpointsByVote[vote] = viewpoints;
+        return viewpoints;
+    } catch (error) {
+        server.log.error(`Failed to summarize responses for choice ${choice}:`, error);
+        return [];
     }
-    return viewpointsByVote;
 }
 
 interface TGenerateViewpointsByMultipleChoiceArgs extends TGenerateViewpointsArgs {
@@ -174,45 +231,17 @@ async function generateViewpointsByMultipleChoice({
     prisma,
     forceRegenerate,
 }: TGenerateViewpointsByMultipleChoiceArgs) {
-    const viewpointsByChoice: Record<string, string[]> = {};
-    for (const choice of choices) {
-        const _responses = await prisma.eventLiveFeedbackPromptResponse.findMany({
-            where: { promptId, multipleChoiceResponse: choice },
-        });
+    const viewpointPromises = choices.map((choice) =>
+        getViewpointsForMultipleChoice(choice, { promptId, issue, eventId, prisma, forceRegenerate })
+    );
 
-        const responses = _responses.map((response) => response.response);
-        if (responses.length === 0) continue;
+    const settledViewpoints = await Promise.all(viewpointPromises);
 
-        if (!forceRegenerate) {
-            const cachedViewpoints = await checkViewpointsCache(promptId, responses);
-            if (cachedViewpoints) {
-                viewpointsByChoice[choice] = cachedViewpoints;
-                continue;
-            }
-        }
+    const viewpointsByChoice = settledViewpoints.reduce((acc, viewpoints, index) => {
+        acc[choices[index]] = viewpoints;
+        return acc;
+    }, {} as Record<string, string[]>);
 
-        let response: AxiosResponse<string[]> | null = null;
-        try {
-            const url = process.env.MODERATION_URL + 'promptsummary';
-            response = await axios.post(
-                url,
-                {
-                    prompt_responses: responses,
-                    issue_override: issue,
-                    eventId,
-                },
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                }
-            );
-            if (!response) throw new Error('Could not summarize responses, No response from moderation service.');
-        } catch (error) {
-            server.log.error(error);
-        }
-        const viewpoints = response?.data || [];
-        await cacheViewpoints(promptId, responses, viewpoints);
-        viewpointsByChoice[choice] = viewpoints;
-    }
     return viewpointsByChoice;
 }
 
@@ -229,6 +258,7 @@ export async function summarizePromptResponses({
     prisma,
     forceRegenerate = false,
 }: TSummarizePromptResponsesArgs) {
+    const startTime = performance.now();
     const event = await prisma.event.findUnique({ where: { id: eventId }, select: { issue: true } });
     if (!event) {
         throw new ProtectedError({ userMessage: 'Event not found' });
@@ -270,6 +300,9 @@ export async function summarizePromptResponses({
 
     // Default to open-ended prompt
     const viewpoints = await generateViewpoints({ promptId, issue, eventId, prisma, forceRegenerate });
+
+    const endTime = performance.now();
+    server.log.debug(`Viewpoints generated for prompt ${promptId} in ${(endTime - startTime).toFixed(3)} ms`);
 
     return prisma.eventLiveFeedbackPrompt.update({
         where: { id: promptId },

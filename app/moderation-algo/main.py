@@ -15,8 +15,25 @@ from redis.cluster import RedisCluster, ClusterNode
 import redis
 import json
 import os
+import time
+from functools import wraps
+
 
 app = Flask(__name__)
+
+def log_timing(func):
+    """
+    A decorator that logs the execution time of a function.
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start_time = time.perf_counter()
+        result = func(*args, **kwargs)
+        end_time = time.perf_counter()
+        execution_time = end_time - start_time
+        LogEventConsole(f"Function '{func.__name__}' executed in {execution_time:.4f} seconds", 'DEBUG')
+        return result
+    return wrapper
 
 def ProcessQuestion(issue: str, topics: dict, question: str) -> dict:
     """Process a question through the algorithm and return the results from each stage as a dict.
@@ -83,6 +100,7 @@ def PrintRedisConnectionStatus():
         LogEventConsole('Connection to redis failed.', 'ERROR')
 
 @app.route('/', methods=['POST'])
+@log_timing
 def HandleUserInput():
     # Check if the request contains JSON data
     if request.is_json:
@@ -279,6 +297,7 @@ def HandleUserInput():
         return jsonify({'ERROR': 'Request must be in JSON format'}), 415 # HTTP unsupported media type
 
 @app.route('/promptsummary', methods=['POST'])
+@log_timing
 def PromptSummarization():
     # Check if the request contains JSON data
     if request.is_json:
@@ -330,6 +349,7 @@ def PromptSummarization():
         return jsonify(viewpoints), 200 # HTTP success
 
 @app.route('/stakeholders', methods=['POST'])
+@log_timing
 def StakeholderExtraction():
     # Check if the request contains JSON data
     if request.is_json:
