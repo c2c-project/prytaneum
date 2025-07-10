@@ -13,6 +13,7 @@ import {
     MenuItem,
     SelectChangeEvent,
     List,
+    Box,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
@@ -35,6 +36,7 @@ import { useQuestionDequeued } from './hooks/useQuestionDequeued';
 import { useQuestionEnqueued } from './hooks/useQuestionEnqueued';
 import { useQuestionCreatedByTopic } from './hooks/useQuestionCreatedByTopic';
 import { useQuestionDeletedByTopic } from './hooks/useQuestionDeletedByTopic';
+import { getHashedColor, darkenHslColor } from '@local/core/getHashedColor';
 
 interface Props {
     fragmentRef: useQuestionsByTopicFragment$key;
@@ -230,8 +232,38 @@ export function QuestionListContainer({
                             >
                                 <MenuItem value='default'>Default</MenuItem>
                                 {topics.map((_topic) => (
-                                    <MenuItem key={_topic.id} value={_topic.topic}>
-                                        {_topic.topic}
+                                    <MenuItem
+                                        key={_topic.id}
+                                        value={_topic.topic}
+                                        sx={{
+                                            '&.Mui-selected': {
+                                                backgroundColor: getHashedColor(_topic.topic),
+                                                color: theme.palette.common.white,
+                                                '&:hover': {
+                                                    backgroundColor: darkenHslColor(getHashedColor(_topic.topic)),
+                                                    color: theme.palette.common.white,
+                                                },
+                                            },
+                                        }}
+                                    >
+                                        <Box
+                                            sx={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                direction: 'row',
+                                            }}
+                                        >
+                                            <Box
+                                                sx={{
+                                                    width: '1rem',
+                                                    height: '1rem',
+                                                    backgroundColor: getHashedColor(_topic.topic),
+                                                    borderRadius: '50%',
+                                                    marginRight: '0.5rem',
+                                                }}
+                                            />
+                                            {_topic.topic}
+                                        </Box>
                                     </MenuItem>
                                 ))}
                             </Select>

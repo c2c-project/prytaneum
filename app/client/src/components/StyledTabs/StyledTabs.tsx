@@ -8,21 +8,24 @@ interface StyledTabsProps {
     children: React.ReactNode;
     props?: TabsProps;
     value: any;
+    color?: string;
+    darkColor?: string;
+    alphaValue?: number;
 }
 
-export const StyledTabs = ({ children, props, value }: StyledTabsProps) => {
+export const StyledTabs = ({ children, props, value, color, darkColor, alphaValue }: StyledTabsProps) => {
     const theme = useTheme();
 
     return (
         <Tabs
             sx={{
-                '& .MuiTabs-indicator': { backgroundColor: 'custom.creamCan' },
+                '& .MuiTabs-indicator': { backgroundColor: color || 'custom.creamCan' },
                 '& .MuiTab-root': {
                     color: 'white',
-                    backgroundColor: alpha(theme.palette.custom.darkCreamCan, 0.25),
+                    backgroundColor: alpha(darkColor || theme.palette.custom.darkCreamCan, alphaValue || 0.25),
                     borderRadius: '20px 20px 0 0',
                 },
-                '& .Mui-selected': { color: 'white !important', backgroundColor: 'custom.creamCan' },
+                '& .Mui-selected': { color: 'white !important', backgroundColor: color || 'custom.creamCan' },
             }}
             value={value}
             centered

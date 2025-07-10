@@ -19,6 +19,7 @@ import { QuestionListSkeleton } from '@local/components/QuestionListSkeleton/Que
 import { VerticalPanelResizeHandle } from '@local/components/PanelHandle';
 import EventQuestion from './EventQuestion';
 import { useDndLists } from './hooks/useDndLists';
+import { getHashedColor } from '@local/core/getHashedColor';
 
 interface QuestionModerationPanelsProps {
     node: Node;
@@ -50,6 +51,16 @@ export function QuestionModerationPanels({ node, topics }: QuestionModerationPan
         sessionStorage.setItem(`${node.id}-topic`, event.target.value);
     }
 
+    const isTopicSelected = React.useMemo(() => {
+        return topic !== 'default' && topic !== '';
+    }, [topic]);
+
+    const questionQueueLabel = React.useMemo(() => {
+        return isTopicSelected ? 'Topic Workspace' : 'Question Queue';
+    }, [isTopicSelected]);
+
+    const topicColor = getHashedColor(topic);
+
     if (!topics) return <Loader />;
 
     return (
@@ -75,7 +86,7 @@ export function QuestionModerationPanels({ node, topics }: QuestionModerationPan
                 <PanelGroup autoSaveId='question-mod-panels' direction='horizontal'>
                     <Panel defaultSize={33} minSize={25} maxSize={50}>
                         <Stack direction='column' alignItems='center' height='100%' width='100%'>
-                            <StyledTabs value='Question List'>
+                            <StyledTabs value='Question List' color={isTopicSelected ? topicColor : undefined}>
                                 <Tab label='Question List' value='Question List' />
                             </StyledTabs>
                             <StyledColumnGrid
@@ -88,6 +99,8 @@ export function QuestionModerationPanels({ node, topics }: QuestionModerationPan
                                     padding: 0,
                                 }}
                                 scrollable={false}
+                                color={isTopicSelected ? topicColor : theme.palette.custom.creamCan}
+                                alphaValue={isTopicSelected ? 0.25 : 0.15}
                             >
                                 <React.Suspense fallback={<QuestionListSkeleton xlUpBreakpoint={xlUpBreakpoint} />}>
                                     <QuestionListContainer
@@ -105,14 +118,16 @@ export function QuestionModerationPanels({ node, topics }: QuestionModerationPan
                     <VerticalPanelResizeHandle
                         alternateIcon={
                             <Tooltip title='These lists are linked, changing the topic updates both the question list and queue!'>
-                                <LinkIcon sx={{ color: theme.palette.custom.darkCreamCan }} />
+                                <LinkIcon
+                                    sx={{ color: isTopicSelected ? topicColor : theme.palette.custom.creamCan }}
+                                />
                             </Tooltip>
                         }
                     />
                     <Panel defaultSize={33} minSize={25} maxSize={50}>
                         <Stack direction='column' alignItems='center' height='100%' width='100%'>
-                            <StyledTabs value='Question Queue'>
-                                <Tab label='Question Queue' value='Question Queue' />
+                            <StyledTabs value={questionQueueLabel} color={isTopicSelected ? topicColor : undefined}>
+                                <Tab label={questionQueueLabel} value={questionQueueLabel} />
                             </StyledTabs>
                             <StyledColumnGrid
                                 props={{
@@ -124,6 +139,8 @@ export function QuestionModerationPanels({ node, topics }: QuestionModerationPan
                                     padding: 0,
                                 }}
                                 scrollable={true}
+                                color={isTopicSelected ? topicColor : theme.palette.custom.creamCan}
+                                alphaValue={isTopicSelected ? 0.25 : 0.15}
                             >
                                 <React.Suspense fallback={<Loader />}>
                                     <QuestionQueueContainer
@@ -160,6 +177,7 @@ export function QuestionModerationPanels({ node, topics }: QuestionModerationPan
                                         questions={onDeckQuestions}
                                         questionRecord={questionRecord}
                                         connections={connections}
+                                        topic={topic}
                                     />
                                 </React.Suspense>
                             </StyledColumnGrid>

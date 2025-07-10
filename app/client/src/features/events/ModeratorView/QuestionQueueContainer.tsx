@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Typography, Stack, Grid } from '@mui/material';
+import { Typography, Stack, Grid, Divider } from '@mui/material';
 import { Question } from './types';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { UniqueIdentifier, useDroppable } from '@dnd-kit/core';
@@ -23,11 +23,12 @@ export function QuestionQueueContainer({ id, questions, topic }: Props) {
         <Stack direction='column' maxHeight={0} width='100%'>
             <Grid sx={{ textAlign: 'center' }}>
                 {topicSelected && (
-                    <Typography variant='h5' marginTop='1rem'>
+                    <Typography variant='h5' marginTop='1rem' fontWeight='bold'>
                         Topic: {topic}
                     </Typography>
                 )}
             </Grid>
+            {topicSelected && <Divider sx={{ marginTop: '0.5rem' }} />}
             {questions.length === 0 && (
                 <Grid container justifyContent='center' padding='1rem'>
                     <Typography align='center' variant='body1' marginTop='1rem'>
@@ -44,8 +45,9 @@ export function QuestionQueueContainer({ id, questions, topic }: Props) {
                 }}
             >
                 {questions.length > 0 && (
-                    <Typography variant='caption'>
-                        Drag and drop questions to re-order queue or add to on deck
+                    <Typography variant='caption' fontWeight={'bold'} color='textPrimary'>
+                        Drag and drop questions to re-order {topicSelected ? 'topic workspace' : 'queue'} or add to on
+                        deck
                     </Typography>
                 )}
             </Grid>
