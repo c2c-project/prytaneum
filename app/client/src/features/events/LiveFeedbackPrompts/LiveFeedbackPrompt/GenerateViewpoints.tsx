@@ -119,6 +119,8 @@ export default function GenerateViewpoints({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const gradient = 'linear-gradient(to right bottom, #9c27b0, #2979ff)';
+
     return (
         <React.Fragment>
             <ResponsiveDialog open={isOpen} onClose={close} title='Generate Viewpoints'>
@@ -149,7 +151,12 @@ export default function GenerateViewpoints({
                                 Cancel
                             </Button>
                             <div style={{ width: '0.5rem' }} />
-                            <LoadingButton loading={isLoading} variant='contained' onClick={handleSubmit}>
+                            <LoadingButton
+                                loading={isLoading}
+                                variant='contained'
+                                onClick={handleSubmit}
+                                sx={{ backgroundImage: gradient }}
+                            >
                                 Generate
                             </LoadingButton>
                         </Grid>
@@ -157,7 +164,13 @@ export default function GenerateViewpoints({
                 </DialogContent>
             </ResponsiveDialog>
             <Grid item paddingBottom='1rem'>
-                <Button variant='contained' startIcon={<AutoAwesomeIcon />} color='primary' onClick={open}>
+                <Button
+                    variant='contained'
+                    startIcon={<AutoAwesomeIcon />}
+                    color='primary'
+                    onClick={open}
+                    sx={{ backgroundImage: gradient }}
+                >
                     Generate Viewpoints
                 </Button>
             </Grid>
