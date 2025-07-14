@@ -82,6 +82,9 @@ def RegenerateTopicsDescriptions(reading_materials: str, lockedTopics: set, forc
     
     # Convert the response to python dict and return
     try:
+        startIndex = response.find('{')
+        endIndex = response.rfind('}')
+        response = response[startIndex:endIndex+1]
         allTopicsDesc = json.loads(response)
     # If no topics were found, return an empty list
     except:
