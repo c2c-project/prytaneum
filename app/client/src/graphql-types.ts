@@ -982,12 +982,14 @@ export type MutationAddQuestionToTopicQueueArgs = {
 export type MutationAddTopicArgs = {
   description: Scalars['String'];
   eventId: Scalars['String'];
+  manual: Scalars['Boolean'];
   topic: Scalars['String'];
 };
 
 
 export type MutationAddTopicsArgs = {
   eventId: Scalars['String'];
+  manual: Scalars['Boolean'];
   topics: Array<Scalars['String']>;
 };
 
@@ -1225,6 +1227,7 @@ export type MutationRemoveQuestionFromTopicQueueArgs = {
 
 export type MutationRemoveTopicArgs = {
   eventId: Scalars['String'];
+  manual: Scalars['Boolean'];
   topic: Scalars['String'];
 };
 
@@ -1364,6 +1367,7 @@ export type MutationUpdateSpeakerArgs = {
 export type MutationUpdateTopicArgs = {
   description: Scalars['String'];
   eventId: Scalars['String'];
+  manual: Scalars['Boolean'];
   newTopic: Scalars['String'];
   oldTopic: Scalars['String'];
 };

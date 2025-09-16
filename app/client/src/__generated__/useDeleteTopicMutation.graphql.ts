@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<38452931214adc68ed4922187ec59d66>>
+ * @generated SignedSource<<aa35bd1a7cf97ddb2496cfa451da20db>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,6 +11,7 @@
 import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type useDeleteTopicMutation$variables = {
   eventId: string;
+  manual: boolean;
   topic: string;
 };
 export type useDeleteTopicMutation$data = {
@@ -25,19 +26,22 @@ export type useDeleteTopicMutation = {
 };
 
 const node: ConcreteRequest = (function(){
-var v0 = [
-  {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "eventId"
-  },
-  {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "topic"
-  }
-],
-v1 = [
+var v0 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "eventId"
+},
+v1 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "manual"
+},
+v2 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "topic"
+},
+v3 = [
   {
     "alias": null,
     "args": [
@@ -45,6 +49,11 @@ v1 = [
         "kind": "Variable",
         "name": "eventId",
         "variableName": "eventId"
+      },
+      {
+        "kind": "Variable",
+        "name": "manual",
+        "variableName": "manual"
       },
       {
         "kind": "Variable",
@@ -77,32 +86,40 @@ v1 = [
 ];
 return {
   "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v0/*: any*/),
+      (v1/*: any*/),
+      (v2/*: any*/)
+    ],
     "kind": "Fragment",
     "metadata": null,
     "name": "useDeleteTopicMutation",
-    "selections": (v1/*: any*/),
+    "selections": (v3/*: any*/),
     "type": "Mutation",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v0/*: any*/),
+      (v2/*: any*/),
+      (v1/*: any*/)
+    ],
     "kind": "Operation",
     "name": "useDeleteTopicMutation",
-    "selections": (v1/*: any*/)
+    "selections": (v3/*: any*/)
   },
   "params": {
-    "cacheID": "62e06c6be88472111617045b5a833014",
+    "cacheID": "c146a9154934c8eefcfc74a061cb48ff",
     "id": null,
     "metadata": {},
     "name": "useDeleteTopicMutation",
     "operationKind": "mutation",
-    "text": "mutation useDeleteTopicMutation(\n  $eventId: String!\n  $topic: String!\n) {\n  removeTopic(eventId: $eventId, topic: $topic) {\n    isError\n    message\n  }\n}\n"
+    "text": "mutation useDeleteTopicMutation(\n  $eventId: String!\n  $topic: String!\n  $manual: Boolean!\n) {\n  removeTopic(eventId: $eventId, topic: $topic, manual: $manual) {\n    isError\n    message\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "f7c8620387daa1dd762684b7d408392e";
+(node as any).hash = "4440aa0ff848af92976ec3916046cd04";
 
 export default node;

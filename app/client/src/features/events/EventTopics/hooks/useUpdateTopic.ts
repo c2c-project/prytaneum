@@ -7,8 +7,20 @@ import { useUpdateTopicMutation } from '@local/__generated__/useUpdateTopicMutat
 import { Topic } from '../types';
 
 const USE_UPDATE_TOPIC = graphql`
-    mutation useUpdateTopicMutation($eventId: String!, $oldTopic: String!, $newTopic: String!, $description: String!) {
-        updateTopic(eventId: $eventId, oldTopic: $oldTopic, newTopic: $newTopic, description: $description) {
+    mutation useUpdateTopicMutation(
+        $eventId: String!
+        $oldTopic: String!
+        $newTopic: String!
+        $description: String!
+        $manual: Boolean!
+    ) {
+        updateTopic(
+            eventId: $eventId
+            oldTopic: $oldTopic
+            newTopic: $newTopic
+            description: $description
+            manual: $manual
+        ) {
             body {
                 topic
                 description
@@ -24,13 +36,20 @@ export function useUpdateTopic() {
     const { displaySnack } = useSnack();
     const [commit] = useMutation<useUpdateTopicMutation>(USE_UPDATE_TOPIC);
 
-    const updateTopic = (oldTopic: Topic, newTopic: Topic, onSuccess: () => void, onFailure?: () => void) => {
+    const updateTopic = (
+        oldTopic: Topic,
+        newTopic: Topic,
+        onSuccess: () => void,
+        onFailure?: () => void,
+        manual?: boolean
+    ) => {
         commit({
             variables: {
                 eventId,
                 oldTopic: oldTopic.topic,
                 newTopic: newTopic.topic,
                 description: newTopic.description,
+                manual: !!manual,
             },
             onCompleted: (response) => {
                 try {
