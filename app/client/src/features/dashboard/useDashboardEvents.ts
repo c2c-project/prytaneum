@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { graphql, useRefetchableFragment } from 'react-relay';
-import { isAfter, isBefore } from 'date-fns';
 
 import type { useDashboardEventsFragment$key } from '@local/__generated__/useDashboardEventsFragment.graphql';
 import type { DashboardEventsRefreshQuery } from '@local/__generated__/DashboardEventsRefreshQuery.graphql';
@@ -67,17 +66,17 @@ export function useDashboardEvents({ fragmentRef }: TArgs) {
     const currentEvents = React.useMemo(() => {
         return eventList.filter(({ node: event }) => {
             if (!event.startDateTime || !event.endDateTime) return Boolean(event.isActive);
-            return (
-                Boolean(event.isActive) ||
-                (isBefore(new Date(event.startDateTime), now) && isAfter(new Date(event.endDateTime), now))
-            );
+            const startDate = new Date(event.startDateTime);
+            const endDate = new Date(event.endDateTime);
+            return Boolean(event.isActive) || (startDate < now && endDate > now);
         });
     }, [eventList, now]);
 
     const upcomingEvents = React.useMemo(() => {
         return eventList.filter(({ node: event }) => {
             if (!event.startDateTime) return false;
-            return isAfter(new Date(event.startDateTime), now);
+            const startDate = new Date(event.startDateTime);
+            return startDate > now;
         });
     }, [eventList, now]);
 
