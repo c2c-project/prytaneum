@@ -28,25 +28,32 @@ export const resolvers: Resolvers = {
         },
         async addTopic(parent, args, ctx, info) {
             return runMutation(async () => {
-                const { eventId, topic, description } = args;
+                const { eventId, topic, description, manual } = args;
                 const { id: globalEventId } = fromGlobalId(eventId);
-                await Topics.addTopic(globalEventId, topic, description);
+                await Topics.addTopic({ eventId: globalEventId, topic, description, manual, prisma: ctx.prisma });
                 return { topic, description };
             });
         },
         async updateTopic(parent, args, ctx, info) {
             return runMutation(async () => {
-                const { eventId, oldTopic, newTopic, description } = args;
+                const { eventId, oldTopic, newTopic, description, manual } = args;
                 const { id: globalEventId } = fromGlobalId(eventId);
-                await Topics.updateTopic({ eventId: globalEventId, oldTopic, newTopic, description });
+                await Topics.updateTopic({
+                    eventId: globalEventId,
+                    oldTopic,
+                    newTopic,
+                    description,
+                    manual,
+                    prisma: ctx.prisma,
+                });
                 return { topic: newTopic, description };
             });
         },
         async removeTopic(parent, args, ctx, info) {
             return runMutation(async () => {
-                const { eventId, topic } = args;
+                const { eventId, topic, manual } = args;
                 const { id: globalEventId } = fromGlobalId(eventId);
-                await Topics.deleteTopic(globalEventId, topic);
+                await Topics.deleteTopic({ eventId: globalEventId, topic, manual, prisma: ctx.prisma });
                 return { topic };
             });
         },
