@@ -732,8 +732,8 @@ type Mutation {
   addQuestionToTopicQueue(input: AddQuestionToTopicQueue!): EventQuestionMutationResponse!
 
   """Update topics"""
-  addTopic(description: String!, eventId: String!, topic: String!): TopicMutationResponse
-  addTopics(eventId: String!, topics: [String!]!): TopicMutationResponse
+  addTopic(description: String!, eventId: String!, manual: Boolean!, topic: String!): TopicMutationResponse
+  addTopics(eventId: String!, manual: Boolean!, topics: [String!]!): TopicMutationResponse
   alterLike(input: AlterLike!): EventQuestionMutationResponse!
   createBroadcastMessage(input: CreateBroadcastMessage!): EventBroadcastMessageMutationResponse!
   createEvent(event: CreateEvent!): EventMutationResponse!
@@ -811,7 +811,7 @@ type Mutation {
   removeQuestionFromOnDeck(input: RemoveQuestionFromOnDeck!): EventQuestionMutationResponse!
   removeQuestionFromQueue(input: RemoveQuestionFromQueue!): EventQuestionMutationResponse!
   removeQuestionFromTopicQueue(input: RemoveQuestionFromTopicQueue!): EventQuestionMutationResponse!
-  removeTopic(eventId: String!, topic: String!): TopicRemoveMutationResponse
+  removeTopic(eventId: String!, manual: Boolean!, topic: String!): TopicRemoveMutationResponse
   removeTopics(eventId: String!, topics: [String!]!): TopicsRemoveMutationResponse
   resetPassword(input: ResetPasswordForm!): ResetPasswordMutationResponse!
 
@@ -846,7 +846,7 @@ type Mutation {
   updatePreferedLanguage(language: String!): UserMutationResponse!
   updateQuestionPosition(input: UpdateQuestionPosition!): EventQuestionMutationResponse!
   updateSpeaker(input: UpdateSpeaker!): EventSpeakerMutationResponse!
-  updateTopic(description: String!, eventId: String!, newTopic: String!, oldTopic: String!): TopicMutationResponse
+  updateTopic(description: String!, eventId: String!, manual: Boolean!, newTopic: String!, oldTopic: String!): TopicMutationResponse
   updateTopicQueuePosition(input: UpdateTopicQueuePosition!): EventQuestionMutationResponse!
   updateUserName(input: UpdateUserNameForm!): UserMutationResponse!
   updateVideo(input: UpdateVideo!): EventVideoMutationResponse!

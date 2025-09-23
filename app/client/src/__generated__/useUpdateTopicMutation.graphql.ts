@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d18058879a3599045c49902ee2663213>>
+ * @generated SignedSource<<7206fe6b6ff110c705d42f1137d3d354>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,6 +12,7 @@ import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type useUpdateTopicMutation$variables = {
   description: string;
   eventId: string;
+  manual: boolean;
   newTopic: string;
   oldTopic: string;
 };
@@ -44,14 +45,19 @@ v1 = {
 v2 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "newTopic"
+  "name": "manual"
 },
 v3 = {
   "defaultValue": null,
   "kind": "LocalArgument",
+  "name": "newTopic"
+},
+v4 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
   "name": "oldTopic"
 },
-v4 = [
+v5 = [
   {
     "alias": null,
     "args": [
@@ -64,6 +70,11 @@ v4 = [
         "kind": "Variable",
         "name": "eventId",
         "variableName": "eventId"
+      },
+      {
+        "kind": "Variable",
+        "name": "manual",
+        "variableName": "manual"
       },
       {
         "kind": "Variable",
@@ -130,12 +141,13 @@ return {
       (v0/*: any*/),
       (v1/*: any*/),
       (v2/*: any*/),
-      (v3/*: any*/)
+      (v3/*: any*/),
+      (v4/*: any*/)
     ],
     "kind": "Fragment",
     "metadata": null,
     "name": "useUpdateTopicMutation",
-    "selections": (v4/*: any*/),
+    "selections": (v5/*: any*/),
     "type": "Mutation",
     "abstractKey": null
   },
@@ -143,25 +155,26 @@ return {
   "operation": {
     "argumentDefinitions": [
       (v1/*: any*/),
+      (v4/*: any*/),
       (v3/*: any*/),
-      (v2/*: any*/),
-      (v0/*: any*/)
+      (v0/*: any*/),
+      (v2/*: any*/)
     ],
     "kind": "Operation",
     "name": "useUpdateTopicMutation",
-    "selections": (v4/*: any*/)
+    "selections": (v5/*: any*/)
   },
   "params": {
-    "cacheID": "43ecb39503a40a048f484ea7f4546d7f",
+    "cacheID": "6459b91c972dad8b85e51c73df377af0",
     "id": null,
     "metadata": {},
     "name": "useUpdateTopicMutation",
     "operationKind": "mutation",
-    "text": "mutation useUpdateTopicMutation(\n  $eventId: String!\n  $oldTopic: String!\n  $newTopic: String!\n  $description: String!\n) {\n  updateTopic(eventId: $eventId, oldTopic: $oldTopic, newTopic: $newTopic, description: $description) {\n    body {\n      topic\n      description\n    }\n    isError\n    message\n  }\n}\n"
+    "text": "mutation useUpdateTopicMutation(\n  $eventId: String!\n  $oldTopic: String!\n  $newTopic: String!\n  $description: String!\n  $manual: Boolean!\n) {\n  updateTopic(eventId: $eventId, oldTopic: $oldTopic, newTopic: $newTopic, description: $description, manual: $manual) {\n    body {\n      topic\n      description\n    }\n    isError\n    message\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "c9a99cd898f2c0794983e7f794f357c8";
+(node as any).hash = "ce432c2da172ba23f89cae531a122110";
 
 export default node;

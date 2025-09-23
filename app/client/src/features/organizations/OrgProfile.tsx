@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material/styles';
 import { graphql, PreloadedQuery, usePreloadedQuery } from 'react-relay';
 
 import type { OrgProfileQuery } from '@local/__generated__/OrgProfileQuery.graphql';
-import { OrgEventList, OrgMemberList } from '@local/features/organizations';
+import { OrgEventList, OrgMemberList, CreateEventFab } from '@local/features/organizations';
 import { Loader } from '@local/components/Loader';
 import { useUser } from '../accounts';
 
@@ -64,6 +64,7 @@ export const OrgProfile = ({ queryRef }: Props) => {
                 <Typography variant='h5'>Members</Typography>
                 {node && <OrgMemberList fragmentRef={node} />}
             </Grid>
+            {node && <CreateEventFab fragmentRef={node} />}
         </Grid>
     );
 };

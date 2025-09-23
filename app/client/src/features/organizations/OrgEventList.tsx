@@ -13,7 +13,7 @@ interface OrgEventListProps {
     fragementRef: OrgEventListFragment$key;
 }
 
-const EVENT_FRAGEMENT = graphql`
+export const EVENT_FRAGMENT = graphql`
     fragment OrgEventListFragment on Organization {
         id
         events(first: $count, after: $cursor) @connection(key: "OrgEventListFragment_events") {
@@ -38,7 +38,7 @@ const EVENT_FRAGEMENT = graphql`
 `;
 
 export function OrgEventList({ fragementRef }: OrgEventListProps) {
-    const data = useFragment(EVENT_FRAGEMENT, fragementRef);
+    const data = useFragment(EVENT_FRAGMENT, fragementRef);
     const eventArr = React.useMemo(() => data.events?.edges || [], [data]);
     const router = useRouter();
     const handleNav = (path: string) => () => router.push(path);

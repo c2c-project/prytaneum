@@ -9,8 +9,8 @@ import { Topic } from '../types';
 import { TopicContext } from '../EventTopicSettings';
 
 const USE_ADD_TOPIC = graphql`
-    mutation useAddTopicMutation($eventId: String!, $topic: String!, $description: String!) {
-        addTopic(eventId: $eventId, topic: $topic, description: $description) {
+    mutation useAddTopicMutation($eventId: String!, $topic: String!, $description: String!, $manual: Boolean!) {
+        addTopic(eventId: $eventId, topic: $topic, description: $description, manual: $manual) {
             isError
             message
         }
@@ -23,14 +23,14 @@ export function useAddTopic() {
     const { displaySnack } = useSnack();
     const [commit] = useMutation<useAddTopicMutation>(USE_ADD_TOPIC);
 
-    const addTopic = (newTopic: Topic, onSuccess: () => void, onFailure?: () => void) => {
+    const addTopic = (newTopic: Topic, onSuccess: () => void, onFailure?: () => void, manual?: boolean) => {
         // Validate that the new topic is unique
         if (topics.find((topic) => topic.topic === newTopic.topic)) {
             displaySnack('Topic already exists, please ensure it is unique.', { variant: 'error' });
             return;
         }
         commit({
-            variables: { eventId, topic: newTopic.topic, description: newTopic.description },
+            variables: { eventId, topic: newTopic.topic, description: newTopic.description, manual: !!manual },
             onCompleted: (response) => {
                 try {
                     if (!response.addTopic) throw new Error('An error occurred while adding topic');

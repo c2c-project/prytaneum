@@ -25,10 +25,11 @@ interface Props {
     questions: Question[];
     questionRecord: Question[];
     connections: string[];
+    topic: string;
 }
 
 // TODO: Fix the workaround height issue
-export function OnDeckContainer({ id, questions, questionRecord, connections }: Props) {
+export function OnDeckContainer({ id, questions, questionRecord, connections, topic }: Props) {
     const { setNodeRef } = useDroppable({ id });
     const [onDeckSelection, setOnDeckSelection] = React.useState<'upcoming' | 'previous'>('upcoming');
 
@@ -40,6 +41,10 @@ export function OnDeckContainer({ id, questions, questionRecord, connections }: 
         () => (questionRecord.length > 0 ? questionRecord.slice(0, -1).reverse() : []), // removes current question from display in tab for previous questions
         [questionRecord]
     );
+
+    const isTopicSelected = React.useMemo(() => {
+        return topic !== 'default' && topic !== '';
+    }, [topic]);
 
     const OnDeckEmptyBox = () => {
         return (
@@ -65,7 +70,8 @@ export function OnDeckContainer({ id, questions, questionRecord, connections }: 
                     }}
                 >
                     <Typography align='center' variant='body1' marginTop='1rem'>
-                        Drag and drop questions from the question queue to here to start the On Deck Queue.
+                        Drag and drop questions from the {isTopicSelected ? 'Topic Workspace' : 'Question Queue'} to
+                        here to start the On Deck Queue.
                     </Typography>
                 </Box>
             </Grid>
@@ -122,9 +128,11 @@ export function OnDeckContainer({ id, questions, questionRecord, connections }: 
                         </MenuItem>
                     </Select>
                     <Tooltip
-                        title='On Deck contains the questions that are upcoming to be asked. 
+                        title={`On Deck contains the questions that are upcoming to be asked. 
                         The top questions is the next one to be asked. 
-                        To remove a question simply drag it back to the question queue'
+                        To remove a question simply drag it back to the ${
+                            isTopicSelected ? 'Topic Workspace' : 'Question Queue'
+                        }`}
                     >
                         <InfoIcon sx={{ color: (theme) => theme.palette.primary.main }} />
                     </Tooltip>

@@ -7,9 +7,11 @@ export interface StyledColumnGridProps {
     children: React.ReactNode;
     props?: GridProps;
     scrollable?: boolean;
+    color?: string;
+    alphaValue?: number;
 }
 
-export const StyledColumnGrid = ({ children, props, scrollable = true }: StyledColumnGridProps) => {
+export const StyledColumnGrid = ({ children, props, scrollable = true, color, alphaValue }: StyledColumnGridProps) => {
     const theme = useTheme();
     return (
         <Grid
@@ -19,11 +21,11 @@ export const StyledColumnGrid = ({ children, props, scrollable = true }: StyledC
             padding={1}
             sx={{
                 border: 5,
-                borderImage: `linear-gradient(${theme.palette.custom.creamCan},${alpha(
-                    theme.palette.custom.creamCan,
-                    0.06
+                borderImage: `linear-gradient(${color || theme.palette.custom.creamCan},${alpha(
+                    color || theme.palette.custom.creamCan,
+                    alphaValue || 0.06
                 )}) 10`,
-                backgroundColor: alpha(theme.palette.custom.creamCan, 0.06),
+                backgroundColor: alpha(color || theme.palette.custom.creamCan, alphaValue || 0.06),
                 overflowY: scrollable ? 'scroll' : 'hidden',
             }}
             {...props}

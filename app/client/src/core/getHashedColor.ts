@@ -75,3 +75,102 @@ export function useHashedColor() {
         return clearColorCache;
     }, []);
 }
+
+export const darkenHslColor = (hslString: string, amount = 10) => {
+    // Use a regular expression to capture the H, S, and L values.
+    const regex = /hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/;
+    const match = hslString.match(regex);
+
+    // If the string isn't a valid HSL string, return the original.
+    if (!match) {
+        return hslString;
+    }
+
+    const [, h, s, l] = match;
+
+    // Decrease the lightness, ensuring it doesn't go below 0.
+    const newLightness = Math.max(0, parseInt(l, 10) - amount);
+
+    // Rebuild and return the new HSL string.
+    return `hsl(${h}, ${s}%, ${newLightness}%)`;
+};
+
+export const hslToHex = (hslString: string): string | null => {
+    const regex = /hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/;
+    const match = hslString.match(regex);
+
+    if (!match) {
+        return null;
+    }
+
+    let [, h, s, l] = match.map(Number);
+
+    s /= 100;
+    l /= 100;
+
+    const c: number = (1 - Math.abs(2 * l - 1)) * s;
+    const x: number = c * (1 - Math.abs(((h / 60) % 2) - 1));
+    const m: number = l - c / 2;
+
+    let r: number = 0,
+        g: number = 0,
+        b: number = 0;
+
+    if (h >= 0 && h < 60) {
+        r = c;
+        g = x;
+        b = 0;
+    } else if (h >= 60 && h < 120) {
+        r = x;
+        g = c;
+        b = 0;
+    } else if (h >= 120 && h < 180) {
+        r = 0;
+        g = c;
+        b = x;
+    } else if (h >= 180 && h < 240) {
+        r = 0;
+        g = x;
+        b = c;
+    } else if (h >= 240 && h < 300) {
+        r = x;
+        g = 0;
+        b = c;
+    } else if (h >= 300 && h < 360) {
+        r = c;
+        g = 0;
+        b = x;
+    }
+
+    r = Math.round((r + m) * 255);
+    g = Math.round((g + m) * 255);
+    b = Math.round((b + m) * 255);
+
+    const toHex = (_val: number): string => {
+        const hex = _val.toString(16);
+        return hex.length === 1 ? '0' + hex : hex;
+    };
+
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+};
+
+export const getTextColorForBackground = (hslColor: string) => {
+    const hexColor = hslToHex(hslColor);
+    if (!hexColor) {
+        return '#000000'; // Default to black if conversion fails
+    }
+    // 1. Remove the '#' if it exists
+    const color = hexColor.startsWith('#') ? hexColor.slice(1) : hexColor;
+
+    // 2. Convert hex to RGB
+    const r = parseInt(color.substring(0, 2), 16);
+    const g = parseInt(color.substring(2, 4), 16);
+    const b = parseInt(color.substring(4, 6), 16);
+
+    // 3. Calculate the perceptive luminance (brightness)
+    // This formula is based on the W3C accessibility guidelines
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+    // 4. Return black for light colors, white for dark colors
+    return luminance > 0.5 ? '#000000' : '#FFFFFF';
+};

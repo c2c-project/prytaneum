@@ -80,11 +80,17 @@ type Mutation {
     """
     Update topics
     """
-    addTopic(eventId: String!, topic: String!, description: String!): TopicMutationResponse
-    addTopics(eventId: String!, topics: [String!]!): TopicMutationResponse
-    removeTopic(eventId: String!, topic: String!): TopicRemoveMutationResponse
+    addTopic(eventId: String!, topic: String!, description: String!, manual: Boolean!): TopicMutationResponse
+    addTopics(eventId: String!, topics: [String!]!, manual: Boolean!): TopicMutationResponse
+    removeTopic(eventId: String!, topic: String!, manual: Boolean!): TopicRemoveMutationResponse
     removeTopics(eventId: String!, topics: [String!]!): TopicsRemoveMutationResponse
-    updateTopic(eventId: String!, oldTopic: String!, newTopic: String!, description: String!): TopicMutationResponse
+    updateTopic(
+        eventId: String!
+        oldTopic: String!
+        newTopic: String!
+        description: String!
+        manual: Boolean!
+    ): TopicMutationResponse
     lockTopic(eventId: String!, topic: String!): TopicLockToggleMutationResponse
     unlockTopic(eventId: String!, topic: String!): TopicLockToggleMutationResponse
     lockTopics(eventId: String!, topics: [String!]!): MutationResponse

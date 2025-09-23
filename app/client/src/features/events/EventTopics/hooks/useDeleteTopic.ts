@@ -7,8 +7,8 @@ import { useDeleteTopicMutation } from '@local/__generated__/useDeleteTopicMutat
 import { Topic } from '../types';
 
 const USE_DELETE_TOPIC = graphql`
-    mutation useDeleteTopicMutation($eventId: String!, $topic: String!) {
-        removeTopic(eventId: $eventId, topic: $topic) {
+    mutation useDeleteTopicMutation($eventId: String!, $topic: String!, $manual: Boolean!) {
+        removeTopic(eventId: $eventId, topic: $topic, manual: $manual) {
             isError
             message
         }
@@ -20,9 +20,9 @@ export function useDeleteTopic() {
     const { displaySnack } = useSnack();
     const [commit] = useMutation<useDeleteTopicMutation>(USE_DELETE_TOPIC);
 
-    const deleteTopic = (topic: Topic, onSuccess: () => void, onFailure?: () => void) => {
+    const deleteTopic = (topic: Topic, onSuccess: () => void, onFailure?: () => void, manual?: boolean) => {
         commit({
-            variables: { eventId, topic: topic.topic },
+            variables: { eventId, topic: topic.topic, manual: !!manual },
             onCompleted: (response) => {
                 try {
                     if (!response.removeTopic) throw new Error('An error occurred while deleting topic');

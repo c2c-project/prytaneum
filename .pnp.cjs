@@ -381,6 +381,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["chromatic", "npm:6.5.1"],\
             ["clsx", "npm:1.1.1"],\
             ["date-fns", "npm:2.28.0"],\
+            ["dayjs", "npm:1.11.18"],\
             ["dotenv-cli", "npm:5.1.0"],\
             ["eslint", "npm:8.9.0"],\
             ["eslint-config-airbnb-typescript", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:16.1.0"],\
@@ -8345,7 +8346,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["clsx", "npm:2.1.1"],\
             ["date-fns", "npm:2.28.0"],\
             ["date-fns-jalali", null],\
-            ["dayjs", null],\
+            ["dayjs", "npm:1.11.18"],\
             ["luxon", null],\
             ["moment", null],\
             ["moment-hijri", null],\
@@ -18729,6 +18730,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/dateformat-npm-4.6.3-aa1a4cb7f9-c3aa0617c0.zip/node_modules/dateformat/",\
           "packageDependencies": [\
             ["dateformat", "npm:4.6.3"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["dayjs", [\
+        ["npm:1.11.18", {\
+          "packageLocation": "./.yarn/cache/dayjs-npm-1.11.18-76d3212973-cc90054bad.zip/node_modules/dayjs/",\
+          "packageDependencies": [\
+            ["dayjs", "npm:1.11.18"]\
           ],\
           "linkType": "HARD"\
         }]\

@@ -98,9 +98,26 @@ interface UpdateTopicProps {
     oldTopic: string;
     newTopic: string;
     description: string;
+    manual?: boolean;
+    prisma?: PrismaClient;
 }
 
-export async function updateTopic({ eventId, oldTopic, newTopic, description }: UpdateTopicProps) {
+export async function updateTopic({ eventId, oldTopic, newTopic, description, manual, prisma }: UpdateTopicProps) {
+    if (manual) {
+        // Update the topic directly in the database and skip the moderation service
+        if (!prisma) throw new Error('Prisma client is not available');
+        await prisma.eventTopic.updateMany({
+            where: {
+                eventId,
+                topic: oldTopic,
+            },
+            data: {
+                topic: newTopic,
+                description,
+            },
+        });
+        return;
+    }
     try {
         await axios.post(
             process.env.MODERATION_URL,
@@ -122,7 +139,26 @@ export async function updateTopic({ eventId, oldTopic, newTopic, description }: 
     }
 }
 
-export async function deleteTopic(eventId: string, topic: string) {
+interface DeleteTopicParams {
+    eventId: string;
+    topic: string;
+    manual?: boolean;
+    prisma?: PrismaClient;
+}
+
+export async function deleteTopic(params: DeleteTopicParams) {
+    const { eventId, topic, manual, prisma } = params;
+    if (manual) {
+        // Delete the topic directly from the database and skip the moderation service
+        if (!prisma) throw new Error('Prisma client is not available');
+        await prisma.eventTopic.deleteMany({
+            where: {
+                eventId,
+                topic,
+            },
+        });
+        return;
+    }
     try {
         await axios.post(
             process.env.MODERATION_URL,
@@ -142,7 +178,28 @@ export async function deleteTopic(eventId: string, topic: string) {
     }
 }
 
-export async function addTopic(eventId: string, topic: string, description: string) {
+interface AddTopicParams {
+    eventId: string;
+    topic: string;
+    description: string;
+    manual: boolean;
+    prisma?: PrismaClient;
+}
+
+export async function addTopic(params: AddTopicParams) {
+    const { eventId, topic, description, manual, prisma } = params;
+    if (manual) {
+        // Add the topic directly to the database and skip the moderation service
+        if (!prisma) throw new Error('Prisma client is not available');
+        await prisma.eventTopic.create({
+            data: {
+                eventId,
+                topic,
+                description,
+            },
+        });
+        return;
+    }
     try {
         await axios.post(
             process.env.MODERATION_URL,

@@ -1,5 +1,5 @@
 import { GeminiIcon } from '@local/components/icons';
-import { Chip, Divider, Typography } from '@mui/material';
+import { Box, Divider, Typography } from '@mui/material';
 import React from 'react';
 import { SummarizedViewpoints } from './FeedbackFlowResponsesDialog';
 import { Prompt } from './LiveFeedbackPromptList';
@@ -8,15 +8,23 @@ const StyledViewpoint = ({ viewpoint }: { viewpoint: string }) => {
     // Gradient from purple to blue
     const gradient = 'linear-gradient(to right bottom, #9c27b0, #2979ff)';
     return (
-        <Chip
-            variant='outlined'
-            label={viewpoint}
-            sx={{
-                marginBottom: '0.25rem',
-                color: 'white',
-                backgroundImage: gradient,
-            }}
-        />
+        <Box sx={{ marginBottom: '0.25rem', display: 'inline-block', backgroundImage: gradient, borderRadius: '4px' }}>
+            <Typography
+                variant='body1'
+                sx={{
+                    color: 'white',
+                    padding: '0.25rem 0.5rem',
+                    borderRadius: '4px',
+                    fontSize: {
+                        xs: '1rem',
+                        md: '1.10rem',
+                        xl: '1.15rem',
+                    },
+                }}
+            >
+                {viewpoint}
+            </Typography>
+        </Box>
     );
 };
 

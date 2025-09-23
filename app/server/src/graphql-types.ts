@@ -725,16 +725,19 @@ export type MutationaddTopicArgs = {
     eventId: Scalars['String'];
     topic: Scalars['String'];
     description: Scalars['String'];
+    manual: Scalars['Boolean'];
 };
 
 export type MutationaddTopicsArgs = {
     eventId: Scalars['String'];
     topics: Array<Scalars['String']>;
+    manual: Scalars['Boolean'];
 };
 
 export type MutationremoveTopicArgs = {
     eventId: Scalars['String'];
     topic: Scalars['String'];
+    manual: Scalars['Boolean'];
 };
 
 export type MutationremoveTopicsArgs = {
@@ -747,6 +750,7 @@ export type MutationupdateTopicArgs = {
     oldTopic: Scalars['String'];
     newTopic: Scalars['String'];
     description: Scalars['String'];
+    manual: Scalars['Boolean'];
 };
 
 export type MutationlockTopicArgs = {
@@ -3151,19 +3155,19 @@ export type MutationResolvers<
         Maybe<ResolversTypes['TopicMutationResponse']>,
         ParentType,
         ContextType,
-        RequireFields<MutationaddTopicArgs, 'eventId' | 'topic' | 'description'>
+        RequireFields<MutationaddTopicArgs, 'eventId' | 'topic' | 'description' | 'manual'>
     >;
     addTopics?: Resolver<
         Maybe<ResolversTypes['TopicMutationResponse']>,
         ParentType,
         ContextType,
-        RequireFields<MutationaddTopicsArgs, 'eventId' | 'topics'>
+        RequireFields<MutationaddTopicsArgs, 'eventId' | 'topics' | 'manual'>
     >;
     removeTopic?: Resolver<
         Maybe<ResolversTypes['TopicRemoveMutationResponse']>,
         ParentType,
         ContextType,
-        RequireFields<MutationremoveTopicArgs, 'eventId' | 'topic'>
+        RequireFields<MutationremoveTopicArgs, 'eventId' | 'topic' | 'manual'>
     >;
     removeTopics?: Resolver<
         Maybe<ResolversTypes['TopicsRemoveMutationResponse']>,
@@ -3175,7 +3179,7 @@ export type MutationResolvers<
         Maybe<ResolversTypes['TopicMutationResponse']>,
         ParentType,
         ContextType,
-        RequireFields<MutationupdateTopicArgs, 'eventId' | 'oldTopic' | 'newTopic' | 'description'>
+        RequireFields<MutationupdateTopicArgs, 'eventId' | 'oldTopic' | 'newTopic' | 'description' | 'manual'>
     >;
     lockTopic?: Resolver<
         Maybe<ResolversTypes['TopicLockToggleMutationResponse']>,
