@@ -4,7 +4,7 @@ from google.generativeai.types import HarmCategory, HarmBlockThreshold
 import hashlib
 import json
 
-def AskGoogleGemini(prompt: str, model='gemini-2.0-flash-001', max_output_tokens=1024, force=False, temperature=0.2, top_k=40) -> str:
+def AskGoogleGemini(prompt: str, model='gemini-2.5-flash', max_output_tokens=1024, force=False, temperature=0.2, top_k=40) -> str:
     "Ask a prompt to given Google Cloud model and return the response text and safety ratings."
     # Get cache folder path of desired model and create one if it does not already exist
     folder = os.path.dirname(os.path.abspath(__file__)) + '/' # Folder of this script
