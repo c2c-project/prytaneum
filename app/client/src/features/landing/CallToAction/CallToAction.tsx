@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Grid, Typography, Button, useMediaQuery } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useTheme } from '@mui/material/styles';
+import { scrolltoHash } from '@local/core/useScrollTo';
 
 export function CallToAction() {
     const theme = useTheme();
@@ -71,7 +72,7 @@ export function CallToAction() {
                                 borderRadius: 12,
                                 padding: '3px 20px 3px 20px',
                             }}
-                            onClick={() => router.push('/guides/getting-started')}
+                            onClick={() => router.push('/register')}
                         >
                             Get Started
                         </Button>
@@ -84,7 +85,7 @@ export function CallToAction() {
                                 color: 'white',
                                 padding: '3px 20px 3px 20px',
                             }}
-                            onClick={() => router.push('#video-section')}
+                            onClick={() => scrolltoHash('video-section')}
                         >
                             See How It Works
                         </Button>

@@ -29,7 +29,7 @@ export default function Landing() {
                 margin={0}
                 style={{ backgroundColor: '#8EAFFF42' }}
             >
-                <Grid item marginTop={6} id='video-section'>
+                <Grid item marginTop={6}>
                     <Blurb title='Enable constructive, virtual dialogue' titleColor='#282D6E' />
                 </Grid>
 
@@ -74,6 +74,7 @@ export default function Landing() {
                     </Grid>
                 </Grid>
             </Grid>
+            <div id='video-section' />
 
             {/* This is the only section of the page that doesn't need the style prop detailed above. */}
             <ViewsPanel />

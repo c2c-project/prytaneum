@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { Chip, Grid, Link, Paper, Typography, useMediaQuery } from '@mui/material';
+import { Chip, Grid, Link, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import BookOutlinedIcon from '@mui/icons-material/BookOutlined';
 import HelpIcon from '@mui/icons-material/Help';
 
-import { RegisterFormDemo, LoginFormDemo, UserSettingsDemo } from '@local/features/accounts/Demos';
 import { DashboardDemo } from '@local/features/dashboard/Demos/DashboardDemo';
 import { useUser } from '../accounts';
 import { Loader } from '@local/components/Loader/Loader.stories';
@@ -60,26 +59,9 @@ export default function GettingStartedGuide() {
                     To access what Prytaneum offer and fully experience a town hall event, you must create a Prytaneum
                     account. With an account, you will be able to ask, like, and quote questions asked during events as
                     a participant. If you don&#39;t have an account or are not logged in, you can find the{' '}
-                    <b>Register</b> and <b>Login</b> buttons in the top right corner of every Prytaneum page.
+                    <b>Create Account</b> button in the top right corner of the page. If you already have an account you
+                    can use the <b>Login</b> button at the top right.
                 </Typography>
-                <Typography variant='body1' fontSize='large'>
-                    To login, click on the login button and enter your account information into the menu. Finalize by
-                    clicking <b>Login</b>.
-                </Typography>
-            </Grid>
-            <Grid item xs={12} display='flex' flexDirection='column' alignItems='center' gap='0.5rem'>
-                <Paper
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '1rem',
-                        width: '100%',
-                        maxWidth: '720px',
-                        padding: theme.spacing(2),
-                    }}
-                >
-                    <LoginFormDemo />
-                </Paper>
             </Grid>
             <Grid item xs={12} display='flex' flexDirection='column' gap='0.5rem'>
                 <Typography variant='body1' fontSize='large'>
@@ -90,20 +72,6 @@ export default function GettingStartedGuide() {
                     If you don&#39;t have an account yet, register by clicking on the register button. Enter your
                     information into the menu and finalize by clicking <b>Create Account</b>.
                 </Typography>
-            </Grid>
-            <Grid item xs={12} display='flex' flexDirection='column' alignItems='center' gap='0.5rem'>
-                <Paper
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '1rem',
-                        width: '100%',
-                        maxWidth: '720px',
-                        padding: theme.spacing(2),
-                    }}
-                >
-                    <RegisterFormDemo />
-                </Paper>
             </Grid>
             <Grid item xs={12} display='flex' flexDirection='column' gap='0.5rem'>
                 <Typography variant='h4' id='dashboard' paddingTop='80px'>
@@ -118,30 +86,6 @@ export default function GettingStartedGuide() {
             </Grid>
             <Grid item xs={12} sm={10} display='flex' flexDirection='column' alignItems='center' gap='0.5rem'>
                 <DashboardDemo />
-            </Grid>
-            <Grid item xs={12} sm={10} display='flex' flexDirection='column' gap='0.5rem'>
-                <Typography variant='h4' id='account-settings' paddingTop='80px'>
-                    Account Settings
-                </Typography>
-                <Typography variant='body1' fontSize='large'>
-                    You can access your account settings by clicking on your profile in the top right corner of every
-                    Prytaneum page after logging in. You can change your email, password, or delete your account while
-                    in your account settings.
-                </Typography>
-            </Grid>
-            <Grid item xs={12} display='flex' flexDirection='column' alignItems='center' gap='0.5rem'>
-                <Paper
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '1rem',
-                        width: '100%',
-                        maxWidth: '720px',
-                        padding: theme.spacing(2),
-                    }}
-                >
-                    <UserSettingsDemo />
-                </Paper>
             </Grid>
         </Grid>
     );
