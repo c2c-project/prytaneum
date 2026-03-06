@@ -433,31 +433,45 @@ export async function isInvited(userId: string, eventId: string, prisma: PrismaC
 }
 
 export async function findDashboardEvents(userId: string, prisma: PrismaClient) {
-    const results = await prisma.user.findUnique({
-        where: { id: userId },
-        include: {
-            moderatorOf: {
-                where: {
-                    event: {
-                        OR: [{ isActive: true }, { endDateTime: { gte: new Date() } }],
+    let events: Event[] = [];
+
+    const [user, allPublicEvents] = await Promise.all([
+        prisma.user.findUnique({
+            where: { id: userId },
+            include: {
+                moderatorOf: {
+                    where: {
+                        event: {
+                            OR: [{ isActive: true }, { endDateTime: { gte: new Date() } }],
+                        },
                     },
+                    orderBy: { event: { startDateTime: 'asc' } },
+                    select: { event: true },
                 },
-                orderBy: { event: { startDateTime: 'asc' } },
-                select: { event: true },
-            },
-            invitedOf: {
-                where: {
-                    event: {
-                        OR: [{ isActive: true }, { endDateTime: { gte: new Date() } }],
+                invitedOf: {
+                    where: {
+                        event: {
+                            OR: [{ isActive: true }, { endDateTime: { gte: new Date() } }],
+                        },
                     },
+                    orderBy: { event: { startDateTime: 'asc' } },
+                    select: { event: true },
                 },
-                orderBy: { event: { startDateTime: 'asc' } },
-                select: { event: true },
             },
-        },
+        }),
+        prisma.event.findMany({
+            where: { isPrivate: false, endDateTime: { gte: new Date() } },
+            orderBy: { startDateTime: 'asc' },
+        }),
+    ]);
+
+    if (user) events = user.moderatorOf.map(({ event }) => event).concat(user.invitedOf.map(({ event }) => event));
+
+    allPublicEvents.forEach((event) => {
+        if (events.find((_event) => _event.id === event.id)) return;
+        events.push(event);
     });
-    if (!results) return [];
-    const events = results.moderatorOf.map(({ event }) => event).concat(results.invitedOf.map(({ event }) => event));
+
     return events;
 }
 
