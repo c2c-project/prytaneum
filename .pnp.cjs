@@ -500,7 +500,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["jest-mock-extended", "virtual:aedf018ff37487bbea07e39ab6922028847ef7476f42fbf184065ed99eff5d24997be06d56f281c73bbc274cfcb741db55884ec3b111f95f482082ce3a2760fe#npm:2.0.5"],\
             ["jsonwebtoken", "npm:9.0.0"],\
             ["module-alias", "npm:2.2.2"],\
-            ["multer", "npm:1.4.5-lts.1"],\
+            ["multer", "npm:2.0.0"],\
             ["papaparse", "npm:5.4.1"],\
             ["pino-pretty", "npm:7.1.0"],\
             ["prettier", "npm:2.8.0"],\
@@ -606,7 +606,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["module-alias", "npm:2.2.2"],\
             ["mqemitter", "npm:4.5.0"],\
             ["mqemitter-redis", "npm:4.2.0"],\
-            ["multer", "npm:1.4.5-lts.1"],\
+            ["multer", "npm:2.0.0"],\
             ["papaparse", "npm:5.4.1"],\
             ["pino-pretty", "npm:7.1.0"],\
             ["prettier", "npm:2.8.0"],\
@@ -29429,10 +29429,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["multer", [\
-        ["npm:1.4.5-lts.1", {\
-          "packageLocation": "./.yarn/cache/multer-npm-1.4.5-lts.1-2b83a2d180-d6dfa78a6e.zip/node_modules/multer/",\
+        ["npm:2.0.0", {\
+          "packageLocation": "./.yarn/cache/multer-npm-2.0.0-aefd211bd2-0a6f7de5e5.zip/node_modules/multer/",\
           "packageDependencies": [\
-            ["multer", "npm:1.4.5-lts.1"],\
+            ["multer", "npm:2.0.0"],\
             ["append-field", "npm:1.0.0"],\
             ["busboy", "npm:1.6.0"],\
             ["concat-stream", "npm:1.6.2"],\
