@@ -9,7 +9,7 @@ from AlgoStages.classifyQuestion import DoesQuestionFitCategory
 from PromptAnalysis.promptSummarization import SummarizePosts
 from PromptAnalysis.analyzeStakeholders import ExtractShareholders
 from Translation.translation import TranslateText
-from PerspectiveAPI import InitPerspectiveAPI
+from NaturalLanguageModeration import InitNaturalLanguageModeration
 from Utilities.logEvents import LogEventConsole
 from redis.cluster import RedisCluster, ClusterNode
 import redis
@@ -370,6 +370,6 @@ def StakeholderExtraction():
 
 if __name__ == '__main__':
     # Initialize Google API before starting the app
-    InitPerspectiveAPI()
+    InitNaturalLanguageModeration()
     PrintRedisConnectionStatus()
     serve(app, host='0.0.0.0', port=5000)
