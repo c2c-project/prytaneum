@@ -6,37 +6,43 @@ import {
     parseRound1Output,
     preflightRound1Import,
 } from '../src/features/events/feedback/simulation/importRound1';
-
-type CliOptions = {
-    file: string;
-    dryRun: boolean;
-};
-
-function parseCliOptions(args: string[]): CliOptions {
-    let file = '';
-    let dryRun = false;
-    for (let index = 0; index < args.length; index++) {
-        const argument = args[index];
-        if (argument === '--dry-run') {
-            dryRun = true;
-        } else if (argument === '--file') {
-            file = args[index + 1] || '';
-            index++;
-        } else {
-            throw new Error(`Unknown argument: ${argument}`);
-        }
-    }
-    if (!file) throw new Error('Usage: fgdt-round1 --file <path> [--dry-run]');
-    return { file, dryRun };
-}
+import { prepareRound1Input } from '../src/features/events/feedback/simulation/prepareRound1';
+import { parseRound1CliOptions } from '../src/features/events/feedback/simulation/round1Cli';
 
 async function main() {
-    const { file, dryRun } = parseCliOptions(process.argv.slice(2));
-    const json = JSON.parse(fs.readFileSync(file, 'utf-8')) as unknown;
-    const output = parseRound1Output(json);
+    const options = parseRound1CliOptions(process.argv.slice(2));
     const prisma = new PrismaClient();
     try {
-        if (dryRun) {
+        if (options.command === 'prepare') {
+            const input = await prepareRound1Input(prisma, {
+                eventId: options.eventId,
+                promptId: options.promptId,
+                participantCount: options.participantCount,
+                topic: options.topic,
+                background: options.background,
+                model: options.model,
+                force: options.force,
+            });
+            fs.writeFileSync(options.output, `${JSON.stringify(input, null, 2)}\n`, 'utf-8');
+            console.log(
+                JSON.stringify(
+                    {
+                        eventId: input.eventId,
+                        promptId: input.promptId,
+                        participantCount: input.participants.length,
+                        participantKeys: input.participants.map(({ participantKey }) => participantKey),
+                        output: options.output,
+                    },
+                    null,
+                    2
+                )
+            );
+            return;
+        }
+
+        const json = JSON.parse(fs.readFileSync(options.file, 'utf-8')) as unknown;
+        const output = parseRound1Output(json);
+        if (options.dryRun) {
             const preflight = await preflightRound1Import(prisma, output);
             console.log(JSON.stringify({ dryRun: true, ...preflight }, null, 2));
             return;
