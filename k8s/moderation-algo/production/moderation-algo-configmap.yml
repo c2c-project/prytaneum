@@ -9,6 +9,9 @@ data:
     HOST: 0.0.0.0
     NODE_ENV: production
     GCP_PROJECT_ID: prytaneum-project
+    GOOGLE_CLOUD_PROJECT: prytaneum-project
+    GOOGLE_CLOUD_LOCATION: us-central1
+    GOOGLE_GENAI_USE_VERTEXAI: 'true'
     REDIS_HOST: 10.169.113.211 # GCloud Memorystore Redis Instance IP
     REDIS_PORT: '6379'
     REDIS_USERNAME: default
