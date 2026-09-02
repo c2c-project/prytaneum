@@ -40,14 +40,6 @@ beforeAll(async () => {
     plugins.attachMercuriusTo(server);
     plugins.attachCookieTo(server);
     const prisma = getPrismaClient(server.log);
-    
-    // Clean up first just in case
-    await prisma.eventQuestion.deleteMany();
-    await prisma.eventModerator.deleteMany();
-    await prisma.event.deleteMany();
-    await prisma.orgMember.deleteMany();
-    await prisma.organization.deleteMany();
-    await prisma.user.deleteMany();
 
     await prisma.user.create({
         data: {
@@ -106,10 +98,10 @@ beforeAll(async () => {
             question: 'What is life?',
             eventId: testEventId,
             createdById: userData.id,
-            position: "0",
+            position: '0',
             isVisible: true,
             isAsked: false,
-            lang: "EN",
+            lang: 'EN',
             isFollowUp: false,
             isQuote: false,
         }
@@ -122,12 +114,12 @@ beforeAll(async () => {
 afterAll(async () => {
     const server = getOrCreateServer();
     const prisma = getPrismaClient(server.log);
-    await prisma.eventQuestion.deleteMany();
-    await prisma.eventModerator.deleteMany();
-    await prisma.event.deleteMany();
-    await prisma.orgMember.deleteMany();
-    await prisma.organization.deleteMany();
-    await prisma.user.deleteMany();
+    await prisma.eventQuestion.deleteMany({ where: { eventId: testEventId } });
+    await prisma.eventModerator.deleteMany({ where: { eventId: testEventId } });
+    await prisma.event.deleteMany({ where: { id: testEventId } });
+    await prisma.orgMember.deleteMany({ where: { orgId: testOrgId } });
+    await prisma.organization.deleteMany({ where: { id: testOrgId } });
+    await prisma.user.deleteMany({ where: { id: { in: [userData.id, modData.id] } } });
     await prisma.$disconnect();
     await server.close();
 });

@@ -8,7 +8,7 @@ import { toGlobalId } from '@local/features/utils';
 const toUserId = toGlobalId('User');
 
 const userData = {
-    id: '4136cd0b-d90b-4af7-b485-5d1ded8db254',
+    id: '22222222-2222-4222-a222-222222222222',
     email: 'eventTest@test.com',
     firstName: 'Event',
     lastName: 'Test',
@@ -25,7 +25,7 @@ beforeAll(async () => {
     plugins.attachMercuriusTo(server);
     plugins.attachCookieTo(server);
     const prisma = getPrismaClient(server.log);
-    
+
     await prisma.user.create({
         data: {
             ...userData,
@@ -34,7 +34,7 @@ beforeAll(async () => {
     });
 
     const org = await prisma.organization.create({
-        data: { name: 'Test Org' }
+        data: { name: 'Test Org' },
     });
     testOrgId = org.id;
 
@@ -42,7 +42,7 @@ beforeAll(async () => {
         data: {
             userId: userData.id,
             orgId: testOrgId,
-        }
+        },
     });
 
     await server.ready();
@@ -51,9 +51,10 @@ beforeAll(async () => {
 afterAll(async () => {
     const server = getOrCreateServer();
     const prisma = getPrismaClient(server.log);
-    await prisma.orgMember.deleteMany();
-    await prisma.organization.deleteMany();
-    await prisma.user.deleteMany();
+    await prisma.event.deleteMany({ where: { orgId: testOrgId } });
+    await prisma.orgMember.deleteMany({ where: { orgId: testOrgId } });
+    await prisma.organization.deleteMany({ where: { id: testOrgId } });
+    await prisma.user.deleteMany({ where: { id: userData.id } });
     await prisma.$disconnect();
     await server.close();
 });
@@ -100,7 +101,7 @@ describe('event resolvers', () => {
                     console.log('Response errors:', response.errors);
                 }
                 expect(response.data.createEvent.isError).toBe(false);
-                expect(response.data.createEvent.body.title).toBe("New Event");
+                expect(response.data.createEvent.body.title).toBe('New Event');
             });
         });
     });

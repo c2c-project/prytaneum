@@ -14,7 +14,7 @@ export const resolvers: Resolvers = {
         name: 'Date',
         description: 'Date custom scalar type',
         parseValue(value: unknown) {
-            if (typeof value === 'string') return new Date(value); // value from the client
+            if (typeof value === 'string' || typeof value === 'number') return new Date(value); // value from the client
             return value;
         },
         serialize(value: unknown) {
@@ -23,7 +23,10 @@ export const resolvers: Resolvers = {
         },
         parseLiteral(ast) {
             if (ast.kind === Kind.INT) {
-                return new Date(ast.value); // ast value is always in string format
+                return new Date(parseInt(ast.value, 10)); // ast value is always in string format for INT
+            }
+            if (ast.kind === Kind.STRING) {
+                return new Date(ast.value);
             }
             return null;
         },

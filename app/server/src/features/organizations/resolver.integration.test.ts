@@ -8,7 +8,7 @@ import { toGlobalId } from '@local/features/utils';
 const toUserId = toGlobalId('User');
 
 const userData = {
-    id: '4136cd0b-d90b-4af7-b485-5d1ded8db253',
+    id: '11111111-1111-4111-a111-111111111111',
     email: 'orgTest@test.com',
     firstName: 'Org',
     lastName: 'Test',
@@ -36,14 +36,14 @@ beforeAll(async () => {
 afterAll(async () => {
     const server = getOrCreateServer();
     const prisma = getPrismaClient(server.log);
-    await prisma.user.deleteMany();
+    await prisma.organization.deleteMany({ where: { name: 'Test Org' } });
+    await prisma.user.deleteMany({ where: { id: userData.id } });
     await prisma.$disconnect();
     await server.close();
 });
 
 const server = getOrCreateServer();
 const testClient = createMercuriusTestClient(server);
-const prisma = getPrismaClient(server.log);
 
 describe('organization resolvers', () => {
     describe('Query', () => {
@@ -66,13 +66,13 @@ describe('organization resolvers', () => {
     describe('Mutation', () => {
         describe('[createOrganization]', () => {
             test('creates org successfully', async () => {
-                const mutation = `mutation { createOrganization(input: { name: "Test Org" }) { isError message body { node { name } } } }`;
+                const mutation = 'mutation { createOrganization(input: { name: "Test Org" }) { isError message body { node { name } } } }';
                 const user = toUserId(userData);
                 const token = await jwt.sign({ id: user.id });
                 testClient.setCookies({ jwt: token });
                 const response = await testClient.query(mutation);
                 expect(response.data.createOrganization.isError).toBe(false);
-                expect(response.data.createOrganization.body.node.name).toBe("Test Org");
+                expect(response.data.createOrganization.body.node.name).toBe('Test Org');
             });
         });
     });

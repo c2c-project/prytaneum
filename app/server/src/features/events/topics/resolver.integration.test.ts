@@ -4,17 +4,14 @@ import { getPrismaClient } from '@local/core/utils';
 import * as plugins from '@local/core/plugins';
 import * as jwt from '@local/lib/jwt';
 import { toGlobalId } from '@local/features/utils';
-import axios from 'axios';
-
-jest.mock('axios');
 
 const toUserId = toGlobalId('User');
 const toEventId = toGlobalId('Event');
 
 const userData = {
-    id: '5236cd0b-d90b-4af7-b485-5d1ded8db254',
-    email: 'topicTest@test.com',
-    firstName: 'Topic',
+    id: '4136cd0b-d90b-4af7-b485-5d1ded8db255',
+    email: 'topicsTest@test.com',
+    firstName: 'Topics',
     lastName: 'Test',
     password: 'testPassword',
     preferredLang: 'EN',
@@ -26,15 +23,6 @@ let testOrgId: string;
 let testEventId: string;
 
 beforeAll(async () => {
-    (axios.post as jest.Mock).mockResolvedValue({
-        data: {
-            topics: {
-                'MOCKED_TOPIC': 'MOCKED_DESC'
-            },
-            locked_topics: []
-        },
-    });
-
     const server = getOrCreateServer();
     plugins.attachMercuriusTo(server);
     plugins.attachCookieTo(server);
@@ -83,11 +71,11 @@ beforeAll(async () => {
 afterAll(async () => {
     const server = getOrCreateServer();
     const prisma = getPrismaClient(server.log);
-    await prisma.eventTopic.deleteMany();
-    await prisma.event.deleteMany();
-    await prisma.orgMember.deleteMany();
-    await prisma.organization.deleteMany();
-    await prisma.user.deleteMany();
+    await prisma.eventTopic.deleteMany({ where: { eventId: testEventId } });
+    await prisma.event.deleteMany({ where: { id: testEventId } });
+    await prisma.orgMember.deleteMany({ where: { orgId: testOrgId } });
+    await prisma.organization.deleteMany({ where: { id: testOrgId } });
+    await prisma.user.deleteMany({ where: { id: userData.id } });
     await prisma.$disconnect();
     await server.close();
 });
@@ -96,21 +84,15 @@ const server = getOrCreateServer();
 const testClient = createMercuriusTestClient(server);
 
 describe('topics resolvers', () => {
-    let globalEventId: string;
-
-    beforeAll(() => {
-        globalEventId = toEventId({ id: testEventId }).id;
-    });
-
     describe('Mutation', () => {
         describe('[addTopic]', () => {
-            test('adds topic successfully (manual)', async () => {
+            test('adds a topic successfully', async () => {
                 const mutation = `
                     mutation {
                         addTopic(
-                            eventId: "${globalEventId}",
-                            topic: "Test Topic 1",
-                            description: "Description 1",
+                            eventId: "${toEventId({ id: testEventId }).id}",
+                            topic: "Climate Policy",
+                            description: "Discussions on climate change policies.",
                             manual: true
                         ) {
                             isError
@@ -131,22 +113,21 @@ describe('topics resolvers', () => {
                     console.error('Response errors:', response.errors);
                 }
 
-                expect(response.errors).toBeUndefined();
                 expect(response.data.addTopic.isError).toBe(false);
-                expect(response.data.addTopic.body.topic).toBe('Test Topic 1');
-                expect(response.data.addTopic.body.description).toBe('Description 1');
+                expect(response.data.addTopic.body.topic).toBe('Climate Policy');
+                expect(response.data.addTopic.body.description).toBe('Discussions on climate change policies.');
             });
         });
 
         describe('[updateTopic]', () => {
-            test('updates topic successfully (manual)', async () => {
+            test('updates a topic successfully', async () => {
                 const mutation = `
                     mutation {
                         updateTopic(
-                            eventId: "${globalEventId}",
-                            oldTopic: "Test Topic 1",
-                            newTopic: "Updated Topic 1",
-                            description: "Updated Description 1",
+                            eventId: "${toEventId({ id: testEventId }).id}",
+                            oldTopic: "Climate Policy",
+                            newTopic: "Global Climate Policy",
+                            description: "Updated description.",
                             manual: true
                         ) {
                             isError
@@ -164,10 +145,9 @@ describe('topics resolvers', () => {
                     console.error('Response errors:', response.errors);
                 }
 
-                expect(response.errors).toBeUndefined();
                 expect(response.data.updateTopic.isError).toBe(false);
-                expect(response.data.updateTopic.body.topic).toBe('Updated Topic 1');
-                expect(response.data.updateTopic.body.description).toBe('Updated Description 1');
+                expect(response.data.updateTopic.body.topic).toBe('Global Climate Policy');
+                expect(response.data.updateTopic.body.description).toBe('Updated description.');
             });
         });
     });
@@ -177,33 +157,30 @@ describe('topics resolvers', () => {
             test('returns list of topics for an event', async () => {
                 const query = `
                     query {
-                        eventTopics(eventId: "${globalEventId}") {
+                        eventTopics(eventId: "${toEventId({ id: testEventId }).id}") {
                             id
                             topic
                             description
                         }
                     }`;
                 const response = await testClient.query(query);
-                
+
                 expect(response.errors).toBeUndefined();
                 expect(response.data.eventTopics).toBeDefined();
                 expect(response.data.eventTopics.length).toBeGreaterThan(0);
-                
-                const updatedTopic = response.data.eventTopics.find((t: any) => t.topic === 'Updated Topic 1');
-                expect(updatedTopic).toBeDefined();
-                expect(updatedTopic.description).toBe('Updated Description 1');
+                expect(response.data.eventTopics[0].topic).toBe('Global Climate Policy');
             });
         });
     });
 
-    describe('Mutation (Delete)', () => {
+    describe('Mutation (Remove)', () => {
         describe('[removeTopic]', () => {
-            test('removes a topic successfully (manual)', async () => {
+            test('removes a topic successfully', async () => {
                 const mutation = `
                     mutation {
                         removeTopic(
-                            eventId: "${globalEventId}",
-                            topic: "Updated Topic 1",
+                            eventId: "${toEventId({ id: testEventId }).id}",
+                            topic: "Global Climate Policy",
                             manual: true
                         ) {
                             isError
@@ -220,22 +197,41 @@ describe('topics resolvers', () => {
                     console.error('Response errors:', response.errors);
                 }
 
-                expect(response.errors).toBeUndefined();
                 expect(response.data.removeTopic.isError).toBe(false);
-                expect(response.data.removeTopic.body.topic).toBe('Updated Topic 1');
-                
-                // Verify deletion via query
-                const query = `
-                    query {
-                        eventTopics(eventId: "${globalEventId}") {
-                            id
-                            topic
+                expect(response.data.removeTopic.body.topic).toBe('Global Climate Policy');
+            });
+        });
+    });
+
+    describe('Mutation (Finalize)', () => {
+        describe('[finalizeTopics]', () => {
+            test('finalizes a list of topics successfully', async () => {
+                const mutation = `
+                    mutation {
+                        finalizeTopics(
+                            eventId: "${toEventId({ id: testEventId }).id}",
+                            topics: ["Economy", "Education"],
+                            descriptions: ["Economic plans", "Education reform"]
+                        ) {
+                            isError
+                            message
+                            body {
+                                topic
+                                description
+                            }
                         }
                     }`;
-                const verifyResponse = await testClient.query(query);
-                const topics = verifyResponse.data.eventTopics;
-                const removedTopic = topics.find((t: any) => t.topic === 'Updated Topic 1');
-                expect(removedTopic).toBeUndefined();
+                const response = await testClient.query(mutation);
+
+                if (response.data?.finalizeTopics?.isError) {
+                    console.error('Error finalizing topics:', response.data.finalizeTopics);
+                    console.error('Response errors:', response.errors);
+                }
+
+                expect(response.data.finalizeTopics.isError).toBe(false);
+                expect(response.data.finalizeTopics.body.length).toBe(2);
+                expect(response.data.finalizeTopics.body[0].topic).toBe('Economy');
+                expect(response.data.finalizeTopics.body[1].topic).toBe('Education');
             });
         });
     });

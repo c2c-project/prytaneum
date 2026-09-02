@@ -70,7 +70,7 @@ type Settings = Omit<
 export async function createEvent(userId: string, prisma: PrismaClient, input: CreateEvent) {
     const { title, description, topic, startDateTime, endDateTime, orgId } = input;
 
-    if (!isMemberOfOrg(userId, orgId, prisma)) throw new ProtectedError({ userMessage: errors.permissions });
+    if (!(await isMemberOfOrg(userId, orgId, prisma))) throw new ProtectedError({ userMessage: errors.permissions });
 
     // default values for different settings
     const defaultSettings: Settings = {

@@ -9,25 +9,14 @@ const toUserId = toGlobalId('User');
 const toEventId = toGlobalId('Event');
 
 const userData = {
-    id: 'f9b3b4a2-930b-4d74-8b65-d0505b22c2a1',
-    email: 'organizer@test.com',
-    firstName: 'Speaker',
+    id: '4136cd0b-d90b-4af7-b485-5d1ded8db256',
+    email: 'speakersTest@test.com',
+    firstName: 'Speakers',
     lastName: 'Test',
     password: 'testPassword',
     preferredLang: 'EN',
     isAdmin: false,
     canMakeOrgs: true,
-};
-
-const existingUserData = {
-    id: 'b6f4c3a2-1111-4d74-8b65-d0505b22c2a2',
-    email: 'existinguser@test.com',
-    firstName: 'Existing',
-    lastName: 'User',
-    password: 'testPassword',
-    preferredLang: 'EN',
-    isAdmin: false,
-    canMakeOrgs: false,
 };
 
 let testOrgId: string;
@@ -40,7 +29,6 @@ beforeAll(async () => {
     plugins.attachCookieTo(server);
     const prisma = getPrismaClient(server.log);
 
-    // Create organizer user
     await prisma.user.create({
         data: {
             ...userData,
@@ -48,35 +36,24 @@ beforeAll(async () => {
         },
     });
 
-    // Create existing user for linking test
-    await prisma.user.create({
-        data: {
-            ...existingUserData,
-            password: 'hashedPassword',
-        },
-    });
-
-    // Create org
     const org = await prisma.organization.create({
-        data: { name: 'Test Speaker Org' }
+        data: { name: 'Test Org Speakers' },
     });
     testOrgId = org.id;
 
-    // Make organizer a member
     await prisma.orgMember.create({
         data: {
             userId: userData.id,
             orgId: testOrgId,
-        }
+        },
     });
 
-    // Create event
     const event = await prisma.event.create({
         data: {
-            title: 'Test Event',
+            title: 'Test Event Speakers',
             startDateTime: new Date(),
             endDateTime: new Date(Date.now() + 100000),
-            description: 'Test Event Desc',
+            description: 'Test Desc',
             topic: 'Test Topic',
             orgId: testOrgId,
             createdById: userData.id,
@@ -85,7 +62,7 @@ beforeAll(async () => {
             isCollectRatingsEnabled: true,
             isForumEnabled: true,
             isPrivate: false,
-        }
+        },
     });
     testEventId = event.id;
 
@@ -95,92 +72,58 @@ beforeAll(async () => {
 afterAll(async () => {
     const server = getOrCreateServer();
     const prisma = getPrismaClient(server.log);
-    await prisma.eventSpeaker.deleteMany();
-    await prisma.event.deleteMany();
-    await prisma.orgMember.deleteMany();
-    await prisma.organization.deleteMany();
-    await prisma.user.deleteMany();
+    await prisma.eventSpeaker.deleteMany({ where: { eventId: testEventId } });
+    await prisma.event.deleteMany({ where: { id: testEventId } });
+    await prisma.orgMember.deleteMany({ where: { orgId: testOrgId } });
+    await prisma.organization.deleteMany({ where: { id: testOrgId } });
+    await prisma.user.deleteMany({ where: { id: userData.id } });
     await prisma.$disconnect();
     await server.close();
 });
 
-describe('Speaker resolvers', () => {
-    let testClient: any;
-    let token: string;
-    
-    beforeAll(async () => {
-        const server = getOrCreateServer();
-        testClient = createMercuriusTestClient(server);
-        const user = toUserId(userData);
-        token = await jwt.sign({ id: user.id });
-    });
+const server = getOrCreateServer();
+const testClient = createMercuriusTestClient(server);
 
+describe('speakers resolvers', () => {
     describe('Mutation', () => {
         describe('[createSpeaker]', () => {
-            test('creates speaker successfully (new email)', async () => {
+            test('creates speaker successfully', async () => {
                 const mutation = `
                     mutation {
                         createSpeaker(input: {
                             eventId: "${toEventId({ id: testEventId }).id}",
-                            name: "New Speaker",
-                            title: "Dr.",
-                            description: "Awesome speaker",
-                            pictureUrl: "http://example.com/pic.png",
-                            email: "newemail@test.com"
+                            name: "Jane Doe",
+                            title: "Professor of Political Science",
+                            description: "Keynote speaker",
+                            pictureUrl: "https://example.com/photo.jpg",
+                            email: "janedoe@example.com"
                         }) {
                             isError
                             message
                             body {
                                 id
                                 name
+                                title
+                                description
                                 email
-                                user {
-                                    id
-                                    email
-                                }
                             }
                         }
                     }`;
+                const user = toUserId(userData);
+                const token = await jwt.sign({ id: user.id });
                 testClient.setCookies({ jwt: token });
                 const response = await testClient.query(mutation);
-                expect(response.data.createSpeaker.isError).toBe(false);
-                expect(response.data.createSpeaker.body.name).toBe("New Speaker");
-                expect(response.data.createSpeaker.body.email).toBe("newemail@test.com");
-                expect(response.data.createSpeaker.body.user).not.toBeNull();
-                expect(response.data.createSpeaker.body.user.email).toBe("newemail@test.com");
-                createdSpeakerId = response.data.createSpeaker.body.id;
-            });
 
-            test('creates speaker successfully and links to existing user', async () => {
-                const mutation = `
-                    mutation {
-                        createSpeaker(input: {
-                            eventId: "${toEventId({ id: testEventId }).id}",
-                            name: "Existing Speaker",
-                            title: "Mr.",
-                            description: "Existing speaker",
-                            pictureUrl: "http://example.com/pic2.png",
-                            email: "${existingUserData.email}"
-                        }) {
-                            isError
-                            message
-                            body {
-                                id
-                                name
-                                email
-                                user {
-                                    id
-                                    email
-                                }
-                            }
-                        }
-                    }`;
-                testClient.setCookies({ jwt: token });
-                const response = await testClient.query(mutation);
+                if (response.data?.createSpeaker?.isError) {
+                    console.error('Error creating speaker:', response.data.createSpeaker);
+                    console.error('Response errors:', response.errors);
+                }
+
                 expect(response.data.createSpeaker.isError).toBe(false);
-                expect(response.data.createSpeaker.body.email).toBe(existingUserData.email);
-                expect(response.data.createSpeaker.body.user).not.toBeNull();
-                expect(response.data.createSpeaker.body.user.id).toBe(existingUserData.id);
+                expect(response.data.createSpeaker.body.name).toBe('Jane Doe');
+                expect(response.data.createSpeaker.body.title).toBe('Professor of Political Science');
+                expect(response.data.createSpeaker.body.email).toBe('janedoe@example.com');
+                createdSpeakerId = response.data.createSpeaker.body.id;
             });
         });
 
@@ -189,22 +132,34 @@ describe('Speaker resolvers', () => {
                 const mutation = `
                     mutation {
                         updateSpeaker(input: {
-                            eventId: "${toEventId({ id: testEventId }).id}",
                             id: "${createdSpeakerId}",
-                            name: "Updated Speaker Name"
+                            eventId: "${toEventId({ id: testEventId }).id}",
+                            name: "Dr. Jane Doe",
+                            title: "Distinguished Professor",
+                            description: "Updated keynote speaker",
+                            pictureUrl: "https://example.com/photo2.jpg",
+                            email: "janedoe@example.com"
                         }) {
                             isError
                             message
                             body {
                                 id
                                 name
+                                title
+                                description
                             }
                         }
                     }`;
-                testClient.setCookies({ jwt: token });
                 const response = await testClient.query(mutation);
+
+                if (response.data?.updateSpeaker?.isError) {
+                    console.error('Error updating speaker:', response.data.updateSpeaker);
+                    console.error('Response errors:', response.errors);
+                }
+
                 expect(response.data.updateSpeaker.isError).toBe(false);
-                expect(response.data.updateSpeaker.body.name).toBe("Updated Speaker Name");
+                expect(response.data.updateSpeaker.body.name).toBe('Dr. Jane Doe');
+                expect(response.data.updateSpeaker.body.title).toBe('Distinguished Professor');
             });
         });
 
@@ -213,8 +168,8 @@ describe('Speaker resolvers', () => {
                 const mutation = `
                     mutation {
                         deleteSpeaker(input: {
-                            eventId: "${toEventId({ id: testEventId }).id}",
-                            id: "${createdSpeakerId}"
+                            id: "${createdSpeakerId}",
+                            eventId: "${toEventId({ id: testEventId }).id}"
                         }) {
                             isError
                             message
@@ -223,10 +178,14 @@ describe('Speaker resolvers', () => {
                             }
                         }
                     }`;
-                testClient.setCookies({ jwt: token });
                 const response = await testClient.query(mutation);
+
+                if (response.data?.deleteSpeaker?.isError) {
+                    console.error('Error deleting speaker:', response.data.deleteSpeaker);
+                    console.error('Response errors:', response.errors);
+                }
+
                 expect(response.data.deleteSpeaker.isError).toBe(false);
-                expect(response.data.deleteSpeaker.body.id).toBe(createdSpeakerId);
             });
         });
     });

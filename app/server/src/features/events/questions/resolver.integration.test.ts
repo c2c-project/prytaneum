@@ -10,10 +10,9 @@ jest.mock('axios');
 
 const toUserId = toGlobalId('User');
 const toEventId = toGlobalId('Event');
-const toQuestionId = toGlobalId('EventQuestion');
 
 const userData = {
-    id: '4136cd0b-d90b-4af7-b485-5d1ded8db254',
+    id: '33333333-3333-4333-a333-333333333333',
     email: 'questionTest@test.com',
     firstName: 'Question',
     lastName: 'Test',
@@ -88,11 +87,11 @@ beforeAll(async () => {
 afterAll(async () => {
     const server = getOrCreateServer();
     const prisma = getPrismaClient(server.log);
-    await prisma.eventQuestion.deleteMany();
-    await prisma.event.deleteMany();
-    await prisma.orgMember.deleteMany();
-    await prisma.organization.deleteMany();
-    await prisma.user.deleteMany();
+    await prisma.eventQuestion.deleteMany({ where: { eventId: testEventId } });
+    await prisma.event.deleteMany({ where: { id: testEventId } });
+    await prisma.orgMember.deleteMany({ where: { orgId: testOrgId } });
+    await prisma.organization.deleteMany({ where: { id: testOrgId } });
+    await prisma.user.deleteMany({ where: { id: userData.id } });
     await prisma.$disconnect();
     await server.close();
 });

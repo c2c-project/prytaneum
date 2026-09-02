@@ -12,7 +12,8 @@ const toUserId = toGlobalId('User');
 export const resolvers: Resolvers = {
     Query: {
         async questionsByEventId(parent, args, ctx, info) {
-            const questions = await Question.findQuestionsByEventId(args.eventId, ctx.prisma);
+            const { id: eventId } = fromGlobalId(args.eventId);
+            const questions = await Question.findQuestionsByEventId(eventId, ctx.prisma);
             return questions.map(toQuestionId);
         },
     },

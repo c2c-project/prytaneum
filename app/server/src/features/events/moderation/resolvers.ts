@@ -24,7 +24,13 @@ export const resolvers: Resolvers = {
     Mutation: {
         async hideQuestion(parent, args, ctx, info) {
             if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
-            const hiddenQuestion = await Moderation.hideQuestionById(ctx.viewer.id, ctx.prisma, args.input);
+            const { id: eventId } = fromGlobalId(args.input.eventId);
+            const { id: questionId } = fromGlobalId(args.input.questionId);
+            const hiddenQuestion = await Moderation.hideQuestionById(ctx.viewer.id, ctx.prisma, {
+                ...args.input,
+                eventId,
+                questionId,
+            });
             return toQuestionId(hiddenQuestion);
         },
         async updateQuestionPosition(parent, args, ctx, info) {
