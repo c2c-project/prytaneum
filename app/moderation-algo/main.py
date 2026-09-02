@@ -10,6 +10,7 @@ from PromptAnalysis.promptSummarization import SummarizePosts
 from PromptAnalysis.analyzeStakeholders import ExtractShareholders
 from Translation.translation import TranslateText
 from NaturalLanguageModeration import InitNaturalLanguageModeration
+from GoogleGemini import InitGoogleGemini
 from Utilities.logEvents import LogEventConsole
 from redis.cluster import RedisCluster, ClusterNode
 import redis
@@ -369,7 +370,8 @@ def StakeholderExtraction():
         return jsonify(stakeholders), 200 # HTTP success
 
 if __name__ == '__main__':
-    # Initialize Google API before starting the app
+    # Initialize Google APIs before starting the app
     InitNaturalLanguageModeration()
+    InitGoogleGemini()
     PrintRedisConnectionStatus()
     serve(app, host='0.0.0.0', port=5000)

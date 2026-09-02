@@ -58,6 +58,21 @@ spec:
                             configMapKeyRef:
                                 key: GCP_PROJECT_ID
                                 name: moderation-algo-config
+                      - name: GOOGLE_CLOUD_PROJECT
+                        valueFrom:
+                            configMapKeyRef:
+                                key: GOOGLE_CLOUD_PROJECT
+                                name: moderation-algo-config
+                      - name: GOOGLE_CLOUD_LOCATION
+                        valueFrom:
+                            configMapKeyRef:
+                                key: GOOGLE_CLOUD_LOCATION
+                                name: moderation-algo-config
+                      - name: GOOGLE_GENAI_USE_VERTEXAI
+                        valueFrom:
+                            configMapKeyRef:
+                                key: GOOGLE_GENAI_USE_VERTEXAI
+                                name: moderation-algo-config
                       - name: POD_ID
                         valueFrom:
                             fieldRef:
