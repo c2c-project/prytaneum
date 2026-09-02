@@ -30,7 +30,7 @@ def InitGoogleGemini():
                 or os.environ.get('GOOGLE_CLOUD_PROJECT')
                 or 'prytaneum-project'
             )
-            location = os.environ.get('GOOGLE_CLOUD_LOCATION', 'us-central1')
+            location = os.environ.get('GOOGLE_CLOUD_LOCATION', 'global')
             _client = genai.Client(vertexai=True, project=project, location=location)
     except Exception as error:
         _client = None
@@ -45,8 +45,13 @@ def _get_client():
     return _client
 
 
-def AskGoogleGemini(prompt: str, model='gemini-3.7-flash', max_output_tokens=1024, force=False, temperature=0.2, top_k=40) -> str:
+DEFAULT_MODEL = os.environ.get('GEMINI_MODEL', 'gemini-3.7-flash')
+
+
+def AskGoogleGemini(prompt: str, model=None, max_output_tokens=1024, force=False, temperature=0.2, top_k=40) -> str:
     "Ask a prompt to given Google Cloud model and return the response text and safety ratings."
+    if not model:
+        model = os.environ.get('GEMINI_MODEL', DEFAULT_MODEL)
     # Get cache folder path of desired model and create one if it does not already exist
     folder = os.path.dirname(os.path.abspath(__file__)) + '/' # Folder of this script
     cachefolder = folder + 'GooglegeminiCache/' + model.replace('.', '_') + '/' # Folder names cannot have periods

@@ -73,6 +73,11 @@ spec:
                             configMapKeyRef:
                                 key: GOOGLE_GENAI_USE_VERTEXAI
                                 name: moderation-algo-config
+                      - name: GEMINI_MODEL
+                        valueFrom:
+                            configMapKeyRef:
+                                key: GEMINI_MODEL
+                                name: moderation-algo-config
                       - name: POD_ID
                         valueFrom:
                             fieldRef:
