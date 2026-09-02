@@ -1,46 +1,40 @@
-import os
-import google.generativeai as genai
-from google.generativeai.types import HarmCategory, HarmBlockThreshold
 import hashlib
 import json
+import os
 
-def AskGoogleGemini(prompt: str, model='gemini-2.5-flash', max_output_tokens=1024, force=False, temperature=0.2, top_k=40) -> str:
+from google import genai
+from google.genai import types
+
+client = genai.Client()
+
+
+def AskGoogleGemini(prompt: str, model='gemini-3.7-flash', max_output_tokens=1024, force=False, temperature=0.2, top_k=40) -> str:
     "Ask a prompt to given Google Cloud model and return the response text and safety ratings."
     # Get cache folder path of desired model and create one if it does not already exist
     folder = os.path.dirname(os.path.abspath(__file__)) + '/' # Folder of this script
     cachefolder = folder + 'GooglegeminiCache/' + model.replace('.', '_') + '/' # Folder names cannot have periods
     os.makedirs(cachefolder, exist_ok=True)
 
-    # Construct non-limiting safety filters
-    safety_settings = []
-    for category in HarmCategory:
-        safety_settings.append({
-            "category": category,
-            "threshold": HarmBlockThreshold.BLOCK_NONE,
-        })
-    
-    safety_settings=[
-            {
-                "category": HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-                "threshold": HarmBlockThreshold.BLOCK_NONE,
-            },
-            {
-                "category": HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-                "threshold": HarmBlockThreshold.BLOCK_NONE,
-            },
-            {
-                "category": HarmCategory.HARM_CATEGORY_HARASSMENT,
-                "threshold": HarmBlockThreshold.BLOCK_NONE,
-            },
-            {
-                "category": HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-                "threshold": HarmBlockThreshold.BLOCK_NONE,
-            },
-        ]
+    # Construct non-limiting safety filters -- this goes into the config argument below
+    safety_settings = [
+        types.SafetySetting(
+            category='HARM_CATEGORY_HATE_SPEECH',
+            threshold='BLOCK_NONE',
+        ),
+        types.SafetySetting(
+            category='HARM_CATEGORY_DANGEROUS_CONTENT',
+            threshold='BLOCK_NONE',
+        ),
+        types.SafetySetting(
+            category='HARM_CATEGORY_HARASSMENT',
+            threshold='BLOCK_NONE',
+        ),
+        types.SafetySetting(
+            category='HARM_CATEGORY_SEXUALLY_EXPLICIT',
+            threshold='BLOCK_NONE',
+        ),
+    ]
 
-    # Fetch the requested model with no safety filters
-    model = genai.GenerativeModel(model, safety_settings=safety_settings)
-    
     # Check if the prompt has been executed before
     response = ''
     hashedPrompt = str(hashlib.md5(prompt.encode('utf-8')).hexdigest()[:8])
@@ -55,14 +49,26 @@ def AskGoogleGemini(prompt: str, model='gemini-2.5-flash', max_output_tokens=102
         
     # Get the response and its safety ratings from Gemini if it was not cached
     if(response == ''):
-        completion = model.generate_content(
-            prompt,
-            generation_config=genai.types.GenerationConfig(
-                #max_output_tokens=max_output_tokens,
-                temperature=temperature, # Randomness: Low temp = low randomness, high temp = high creativity
+        completion = client.models.generate_content(
+            model=model,
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                # max_output_tokens=max_output_tokens,
                 top_k=top_k,
+                temperature=temperature,  # Randomness: Low temp = low randomness, high temp = high creativity
+                http_options=types.HttpOptions(
+                    retry_options=types.HttpRetryOptions(
+                        attempts=10,        # default is 5
+                        initial_delay=1.0,  # seconds
+                        exp_base=2,         # 1s, 2s, 4s, 8s, ...
+                        http_status_codes=[408, 429, 500, 502, 503, 504],
+                    ),
+                    timeout=120000,  # ms
+                ),
+                safety_settings=safety_settings,
             ),
         )
+
         response = completion.text
         if(response is None):
             response = 'unknown'
