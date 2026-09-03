@@ -13,8 +13,7 @@ export type PieDatumWithColor = PieDatum & {
 
 interface Props {
     height: number;
-    // FIXME:
-    // data: PieDatum[];
+    data?: PieDatum[];
 }
 export type AccessorFunc = (datum: PieDatum) => string;
 

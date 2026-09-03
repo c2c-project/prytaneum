@@ -170,13 +170,12 @@ export function PreloadedEventLiveModratorView({ eventId }: PreloadedEventLiveMo
 
     React.useEffect(() => {
         if (isLoading) return;
-        if (!queryRef) loadEventQuery({ eventId, lang: user?.preferredLang || 'EN' });
-    }, [eventId, queryRef, loadEventQuery, isLoading, user?.preferredLang]);
+        loadEventQuery({ eventId, lang: user?.preferredLang || 'EN' });
+    }, [eventId, loadEventQuery, isLoading, user?.preferredLang]);
 
     React.useEffect(() => {
         return () => disposeQuery();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [disposeQuery]);
 
     if (!queryRef) return <Loader />;
     return <EventLiveModeratorViewContainer queryRef={queryRef} eventId={eventId} />;

@@ -44,8 +44,15 @@ export function useEventsDashboard({ fragmentRef }: UseEventsDashboardProps) {
         (filter: EventsDashboardSearchFilter) => {
             if (isRefreshing) return;
             setIsRefreshing(true);
-            refetch({ filter });
-            setIsRefreshing(false);
+            refetch(
+                { filter },
+                {
+                    fetchPolicy: 'store-and-network',
+                    onComplete: () => {
+                        setIsRefreshing(false);
+                    },
+                }
+            );
         },
         [isRefreshing, refetch]
     );
@@ -54,5 +61,5 @@ export function useEventsDashboard({ fragmentRef }: UseEventsDashboardProps) {
         return data.allEvents?.edges?.map((edge) => edge?.node) ?? [];
     }, [data.allEvents?.edges]);
 
-    return { events, loadNext, loadPrevious, hasNext, isLoadingNext, refresh };
+    return { events, loadNext, loadPrevious, hasNext, isLoadingNext, isRefreshing, refresh };
 }

@@ -2,7 +2,7 @@ import React from 'react';
 
 interface useRefreshProps {
     refreshInterval: number; // in milliseconds
-    callback: () => void;
+    callback: () => void | Promise<void>;
 }
 
 export function useRefresh({ refreshInterval, callback }: useRefreshProps) {
@@ -17,11 +17,14 @@ export function useRefresh({ refreshInterval, callback }: useRefreshProps) {
         setRefreshPaused(false);
     }, [setRefreshPaused]);
 
-    const refresh = React.useCallback(() => {
+    const refresh = React.useCallback(async () => {
         if (isRefreshing || refreshPaused) return;
         setIsRefreshing(true);
-        callback();
-        setIsRefreshing(false);
+        try {
+            await callback();
+        } finally {
+            setIsRefreshing(false);
+        }
     }, [refreshPaused, isRefreshing, callback]);
 
     React.useEffect(() => {
@@ -29,5 +32,5 @@ export function useRefresh({ refreshInterval, callback }: useRefreshProps) {
         return () => clearInterval(interval);
     }, [refresh, refreshInterval]);
 
-    return { pauseRefresh, resumeRefresh };
+    return { isRefreshing, pauseRefresh, resumeRefresh };
 }

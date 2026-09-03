@@ -5,12 +5,11 @@ import { Card, Grid, List, ListItem, Paper, Typography } from '@mui/material';
 import { useEvent } from '@local/features/events';
 import { ConditionalRender } from '@local/components/ConditionalRender';
 import { Loader } from '@local/components/Loader';
-import { fetchQuery, FragmentRefs, graphql } from 'relay-runtime';
+import { FragmentRefs, graphql } from 'relay-runtime';
 import { PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
 import { BroadcastMessageAuthor } from './BroadcastMessageAuthor';
 import { BroadcastMessageContent } from './BroadcastMessageContent';
 import { LiveMessagesQuery } from '@local/__generated__/LiveMessagesQuery.graphql';
-import { useEnvironment } from '@local/core';
 import { useUser } from '@local/features/accounts';
 
 export const LIVE_MESSAGES_QUERY = graphql`
@@ -109,23 +108,15 @@ export function PreloadedLiveMessages() {
     const { user, isLoading } = useUser();
     const [queryRef, loadQuery, disposeQuery] = useQueryLoader<LiveMessagesQuery>(LIVE_MESSAGES_QUERY);
     const [isRefreshing, setIsRefreshing] = React.useState(false);
-    const { env } = useEnvironment();
     const { eventId } = useEvent();
     const REFRESH_INTERVAL = 15000; // 15 seconds
 
     const refresh = React.useCallback(() => {
         if (isRefreshing || isLoading) return;
         setIsRefreshing(true);
-        fetchQuery(env, LIVE_MESSAGES_QUERY, { eventId, lang: user?.preferredLang || 'EN' }).subscribe({
-            complete: () => {
-                setIsRefreshing(false);
-                loadQuery({ eventId, lang: user?.preferredLang || 'EN' }, { fetchPolicy: 'store-and-network' });
-            },
-            error: () => {
-                setIsRefreshing(false);
-            },
-        });
-    }, [isRefreshing, isLoading, env, eventId, loadQuery, user?.preferredLang]);
+        loadQuery({ eventId, lang: user?.preferredLang || 'EN' }, { fetchPolicy: 'network-only' });
+        setIsRefreshing(false);
+    }, [isRefreshing, isLoading, eventId, loadQuery, user?.preferredLang]);
 
     // Fetches up to date data on initial load and sets up polling
     React.useEffect(() => {
@@ -137,8 +128,7 @@ export function PreloadedLiveMessages() {
 
     React.useEffect(() => {
         return () => disposeQuery();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [disposeQuery]);
 
     if (!queryRef) return <Loader />;
     return (

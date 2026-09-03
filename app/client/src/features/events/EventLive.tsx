@@ -296,23 +296,25 @@ export interface PreloadedEventLiveProps {
 
 export function PreloadedEventLive({ eventId, token }: PreloadedEventLiveProps) {
     const { user, isLoading } = useUser();
-    const [eventLiveQueryRef, loadEventQuery, disposeQuery] = useQueryLoader<EventLiveQuery>(EVENT_LIVE_QUERY);
-    const [validateInviteQueryRef, loadInviteQuery] = useQueryLoader<ValidateInviteQuery>(VALIDATE_INVITE_QUERY);
+    const [eventLiveQueryRef, loadEventQuery, disposeEventQuery] = useQueryLoader<EventLiveQuery>(EVENT_LIVE_QUERY);
+    const [validateInviteQueryRef, loadInviteQuery, disposeInviteQuery] =
+        useQueryLoader<ValidateInviteQuery>(VALIDATE_INVITE_QUERY);
 
     React.useEffect(() => {
         if (isLoading) return;
-        if (!eventLiveQueryRef) loadEventQuery({ eventId, lang: user?.preferredLang || 'EN' });
-    }, [eventId, eventLiveQueryRef, isLoading, loadEventQuery, user?.preferredLang]);
+        loadEventQuery({ eventId, lang: user?.preferredLang || 'EN' });
+    }, [eventId, isLoading, loadEventQuery, user?.preferredLang]);
 
     React.useEffect(() => {
-        if (!token && !validateInviteQueryRef) loadInviteQuery({ token: '', eventId });
-        if (token && !validateInviteQueryRef) loadInviteQuery({ token, eventId });
-    }, [validateInviteQueryRef, loadInviteQuery, eventId, token]);
+        loadInviteQuery({ token: token || '', eventId });
+    }, [eventId, loadInviteQuery, token]);
 
     React.useEffect(() => {
-        return () => disposeQuery();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        return () => {
+            disposeEventQuery();
+            disposeInviteQuery();
+        };
+    }, [disposeEventQuery, disposeInviteQuery]);
 
     if (!eventLiveQueryRef || !validateInviteQueryRef) return <Loader />;
     return (

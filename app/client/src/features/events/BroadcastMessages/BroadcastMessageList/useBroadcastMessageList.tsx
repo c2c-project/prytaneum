@@ -63,13 +63,17 @@ export function useBroadcastMessageList({ fragmentRef }: useBroadcastMessageList
         refetch(
             {
                 first: MAX_MESSAGES_DISPLAYED,
-                after: data.broadcastMessages?.pageInfo?.endCursor,
+                after: '',
                 lang: user?.preferredLang ?? 'EN',
             },
-            { fetchPolicy: 'store-and-network' }
+            {
+                fetchPolicy: 'store-and-network',
+                onComplete: () => {
+                    setIsRefreshing(false);
+                },
+            }
         );
-        setIsRefreshing(false);
-    }, [data.broadcastMessages?.pageInfo?.endCursor, isRefreshing, refetch, user?.preferredLang]);
+    }, [isRefreshing, refetch, user?.preferredLang]);
 
     const connections = React.useMemo(() => {
         return broadcastMessages?.__id ? [broadcastMessages.__id] : [];

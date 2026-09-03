@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery, fetchQuery } from 'react-relay';
+import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { List, ListItem, Card, CardContent, Typography, Grid, Button, Divider } from '@mui/material';
 
 import { ConditionalRender, Loader } from '@local/components';
 import { LiveFeedbackPromptResponseListQuery } from '@local/__generated__/LiveFeedbackPromptResponseListQuery.graphql';
-import { useEnvironment } from '@local/core';
 import { Prompt } from '../LiveFeedbackPrompt/LiveFeedbackPromptList';
 import { PromptResponseAuthorCardHeader } from './PromptResponseAuthorCardHeader';
 import { VoteResponseChart } from '../LiveFeedbackPromptResponse/VoteResponseChart';
@@ -230,7 +229,6 @@ export function PreloadedLiveFeedbackPromptResponseList({
         LIVE_FEEDBACK_PROMPT_RESPONSE_LIST_QUERY
     );
     const [isRefreshing, setIsRefreshing] = React.useState(false);
-    const { env } = useEnvironment();
     const REFRESH_INTERVAL = 30000; // 30 seconds
     const promptData = {
         promptId: prompt.id,
@@ -245,16 +243,9 @@ export function PreloadedLiveFeedbackPromptResponseList({
     const refresh = React.useCallback(() => {
         if (isRefreshing) return;
         setIsRefreshing(true);
-        fetchQuery(env, LIVE_FEEDBACK_PROMPT_RESPONSE_LIST_QUERY, { promptId }).subscribe({
-            complete: () => {
-                setIsRefreshing(false);
-                loadQuery({ promptId, isFlow }, { fetchPolicy: 'store-or-network' });
-            },
-            error: () => {
-                setIsRefreshing(false);
-            },
-        });
-    }, [env, isRefreshing, loadQuery, promptId, isFlow]);
+        loadQuery({ promptId, isFlow }, { fetchPolicy: 'network-only' });
+        setIsRefreshing(false);
+    }, [isRefreshing, loadQuery, promptId, isFlow]);
 
     // TODO: Update to manual refresh button
     React.useEffect(() => {
@@ -262,13 +253,11 @@ export function PreloadedLiveFeedbackPromptResponseList({
         // This Ensures any cached data is displayed right away but will still be kept up to date
         if (!queryRef) loadQuery({ promptId, isFlow }, { fetchPolicy: 'store-and-network' });
         const interval = setInterval(refresh, REFRESH_INTERVAL);
-        // return () => clearInterval(interval);
         return () => {
             clearInterval(interval);
             disposeQuery();
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [disposeQuery, isFlow, loadQuery, promptId, queryRef, refresh]);
 
     if (!queryRef) return <Loader />;
     return (
