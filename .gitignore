@@ -136,3 +136,7 @@ screenshots/
 # Macos specific files
 .yarn/cache/fsevents*
 .yarn/cache/@next-swc-darwin-arm64*
+
+# Generated Relay and GraphQL files
+**/__generated__/*
+!**/__generated__/.gitignore
