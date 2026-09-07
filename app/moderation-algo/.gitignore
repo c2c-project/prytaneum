@@ -1,2 +1,4 @@
 Keys/*
 *pyc
+.venv/
+NaturalLanguageModerationCache/

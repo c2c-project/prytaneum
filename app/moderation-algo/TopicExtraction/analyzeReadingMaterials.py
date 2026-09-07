@@ -26,6 +26,7 @@ def ExtractTopicsDescriptions(reading_materials: str, force=False) -> dict:
     prompt = 'I am giving you a political article, give me the broader topics discussed in the article '
     prompt += 'and a definition of them in a '
     prompt += 'JSON format like so: {"the first topic":"the first definition","second topic":"second definition", ...}. '
+    prompt += 'The topics should be either one word or two words, and may have no more than two words. '
     prompt += 'Only provide high level topics that are not similar to one another. '
     prompt += 'Condense the provided topics into a maximum of 7 broad topics. '
     prompt += 'The political article to extract topics from is as follows:\n"'
@@ -64,6 +65,7 @@ def RegenerateTopicsDescriptions(reading_materials: str, lockedTopics: set, forc
         prompt += 'that are not similar to any topic in the given list '
     prompt += 'and a definition of them in a '
     prompt += 'JSON format like so: {"the first topic":"the first definition","second topic":"second definition", ...}. '
+    prompt += 'The topics should be either one word or two words, and may have no more than two words. '
     prompt += 'Only provide high level topics that are not similar to one another. '
     prompt += 'Condense the provided topics into a maximum of 7 broad topics. '
     if(len(lockedTopics) > 0):
