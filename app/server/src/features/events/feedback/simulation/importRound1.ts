@@ -193,11 +193,11 @@ export async function preflightRound1Import(
     };
 }
 
-/** Parse, preflight, and transactionally import all FGDT Round 1 responses. */
-export async function importRound1Responses(prisma: PrismaClient, json: unknown): Promise<Round1ImportSummary> {
-    const output = parseRound1Output(json);
-    await preflightRound1Import(prisma, output);
-
+/** Transactionally persist FGDT Round 1 responses that have already been parsed and preflighted. */
+export async function persistRound1Responses(
+    prisma: PrismaClient,
+    output: Round1Output
+): Promise<Round1ImportSummary> {
     await prisma.$transaction(async (tx) => {
         for (const response of output.responses) {
             await tx.eventLiveFeedbackPromptResponse.create({
@@ -221,4 +221,11 @@ export async function importRound1Responses(prisma: PrismaClient, json: unknown)
         insertedCount: output.responses.length,
         participantKeys: output.responses.map(({ participantKey }) => participantKey),
     };
+}
+
+/** Parse, preflight, and transactionally import all FGDT Round 1 responses. */
+export async function importRound1Responses(prisma: PrismaClient, json: unknown): Promise<Round1ImportSummary> {
+    const output = parseRound1Output(json);
+    await preflightRound1Import(prisma, output);
+    return persistRound1Responses(prisma, output);
 }

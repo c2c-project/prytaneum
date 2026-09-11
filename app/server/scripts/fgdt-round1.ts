@@ -8,15 +8,18 @@ import {
 } from '../src/features/events/feedback/simulation/importRound1';
 import { prepareRound1Input } from '../src/features/events/feedback/simulation/prepareRound1';
 import { parseRound1CliOptions } from '../src/features/events/feedback/simulation/round1Cli';
+import { resolveRound1Target } from '../src/features/events/feedback/simulation/resolveRound1Target';
+import { Round1RunError, runRound1 } from '../src/features/events/feedback/simulation/runRound1';
 
 async function main() {
     const options = parseRound1CliOptions(process.argv.slice(2));
     const prisma = new PrismaClient();
     try {
         if (options.command === 'prepare') {
+            const target = await resolveRound1Target(prisma, options);
             const input = await prepareRound1Input(prisma, {
-                eventId: options.eventId,
-                promptId: options.promptId,
+                eventId: target.eventId,
+                promptId: target.promptId,
                 participantCount: options.participantCount,
                 topic: options.topic,
                 background: options.background,
@@ -40,6 +43,13 @@ async function main() {
             return;
         }
 
+        if (options.command === 'run') {
+            const target = await resolveRound1Target(prisma, options);
+            const summary = await runRound1(prisma, { ...options, ...target });
+            console.log(JSON.stringify(summary, null, 2));
+            return;
+        }
+
         const json = JSON.parse(fs.readFileSync(options.file, 'utf-8')) as unknown;
         const output = parseRound1Output(json);
         if (options.dryRun) {
@@ -57,6 +67,9 @@ async function main() {
 if (require.main === module) {
     main().catch((error) => {
         console.error(error instanceof Error ? error.message : error);
+        if (error instanceof Round1RunError && error.tempDirectory) {
+            console.error(`Temporary files kept at: ${error.tempDirectory}`);
+        }
         process.exitCode = 1;
     });
 }
