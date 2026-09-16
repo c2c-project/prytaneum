@@ -95,7 +95,7 @@ function parseResponse(value: unknown, index: number, options: string[]): Round1
     }
 
     const reasoning = requireNonemptyString(response.reasoning, `responses[${index}].reasoning`);
-    if (reasoning.length > 500) {
+    if (Array.from(reasoning).length > 500) {
         throw new Round1ImportError(`responses[${index}].reasoning must be at most 500 characters.`);
     }
 
@@ -111,7 +111,7 @@ export function parseRound1Output(json: unknown): Round1Output {
     const eventId = requireUuid(output.eventId, 'eventId');
     const promptId = requireUuid(output.promptId, 'promptId');
     const model = requireNonemptyString(output.model, 'model');
-    if (!model.startsWith('gemini-')) throw new Round1ImportError('model must be a Gemini model name.');
+    if (model !== 'gemini-3.5-flash') throw new Round1ImportError('model must be gemini-3.5-flash.');
     const generatedAt = requireNonemptyString(output.generatedAt, 'generatedAt');
     const options = parseOptions(output.options);
 

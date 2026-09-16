@@ -68,6 +68,12 @@ describe('parseRound1Output', () => {
         expect(() => parseRound1Output(json)).toThrow('schemaVersion must equal 1');
     });
 
+    test('rejects any model other than the fixed Round 1 Gemini model', () => {
+        expect(() => parseRound1Output({ ...(makeValidJson() as object), model: 'gemini-other' })).toThrow(
+            'model must be gemini-3.5-flash'
+        );
+    });
+
     test('rejects a duplicate participantKey', () => {
         const json = makeValidJson() as any;
         json.responses[1].participantKey = json.responses[0].participantKey;

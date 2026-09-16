@@ -1,5 +1,3 @@
-import { DEFAULT_ROUND1_MODEL } from './prepareRound1';
-
 export type Round1ImportCliOptions = {
     command: 'import';
     file: string;
@@ -16,7 +14,6 @@ export type Round1PrepareCliOptions = {
     topic: string;
     background: string;
     output: string;
-    model?: string;
     force: boolean;
 };
 
@@ -29,11 +26,7 @@ export type Round1RunCliOptions = {
     participantCount: number;
     topic: string;
     background: string;
-    simulatorDir: string;
-    model: string;
     force: boolean;
-    python: string;
-    keepFiles: boolean;
     dryRun: boolean;
 };
 
@@ -95,7 +88,6 @@ function parsePrepareOptions(args: string[]): Round1PrepareCliOptions {
                 '--topic',
                 '--background',
                 '--output',
-                '--model',
             ].includes(argument)
         ) {
             values[argument] = requireFlagValue(args, index, argument);
@@ -125,7 +117,6 @@ function parsePrepareOptions(args: string[]): Round1PrepareCliOptions {
         topic: values['--topic'],
         background: values['--background'],
         output: values['--output'],
-        model: values['--model'],
         force,
     };
 }
@@ -133,14 +124,11 @@ function parsePrepareOptions(args: string[]): Round1PrepareCliOptions {
 function parseRunOptions(args: string[]): Round1RunCliOptions {
     const values: Record<string, string> = {};
     let force = false;
-    let keepFiles = false;
     let dryRun = false;
     for (let index = 0; index < args.length; index++) {
         const argument = args[index];
         if (argument === '--force') {
             force = true;
-        } else if (argument === '--keep-files') {
-            keepFiles = true;
         } else if (argument === '--dry-run') {
             dryRun = true;
         } else if (
@@ -152,9 +140,6 @@ function parseRunOptions(args: string[]): Round1RunCliOptions {
                 '--participants',
                 '--topic',
                 '--background',
-                '--simulator-dir',
-                '--model',
-                '--python',
             ].includes(argument)
         ) {
             values[argument] = requireFlagValue(args, index, argument);
@@ -164,7 +149,7 @@ function parseRunOptions(args: string[]): Round1RunCliOptions {
         }
     }
 
-    const requiredFlags = ['--participants', '--topic', '--background', '--simulator-dir'];
+    const requiredFlags = ['--participants', '--topic', '--background'];
     const missingFlags = requiredFlags.filter((flag) => !values[flag]);
     if (missingFlags.length > 0) {
         throw new Error(`Missing required argument(s): ${missingFlags.join(', ')}.`);
@@ -183,11 +168,7 @@ function parseRunOptions(args: string[]): Round1RunCliOptions {
         participantCount: Number(values['--participants']),
         topic: values['--topic'],
         background: values['--background'],
-        simulatorDir: values['--simulator-dir'],
-        model: values['--model'] ?? DEFAULT_ROUND1_MODEL,
         force,
-        python: values['--python'] ?? 'python',
-        keepFiles,
         dryRun,
     };
 }

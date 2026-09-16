@@ -1,20 +1,29 @@
 import { parseRound1CliOptions } from './round1Cli';
 
+const runArgs = [
+    'run',
+    '--event',
+    'event-uuid',
+    '--prompt',
+    'prompt-uuid',
+    '--participants',
+    '5',
+    '--topic',
+    'topic',
+    '--background',
+    'background',
+];
+
 describe('parseRound1CliOptions', () => {
-    test('preserves the existing import CLI behavior', () => {
+    test('preserves standalone import behavior', () => {
         expect(parseRound1CliOptions(['--file', '/tmp/output.json', '--dry-run'])).toEqual({
             command: 'import',
             file: '/tmp/output.json',
             dryRun: true,
         });
-        expect(parseRound1CliOptions(['--file', '/tmp/output.json'])).toEqual({
-            command: 'import',
-            file: '/tmp/output.json',
-            dryRun: false,
-        });
     });
 
-    test('parses the prepare command', () => {
+    test('parses prepare without model selection', () => {
         expect(
             parseRound1CliOptions([
                 'prepare',
@@ -25,13 +34,11 @@ describe('parseRound1CliOptions', () => {
                 '--participants',
                 '5',
                 '--topic',
-                'the adoption of nuclear power',
+                'topic',
                 '--background',
-                'Background text',
+                'background',
                 '--output',
                 '/tmp/input.json',
-                '--model',
-                'gemini-test',
                 '--force',
             ])
         ).toEqual({
@@ -39,173 +46,32 @@ describe('parseRound1CliOptions', () => {
             eventId: 'event-uuid',
             promptId: 'prompt-uuid',
             participantCount: 5,
-            topic: 'the adoption of nuclear power',
-            background: 'Background text',
+            topic: 'topic',
+            background: 'background',
             output: '/tmp/input.json',
-            model: 'gemini-test',
             force: true,
         });
     });
 
-    test('parses the run command with defaults', () => {
-        expect(
-            parseRound1CliOptions([
-                'run',
-                '--event',
-                'event-uuid',
-                '--prompt',
-                'prompt-uuid',
-                '--participants',
-                '5',
-                '--topic',
-                'topic',
-                '--background',
-                'background',
-                '--simulator-dir',
-                '/opt/FGDT-simulator',
-            ])
-        ).toEqual({
+    test('parses an internal run with defaults', () => {
+        expect(parseRound1CliOptions(runArgs)).toEqual({
             command: 'run',
             eventId: 'event-uuid',
             promptId: 'prompt-uuid',
             participantCount: 5,
             topic: 'topic',
             background: 'background',
-            simulatorDir: '/opt/FGDT-simulator',
-            model: 'gemini-3.5-flash',
             force: false,
-            python: 'python',
-            keepFiles: false,
             dryRun: false,
         });
     });
 
-    test('parses all optional run arguments', () => {
-        const options = parseRound1CliOptions([
-            'run',
-            '--event',
-            'event-uuid',
-            '--prompt',
-            'prompt-uuid',
-            '--participants',
-            '5',
-            '--topic',
-            'topic',
-            '--background',
-            'background',
-            '--simulator-dir',
-            '/opt/FGDT-simulator',
-            '--model',
-            'gemini-test',
-            '--python',
-            '/opt/conda/bin/python',
-            '--force',
-            '--keep-files',
-            '--dry-run',
-        ]);
-
-        expect(options).toMatchObject({
-            command: 'run',
-            model: 'gemini-test',
-            python: '/opt/conda/bin/python',
-            force: true,
-            keepFiles: true,
-            dryRun: true,
-        });
-    });
-
-    test('parses human-readable identifiers for prepare', () => {
-        expect(
-            parseRound1CliOptions([
-                'prepare',
-                '--event-title',
-                'Nuclear Energy Forum',
-                '--prompt-text',
-                'Should nuclear power be expanded?',
-                '--participants',
-                '5',
-                '--topic',
-                'topic',
-                '--background',
-                'background',
-                '--output',
-                'input.json',
-            ])
-        ).toMatchObject({
-            command: 'prepare',
-            eventTitle: 'Nuclear Energy Forum',
-            promptText: 'Should nuclear power be expanded?',
-        });
-    });
-
-    test('accepts mixed identifier modes for run', () => {
+    test('parses force, dry-run, and human-readable identifiers', () => {
         expect(
             parseRound1CliOptions([
                 'run',
-                '--event',
-                'event-uuid',
-                '--prompt-text',
-                'Prompt text',
-                '--participants',
-                '5',
-                '--topic',
-                'topic',
-                '--background',
-                'background',
-                '--simulator-dir',
-                '/opt/FGDT-simulator',
-            ])
-        ).toMatchObject({ command: 'run', eventId: 'event-uuid', promptText: 'Prompt text' });
-    });
-
-    test('requires an event and prompt identifier form', () => {
-        const base = [
-            'run',
-            '--participants',
-            '5',
-            '--topic',
-            'topic',
-            '--background',
-            'background',
-            '--simulator-dir',
-            '/opt/FGDT-simulator',
-        ];
-        expect(() => parseRound1CliOptions(base)).toThrow('One of --event or --event-title is required');
-        expect(() => parseRound1CliOptions([...base, '--event-title', 'Event'])).toThrow(
-            'One of --prompt or --prompt-text is required'
-        );
-    });
-
-    test('rejects both event identifier forms', () => {
-        expect(() =>
-            parseRound1CliOptions([
-                'prepare',
-                '--event',
-                'event-uuid',
                 '--event-title',
                 'Event',
-                '--prompt',
-                'prompt-uuid',
-                '--participants',
-                '5',
-                '--topic',
-                'topic',
-                '--background',
-                'background',
-                '--output',
-                'input.json',
-            ])
-        ).toThrow('--event and --event-title cannot be used together');
-    });
-
-    test('rejects both prompt identifier forms', () => {
-        expect(() =>
-            parseRound1CliOptions([
-                'run',
-                '--event',
-                'event-uuid',
-                '--prompt',
-                'prompt-uuid',
                 '--prompt-text',
                 'Prompt',
                 '--participants',
@@ -214,33 +80,30 @@ describe('parseRound1CliOptions', () => {
                 'topic',
                 '--background',
                 'background',
-                '--simulator-dir',
-                '/opt/FGDT-simulator',
+                '--force',
+                '--dry-run',
             ])
-        ).toThrow('--prompt and --prompt-text cannot be used together');
+        ).toMatchObject({ command: 'run', eventTitle: 'Event', promptText: 'Prompt', force: true, dryRun: true });
     });
 
-    test('requires all prepare arguments', () => {
-        expect(() => parseRound1CliOptions(['prepare', '--participants', '5'])).toThrow('Missing required argument(s)');
+    test.each(['--simulator-dir', '--python', '--keep-files', '--model'])(
+        'rejects obsolete argument %s',
+        (obsoleteArgument) => {
+            const args = [...runArgs, obsoleteArgument];
+            if (obsoleteArgument !== '--keep-files') args.push('value');
+            expect(() => parseRound1CliOptions(args)).toThrow(`Unknown argument: ${obsoleteArgument}`);
+        }
+    );
+
+    test('requires an event and prompt identifier form', () => {
+        expect(() =>
+            parseRound1CliOptions(['run', '--participants', '5', '--topic', 'topic', '--background', 'background'])
+        ).toThrow('One of --event or --event-title is required');
     });
 
     test('rejects a non-integer participant count', () => {
-        expect(() =>
-            parseRound1CliOptions([
-                'prepare',
-                '--event',
-                'event-uuid',
-                '--prompt',
-                'prompt-uuid',
-                '--participants',
-                '5.5',
-                '--topic',
-                'topic',
-                '--background',
-                'background',
-                '--output',
-                'input.json',
-            ])
-        ).toThrow('--participants must be an integer');
+        const args = [...runArgs];
+        args[args.indexOf('5')] = '5.5';
+        expect(() => parseRound1CliOptions(args)).toThrow('--participants must be an integer');
     });
 });

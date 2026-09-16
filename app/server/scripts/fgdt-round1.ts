@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import fs from 'fs';
 import { PrismaClient } from '../src/__generated__/prisma';
+import { disconnectRedisClientIfCreated } from '../src/core/utils/redis';
 import {
     importRound1Responses,
     parseRound1Output,
@@ -9,7 +10,7 @@ import {
 import { prepareRound1Input } from '../src/features/events/feedback/simulation/prepareRound1';
 import { parseRound1CliOptions } from '../src/features/events/feedback/simulation/round1Cli';
 import { resolveRound1Target } from '../src/features/events/feedback/simulation/resolveRound1Target';
-import { Round1RunError, runRound1 } from '../src/features/events/feedback/simulation/runRound1';
+import { runRound1 } from '../src/features/events/feedback/simulation/runRound1';
 
 async function main() {
     const options = parseRound1CliOptions(process.argv.slice(2));
@@ -23,7 +24,6 @@ async function main() {
                 participantCount: options.participantCount,
                 topic: options.topic,
                 background: options.background,
-                model: options.model,
                 force: options.force,
             });
             fs.writeFileSync(options.output, `${JSON.stringify(input, null, 2)}\n`, 'utf-8');
@@ -60,6 +60,7 @@ async function main() {
         const summary = await importRound1Responses(prisma, output);
         console.log(JSON.stringify(summary, null, 2));
     } finally {
+        disconnectRedisClientIfCreated();
         await prisma.$disconnect();
     }
 }
@@ -67,9 +68,6 @@ async function main() {
 if (require.main === module) {
     main().catch((error) => {
         console.error(error instanceof Error ? error.message : error);
-        if (error instanceof Round1RunError && error.tempDirectory) {
-            console.error(`Temporary files kept at: ${error.tempDirectory}`);
-        }
         process.exitCode = 1;
     });
 }

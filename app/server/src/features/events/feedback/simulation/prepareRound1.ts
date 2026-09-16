@@ -23,7 +23,6 @@ export type Round1Input = {
     background: string;
     options: string[];
     generation: {
-        model: string;
         force: boolean;
     };
     participants: Round1InputParticipant[];
@@ -35,7 +34,6 @@ export type PrepareRound1InputParams = {
     participantCount: number;
     topic: string;
     background: string;
-    model?: string;
     force?: boolean;
     runId?: string;
 };
@@ -47,28 +45,26 @@ export class Round1PrepareError extends Error {
     }
 }
 
-export const DEFAULT_ROUND1_MODEL = 'gemini-3.5-flash';
-
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const PERSONAS: Round1PersonaCovariates[] = [
-    { gender: 'female', education: "Bachelor's degree", politics: 'liberal' },
+    { gender: 'female', education: 'Bachelor\'s degree', politics: 'liberal' },
     { gender: 'male', education: 'High school', politics: 'conservative' },
     { gender: 'female', education: 'Graduate degree', politics: 'moderate' },
     { gender: 'male', education: 'Some college', politics: 'liberal' },
     { gender: 'female', education: 'High school', politics: 'moderate' },
-    { gender: 'male', education: "Bachelor's degree", politics: 'conservative' },
+    { gender: 'male', education: 'Bachelor\'s degree', politics: 'conservative' },
     { gender: 'female', education: 'Some college', politics: 'liberal' },
     { gender: 'male', education: 'Graduate degree', politics: 'moderate' },
-    { gender: 'female', education: "Bachelor's degree", politics: 'conservative' },
+    { gender: 'female', education: 'Bachelor\'s degree', politics: 'conservative' },
     { gender: 'male', education: 'High school', politics: 'liberal' },
     { gender: 'female', education: 'Graduate degree', politics: 'moderate' },
     { gender: 'male', education: 'Some college', politics: 'conservative' },
     { gender: 'female', education: 'High school', politics: 'liberal' },
-    { gender: 'male', education: "Bachelor's degree", politics: 'moderate' },
+    { gender: 'male', education: 'Bachelor\'s degree', politics: 'moderate' },
     { gender: 'female', education: 'Some college', politics: 'conservative' },
     { gender: 'male', education: 'Graduate degree', politics: 'liberal' },
-    { gender: 'female', education: "Bachelor's degree", politics: 'moderate' },
+    { gender: 'female', education: 'Bachelor\'s degree', politics: 'moderate' },
     { gender: 'male', education: 'High school', politics: 'conservative' },
     { gender: 'female', education: 'Graduate degree', politics: 'liberal' },
     { gender: 'male', education: 'Some college', politics: 'moderate' },
@@ -92,8 +88,14 @@ function makeRunId(promptId: string): string {
 }
 
 function validateOptions(options: string[]): void {
-    if (options.length < 2) throw new Round1PrepareError('Prompt must have at least 2 multiple-choice options.');
-    options.forEach((option, index) => requireNonemptyString(option, `Prompt option ${index + 1}`));
+    if (options.length < 2 || options.length > 20) {
+        throw new Round1PrepareError('Prompt must have between 2 and 20 multiple-choice options.');
+    }
+    options.forEach((option, index) => {
+        requireNonemptyString(option, `Prompt option ${index + 1}`);
+        if (Array.from(option).length > 250)
+            throw new Round1PrepareError(`Prompt option ${index + 1} must be at most 250 characters.`);
+    });
     if (new Set(options).size !== options.length) {
         throw new Round1PrepareError('Prompt options must be unique.');
     }
@@ -113,8 +115,6 @@ export async function prepareRound1Input(prisma: PrismaClient, params: PrepareRo
         throw new Round1PrepareError(`participantCount must be between 1 and ${FGDT_DUMMY_USER_COUNT}.`);
     }
 
-    const model = params.model === undefined ? DEFAULT_ROUND1_MODEL : requireNonemptyString(params.model, 'model');
-    if (!model.startsWith('gemini-')) throw new Round1PrepareError('model must be a Gemini model name.');
     const runId = params.runId === undefined ? makeRunId(promptId) : requireNonemptyString(params.runId, 'runId');
 
     const event = await prisma.event.findUnique({ where: { id: eventId }, select: { id: true } });
@@ -172,7 +172,7 @@ export async function prepareRound1Input(prisma: PrismaClient, params: PrepareRo
         topic,
         background,
         options: [...prompt.multipleChoiceOptions],
-        generation: { model, force: params.force ?? false },
+        generation: { force: params.force ?? false },
         participants,
     };
 }

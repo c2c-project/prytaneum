@@ -1,5 +1,5 @@
 import { prismaMock } from '../../../../../mocks/prisma/singleton';
-import { DEFAULT_ROUND1_MODEL, prepareRound1Input, PrepareRound1InputParams } from './prepareRound1';
+import { prepareRound1Input, PrepareRound1InputParams } from './prepareRound1';
 
 const EVENT_ID = '4ca977f8-3cf4-40ea-a9af-e2b852c0b15f';
 const OTHER_EVENT_ID = 'cc0f08b4-bcb0-4d3b-b07d-918339f4a220';
@@ -62,7 +62,7 @@ describe('prepareRound1Input', () => {
             topic: 'the adoption of nuclear power',
             background: 'The region is considering a new nuclear power plant.',
             options: OPTIONS,
-            generation: { model: DEFAULT_ROUND1_MODEL, force: false },
+            generation: { force: false },
             participants: [
                 {
                     participantKey: 'fgdt-demo-01',
@@ -70,7 +70,7 @@ describe('prepareRound1Input', () => {
                     persona: {
                         covariates: {
                             gender: 'female',
-                            education: "Bachelor's degree",
+                            education: 'Bachelor\'s degree',
                             politics: 'liberal',
                         },
                     },
@@ -142,9 +142,11 @@ describe('prepareRound1Input', () => {
     });
 
     test.each([
-        [['Only one'], 'at least 2'],
+        [['Only one'], 'between 2 and 20'],
         [['Yes', ''], 'nonempty'],
         [['Yes', 'Yes'], 'unique'],
+        [Array.from({ length: 21 }, (_, index) => `Option ${index}`), 'between 2 and 20'],
+        [['Yes', 'x'.repeat(251)], 'at most 250 characters'],
     ])('rejects invalid prompt options: %j', async (multipleChoiceOptions, message) => {
         prismaMock.event.findUnique.mockResolvedValue({ id: EVENT_ID } as any);
         prismaMock.eventLiveFeedbackPrompt.findUnique.mockResolvedValue(makePrompt({ multipleChoiceOptions }) as any);
@@ -185,7 +187,7 @@ describe('prepareRound1Input', () => {
             'fgdt-demo-03',
         ]);
         expect(first.participants.map(({ persona }) => persona.covariates)).toEqual([
-            { gender: 'female', education: "Bachelor's degree", politics: 'liberal' },
+            { gender: 'female', education: 'Bachelor\'s degree', politics: 'liberal' },
             { gender: 'male', education: 'High school', politics: 'conservative' },
             { gender: 'female', education: 'Graduate degree', politics: 'moderate' },
         ]);
