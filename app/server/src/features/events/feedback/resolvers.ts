@@ -7,6 +7,7 @@ import { ProtectedError } from '@local/lib/ProtectedError';
 import type { EventLiveFeedbackPromptEdge, FeedbackFlowEdge, FeedbackOperation } from '@local/graphql-types';
 import { EventLiveFeedbackPrompt } from '../../../graphql-types';
 import { isModerator } from '../moderation/methods';
+import { runAuthorizedRound1 } from './simulation/runRound1Mutation';
 
 const toFeedbackId = toGlobalId('EventLiveFeedback');
 const toFeedbackPromptId = toGlobalId('EventLiveFeedbackPrompt');
@@ -274,6 +275,30 @@ export const resolvers: Resolvers = {
                     cursor: formattedPrompt.id,
                 };
                 return edge;
+            });
+        },
+        async runRound1Simulation(parent, args, ctx) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+                if (!args.input) throw new ProtectedError({ userMessage: errors.invalidArgs });
+                const eventGlobalId = fromGlobalId(args.input.eventId);
+                const promptGlobalId = fromGlobalId(args.input.promptId);
+                if (
+                    eventGlobalId.type !== 'Event' ||
+                    promptGlobalId.type !== 'EventLiveFeedbackPrompt' ||
+                    !eventGlobalId.id ||
+                    !promptGlobalId.id
+                ) {
+                    throw new ProtectedError({ userMessage: 'Invalid eventId or promptId.' });
+                }
+                return runAuthorizedRound1(ctx.viewer.id, ctx.prisma, {
+                    eventId: eventGlobalId.id,
+                    promptId: promptGlobalId.id,
+                    participantCount: args.input.participantCount,
+                    topic: args.input.topic,
+                    background: args.input.background,
+                    force: args.input.force ?? false,
+                });
             });
         },
         createFeedbackFlow(parent, args, ctx) {

@@ -255,6 +255,11 @@ export type Event = Node & {
   questionsByTopic?: Maybe<EventQuestionConnection>;
   /** Registrants for this event -- individuals invited */
   registrants?: Maybe<UserConnection>;
+  simulationBackground?: Maybe<Scalars['String']>;
+  /** Whether organizer-configured Round 1 simulation is available for this event */
+  simulationEnabled?: Maybe<Scalars['Boolean']>;
+  simulationParticipantCount?: Maybe<Scalars['Int']>;
+  simulationTopic?: Maybe<Scalars['String']>;
   /** Speakers for this event */
   speakers?: Maybe<EventSpeakerConnection>;
   /** The planned start date time string */
@@ -936,6 +941,7 @@ export type Mutation = {
   resetPasswordRequest: ResetPasswordRequestMutationResponse;
   reshareFeedbackFlow: FeedbackFlowMutationResponse;
   reshareFeedbackPrompt: EventFeedbackPromptMutationResponse;
+  runRound1Simulation: Round1SimulationMutationResponse;
   shareFeedbackFlowDraft: FeedbackFlowMutationResponse;
   shareFeedbackPromptDraft: EventFeedbackPromptMutationResponse;
   shareFeedbackPromptResults: EventFeedbackPromptMutationResponse;
@@ -1255,6 +1261,11 @@ export type MutationReshareFeedbackFlowArgs = {
 
 export type MutationReshareFeedbackPromptArgs = {
   promptId: Scalars['ID'];
+};
+
+
+export type MutationRunRound1SimulationArgs = {
+  input: RunRound1SimulationInput;
 };
 
 
@@ -1656,6 +1667,31 @@ export type ResetPasswordRequestMutationResponse = MutationResponse & {
   message: Scalars['String'];
 };
 
+export type Round1SimulationMutationResponse = MutationResponse & {
+  __typename?: 'Round1SimulationMutationResponse';
+  body?: Maybe<Round1SimulationResult>;
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
+};
+
+export type Round1SimulationResult = {
+  __typename?: 'Round1SimulationResult';
+  eventId: Scalars['String'];
+  insertedCount: Scalars['Int'];
+  participantCount: Scalars['Int'];
+  promptId: Scalars['String'];
+  runId: Scalars['String'];
+};
+
+export type RunRound1SimulationInput = {
+  background: Scalars['String'];
+  eventId: Scalars['ID'];
+  force?: InputMaybe<Scalars['Boolean']>;
+  participantCount: Scalars['Int'];
+  promptId: Scalars['ID'];
+  topic: Scalars['String'];
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   broadcastMessageCreated: EventBroadcastMessageEdgeContainer;
@@ -1903,6 +1939,10 @@ export type UpdateEvent = {
   isForumEnabled?: InputMaybe<Scalars['Boolean']>;
   isPrivate?: InputMaybe<Scalars['Boolean']>;
   isQuestionFeedVisible?: InputMaybe<Scalars['Boolean']>;
+  simulationBackground?: InputMaybe<Scalars['String']>;
+  simulationEnabled?: InputMaybe<Scalars['Boolean']>;
+  simulationParticipantCount?: InputMaybe<Scalars['Int']>;
+  simulationTopic?: InputMaybe<Scalars['String']>;
   startDateTime?: InputMaybe<Scalars['Date']>;
   title?: InputMaybe<Scalars['String']>;
   topic?: InputMaybe<Scalars['String']>;

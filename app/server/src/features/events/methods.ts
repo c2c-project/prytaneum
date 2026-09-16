@@ -78,6 +78,10 @@ export async function createEvent(userId: string, prisma: PrismaClient, input: C
         isCollectRatingsEnabled: true,
         isForumEnabled: true,
         isPrivate: false,
+        simulationEnabled: false,
+        simulationParticipantCount: 10,
+        simulationTopic: '',
+        simulationBackground: '',
         createdById: userId,
         issueGuideUrl: '',
         issue: '',
@@ -142,7 +146,49 @@ export async function canUserModify(userId: string, id: string, prisma: PrismaCl
  */
 export async function updateEvent(userId: string, prisma: PrismaClient, input: UpdateEvent) {
     // check if user has valid permissions
-    if (!canUserModify(userId, input.eventId, prisma)) throw new ProtectedError({ userMessage: errors.permissions });
+    if (!(await canUserModify(userId, input.eventId, prisma))) {
+        throw new ProtectedError({ userMessage: errors.permissions });
+    }
+
+    const includesSimulationSettings = [
+        input.simulationEnabled,
+        input.simulationParticipantCount,
+        input.simulationTopic,
+        input.simulationBackground,
+    ].some((value) => value !== null && value !== undefined);
+
+    if (includesSimulationSettings) {
+        const current = await prisma.event.findUnique({
+            where: { id: input.eventId },
+            select: {
+                simulationEnabled: true,
+                simulationParticipantCount: true,
+                simulationTopic: true,
+                simulationBackground: true,
+            },
+        });
+        if (!current) throw new ProtectedError({ userMessage: 'Event not found.' });
+
+        const simulation = {
+            simulationEnabled: input.simulationEnabled ?? current.simulationEnabled,
+            simulationParticipantCount: input.simulationParticipantCount ?? current.simulationParticipantCount,
+            simulationTopic: input.simulationTopic ?? current.simulationTopic,
+            simulationBackground: input.simulationBackground ?? current.simulationBackground,
+        };
+        if (
+            !Number.isInteger(simulation.simulationParticipantCount) ||
+            simulation.simulationParticipantCount < 1 ||
+            simulation.simulationParticipantCount > 20
+        ) {
+            throw new ProtectedError({ userMessage: 'Simulated participant count must be between 1 and 20.' });
+        }
+        if (simulation.simulationEnabled && simulation.simulationTopic.trim().length === 0) {
+            throw new ProtectedError({ userMessage: 'Simulation topic is required when simulation is enabled.' });
+        }
+        if (simulation.simulationEnabled && simulation.simulationBackground.trim().length === 0) {
+            throw new ProtectedError({ userMessage: 'Simulation background is required when simulation is enabled.' });
+        }
+    }
 
     const fields = filterFields({
         input,
@@ -156,6 +202,10 @@ export async function updateEvent(userId: string, prisma: PrismaClient, input: U
             isForumEnabled: true,
             isPrivate: true,
             isQuestionFeedVisible: true,
+            simulationEnabled: true,
+            simulationParticipantCount: true,
+            simulationTopic: true,
+            simulationBackground: true,
         },
     });
 

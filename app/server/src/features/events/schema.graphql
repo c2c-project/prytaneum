@@ -53,6 +53,14 @@ type Event implements Node {
     isPrivate: Boolean
 
     """
+    Whether organizer-configured Round 1 simulation is available for this event
+    """
+    simulationEnabled: Boolean
+    simulationParticipantCount: Int
+    simulationTopic: String
+    simulationBackground: String
+
+    """
     All questions relating to this event
     """
     questions(first: Int, after: String, viewerOnly: Boolean, topic: String): EventQuestionConnection
@@ -184,6 +192,10 @@ input UpdateEvent {
     isCollectRatingsEnabled: Boolean
     isForumEnabled: Boolean
     isPrivate: Boolean
+    simulationEnabled: Boolean
+    simulationParticipantCount: Int
+    simulationTopic: String
+    simulationBackground: String
     eventId: String!
 }
 """
