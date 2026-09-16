@@ -1,5 +1,8 @@
 import type { PrismaClient } from '@local/__generated__/prisma';
 import { FGDT_DUMMY_USER_COUNT, getFgdtDummyUserIdentity } from './dummyUsers';
+import { isRound1PromptUnpublished } from './round1PromptEligibility';
+import { sampleRound1Participants } from './sampleRound1Participants';
+import type { Round1Random } from './sampleRound1Participants';
 
 export type Round1PersonaCovariates = {
     gender: string;
@@ -102,7 +105,11 @@ function validateOptions(options: string[]): void {
 }
 
 /** Build an FGDT Round 1 input from authoritative Prytaneum data without writing to the database. */
-export async function prepareRound1Input(prisma: PrismaClient, params: PrepareRound1InputParams): Promise<Round1Input> {
+export async function prepareRound1Input(
+    prisma: PrismaClient,
+    params: PrepareRound1InputParams,
+    random: Round1Random = Math.random
+): Promise<Round1Input> {
     const eventId = requireRawUuid(params.eventId, 'eventId');
     const promptId = requireRawUuid(params.promptId, 'promptId');
     const topic = requireNonemptyString(params.topic, 'topic');
@@ -128,7 +135,9 @@ export async function prepareRound1Input(prisma: PrismaClient, params: PrepareRo
             isMultipleChoice: true,
             isOpenEnded: true,
             isVote: true,
+            isDraft: true,
             multipleChoiceOptions: true,
+            flows: { select: { feedbackFlow: { select: { isDraft: true } } } },
         },
     });
     if (!prompt) throw new Round1PrepareError(`Prompt ${promptId} does not exist.`);
@@ -138,12 +147,16 @@ export async function prepareRound1Input(prisma: PrismaClient, params: PrepareRo
     if (!prompt.isMultipleChoice || prompt.isOpenEnded || prompt.isVote) {
         throw new Round1PrepareError(`Prompt ${promptId} must be a non-vote, non-open-ended multiple-choice prompt.`);
     }
+    if (!isRound1PromptUnpublished(prompt)) {
+        throw new Round1PrepareError('Simulation is only available for draft/unpublished surveys.');
+    }
     const question = requireNonemptyString(prompt.prompt, 'Prompt question');
     validateOptions(prompt.multipleChoiceOptions);
 
-    const expectedIdentities = Array.from({ length: params.participantCount }, (_, index) =>
-        getFgdtDummyUserIdentity(index + 1)
-    );
+    const expectedIdentities = Array.from({ length: FGDT_DUMMY_USER_COUNT }, (_, index) => ({
+        ...getFgdtDummyUserIdentity(index + 1),
+        personaIndex: index,
+    }));
     const users = await prisma.user.findMany({
         where: { email: { in: expectedIdentities.map(({ email }) => email) } },
         select: { id: true, email: true },
@@ -157,10 +170,24 @@ export async function prepareRound1Input(prisma: PrismaClient, params: PrepareRo
         );
     }
 
-    const participants = expectedIdentities.map(({ participantKey, email }, index) => ({
+    const existingResponses = await prisma.eventLiveFeedbackPromptResponse.findMany({
+        where: { promptId, createdById: { in: users.map(({ id }) => id) } },
+        select: { createdById: true },
+    });
+    const usedUserIds = new Set(existingResponses.map(({ createdById }) => createdById));
+    const eligibleIdentities = expectedIdentities.filter(({ email }) => !usedUserIds.has(userByEmail.get(email)!.id));
+    if (params.participantCount > eligibleIdentities.length) {
+        throw new Round1PrepareError(
+            `Only ${eligibleIdentities.length} unused simulated participants remain for this survey, ` +
+                `but ${params.participantCount} were requested.`
+        );
+    }
+
+    const selectedIdentities = sampleRound1Participants(eligibleIdentities, params.participantCount, random);
+    const participants = selectedIdentities.map(({ participantKey, email, personaIndex }) => ({
         participantKey,
         userId: userByEmail.get(email)!.id,
-        persona: { covariates: { ...PERSONAS[index] } },
+        persona: { covariates: { ...PERSONAS[personaIndex] } },
     }));
 
     return {

@@ -26,7 +26,9 @@ function makePrompt(overrides: Record<string, unknown> = {}) {
         isMultipleChoice: true,
         isOpenEnded: false,
         isVote: false,
+        isDraft: false,
         multipleChoiceOptions: OPTIONS,
+        flows: [{ feedbackFlow: { isDraft: true } }],
         ...overrides,
     };
 }
@@ -41,17 +43,18 @@ function makeUsers(count: number) {
     });
 }
 
-function mockValidDatabase(participantCount = 2) {
+function mockValidDatabase() {
     prismaMock.event.findUnique.mockResolvedValue({ id: EVENT_ID } as any);
     prismaMock.eventLiveFeedbackPrompt.findUnique.mockResolvedValue(makePrompt() as any);
-    prismaMock.user.findMany.mockResolvedValue(makeUsers(participantCount) as any);
+    prismaMock.user.findMany.mockResolvedValue(makeUsers(20) as any);
+    prismaMock.eventLiveFeedbackPromptResponse.findMany.mockResolvedValue([]);
 }
 
 describe('prepareRound1Input', () => {
     test('prepares the exact FGDT v1 structure from authoritative prompt data', async () => {
         mockValidDatabase();
 
-        const input = await prepareRound1Input(prismaMock, makeParams());
+        const input = await prepareRound1Input(prismaMock, makeParams(), () => 0);
 
         expect(input).toEqual({
             schemaVersion: 1,
@@ -93,7 +96,9 @@ describe('prepareRound1Input', () => {
                 isMultipleChoice: true,
                 isOpenEnded: true,
                 isVote: true,
+                isDraft: true,
                 multipleChoiceOptions: true,
+                flows: { select: { feedbackFlow: { select: { isDraft: true } } } },
             },
         });
     });
@@ -101,7 +106,7 @@ describe('prepareRound1Input', () => {
     test('generates a readable runId when none is supplied', async () => {
         mockValidDatabase();
 
-        const input = await prepareRound1Input(prismaMock, makeParams({ runId: undefined }));
+        const input = await prepareRound1Input(prismaMock, makeParams({ runId: undefined }), () => 0);
 
         expect(input.runId).toMatch(/^fgdt-90990f38-\d+$/);
     });
@@ -172,13 +177,14 @@ describe('prepareRound1Input', () => {
     });
 
     test('keeps participant ordering and persona assignment deterministic regardless of database order', async () => {
-        const reversedUsers = makeUsers(3).reverse();
+        const reversedUsers = makeUsers(20).reverse();
         prismaMock.event.findUnique.mockResolvedValue({ id: EVENT_ID } as any);
         prismaMock.eventLiveFeedbackPrompt.findUnique.mockResolvedValue(makePrompt() as any);
         prismaMock.user.findMany.mockResolvedValue(reversedUsers as any);
+        prismaMock.eventLiveFeedbackPromptResponse.findMany.mockResolvedValue([]);
 
-        const first = await prepareRound1Input(prismaMock, makeParams({ participantCount: 3 }));
-        const second = await prepareRound1Input(prismaMock, makeParams({ participantCount: 3 }));
+        const first = await prepareRound1Input(prismaMock, makeParams({ participantCount: 3 }), () => 0);
+        const second = await prepareRound1Input(prismaMock, makeParams({ participantCount: 3 }), () => 0);
 
         expect(first.participants).toEqual(second.participants);
         expect(first.participants.map(({ participantKey }) => participantKey)).toEqual([
@@ -199,11 +205,85 @@ describe('prepareRound1Input', () => {
         prismaMock.eventLiveFeedbackPrompt.findUnique.mockResolvedValue(
             makePrompt({ prompt: ' Exact database question? ', multipleChoiceOptions: exactOptions }) as any
         );
-        prismaMock.user.findMany.mockResolvedValue(makeUsers(2) as any);
+        prismaMock.user.findMany.mockResolvedValue(makeUsers(20) as any);
+        prismaMock.eventLiveFeedbackPromptResponse.findMany.mockResolvedValue([]);
 
-        const input = await prepareRound1Input(prismaMock, makeParams());
+        const input = await prepareRound1Input(prismaMock, makeParams(), () => 0);
 
         expect(input.question).toBe(' Exact database question? ');
         expect(input.options).toEqual(exactOptions);
+    });
+
+    test('randomly samples the full pool on the first run and preserves each selected persona', async () => {
+        mockValidDatabase();
+        const randomValues = [0.9, 0.99, 0.84];
+
+        const input = await prepareRound1Input(
+            prismaMock,
+            makeParams({ participantCount: 3 }),
+            () => randomValues.shift()!
+        );
+
+        expect(input.participants.map(({ participantKey }) => participantKey)).toEqual([
+            'fgdt-demo-19',
+            'fgdt-demo-20',
+            'fgdt-demo-18',
+        ]);
+        expect(new Set(input.participants.map(({ userId }) => userId))).toHaveProperty('size', 3);
+        expect(input.participants[0].persona.covariates).toEqual({
+            gender: 'female',
+            education: 'Graduate degree',
+            politics: 'liberal',
+        });
+    });
+
+    test('second and later runs exclude every dummy user who already responded', async () => {
+        mockValidDatabase();
+        const users = makeUsers(20);
+        prismaMock.eventLiveFeedbackPromptResponse.findMany
+            .mockResolvedValueOnce(users.slice(0, 2).map(({ id: createdById }) => ({ createdById })) as any)
+            .mockResolvedValueOnce(users.slice(0, 4).map(({ id: createdById }) => ({ createdById })) as any);
+
+        const secondRun = await prepareRound1Input(prismaMock, makeParams({ participantCount: 2 }), () => 0);
+        const thirdRun = await prepareRound1Input(prismaMock, makeParams({ participantCount: 2 }), () => 0);
+
+        expect(secondRun.participants.map(({ participantKey }) => participantKey)).toEqual([
+            'fgdt-demo-03',
+            'fgdt-demo-04',
+        ]);
+        expect(thirdRun.participants.map(({ participantKey }) => participantKey)).toEqual([
+            'fgdt-demo-05',
+            'fgdt-demo-06',
+        ]);
+        expect(prismaMock.eventLiveFeedbackPromptResponse.findMany).toHaveBeenCalledWith({
+            where: {
+                promptId: PROMPT_ID,
+                createdById: { in: users.map(({ id }) => id) },
+            },
+            select: { createdById: true },
+        });
+    });
+
+    test('fails before simulation when too few unused dummy users remain', async () => {
+        mockValidDatabase();
+        prismaMock.eventLiveFeedbackPromptResponse.findMany.mockResolvedValue(
+            makeUsers(19).map(({ id: createdById }) => ({ createdById })) as any
+        );
+
+        await expect(prepareRound1Input(prismaMock, makeParams({ participantCount: 2 }), () => 0)).rejects.toThrow(
+            'Only 1 unused simulated participants remain for this survey, but 2 were requested.'
+        );
+    });
+
+    test('rejects a published survey', async () => {
+        prismaMock.event.findUnique.mockResolvedValue({ id: EVENT_ID } as any);
+        prismaMock.eventLiveFeedbackPrompt.findUnique.mockResolvedValue(
+            makePrompt({ flows: [{ feedbackFlow: { isDraft: false } }] }) as any
+        );
+
+        await expect(prepareRound1Input(prismaMock, makeParams(), () => 0)).rejects.toThrow(
+            'Simulation is only available for draft/unpublished surveys.'
+        );
+        expect(prismaMock.user.findMany).not.toHaveBeenCalled();
     });
 });

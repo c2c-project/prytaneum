@@ -1,4 +1,5 @@
 import type { PrismaClient } from '@local/__generated__/prisma';
+import { isRound1PromptUnpublished } from './round1PromptEligibility';
 
 type JsonRecord = Record<string, unknown>;
 
@@ -151,7 +152,9 @@ export async function preflightRound1Import(
             isMultipleChoice: true,
             isVote: true,
             isOpenEnded: true,
+            isDraft: true,
             multipleChoiceOptions: true,
+            flows: { select: { feedbackFlow: { select: { isDraft: true } } } },
         },
     });
     if (!prompt) throw new Round1ImportError(`Prompt ${output.promptId} does not exist.`);
@@ -161,6 +164,9 @@ export async function preflightRound1Import(
     if (!prompt.isMultipleChoice) throw new Round1ImportError(`Prompt ${output.promptId} is not multiple choice.`);
     if (prompt.isVote) throw new Round1ImportError(`Prompt ${output.promptId} must not be a vote prompt.`);
     if (prompt.isOpenEnded) throw new Round1ImportError(`Prompt ${output.promptId} must not be open-ended.`);
+    if (!isRound1PromptUnpublished(prompt)) {
+        throw new Round1ImportError('Simulation is only available for draft/unpublished surveys.');
+    }
     if (!arraysEqual(prompt.multipleChoiceOptions, output.options)) {
         throw new Round1ImportError('Prompt options do not exactly match the ordered FGDT output options.');
     }
@@ -194,10 +200,7 @@ export async function preflightRound1Import(
 }
 
 /** Transactionally persist FGDT Round 1 responses that have already been parsed and preflighted. */
-export async function persistRound1Responses(
-    prisma: PrismaClient,
-    output: Round1Output
-): Promise<Round1ImportSummary> {
+export async function persistRound1Responses(prisma: PrismaClient, output: Round1Output): Promise<Round1ImportSummary> {
     await prisma.$transaction(async (tx) => {
         for (const response of output.responses) {
             await tx.eventLiveFeedbackPromptResponse.create({

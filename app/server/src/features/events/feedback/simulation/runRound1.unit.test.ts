@@ -1,6 +1,6 @@
 import type { PrismaClient } from '@local/__generated__/prisma';
 import { Round1Output } from './importRound1';
-import { Round1Input } from './prepareRound1';
+import { Round1Input, Round1PrepareError } from './prepareRound1';
 import { runRound1, RunRound1Options, validateRound1OutputCorrelation } from './runRound1';
 import { simulateRound1 } from './simulateRound1';
 
@@ -134,6 +134,20 @@ describe('runRound1', () => {
             },
         ]);
         expect(dependencies.persistResponses).toHaveBeenCalledWith(expect.anything(), simulatedOutput);
+    });
+
+    test('does not call Gemini or import when too few unused participants remain', async () => {
+        const dependencies = makeDependencies();
+        dependencies.prepare.mockRejectedValue(
+            new Round1PrepareError('Only 1 unused simulated participants remain for this survey, but 2 were requested.')
+        );
+
+        await expect(
+            runRound1({} as PrismaClient, options, dependencies as Parameters<typeof runRound1>[2])
+        ).rejects.toThrow('Only 1 unused simulated participants remain');
+        expect(dependencies.simulate).not.toHaveBeenCalled();
+        expect(dependencies.preflight).not.toHaveBeenCalled();
+        expect(dependencies.persistResponses).not.toHaveBeenCalled();
     });
 });
 

@@ -46,7 +46,9 @@ function mockValidPreflight(output = makeValidOutput()) {
         isMultipleChoice: true,
         isVote: false,
         isOpenEnded: false,
+        isDraft: false,
         multipleChoiceOptions: output.options,
+        flows: [{ feedbackFlow: { isDraft: true } }],
     } as any);
     prismaMock.user.findMany.mockResolvedValueOnce(output.responses.map(({ userId: id }) => ({ id })) as any);
     prismaMock.eventLiveFeedbackPromptResponse.findMany.mockResolvedValueOnce([]);
@@ -132,7 +134,9 @@ describe('preflightRound1Import', () => {
             isMultipleChoice: true,
             isVote: false,
             isOpenEnded: false,
+            isDraft: false,
             multipleChoiceOptions: output.options,
+            flows: [{ feedbackFlow: { isDraft: true } }],
         } as any);
 
         await expect(preflightRound1Import(prismaMock, output)).rejects.toThrow('does not belong to event');
@@ -146,7 +150,9 @@ describe('preflightRound1Import', () => {
             isMultipleChoice: true,
             isVote: false,
             isOpenEnded: false,
+            isDraft: false,
             multipleChoiceOptions: [...output.options].reverse(),
+            flows: [{ feedbackFlow: { isDraft: true } }],
         } as any);
 
         await expect(preflightRound1Import(prismaMock, output)).rejects.toThrow('options do not exactly match');
@@ -160,7 +166,9 @@ describe('preflightRound1Import', () => {
             isMultipleChoice: true,
             isVote: false,
             isOpenEnded: false,
+            isDraft: false,
             multipleChoiceOptions: output.options,
+            flows: [{ feedbackFlow: { isDraft: true } }],
         } as any);
         prismaMock.user.findMany.mockResolvedValueOnce([{ id: USER_1_ID }] as any);
 
@@ -175,17 +183,38 @@ describe('preflightRound1Import', () => {
             isMultipleChoice: true,
             isVote: false,
             isOpenEnded: false,
+            isDraft: false,
             multipleChoiceOptions: output.options,
+            flows: [{ feedbackFlow: { isDraft: true } }],
         } as any);
         prismaMock.user.findMany.mockResolvedValueOnce(output.responses.map(({ userId: id }) => ({ id })) as any);
         prismaMock.eventLiveFeedbackPromptResponse.findMany.mockResolvedValueOnce([{ createdById: USER_1_ID }] as any);
 
         await expect(preflightRound1Import(prismaMock, output)).rejects.toThrow('already exist');
     });
+
+    test('rejects a survey that was published after simulation preparation', async () => {
+        const output = makeValidOutput();
+        prismaMock.event.findUnique.mockResolvedValueOnce({ id: EVENT_ID } as any);
+        prismaMock.eventLiveFeedbackPrompt.findUnique.mockResolvedValueOnce({
+            eventId: EVENT_ID,
+            isMultipleChoice: true,
+            isVote: false,
+            isOpenEnded: false,
+            isDraft: false,
+            multipleChoiceOptions: output.options,
+            flows: [{ feedbackFlow: { isDraft: false } }],
+        } as any);
+
+        await expect(preflightRound1Import(prismaMock, output)).rejects.toThrow(
+            'Simulation is only available for draft/unpublished surveys.'
+        );
+        expect(prismaMock.eventLiveFeedbackPromptResponse.create).not.toHaveBeenCalled();
+    });
 });
 
 describe('importRound1Responses', () => {
-    test('imports every response in one transaction', async () => {
+    test('appends every response in one transaction without overwriting existing responses', async () => {
         const output = makeValidOutput();
         mockValidPreflight(output);
         prismaMock.$transaction.mockImplementationOnce(async (callback: any) => callback(prismaMock));
@@ -207,6 +236,9 @@ describe('importRound1Responses', () => {
                 vote: 'CONFLICTED',
             },
         });
+        expect(prismaMock.eventLiveFeedbackPromptResponse.update).not.toHaveBeenCalled();
+        expect(prismaMock.eventLiveFeedbackPromptResponse.delete).not.toHaveBeenCalled();
+        expect(prismaMock.eventLiveFeedbackPromptResponse.deleteMany).not.toHaveBeenCalled();
         expect(summary).toEqual({
             runId: output.runId,
             promptId: PROMPT_ID,
