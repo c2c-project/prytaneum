@@ -39,7 +39,7 @@
         "@graphql-tools/schema": "^9.0.10",
         "@prisma/client": "^4.15.0",
         "altair-fastify-plugin": "^5.0.6",
-        "axios": "^1.6.8",
+        "axios": "^1.8.2",
         "bcryptjs": "^2.4.3",
         "cors": "^2.8.5",
         "dotenv": "^8.2.0",
