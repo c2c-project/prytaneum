@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ad99246104d01d5e5d666cde76dc4142>>
+ * @generated SignedSource<<e61e75a304b81fe983fe33bfd44a41ad>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,6 +18,7 @@ export type UpdateEvent = {
   isPrivate?: boolean | null;
   isQuestionFeedVisible?: boolean | null;
   simulationBackground?: string | null;
+  simulationCovariates?: ReadonlyArray<string> | null;
   simulationEnabled?: boolean | null;
   simulationParticipantCount?: number | null;
   simulationTopic?: string | null;

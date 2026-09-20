@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6beadb0bb4de482508dfbe335d65e8f2>>
+ * @generated SignedSource<<c24e6f553ada59af6fa33640536c2f6a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -19,6 +19,7 @@ export type UpdateEvent = {
   isPrivate?: boolean | null;
   isQuestionFeedVisible?: boolean | null;
   simulationBackground?: string | null;
+  simulationCovariates?: ReadonlyArray<string> | null;
   simulationEnabled?: boolean | null;
   simulationParticipantCount?: number | null;
   simulationTopic?: string | null;
@@ -170,6 +171,13 @@ return {
                 "kind": "ScalarField",
                 "name": "simulationBackground",
                 "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "simulationCovariates",
+                "storageKey": null
               }
             ],
             "storageKey": null
@@ -180,12 +188,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "3fa123b428defe75f9efb8df27375bf3",
+    "cacheID": "564b2603feaacd94f92b14aa1874d6fb",
     "id": null,
     "metadata": {},
     "name": "SimulationEventSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation SimulationEventSettingsMutation(\n  $input: UpdateEvent!\n) {\n  updateEvent(event: $input) {\n    isError\n    message\n    body {\n      ...SimulationEventSettingsFragment\n      id\n    }\n  }\n}\n\nfragment SimulationEventSettingsFragment on Event {\n  id\n  simulationEnabled\n  simulationParticipantCount\n  simulationTopic\n  simulationBackground\n}\n"
+    "text": "mutation SimulationEventSettingsMutation(\n  $input: UpdateEvent!\n) {\n  updateEvent(event: $input) {\n    isError\n    message\n    body {\n      ...SimulationEventSettingsFragment\n      id\n    }\n  }\n}\n\nfragment SimulationEventSettingsFragment on Event {\n  id\n  simulationEnabled\n  simulationParticipantCount\n  simulationTopic\n  simulationBackground\n  simulationCovariates\n}\n"
   }
 };
 })();

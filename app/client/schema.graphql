@@ -274,6 +274,7 @@ type Event implements Node {
   """Registrants for this event -- individuals invited"""
   registrants: UserConnection
   simulationBackground: String
+  simulationCovariates: [String!]
 
   """
   Whether organizer-configured Round 1 simulation is available for this event
@@ -1159,6 +1160,7 @@ input UpdateEvent {
   isPrivate: Boolean
   isQuestionFeedVisible: Boolean
   simulationBackground: String
+  simulationCovariates: [String!]
   simulationEnabled: Boolean
   simulationParticipantCount: Int
   simulationTopic: String

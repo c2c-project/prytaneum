@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<728fe9fe23f769c276d1b8e335383151>>
+ * @generated SignedSource<<e0be799adff3b6ffa5790757360380fa>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,6 +13,7 @@ import { FragmentRefs } from "relay-runtime";
 export type SimulationEventSettingsFragment$data = {
   readonly id: string;
   readonly simulationBackground: string | null;
+  readonly simulationCovariates: ReadonlyArray<string> | null;
   readonly simulationEnabled: boolean | null;
   readonly simulationParticipantCount: number | null;
   readonly simulationTopic: string | null;
@@ -63,12 +64,19 @@ const node: ReaderFragment = {
       "kind": "ScalarField",
       "name": "simulationBackground",
       "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "simulationCovariates",
+      "storageKey": null
     }
   ],
   "type": "Event",
   "abstractKey": null
 };
 
-(node as any).hash = "45b3b23c1d767f60845c009c95d34770";
+(node as any).hash = "0cf29bdef82dbb9d7fe200a1e1238305";
 
 export default node;

@@ -256,6 +256,7 @@ export type Event = Node & {
   /** Registrants for this event -- individuals invited */
   registrants?: Maybe<UserConnection>;
   simulationBackground?: Maybe<Scalars['String']>;
+  simulationCovariates?: Maybe<Array<Scalars['String']>>;
   /** Whether organizer-configured Round 1 simulation is available for this event */
   simulationEnabled?: Maybe<Scalars['Boolean']>;
   simulationParticipantCount?: Maybe<Scalars['Int']>;
@@ -1940,6 +1941,7 @@ export type UpdateEvent = {
   isPrivate?: InputMaybe<Scalars['Boolean']>;
   isQuestionFeedVisible?: InputMaybe<Scalars['Boolean']>;
   simulationBackground?: InputMaybe<Scalars['String']>;
+  simulationCovariates?: InputMaybe<Array<Scalars['String']>>;
   simulationEnabled?: InputMaybe<Scalars['Boolean']>;
   simulationParticipantCount?: InputMaybe<Scalars['Int']>;
   simulationTopic?: InputMaybe<Scalars['String']>;

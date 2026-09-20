@@ -44,7 +44,10 @@ function makeUsers(count: number) {
 }
 
 function mockValidDatabase() {
-    prismaMock.event.findUnique.mockResolvedValue({ id: EVENT_ID } as any);
+    prismaMock.event.findUnique.mockResolvedValue({
+        id: EVENT_ID,
+        simulationCovariates: ['gender'],
+    } as any);
     prismaMock.eventLiveFeedbackPrompt.findUnique.mockResolvedValue(makePrompt() as any);
     prismaMock.user.findMany.mockResolvedValue(makeUsers(20) as any);
     prismaMock.eventLiveFeedbackPromptResponse.findMany.mockResolvedValue([]);
@@ -72,9 +75,7 @@ describe('prepareRound1Input', () => {
                     userId: '00000000-0000-0000-0000-000000000001',
                     persona: {
                         covariates: {
-                            gender: 'female',
-                            education: 'Bachelor\'s degree',
-                            politics: 'liberal',
+                            gender: 'Male',
                         },
                     },
                 },
@@ -82,7 +83,9 @@ describe('prepareRound1Input', () => {
                     participantKey: 'fgdt-demo-02',
                     userId: '00000000-0000-0000-0000-000000000002',
                     persona: {
-                        covariates: { gender: 'male', education: 'High school', politics: 'conservative' },
+                        covariates: {
+                            gender: 'Female',
+                        },
                     },
                 },
             ],
@@ -111,6 +114,40 @@ describe('prepareRound1Input', () => {
         expect(input.runId).toMatch(/^fgdt-90990f38-\d+$/);
     });
 
+    test('filters the fixed persona to the persisted covariate selection', async () => {
+        mockValidDatabase();
+        prismaMock.event.findUnique.mockResolvedValue({
+            id: EVENT_ID,
+            simulationCovariates: ['politics', 'region', 'age'],
+        } as any);
+
+        const input = await prepareRound1Input(prismaMock, makeParams({ participantCount: 1 }), () => 0);
+
+        expect(input.participants[0]).toMatchObject({
+            participantKey: 'fgdt-demo-01',
+            persona: { covariates: { region: 'South', age: '18-29', politics: 'Conservative' } },
+        });
+        expect(Object.keys(input.participants[0].persona.covariates)).toEqual(['region', 'age', 'politics']);
+    });
+
+    test('rejects an empty persisted covariate selection', async () => {
+        prismaMock.event.findUnique.mockResolvedValue({ id: EVENT_ID, simulationCovariates: [] } as any);
+
+        await expect(prepareRound1Input(prismaMock, makeParams({ participantCount: 1 }), () => 0)).rejects.toThrow(
+            'At least one simulation covariate must be selected.'
+        );
+    });
+
+    test.each([
+        [['region', 'region'], 'duplicate key'],
+        [['unknown'], 'Unsupported simulation covariate'],
+    ])('rejects invalid persisted covariates: %j', async (simulationCovariates, message) => {
+        prismaMock.event.findUnique.mockResolvedValue({ id: EVENT_ID, simulationCovariates } as any);
+
+        await expect(prepareRound1Input(prismaMock, makeParams())).rejects.toThrow(message);
+        expect(prismaMock.eventLiveFeedbackPrompt.findUnique).not.toHaveBeenCalled();
+    });
+
     test('rejects a missing Event', async () => {
         prismaMock.event.findUnique.mockResolvedValue(null);
 
@@ -118,7 +155,10 @@ describe('prepareRound1Input', () => {
     });
 
     test('rejects a missing Prompt', async () => {
-        prismaMock.event.findUnique.mockResolvedValue({ id: EVENT_ID } as any);
+        prismaMock.event.findUnique.mockResolvedValue({
+            id: EVENT_ID,
+            simulationCovariates: ['gender'],
+        } as any);
         prismaMock.eventLiveFeedbackPrompt.findUnique.mockResolvedValue(null);
 
         await expect(prepareRound1Input(prismaMock, makeParams())).rejects.toThrow(
@@ -127,7 +167,7 @@ describe('prepareRound1Input', () => {
     });
 
     test('rejects a Prompt belonging to another Event', async () => {
-        prismaMock.event.findUnique.mockResolvedValue({ id: EVENT_ID } as any);
+        prismaMock.event.findUnique.mockResolvedValue({ id: EVENT_ID, simulationCovariates: ['gender'] } as any);
         prismaMock.eventLiveFeedbackPrompt.findUnique.mockResolvedValue(makePrompt({ eventId: OTHER_EVENT_ID }) as any);
 
         await expect(prepareRound1Input(prismaMock, makeParams())).rejects.toThrow('does not belong to event');
@@ -138,7 +178,7 @@ describe('prepareRound1Input', () => {
         ['open-ended', { isOpenEnded: true }],
         ['vote', { isVote: true }],
     ])('rejects a wrong prompt type: %s', async (_description, override) => {
-        prismaMock.event.findUnique.mockResolvedValue({ id: EVENT_ID } as any);
+        prismaMock.event.findUnique.mockResolvedValue({ id: EVENT_ID, simulationCovariates: ['gender'] } as any);
         prismaMock.eventLiveFeedbackPrompt.findUnique.mockResolvedValue(makePrompt(override) as any);
 
         await expect(prepareRound1Input(prismaMock, makeParams())).rejects.toThrow(
@@ -153,7 +193,7 @@ describe('prepareRound1Input', () => {
         [Array.from({ length: 21 }, (_, index) => `Option ${index}`), 'between 2 and 20'],
         [['Yes', 'x'.repeat(251)], 'at most 250 characters'],
     ])('rejects invalid prompt options: %j', async (multipleChoiceOptions, message) => {
-        prismaMock.event.findUnique.mockResolvedValue({ id: EVENT_ID } as any);
+        prismaMock.event.findUnique.mockResolvedValue({ id: EVENT_ID, simulationCovariates: ['gender'] } as any);
         prismaMock.eventLiveFeedbackPrompt.findUnique.mockResolvedValue(makePrompt({ multipleChoiceOptions }) as any);
 
         await expect(prepareRound1Input(prismaMock, makeParams())).rejects.toThrow(message);
@@ -167,7 +207,7 @@ describe('prepareRound1Input', () => {
     });
 
     test('rejects a missing expected dummy user without creating one', async () => {
-        prismaMock.event.findUnique.mockResolvedValue({ id: EVENT_ID } as any);
+        prismaMock.event.findUnique.mockResolvedValue({ id: EVENT_ID, simulationCovariates: ['gender'] } as any);
         prismaMock.eventLiveFeedbackPrompt.findUnique.mockResolvedValue(makePrompt() as any);
         prismaMock.user.findMany.mockResolvedValue(makeUsers(1) as any);
 
@@ -178,7 +218,10 @@ describe('prepareRound1Input', () => {
 
     test('keeps participant ordering and persona assignment deterministic regardless of database order', async () => {
         const reversedUsers = makeUsers(20).reverse();
-        prismaMock.event.findUnique.mockResolvedValue({ id: EVENT_ID } as any);
+        prismaMock.event.findUnique.mockResolvedValue({
+            id: EVENT_ID,
+            simulationCovariates: ['gender'],
+        } as any);
         prismaMock.eventLiveFeedbackPrompt.findUnique.mockResolvedValue(makePrompt() as any);
         prismaMock.user.findMany.mockResolvedValue(reversedUsers as any);
         prismaMock.eventLiveFeedbackPromptResponse.findMany.mockResolvedValue([]);
@@ -193,15 +236,15 @@ describe('prepareRound1Input', () => {
             'fgdt-demo-03',
         ]);
         expect(first.participants.map(({ persona }) => persona.covariates)).toEqual([
-            { gender: 'female', education: 'Bachelor\'s degree', politics: 'liberal' },
-            { gender: 'male', education: 'High school', politics: 'conservative' },
-            { gender: 'female', education: 'Graduate degree', politics: 'moderate' },
+            { gender: 'Male' },
+            { gender: 'Female' },
+            { gender: 'Female' },
         ]);
     });
 
     test('copies the exact database question and ordered options without allowing overrides', async () => {
         const exactOptions = ['Option B ', 'Option A'];
-        prismaMock.event.findUnique.mockResolvedValue({ id: EVENT_ID } as any);
+        prismaMock.event.findUnique.mockResolvedValue({ id: EVENT_ID, simulationCovariates: ['gender'] } as any);
         prismaMock.eventLiveFeedbackPrompt.findUnique.mockResolvedValue(
             makePrompt({ prompt: ' Exact database question? ', multipleChoiceOptions: exactOptions }) as any
         );
@@ -231,9 +274,7 @@ describe('prepareRound1Input', () => {
         ]);
         expect(new Set(input.participants.map(({ userId }) => userId))).toHaveProperty('size', 3);
         expect(input.participants[0].persona.covariates).toEqual({
-            gender: 'female',
-            education: 'Graduate degree',
-            politics: 'liberal',
+            gender: 'Male',
         });
     });
 
@@ -276,7 +317,7 @@ describe('prepareRound1Input', () => {
     });
 
     test('rejects a published survey', async () => {
-        prismaMock.event.findUnique.mockResolvedValue({ id: EVENT_ID } as any);
+        prismaMock.event.findUnique.mockResolvedValue({ id: EVENT_ID, simulationCovariates: ['gender'] } as any);
         prismaMock.eventLiveFeedbackPrompt.findUnique.mockResolvedValue(
             makePrompt({ flows: [{ feedbackFlow: { isDraft: false } }] }) as any
         );

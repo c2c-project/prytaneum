@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Switch, TextField, Typography } from '@mui/material';
+import { Button, Checkbox, FormControlLabel, FormGroup, Switch, TextField, Typography } from '@mui/material';
 import { graphql, useFragment, useMutation } from 'react-relay';
 
 import type { SimulationEventSettingsFragment$key } from '@local/__generated__/SimulationEventSettingsFragment.graphql';
@@ -15,6 +15,7 @@ const SIMULATION_EVENT_SETTINGS_FRAGMENT = graphql`
         simulationParticipantCount
         simulationTopic
         simulationBackground
+        simulationCovariates
     }
 `;
 
@@ -34,23 +35,48 @@ type Props = {
     fragmentRef: SimulationEventSettingsFragment$key;
 };
 
+const COVARIATE_OPTIONS = [
+    ['region', 'Region'],
+    ['gender', 'Gender'],
+    ['age', 'Age'],
+    ['education', 'Education'],
+    ['race', 'Race'],
+    ['uscitizen', 'U.S. citizenship'],
+    ['maritalstatus', 'Marital status'],
+    ['religion', 'Religion'],
+    ['religionattend', 'Religious attendance'],
+    ['partyid', 'Political affiliation'],
+    ['income', 'Income'],
+    ['politics', 'Political views'],
+    ['hhsize', 'Household size'],
+    ['employstatus', 'Employment status'],
+] as const;
+
 export function SimulationEventSettings({ fragmentRef }: Props) {
     const settings = useFragment(SIMULATION_EVENT_SETTINGS_FRAGMENT, fragmentRef);
     const { displaySnack } = useSnack();
     const [commit, isSaving] = useMutation<SimulationEventSettingsMutation>(SIMULATION_EVENT_SETTINGS_MUTATION);
     const [enabled, setEnabled] = React.useState(Boolean(settings.simulationEnabled));
-    const [participantCount, setParticipantCount] = React.useState(settings.simulationParticipantCount ?? 10);
+    const [participantCount, setParticipantCount] = React.useState(String(settings.simulationParticipantCount ?? 10));
     const [topic, setTopic] = React.useState(settings.simulationTopic ?? '');
     const [background, setBackground] = React.useState(settings.simulationBackground ?? '');
+    const [covariates, setCovariates] = React.useState<readonly string[]>(settings.simulationCovariates ?? ['gender']);
+    const parsedParticipantCount = participantCount.trim() === '' ? null : Number(participantCount);
+    const participantCountIsValid =
+        parsedParticipantCount !== null &&
+        Number.isInteger(parsedParticipantCount) &&
+        parsedParticipantCount >= 1 &&
+        parsedParticipantCount <= 20;
 
     const validationMessage = React.useMemo(() => {
-        if (!Number.isInteger(participantCount) || participantCount < 1 || participantCount > 20) {
+        if (!participantCountIsValid) {
             return 'Number of simulated participants must be between 1 and 20.';
         }
+        if (covariates.length === 0) return 'Select at least one persona covariate.';
         if (enabled && topic.trim().length === 0) return 'Topic is required when Simulation is enabled.';
         if (enabled && background.trim().length === 0) return 'Background is required when Simulation is enabled.';
         return '';
-    }, [background, enabled, participantCount, topic]);
+    }, [background, covariates.length, enabled, participantCountIsValid, topic]);
 
     const save = () => {
         if (validationMessage) {
@@ -62,9 +88,10 @@ export function SimulationEventSettings({ fragmentRef }: Props) {
                 input: {
                     eventId: settings.id,
                     simulationEnabled: enabled,
-                    simulationParticipantCount: participantCount,
+                    simulationParticipantCount: parsedParticipantCount!,
                     simulationTopic: topic.trim(),
                     simulationBackground: background.trim(),
+                    simulationCovariates: [...covariates],
                 },
             },
             onCompleted(payload) {
@@ -97,14 +124,13 @@ export function SimulationEventSettings({ fragmentRef }: Props) {
                     name='simulation-participant-count'
                     type='number'
                     value={participantCount}
-                    onChange={(event) => setParticipantCount(Number(event.target.value))}
+                    onChange={(event) => setParticipantCount(event.target.value)}
+                    onBlur={() => {
+                        if (participantCountIsValid) setParticipantCount(String(parsedParticipantCount));
+                    }}
                     inputProps={{ min: 1, max: 20, step: 1 }}
-                    error={!Number.isInteger(participantCount) || participantCount < 1 || participantCount > 20}
-                    helperText={
-                        !Number.isInteger(participantCount) || participantCount < 1 || participantCount > 20
-                            ? 'Enter a whole number from 1 to 20.'
-                            : undefined
-                    }
+                    error={!participantCountIsValid}
+                    helperText={!participantCountIsValid ? 'Enter a whole number from 1 to 20.' : undefined}
                     size='small'
                 />
             </SettingsItem>
@@ -133,6 +159,45 @@ export function SimulationEventSettings({ fragmentRef }: Props) {
                     fullWidth
                     sx={{ maxWidth: 500 }}
                 />
+            </SettingsItem>
+            <SettingsItem
+                name='Persona Covariates'
+                helpText='Choose which demographic fields from each fixed simulated persona are included.'
+            >
+                <div>
+                    <FormGroup
+                        sx={{
+                            display: 'grid',
+                            gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, minmax(0, 1fr))' },
+                            columnGap: 3,
+                        }}
+                    >
+                        {COVARIATE_OPTIONS.map(([key, label]) => (
+                            <FormControlLabel
+                                key={key}
+                                control={
+                                    <Checkbox
+                                        name={`simulation-covariate-${key}`}
+                                        checked={covariates.includes(key)}
+                                        onChange={(event) =>
+                                            setCovariates((current) =>
+                                                event.target.checked
+                                                    ? [...current, key]
+                                                    : current.filter((value) => value !== key)
+                                            )
+                                        }
+                                    />
+                                }
+                                label={label}
+                            />
+                        ))}
+                    </FormGroup>
+                    {covariates.length === 0 && (
+                        <Typography color='error' variant='caption'>
+                            Select at least one persona covariate.
+                        </Typography>
+                    )}
+                </div>
             </SettingsItem>
             <SettingsItem name='Model' helpText='Round 1 simulations use the configured Gemini model.'>
                 <Typography>Gemini</Typography>

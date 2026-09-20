@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6b86f9467b68efd46f5f98d6eedca220>>
+ * @generated SignedSource<<8799a54e049092c07e34e6cf34d997b0>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -499,6 +499,13 @@ return {
               },
               {
                 "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "simulationCovariates",
+                "storageKey": null
+              },
+              {
+                "alias": null,
                 "args": (v9/*: any*/),
                 "concreteType": "UserConnection",
                 "kind": "LinkedField",
@@ -644,12 +651,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "0e1ee24dca71823d83777c4c3a235938",
+    "cacheID": "7e30f9ffd6dceb2ec0bff38ec4589741",
     "id": null,
     "metadata": {},
     "name": "EventSettingsQuery",
     "operationKind": "query",
-    "text": "query EventSettingsQuery(\n  $eventId: ID!\n) {\n  node(id: $eventId) {\n    __typename\n    id\n    ... on Event {\n      isViewerModerator\n      ...EventDetailsFragment\n      ...SpeakerEventSettingsFragment\n      ...VideoEventSettingsFragment\n      ...GenericSettingsFragment\n      ...SimulationEventSettingsFragment\n      ...ModeratorEventSettingsFragment\n      ...useInvitedUsersListFragment_32qNee\n      ...EventIssueGuideSettingsFragment\n      ...useEventDetailsFragment\n    }\n  }\n}\n\nfragment EventDetailsFragment on Event {\n  id\n  title\n  topic\n  description\n  startDateTime\n  endDateTime\n}\n\nfragment EventIssueGuideSettingsFragment on Event {\n  id\n  title\n  issueGuideUrl\n}\n\nfragment GenericSettingsFragment on Event {\n  id\n  isQuestionFeedVisible\n  isCollectRatingsEnabled\n  isForumEnabled\n  isPrivate\n  issueGuideUrl\n}\n\nfragment GoogleMeetSettingsFragment on Event {\n  googleMeetUrl\n  id\n}\n\nfragment ModeratorEventSettingsFragment on Event {\n  id\n  moderators(first: 10, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        firstName\n        lastName\n        avatar\n        email\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment SimulationEventSettingsFragment on Event {\n  id\n  simulationEnabled\n  simulationParticipantCount\n  simulationTopic\n  simulationBackground\n}\n\nfragment SpeakerEventSettingsFragment on Event {\n  id\n  speakers(first: 10, after: \"\") {\n    edges {\n      node {\n        id\n        eventId\n        name\n        title\n        description\n        pictureUrl\n        email\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment VideoEventSettingsFragment on Event {\n  eventType\n  ...YoutubeSettingsFragment\n  ...GoogleMeetSettingsFragment\n  id\n}\n\nfragment YoutubeSettingsFragment on Event {\n  id\n  videos(first: 10, after: \"\") {\n    edges {\n      node {\n        id\n        url\n        lang\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment useEventDetailsFragment on Event {\n  id\n  title\n  topic\n  description\n  startDateTime\n  endDateTime\n  isActive\n  isViewerModerator\n  isPrivate\n  isViewerInvited\n  issueGuideUrl\n  topics {\n    id\n    topic\n    description\n  }\n  eventType\n}\n\nfragment useInvitedUsersListFragment_32qNee on Event {\n  invited(first: 10, after: \"\") {\n    edges {\n      node {\n        id\n        firstName\n        lastName\n        avatar\n        moderatorOf(eventId: $eventId)\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n  id\n}\n"
+    "text": "query EventSettingsQuery(\n  $eventId: ID!\n) {\n  node(id: $eventId) {\n    __typename\n    id\n    ... on Event {\n      isViewerModerator\n      ...EventDetailsFragment\n      ...SpeakerEventSettingsFragment\n      ...VideoEventSettingsFragment\n      ...GenericSettingsFragment\n      ...SimulationEventSettingsFragment\n      ...ModeratorEventSettingsFragment\n      ...useInvitedUsersListFragment_32qNee\n      ...EventIssueGuideSettingsFragment\n      ...useEventDetailsFragment\n    }\n  }\n}\n\nfragment EventDetailsFragment on Event {\n  id\n  title\n  topic\n  description\n  startDateTime\n  endDateTime\n}\n\nfragment EventIssueGuideSettingsFragment on Event {\n  id\n  title\n  issueGuideUrl\n}\n\nfragment GenericSettingsFragment on Event {\n  id\n  isQuestionFeedVisible\n  isCollectRatingsEnabled\n  isForumEnabled\n  isPrivate\n  issueGuideUrl\n}\n\nfragment GoogleMeetSettingsFragment on Event {\n  googleMeetUrl\n  id\n}\n\nfragment ModeratorEventSettingsFragment on Event {\n  id\n  moderators(first: 10, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        firstName\n        lastName\n        avatar\n        email\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment SimulationEventSettingsFragment on Event {\n  id\n  simulationEnabled\n  simulationParticipantCount\n  simulationTopic\n  simulationBackground\n  simulationCovariates\n}\n\nfragment SpeakerEventSettingsFragment on Event {\n  id\n  speakers(first: 10, after: \"\") {\n    edges {\n      node {\n        id\n        eventId\n        name\n        title\n        description\n        pictureUrl\n        email\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment VideoEventSettingsFragment on Event {\n  eventType\n  ...YoutubeSettingsFragment\n  ...GoogleMeetSettingsFragment\n  id\n}\n\nfragment YoutubeSettingsFragment on Event {\n  id\n  videos(first: 10, after: \"\") {\n    edges {\n      node {\n        id\n        url\n        lang\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment useEventDetailsFragment on Event {\n  id\n  title\n  topic\n  description\n  startDateTime\n  endDateTime\n  isActive\n  isViewerModerator\n  isPrivate\n  isViewerInvited\n  issueGuideUrl\n  topics {\n    id\n    topic\n    description\n  }\n  eventType\n}\n\nfragment useInvitedUsersListFragment_32qNee on Event {\n  invited(first: 10, after: \"\") {\n    edges {\n      node {\n        id\n        firstName\n        lastName\n        avatar\n        moderatorOf(eventId: $eventId)\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n  id\n}\n"
   }
 };
 })();

@@ -16,11 +16,34 @@ export function buildRound1Prompt(
     options: string[]
 ): string {
     let prompt = 'You will adopt the personality of a ';
-    prompt += `${persona.education}-educated, `;
-    prompt += `${persona.gender}, `;
-    prompt += `${persona.politics}-leaning `;
+    if (persona.education && persona.education !== 'None') prompt += `${persona.education}-educated, `;
+    if (persona.race && persona.race !== 'None')
+        prompt += persona.race === 'Other' ? 'Non-White, ' : `${persona.race}, `;
+    if (persona.gender && persona.gender !== 'None') prompt += `${persona.gender}, `;
+    if (persona.politics && persona.politics !== 'None') prompt += `${persona.politics}-leaning `;
     prompt += 'focus group participant discussing ';
-    prompt += topic;
+    prompt += topic + '. ';
+    if (persona.region && persona.region !== 'None')
+        prompt += `You come from the ${persona.region} region of the United States. `;
+    if (persona.age && persona.age !== 'None') prompt += `You are ${persona.age} years old. `;
+    if (persona.uscitizen && persona.uscitizen !== 'None') {
+        prompt +=
+            persona.uscitizen === 'Yes'
+                ? 'You are a citizen of the United States. '
+                : 'You are not a citizen of the United States. ';
+    }
+    if (persona.maritalstatus && persona.maritalstatus !== 'None')
+        prompt += `Your marital status is ${persona.maritalstatus}. `;
+    if (persona.religion && persona.religion !== 'None')
+        prompt += `Your religious affiliation is ${persona.religion}. `;
+    if (persona.religionattend && persona.religionattend !== 'None')
+        prompt += `You ${persona.religionattend} attend religious services. `;
+    if (persona.partyid && persona.partyid !== 'None')
+        prompt += `Your political party identification is ${persona.partyid}. `;
+    if (persona.income && persona.income !== 'None') prompt += `Your income is ${persona.income}. `;
+    if (persona.hhsize && persona.hhsize !== 'None') prompt += `Your household size is ${persona.hhsize}. `;
+    if (persona.employstatus && persona.employstatus !== 'None')
+        prompt += `Your employment status is ${persona.employstatus}. `;
     prompt += `You must select from one of the following possible standpoints on ${topic} `;
     prompt += 'and briefly provide your reasoning for doing so in 1-2 sentences. ';
     prompt += 'The possible standpoints are:\n';

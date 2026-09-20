@@ -3,12 +3,15 @@ import { FGDT_DUMMY_USER_COUNT, getFgdtDummyUserIdentity } from './dummyUsers';
 import { isRound1PromptUnpublished } from './round1PromptEligibility';
 import { sampleRound1Participants } from './sampleRound1Participants';
 import type { Round1Random } from './sampleRound1Participants';
+import {
+    normalizeRound1CovariateKeys,
+    Round1CovariateKey,
+    Round1PersonaCovariates,
+    selectRound1Covariates,
+} from './round1Covariates';
+import { ROUND1_PERSONAS } from './round1Personas';
 
-export type Round1PersonaCovariates = {
-    gender: string;
-    education: string;
-    politics: string;
-};
+export type { Round1PersonaCovariates } from './round1Covariates';
 
 export type Round1InputParticipant = {
     participantKey: string;
@@ -49,29 +52,6 @@ export class Round1PrepareError extends Error {
 }
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
-const PERSONAS: Round1PersonaCovariates[] = [
-    { gender: 'female', education: 'Bachelor\'s degree', politics: 'liberal' },
-    { gender: 'male', education: 'High school', politics: 'conservative' },
-    { gender: 'female', education: 'Graduate degree', politics: 'moderate' },
-    { gender: 'male', education: 'Some college', politics: 'liberal' },
-    { gender: 'female', education: 'High school', politics: 'moderate' },
-    { gender: 'male', education: 'Bachelor\'s degree', politics: 'conservative' },
-    { gender: 'female', education: 'Some college', politics: 'liberal' },
-    { gender: 'male', education: 'Graduate degree', politics: 'moderate' },
-    { gender: 'female', education: 'Bachelor\'s degree', politics: 'conservative' },
-    { gender: 'male', education: 'High school', politics: 'liberal' },
-    { gender: 'female', education: 'Graduate degree', politics: 'moderate' },
-    { gender: 'male', education: 'Some college', politics: 'conservative' },
-    { gender: 'female', education: 'High school', politics: 'liberal' },
-    { gender: 'male', education: 'Bachelor\'s degree', politics: 'moderate' },
-    { gender: 'female', education: 'Some college', politics: 'conservative' },
-    { gender: 'male', education: 'Graduate degree', politics: 'liberal' },
-    { gender: 'female', education: 'Bachelor\'s degree', politics: 'moderate' },
-    { gender: 'male', education: 'High school', politics: 'conservative' },
-    { gender: 'female', education: 'Graduate degree', politics: 'liberal' },
-    { gender: 'male', education: 'Some college', politics: 'moderate' },
-];
 
 function requireNonemptyString(value: string, fieldName: string): string {
     if (typeof value !== 'string' || value.trim().length === 0) {
@@ -124,8 +104,17 @@ export async function prepareRound1Input(
 
     const runId = params.runId === undefined ? makeRunId(promptId) : requireNonemptyString(params.runId, 'runId');
 
-    const event = await prisma.event.findUnique({ where: { id: eventId }, select: { id: true } });
+    const event = await prisma.event.findUnique({
+        where: { id: eventId },
+        select: { id: true, simulationCovariates: true },
+    });
     if (!event) throw new Round1PrepareError(`Event ${eventId} does not exist.`);
+    let selectedCovariates: Round1CovariateKey[];
+    try {
+        selectedCovariates = normalizeRound1CovariateKeys(event.simulationCovariates);
+    } catch (error) {
+        throw new Round1PrepareError(error instanceof Error ? error.message : String(error));
+    }
 
     const prompt = await prisma.eventLiveFeedbackPrompt.findUnique({
         where: { id: promptId },
@@ -187,7 +176,7 @@ export async function prepareRound1Input(
     const participants = selectedIdentities.map(({ participantKey, email, personaIndex }) => ({
         participantKey,
         userId: userByEmail.get(email)!.id,
-        persona: { covariates: { ...PERSONAS[personaIndex] } },
+        persona: { covariates: selectRound1Covariates(ROUND1_PERSONAS[personaIndex], selectedCovariates) },
     }));
 
     return {

@@ -828,6 +828,7 @@ export type Event = Node & {
     simulationParticipantCount?: Maybe<Scalars['Int']>;
     simulationTopic?: Maybe<Scalars['String']>;
     simulationBackground?: Maybe<Scalars['String']>;
+    simulationCovariates?: Maybe<Array<Scalars['String']>>;
     /** All questions relating to this event */
     questions?: Maybe<EventQuestionConnection>;
     questionsByTopic?: Maybe<EventQuestionConnection>;
@@ -992,6 +993,7 @@ export type UpdateEvent = {
     simulationParticipantCount?: InputMaybe<Scalars['Int']>;
     simulationTopic?: InputMaybe<Scalars['String']>;
     simulationBackground?: InputMaybe<Scalars['String']>;
+    simulationCovariates?: InputMaybe<Array<Scalars['String']>>;
     eventId: Scalars['String'];
 };
 
@@ -3309,6 +3311,7 @@ export type EventResolvers<
     simulationParticipantCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
     simulationTopic?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     simulationBackground?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    simulationCovariates?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
     questions?: Resolver<
         Maybe<ResolversTypes['EventQuestionConnection']>,
         ParentType,
@@ -4633,6 +4636,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         simulationParticipantCount?: LoaderResolver<Maybe<Scalars['Int']>, Event, {}, TContext>;
         simulationTopic?: LoaderResolver<Maybe<Scalars['String']>, Event, {}, TContext>;
         simulationBackground?: LoaderResolver<Maybe<Scalars['String']>, Event, {}, TContext>;
+        simulationCovariates?: LoaderResolver<Maybe<Array<Scalars['String']>>, Event, {}, TContext>;
         questions?: LoaderResolver<Maybe<EventQuestionConnection>, Event, EventquestionsArgs, TContext>;
         questionsByTopic?: LoaderResolver<Maybe<EventQuestionConnection>, Event, EventquestionsByTopicArgs, TContext>;
         topicQueue?: LoaderResolver<Maybe<EventQuestionConnection>, Event, EventtopicQueueArgs, TContext>;

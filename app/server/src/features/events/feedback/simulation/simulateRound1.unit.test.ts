@@ -66,6 +66,22 @@ describe('simulateRound1', () => {
         expect(askGemini.mock.calls.map((call) => call[1])).toEqual([false, true, true]);
     });
 
+    test('sends Gemini only the selected persona fields', async () => {
+        const askGemini = jest.fn().mockResolvedValue('{"Standpoint 1":"Reason"}');
+        const participant = {
+            ...input.participants[0],
+            persona: { covariates: { region: 'South', age: '18-29' } },
+        };
+
+        await simulateRound1({ ...input, participants: [participant] }, askGemini);
+
+        const prompt = askGemini.mock.calls[0][0];
+        expect(prompt).toContain('South region');
+        expect(prompt).toContain('18-29 years old');
+        expect(prompt).not.toContain('College');
+        expect(prompt).not.toContain('liberal-leaning');
+    });
+
     test('fails after three invalid responses', async () => {
         const askGemini = jest.fn().mockResolvedValue('invalid');
         await expect(

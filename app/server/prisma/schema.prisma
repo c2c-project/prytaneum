@@ -109,6 +109,7 @@ model Event {
     simulationParticipantCount Int @default(10)
     simulationTopic String @default("")
     simulationBackground String @default("")
+    simulationCovariates String[] @default(["gender"])
 
     feedback EventLiveFeedback[]
     postEventFeedback PostEventFeedback[]

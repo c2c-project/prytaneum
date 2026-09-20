@@ -3,6 +3,7 @@ import { Event, PrismaClient } from '@local/__generated__/prisma';
 import { errors, filterFields, toGlobalId } from '@local/features/utils';
 import { isMemberOfOrg } from '@local/features/permissions';
 import { ProtectedError } from '@local/lib/ProtectedError';
+import { normalizeRound1CovariateKeys } from './feedback/simulation/round1Covariates';
 import type { CreateEvent, DeleteEvent, UpdateEvent } from '@local/graphql-types';
 
 export { isModerator } from './moderation/methods';
@@ -82,6 +83,7 @@ export async function createEvent(userId: string, prisma: PrismaClient, input: C
         simulationParticipantCount: 10,
         simulationTopic: '',
         simulationBackground: '',
+        simulationCovariates: ['gender'],
         createdById: userId,
         issueGuideUrl: '',
         issue: '',
@@ -150,11 +152,13 @@ export async function updateEvent(userId: string, prisma: PrismaClient, input: U
         throw new ProtectedError({ userMessage: errors.permissions });
     }
 
+    let normalizedSimulationCovariates: string[] | undefined;
     const includesSimulationSettings = [
         input.simulationEnabled,
         input.simulationParticipantCount,
         input.simulationTopic,
         input.simulationBackground,
+        input.simulationCovariates,
     ].some((value) => value !== null && value !== undefined);
 
     if (includesSimulationSettings) {
@@ -165,6 +169,7 @@ export async function updateEvent(userId: string, prisma: PrismaClient, input: U
                 simulationParticipantCount: true,
                 simulationTopic: true,
                 simulationBackground: true,
+                simulationCovariates: true,
             },
         });
         if (!current) throw new ProtectedError({ userMessage: 'Event not found.' });
@@ -174,7 +179,14 @@ export async function updateEvent(userId: string, prisma: PrismaClient, input: U
             simulationParticipantCount: input.simulationParticipantCount ?? current.simulationParticipantCount,
             simulationTopic: input.simulationTopic ?? current.simulationTopic,
             simulationBackground: input.simulationBackground ?? current.simulationBackground,
+            simulationCovariates: input.simulationCovariates ?? current.simulationCovariates,
         };
+        try {
+            simulation.simulationCovariates = normalizeRound1CovariateKeys(simulation.simulationCovariates);
+            normalizedSimulationCovariates = simulation.simulationCovariates;
+        } catch (error) {
+            throw new ProtectedError({ userMessage: error instanceof Error ? error.message : String(error) });
+        }
         if (
             !Number.isInteger(simulation.simulationParticipantCount) ||
             simulation.simulationParticipantCount < 1 ||
@@ -206,8 +218,12 @@ export async function updateEvent(userId: string, prisma: PrismaClient, input: U
             simulationParticipantCount: true,
             simulationTopic: true,
             simulationBackground: true,
+            simulationCovariates: true,
         },
     });
+    if (input.simulationCovariates !== null && input.simulationCovariates !== undefined) {
+        fields.simulationCovariates = normalizedSimulationCovariates;
+    }
 
     return prisma.event.update({ where: { id: input.eventId }, data: { ...fields } });
 }

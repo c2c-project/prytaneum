@@ -9,6 +9,7 @@ const currentSimulation = {
     simulationParticipantCount: 10,
     simulationTopic: '',
     simulationBackground: '',
+    simulationCovariates: ['gender'],
 };
 
 function authorize() {
@@ -52,11 +53,40 @@ describe('updateEvent simulation settings', () => {
         expect(prismaMock.event.update).not.toHaveBeenCalled();
     });
 
+    test('validates and normalizes selected simulation covariates', async () => {
+        authorize();
+        prismaMock.event.findUnique.mockResolvedValueOnce(currentSimulation as any);
+        prismaMock.event.update.mockResolvedValue({ id: EVENT_ID } as any);
+
+        await updateEvent(USER_ID, prismaMock, {
+            eventId: EVENT_ID,
+            simulationCovariates: ['politics', 'region', 'age'],
+        });
+
+        expect(prismaMock.event.update).toHaveBeenCalledWith({
+            where: { id: EVENT_ID },
+            data: { simulationCovariates: ['region', 'age', 'politics'] },
+        });
+    });
+
+    test('rejects an empty simulation covariate selection', async () => {
+        authorize();
+        prismaMock.event.findUnique.mockResolvedValueOnce(currentSimulation as any);
+
+        await expect(updateEvent(USER_ID, prismaMock, { eventId: EVENT_ID, simulationCovariates: [] })).rejects.toThrow(
+            'At least one simulation covariate must be selected.'
+        );
+
+        expect(prismaMock.event.update).not.toHaveBeenCalled();
+    });
+
     test.each([
         [{ simulationParticipantCount: 0 }, 'between 1 and 20'],
         [{ simulationParticipantCount: 21 }, 'between 1 and 20'],
         [{ simulationEnabled: true, simulationTopic: '', simulationBackground: 'Background' }, 'topic is required'],
         [{ simulationEnabled: true, simulationTopic: 'Topic', simulationBackground: '' }, 'background is required'],
+        [{ simulationCovariates: ['region', 'region'] }, 'duplicate key'],
+        [{ simulationCovariates: ['unsupported'] }, 'Unsupported simulation covariate'],
     ])('rejects invalid simulation settings', async (changes, expectedMessage) => {
         authorize();
         prismaMock.event.findUnique.mockResolvedValueOnce(currentSimulation as any);

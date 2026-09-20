@@ -59,6 +59,7 @@ type Event implements Node {
     simulationParticipantCount: Int
     simulationTopic: String
     simulationBackground: String
+    simulationCovariates: [String!]
 
     """
     All questions relating to this event
@@ -196,6 +197,7 @@ input UpdateEvent {
     simulationParticipantCount: Int
     simulationTopic: String
     simulationBackground: String
+    simulationCovariates: [String!]
     eventId: String!
 }
 """
