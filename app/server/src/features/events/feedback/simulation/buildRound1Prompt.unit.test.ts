@@ -95,7 +95,7 @@ describe('buildRound1Prompt', () => {
             });
 
             expect(prompt).toContain('vote exactly FOR, AGAINST, or CONFLICTED');
-            expect(prompt).toContain('{"vote": "FOR"');
+            expect(prompt).toContain('{"vote": "<SELECTED_OPTION>"');
             expect(prompt).not.toContain('Standpoint 1');
         }
     );

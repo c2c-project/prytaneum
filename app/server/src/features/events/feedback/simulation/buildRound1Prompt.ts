@@ -77,9 +77,11 @@ export function buildRound1Prompt(
             prompt += 'Format your response in JSON format such as {"Standpoint 2": "your reasoning"}:\n\n';
         }
     } else if (configuration.reasoningType === 'DISABLED') {
-        prompt += 'Format your response in JSON format such as {"vote": "FOR", "reasoning": ""}:\n\n';
+        prompt += 'Format your response in JSON format such as {"vote": "<SELECTED_OPTION>", "reasoning": ""}:\n\n';
     } else {
-        prompt += 'Format your response in JSON format such as {"vote": "FOR", "reasoning": "your reasoning"}:\n\n';
+        prompt +=
+            'Format your response in JSON format such as ' +
+            '{"vote": "<SELECTED_OPTION>", "reasoning": "your reasoning"}:\n\n';
     }
     return prompt;
 }
