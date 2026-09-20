@@ -74,7 +74,7 @@ export function LiveFeedbackPromptResponseForm({
             return form.vote !== '' && isFeedbackValid;
         }
         if (currentPrompt.isMultipleChoice) {
-            return form.multipleChoiceResponse !== '';
+            return form.multipleChoiceResponse !== '' && isFeedbackValid;
         }
         return isFeedbackValid;
     }, [form, currentPrompt, isFeedbackValid]);

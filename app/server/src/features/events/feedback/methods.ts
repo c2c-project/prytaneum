@@ -414,13 +414,20 @@ export async function createFeedbackPromptResponse(
 
     const promptData = await prisma.eventLiveFeedbackPrompt.findUnique({
         where: { id: promptId },
-        select: { isOpenEnded: true, isVote: true, isMultipleChoice: true },
+        select: { isOpenEnded: true, isVote: true, isMultipleChoice: true, reasoningType: true },
     });
 
     if (!promptData) {
         throw new ProtectedError({
             userMessage: 'Prompt not found',
             internalMessage: `Prompt with id ${promptId} not found`,
+        });
+    }
+
+    if (promptData.reasoningType === 'REQUIRED' && response.trim().length === 0) {
+        throw new ProtectedError({
+            userMessage: 'Reasoning is required for this prompt.',
+            internalMessage: `Prompt ${promptId} requires non-empty reasoning.`,
         });
     }
 
