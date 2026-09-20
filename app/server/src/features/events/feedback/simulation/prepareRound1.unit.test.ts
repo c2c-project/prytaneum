@@ -115,7 +115,9 @@ describe('prepareRound1Input', () => {
 
         const input = await prepareRound1Input(prismaMock, makeParams({ runId: undefined }), () => 0);
 
-        expect(input.runId).toMatch(/^fgdt-90990f38-\d+$/);
+        expect(input.runId).toMatch(
+            /^fgdt-90990f38-[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
+        );
     });
 
     test('filters the fixed persona to the persisted covariate selection', async () => {

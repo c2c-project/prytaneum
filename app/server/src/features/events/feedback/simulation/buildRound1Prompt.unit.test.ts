@@ -22,7 +22,8 @@ describe('buildRound1Prompt', () => {
                 'The possible standpoints are:\n' +
                 'Standpoint 1: Keep nasa funding. Standpoint 2: Reduce taxes. ' +
                 '\nPolling question: Which option do you support?\nBackground facts.\n' +
-                'Format your response in JSON format such as {"Standpoint 2": "your reasoning"}:\n\n'
+                'Format your response in JSON format such as ' +
+                '{"Standpoint <SELECTED_NUMBER>": "your reasoning"}:\n\n'
         );
     });
 
@@ -73,7 +74,7 @@ describe('buildRound1Prompt', () => {
         });
 
         expect(prompt).not.toContain('provide your reasoning');
-        expect(prompt).toContain('{"Standpoint 2": ""}');
+        expect(prompt).toContain('{"Standpoint <SELECTED_NUMBER>": ""}');
     });
 
     test('makes reasoning optional when configured as optional', () => {

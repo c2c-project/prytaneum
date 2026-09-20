@@ -28,7 +28,11 @@ async function simulateParticipant(
 
     let lastError: unknown;
     for (let attempt = 0; attempt < 3; attempt++) {
-        const rawResponse = await askGemini(prompt, attempt === 0 ? input.generation.force : true);
+        const rawResponse = await askGemini(
+            prompt,
+            attempt === 0 ? input.generation.force : true,
+            `${input.runId}:${participant.participantKey}`
+        );
         try {
             const parsed = parseRound1ModelResponse(rawResponse, input);
             const identity = { participantKey: participant.participantKey, userId: participant.userId };

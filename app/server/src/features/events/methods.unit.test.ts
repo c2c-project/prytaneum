@@ -6,10 +6,10 @@ const USER_ID = '531be5ae-6df9-47e2-a86d-8ee44062ab79';
 
 const currentSimulation = {
     simulationEnabled: false,
-    simulationParticipantCount: 10,
+    simulationParticipantCount: 3,
     simulationTopic: '',
     simulationBackground: '',
-    simulationCovariates: ['gender'],
+    simulationCovariates: ['gender', 'education', 'politics'],
 };
 
 function authorize() {

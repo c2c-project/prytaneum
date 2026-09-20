@@ -84,6 +84,9 @@ export function parseRound1ModelResponse(response: string, configuration: Round1
 
     const entries = Object.entries(record);
     if (entries.length === 0) throw new Round1ModelResponseError('Gemini response JSON must not be empty.');
+    if (entries.length !== 1) {
+        throw new Round1ModelResponseError('Gemini response must contain exactly one standpoint.');
+    }
     const [rawKey, rawReasoning] = entries[0];
     const match = /^Standpoint\s+(\d+):?$/.exec(rawKey);
     if (!match) throw new Round1ModelResponseError('Gemini response must use a "Standpoint N" key.');

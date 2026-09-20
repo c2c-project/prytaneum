@@ -58,9 +58,6 @@ export function useRunRound1Simulation(configuration: SimulationConfiguration) {
                         input: {
                             eventId,
                             promptId: prompt.id,
-                            participantCount: configuration.participantCount!,
-                            topic: configuration.topic!.trim(),
-                            background: configuration.background!.trim(),
                             force: false,
                         },
                     },

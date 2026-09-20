@@ -31,7 +31,7 @@ describe('simulateRound1', () => {
     test('processes participants sequentially and constructs importable output', async () => {
         let active = 0;
         let maximumActive = 0;
-        const askGemini = jest.fn(async () => {
+        const askGemini = jest.fn<Promise<string>, [string, boolean?, string?]>(async () => {
             active++;
             maximumActive = Math.max(maximumActive, active);
             await Promise.resolve();
@@ -43,6 +43,7 @@ describe('simulateRound1', () => {
 
         expect(maximumActive).toBe(1);
         expect(askGemini).toHaveBeenCalledTimes(2);
+        expect(askGemini.mock.calls.map((call) => call[2])).toEqual(['run:one', 'run:two']);
         expect(output).toMatchObject({
             schemaVersion: 2,
             runId: 'run',
@@ -80,6 +81,40 @@ describe('simulateRound1', () => {
         if (output.questionType !== 'MULTIPLE_CHOICE') throw new Error('Expected multiple choice output.');
         expect(output.responses[0].reasoning).toBe('Recovered');
         expect(askGemini.mock.calls.map((call) => call[1])).toEqual([false, true, true]);
+        expect(askGemini.mock.calls.map((call) => call[2])).toEqual(['run:one', 'run:one', 'run:one']);
+    });
+
+    test('scopes identical rendered prompts independently for different participants', async () => {
+        const sharedPersona = { covariates: { gender: 'female' } };
+        const participants = input.participants.map((participant) => ({ ...participant, persona: sharedPersona }));
+        const askGemini = jest
+            .fn()
+            .mockResolvedValueOnce('{"Standpoint 1":"First independent response"}')
+            .mockResolvedValueOnce('{"Standpoint 2":"Second independent response"}');
+
+        const output = await simulateRound1({ ...input, participants }, askGemini);
+
+        if (output.questionType !== 'MULTIPLE_CHOICE') throw new Error('Expected multiple choice output.');
+        expect(askGemini.mock.calls[0][0]).toBe(askGemini.mock.calls[1][0]);
+        expect(askGemini.mock.calls.map((call) => call[2])).toEqual(['run:one', 'run:two']);
+        expect(output.responses.map((response) => response.reasoning)).toEqual([
+            'First independent response',
+            'Second independent response',
+        ]);
+    });
+
+    test('uses independent cache scopes for repeated simulation runs', async () => {
+        const askGemini = jest
+            .fn()
+            .mockResolvedValueOnce('{"Standpoint 1":"First run"}')
+            .mockResolvedValueOnce('{"Standpoint 2":"Second run"}');
+        const oneParticipant = input.participants.slice(0, 1);
+
+        await simulateRound1({ ...input, runId: 'first-run', participants: oneParticipant }, askGemini);
+        await simulateRound1({ ...input, runId: 'second-run', participants: oneParticipant }, askGemini);
+
+        expect(askGemini.mock.calls.map((call) => call[2])).toEqual(['first-run:one', 'second-run:one']);
+        expect(askGemini.mock.calls.map((call) => call[1])).toEqual([false, false]);
     });
 
     test('sends Gemini only the selected persona fields', async () => {

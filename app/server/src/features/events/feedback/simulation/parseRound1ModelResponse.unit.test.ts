@@ -35,6 +35,8 @@ describe('parseRound1ModelResponse', () => {
         ['non-string reasoning', '{"Standpoint 1":42}'],
         ['empty reasoning', '{"Standpoint 1":"  "}'],
         ['long reasoning', `{"Standpoint 1":"${'x'.repeat(501)}"}`],
+        ['multiple standpoints', '{"Standpoint 1":"Reason one","Standpoint 2":"Reason two"}'],
+        ['literal standpoint placeholder', '{"Standpoint <SELECTED_NUMBER>":"Reason"}'],
     ])('rejects %s', (_description, response) => {
         expect(() => parseRound1ModelResponse(response, { ...requiredMultipleChoice, options: ['A', 'B'] })).toThrow();
     });

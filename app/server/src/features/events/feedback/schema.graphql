@@ -153,9 +153,6 @@ input GenerateViewpointsInput {
 input RunRound1SimulationInput {
     eventId: ID!
     promptId: ID!
-    participantCount: Int!
-    topic: String!
-    background: String!
     force: Boolean
 }
 

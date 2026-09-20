@@ -1050,12 +1050,9 @@ type Round1SimulationResult {
 }
 
 input RunRound1SimulationInput {
-  background: String!
   eventId: ID!
   force: Boolean
-  participantCount: Int!
   promptId: ID!
-  topic: String!
 }
 
 type Subscription {

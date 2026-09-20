@@ -72,9 +72,11 @@ export function buildRound1Prompt(
     prompt += `\n${`Polling question: ${question}\n${background}`.trim()}\n`;
     if (configuration.questionType === 'MULTIPLE_CHOICE') {
         if (configuration.reasoningType === 'DISABLED') {
-            prompt += 'Format your response in JSON format such as {"Standpoint 2": ""}:\n\n';
+            prompt += 'Format your response in JSON format such as {"Standpoint <SELECTED_NUMBER>": ""}:\n\n';
         } else {
-            prompt += 'Format your response in JSON format such as {"Standpoint 2": "your reasoning"}:\n\n';
+            prompt +=
+                'Format your response in JSON format such as ' +
+                '{"Standpoint <SELECTED_NUMBER>": "your reasoning"}:\n\n';
         }
     } else if (configuration.reasoningType === 'DISABLED') {
         prompt += 'Format your response in JSON format such as {"vote": "<SELECTED_OPTION>", "reasoning": ""}:\n\n';

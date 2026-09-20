@@ -294,9 +294,6 @@ export const resolvers: Resolvers = {
                 return runAuthorizedRound1(ctx.viewer.id, ctx.prisma, {
                     eventId: eventGlobalId.id,
                     promptId: promptGlobalId.id,
-                    participantCount: args.input.participantCount,
-                    topic: args.input.topic,
-                    background: args.input.background,
                     force: args.input.force ?? false,
                 });
             });

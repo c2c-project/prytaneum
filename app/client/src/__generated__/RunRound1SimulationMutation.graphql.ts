@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<08b0ce07d49aae3eeb640dacee490c16>>
+ * @generated SignedSource<<6d8825d05a2e4c0a962a41809ffca103>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,12 +10,9 @@
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type RunRound1SimulationInput = {
-  background: string;
   eventId: string;
   force?: boolean | null;
-  participantCount: number;
   promptId: string;
-  topic: string;
 };
 export type RunRound1SimulationMutation$variables = {
   input: RunRound1SimulationInput;

@@ -24,9 +24,6 @@ function makeArgs() {
         input: {
             eventId: toGlobalId('Event', EVENT_ID),
             promptId: toGlobalId('EventLiveFeedbackPrompt', PROMPT_ID),
-            participantCount: 3,
-            topic: 'nuclear power',
-            background: 'Background facts.',
             force: true,
         },
     };
@@ -51,14 +48,15 @@ describe('runRound1Simulation resolver', () => {
             body: expect.objectContaining({ runId: 'fgdt-test-run', insertedCount: 3 }),
         });
         expect(mockedRunAuthorizedRound1).toHaveBeenCalledTimes(1);
-        expect(mockedRunAuthorizedRound1).toHaveBeenCalledWith(VIEWER_ID, {}, {
-            eventId: EVENT_ID,
-            promptId: PROMPT_ID,
-            participantCount: 3,
-            topic: 'nuclear power',
-            background: 'Background facts.',
-            force: true,
-        });
+        expect(mockedRunAuthorizedRound1).toHaveBeenCalledWith(
+            VIEWER_ID,
+            {},
+            {
+                eventId: EVENT_ID,
+                promptId: PROMPT_ID,
+                force: true,
+            }
+        );
     });
 
     test('rejects a request without an authenticated viewer', async () => {

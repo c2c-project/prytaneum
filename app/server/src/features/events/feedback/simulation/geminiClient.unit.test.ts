@@ -25,7 +25,7 @@ describe('askRound1Gemini', () => {
     beforeEach(() => post.mockReset());
 
     test('validates GEMINI_API_KEY lazily', async () => {
-        await expect(askRound1Gemini('prompt', false, { apiKey: '', cache: makeCache() as any })).rejects.toThrow(
+        await expect(askRound1Gemini('prompt', false, '', { apiKey: '', cache: makeCache() as any })).rejects.toThrow(
             'GEMINI_API_KEY is required'
         );
         expect(post).not.toHaveBeenCalled();
@@ -33,7 +33,7 @@ describe('askRound1Gemini', () => {
 
     test('returns a cached raw response without calling Gemini', async () => {
         const cache = makeCache('{"Standpoint 1":"cached"}');
-        await expect(askRound1Gemini('prompt', false, { apiKey: 'test-key', cache: cache as any })).resolves.toBe(
+        await expect(askRound1Gemini('prompt', false, '', { apiKey: 'test-key', cache: cache as any })).resolves.toBe(
             '{"Standpoint 1":"cached"}'
         );
         expect(post).not.toHaveBeenCalled();
@@ -43,7 +43,7 @@ describe('askRound1Gemini', () => {
         const cache = makeCache();
         post.mockResolvedValue({ data: { candidates: [{ content: { parts: [{ text: 'response' }] } }] } });
 
-        await expect(askRound1Gemini('prompt', false, { apiKey: 'test-key', cache: cache as any })).resolves.toBe(
+        await expect(askRound1Gemini('prompt', false, '', { apiKey: 'test-key', cache: cache as any })).resolves.toBe(
             'response'
         );
         expect(post).toHaveBeenCalledWith(
@@ -69,11 +69,28 @@ describe('askRound1Gemini', () => {
     test('force bypasses cache and replaces it', async () => {
         const cache = makeCache('old');
         post.mockResolvedValue({ data: { candidates: [{ content: { parts: [{ text: 'fresh' }] } }] } });
-        await expect(askRound1Gemini('prompt', true, { apiKey: 'test-key', cache: cache as any })).resolves.toBe(
+        await expect(askRound1Gemini('prompt', true, '', { apiKey: 'test-key', cache: cache as any })).resolves.toBe(
             'fresh'
         );
         expect(cache.get).not.toHaveBeenCalled();
         expect(cache.set).toHaveBeenCalledWith(expect.any(String), 'fresh');
+    });
+
+    test('uses distinct cache keys for different run and participant scopes', async () => {
+        const cache = makeCache();
+        post.mockResolvedValue({ data: { candidates: [{ content: { parts: [{ text: 'response' }] } }] } });
+
+        await askRound1Gemini('identical prompt', false, 'run-one:participant-one', {
+            apiKey: 'test-key',
+            cache: cache as any,
+        });
+        await askRound1Gemini('identical prompt', false, 'run-two:participant-one', {
+            apiKey: 'test-key',
+            cache: cache as any,
+        });
+
+        expect(cache.get.mock.calls[0][0]).not.toBe(cache.get.mock.calls[1][0]);
+        expect(cache.set.mock.calls[0][0]).not.toBe(cache.set.mock.calls[1][0]);
     });
 
     test('retries retryable HTTP statuses with exponential delays', async () => {
@@ -84,7 +101,7 @@ describe('askRound1Gemini', () => {
         });
 
         await expect(
-            askRound1Gemini('prompt', false, { apiKey: 'test-key', cache: cache as any, sleep })
+            askRound1Gemini('prompt', false, '', { apiKey: 'test-key', cache: cache as any, sleep })
         ).resolves.toBe('ok');
         expect(post).toHaveBeenCalledTimes(2);
         expect(sleep).toHaveBeenCalledWith(1000);
@@ -93,7 +110,11 @@ describe('askRound1Gemini', () => {
     test('does not retry a non-retryable HTTP status', async () => {
         post.mockRejectedValue({ isAxiosError: true, response: { status: 401 } });
         await expect(
-            askRound1Gemini('prompt', false, { apiKey: 'test-key', cache: makeCache() as any, sleep: jest.fn() })
+            askRound1Gemini('prompt', false, '', {
+                apiKey: 'test-key',
+                cache: makeCache() as any,
+                sleep: jest.fn(),
+            })
         ).rejects.toThrow('HTTP status 401');
         expect(post).toHaveBeenCalledTimes(1);
     });
@@ -103,7 +124,7 @@ describe('askRound1Gemini', () => {
         post.mockRejectedValue({ isAxiosError: true, response: { status: 503 } });
 
         await expect(
-            askRound1Gemini('prompt', false, { apiKey: 'test-key', cache: makeCache() as any, sleep })
+            askRound1Gemini('prompt', false, '', { apiKey: 'test-key', cache: makeCache() as any, sleep })
         ).rejects.toThrow('HTTP status 503');
         expect(post).toHaveBeenCalledTimes(10);
         expect(sleep).toHaveBeenCalledTimes(9);

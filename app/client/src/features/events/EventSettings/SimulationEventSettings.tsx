@@ -57,10 +57,12 @@ export function SimulationEventSettings({ fragmentRef }: Props) {
     const { displaySnack } = useSnack();
     const [commit, isSaving] = useMutation<SimulationEventSettingsMutation>(SIMULATION_EVENT_SETTINGS_MUTATION);
     const [enabled, setEnabled] = React.useState(Boolean(settings.simulationEnabled));
-    const [participantCount, setParticipantCount] = React.useState(String(settings.simulationParticipantCount ?? 10));
+    const [participantCount, setParticipantCount] = React.useState(String(settings.simulationParticipantCount ?? 3));
     const [topic, setTopic] = React.useState(settings.simulationTopic ?? '');
     const [background, setBackground] = React.useState(settings.simulationBackground ?? '');
-    const [covariates, setCovariates] = React.useState<readonly string[]>(settings.simulationCovariates ?? ['gender']);
+    const [covariates, setCovariates] = React.useState<readonly string[]>(
+        settings.simulationCovariates ?? ['gender', 'education', 'politics']
+    );
     const parsedParticipantCount = participantCount.trim() === '' ? null : Number(participantCount);
     const participantCountIsValid =
         parsedParticipantCount !== null &&

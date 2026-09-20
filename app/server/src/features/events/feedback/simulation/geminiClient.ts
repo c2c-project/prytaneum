@@ -29,8 +29,8 @@ export class Round1GeminiError extends Error {
     }
 }
 
-function cacheKey(prompt: string): string {
-    const hash = createHash('md5').update(prompt, 'utf8').digest('hex').slice(0, 8);
+function cacheKey(prompt: string, cacheScope: string): string {
+    const hash = createHash('md5').update(`${cacheScope}\n${prompt}`, 'utf8').digest('hex').slice(0, 8);
     return `fgdt-round1:gemini:${ROUND1_GEMINI_MODEL}:${hash}`;
 }
 
@@ -92,6 +92,7 @@ async function requestGemini(
 export async function askRound1Gemini(
     prompt: string,
     force = false,
+    cacheScope = '',
     dependencies: GeminiClientDependencies = {}
 ): Promise<string> {
     const apiKey = dependencies.apiKey ?? process.env.GEMINI_API_KEY;
@@ -100,7 +101,7 @@ export async function askRound1Gemini(
     }
 
     const cache = dependencies.cache ?? getRedisClient();
-    const key = cacheKey(prompt);
+    const key = cacheKey(prompt, cacheScope);
     if (!force) {
         const cached = await cache.get(key);
         if (cached) return cached;

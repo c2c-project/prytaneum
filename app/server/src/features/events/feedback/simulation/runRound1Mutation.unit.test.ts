@@ -1,5 +1,4 @@
 import type { PrismaClient } from '@local/__generated__/prisma';
-import { ProtectedError } from '@local/lib/ProtectedError';
 import { Round1PrepareError } from './prepareRound1';
 import { runAuthorizedRound1, RunRound1MutationInput } from './runRound1Mutation';
 
@@ -12,9 +11,6 @@ function makeInput(overrides: Partial<RunRound1MutationInput> = {}): RunRound1Mu
     return {
         eventId: EVENT_ID,
         promptId: PROMPT_ID,
-        participantCount: 2,
-        topic: 'nuclear power',
-        background: 'Background facts.',
         force: false,
         ...overrides,
     };
@@ -23,12 +19,19 @@ function makeInput(overrides: Partial<RunRound1MutationInput> = {}): RunRound1Mu
 function makeDependencies() {
     return {
         canModify: jest.fn().mockResolvedValue(true),
+        loadSettings: jest.fn().mockResolvedValue({
+            simulationEnabled: true,
+            simulationParticipantCount: 3,
+            simulationTopic: 'persisted topic',
+            simulationBackground: 'Persisted background.',
+            simulationCovariates: ['gender', 'education', 'politics'],
+        }),
         run: jest.fn().mockResolvedValue({
             runId: 'fgdt-test-run',
             eventId: EVENT_ID,
             promptId: PROMPT_ID,
-            participantCount: 2,
-            insertedCount: 2,
+            participantCount: 3,
+            insertedCount: 3,
             dryRun: false,
         }),
     };
@@ -40,8 +43,8 @@ describe('runAuthorizedRound1', () => {
 
         await expect(runAuthorizedRound1(VIEWER_ID, prisma, makeInput(), dependencies)).resolves.toMatchObject({
             runId: 'fgdt-test-run',
-            participantCount: 2,
-            insertedCount: 2,
+            participantCount: 3,
+            insertedCount: 3,
         });
 
         expect(dependencies.canModify).toHaveBeenCalledWith(VIEWER_ID, EVENT_ID, prisma);
@@ -49,12 +52,71 @@ describe('runAuthorizedRound1', () => {
         expect(dependencies.run).toHaveBeenCalledWith(prisma, {
             eventId: EVENT_ID,
             promptId: PROMPT_ID,
-            participantCount: 2,
-            topic: 'nuclear power',
-            background: 'Background facts.',
+            participantCount: 3,
+            topic: 'persisted topic',
+            background: 'Persisted background.',
             force: false,
             dryRun: false,
         });
+    });
+
+    test('ignores untrusted client copies and uses persisted event settings', async () => {
+        const dependencies = makeDependencies();
+        const input = {
+            ...makeInput(),
+            participantCount: 20,
+            topic: 'client topic',
+            background: 'client background',
+        } as RunRound1MutationInput;
+
+        await runAuthorizedRound1(VIEWER_ID, prisma, input, dependencies);
+
+        expect(dependencies.run).toHaveBeenCalledWith(
+            prisma,
+            expect.objectContaining({
+                participantCount: 3,
+                topic: 'persisted topic',
+                background: 'Persisted background.',
+            })
+        );
+    });
+
+    test('rejects an event with simulation disabled', async () => {
+        const dependencies = makeDependencies();
+        dependencies.loadSettings.mockResolvedValue({
+            simulationEnabled: false,
+            simulationParticipantCount: 3,
+            simulationTopic: 'persisted topic',
+            simulationBackground: 'Persisted background.',
+            simulationCovariates: ['gender', 'education', 'politics'],
+        });
+
+        await expect(runAuthorizedRound1(VIEWER_ID, prisma, makeInput(), dependencies)).rejects.toMatchObject({
+            userMessage: 'Simulation is disabled for this event.',
+        });
+        expect(dependencies.run).not.toHaveBeenCalled();
+    });
+
+    test.each([
+        [{ simulationParticipantCount: 0 }, 'participant count'],
+        [{ simulationTopic: '' }, 'topic is required'],
+        [{ simulationBackground: '' }, 'background is required'],
+        [{ simulationCovariates: [] }, 'At least one simulation covariate'],
+    ])('rejects incomplete persisted settings: %j', async (override, expectedMessage) => {
+        const dependencies = makeDependencies();
+        dependencies.loadSettings.mockResolvedValue({
+            simulationEnabled: true,
+            simulationParticipantCount: 3,
+            simulationTopic: 'persisted topic',
+            simulationBackground: 'Persisted background.',
+            simulationCovariates: ['gender', 'education', 'politics'],
+            ...override,
+        });
+
+        await expect(runAuthorizedRound1(VIEWER_ID, prisma, makeInput(), dependencies)).rejects.toMatchObject({
+            userMessage: expect.stringContaining(expectedMessage),
+        });
+        expect(dependencies.run).not.toHaveBeenCalled();
     });
 
     test('rejects an unauthorized user without invoking Round 1', async () => {
@@ -88,15 +150,5 @@ describe('runAuthorizedRound1', () => {
         await expect(runAuthorizedRound1(VIEWER_ID, prisma, makeInput(), dependencies)).rejects.toMatchObject({
             userMessage: 'Prompt must have exactly one active question-type flag.',
         });
-    });
-
-    test.each([0, 1.5, 21])('rejects invalid participantCount %s before authorization', async (participantCount) => {
-        const dependencies = makeDependencies();
-
-        await expect(
-            runAuthorizedRound1(VIEWER_ID, prisma, makeInput({ participantCount }), dependencies)
-        ).rejects.toBeInstanceOf(ProtectedError);
-        expect(dependencies.canModify).not.toHaveBeenCalled();
-        expect(dependencies.run).not.toHaveBeenCalled();
     });
 });

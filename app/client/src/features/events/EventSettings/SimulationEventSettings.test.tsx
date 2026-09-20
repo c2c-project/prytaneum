@@ -72,6 +72,35 @@ describe('SimulationEventSettings covariates', function () {
         );
     });
 
+    test('uses the new participant and covariate defaults when settings are absent', () => {
+        mockUseFragment.mockReturnValue({
+            id: 'event-id',
+            simulationEnabled: false,
+            simulationParticipantCount: null,
+            simulationTopic: null,
+            simulationBackground: null,
+            simulationCovariates: null,
+        });
+
+        renderSettings();
+
+        expect(container.querySelector<HTMLInputElement>('input[name="simulation-participant-count"]')!.value).toBe(
+            '3'
+        );
+        expect(container.querySelector<HTMLInputElement>('input[name="simulation-covariate-gender"]')!.checked).toBe(
+            true
+        );
+        expect(container.querySelector<HTMLInputElement>('input[name="simulation-covariate-education"]')!.checked).toBe(
+            true
+        );
+        expect(container.querySelector<HTMLInputElement>('input[name="simulation-covariate-politics"]')!.checked).toBe(
+            true
+        );
+        expect(container.querySelector<HTMLInputElement>('input[name="simulation-covariate-region"]')!.checked).toBe(
+            false
+        );
+    });
+
     test('requires at least one selected covariate', () => {
         renderSettings();
 

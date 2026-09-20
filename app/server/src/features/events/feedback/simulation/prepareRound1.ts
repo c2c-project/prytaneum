@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import type { PrismaClient } from '@local/__generated__/prisma';
 import { FGDT_DUMMY_USER_COUNT, getFgdtDummyUserIdentity } from './dummyUsers';
 import { isRound1PromptUnpublished } from './round1PromptEligibility';
@@ -43,7 +44,7 @@ function requireRawUuid(value: string, fieldName: string): string {
 }
 
 function makeRunId(promptId: string): string {
-    return `fgdt-${promptId.slice(0, 8)}-${Date.now()}`;
+    return `fgdt-${promptId.slice(0, 8)}-${randomUUID()}`;
 }
 
 function validateOptions(options: string[]): void {

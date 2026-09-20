@@ -1685,12 +1685,9 @@ export type Round1SimulationResult = {
 };
 
 export type RunRound1SimulationInput = {
-  background: Scalars['String'];
   eventId: Scalars['ID'];
   force?: InputMaybe<Scalars['Boolean']>;
-  participantCount: Scalars['Int'];
   promptId: Scalars['ID'];
-  topic: Scalars['String'];
 };
 
 export type Subscription = {

@@ -1487,9 +1487,6 @@ export type GenerateViewpointsInput = {
 export type RunRound1SimulationInput = {
     eventId: Scalars['ID'];
     promptId: Scalars['ID'];
-    participantCount: Scalars['Int'];
-    topic: Scalars['String'];
-    background: Scalars['String'];
     force?: InputMaybe<Scalars['Boolean']>;
 };
 
