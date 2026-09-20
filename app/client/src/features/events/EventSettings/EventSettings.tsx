@@ -21,6 +21,7 @@ import { DeleteEvent } from '../DeleteEvent';
 import { EventIssueGuideSettings } from '../EventIssueGuide';
 import { EventTopicSettings } from '../EventTopics/EventTopicSettings';
 import { useEventDetails } from '../useEventDetails';
+import { SimulationEventSettings } from './SimulationEventSettings';
 
 export const eventSettingsSections = [
     'Form',
@@ -45,6 +46,7 @@ export const EVENT_SETTINGS_QUERY = graphql`
                 ...SpeakerEventSettingsFragment
                 ...VideoEventSettingsFragment
                 ...GenericSettingsFragment
+                ...SimulationEventSettingsFragment
                 ...ModeratorEventSettingsFragment
                 ...useInvitedUsersListFragment @arguments(eventId: $eventId)
                 ...EventIssueGuideSettingsFragment
@@ -103,6 +105,11 @@ export function EventSettings({ node }: EventSettingsProps) {
                                 title: 'Video',
                                 description: 'Select and configure the type of video for this event',
                                 component: <VideoEventSettings fragmentRef={node} />,
+                            },
+                            {
+                                title: 'Simulation',
+                                description: 'Configure simulated survey participants and context',
+                                component: <SimulationEventSettings fragmentRef={node} />,
                             },
                             {
                                 title: 'Speaker',
