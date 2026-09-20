@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<730e8a81e20acd2da584ae2545abfceb>>
+ * @generated SignedSource<<1f1aa3465ca0e94ba2780a4d07837c7a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -33,6 +33,13 @@ export type useLiveFeedbackPromptFlowsFragment$data = {
             readonly isVote: boolean | null;
             readonly multipleChoiceOptions: ReadonlyArray<string> | null;
             readonly prompt: string;
+            readonly simulationResponses: {
+              readonly edges: ReadonlyArray<{
+                readonly node: {
+                  readonly id: string;
+                };
+              }> | null;
+            } | null;
             readonly viewpoints: ReadonlyArray<string> | null;
             readonly voteViewpoints: any | null;
             readonly " $fragmentSpreads": FragmentRefs<"useLiveFeedbackPromptResponsesFragment">;
@@ -250,6 +257,46 @@ return {
                           "storageKey": null
                         },
                         {
+                          "alias": "simulationResponses",
+                          "args": [
+                            {
+                              "kind": "Literal",
+                              "name": "first",
+                              "value": 1
+                            }
+                          ],
+                          "concreteType": "EventLiveFeedbackPromptResponseConnection",
+                          "kind": "LinkedField",
+                          "name": "responses",
+                          "plural": false,
+                          "selections": [
+                            {
+                              "alias": null,
+                              "args": null,
+                              "concreteType": "EventLiveFeedbackPromptResponseEdge",
+                              "kind": "LinkedField",
+                              "name": "edges",
+                              "plural": true,
+                              "selections": [
+                                {
+                                  "alias": null,
+                                  "args": null,
+                                  "concreteType": "EventLiveFeedbackPromptResponse",
+                                  "kind": "LinkedField",
+                                  "name": "node",
+                                  "plural": false,
+                                  "selections": [
+                                    (v1/*: any*/)
+                                  ],
+                                  "storageKey": null
+                                }
+                              ],
+                              "storageKey": null
+                            }
+                          ],
+                          "storageKey": "responses(first:1)"
+                        },
+                        {
                           "args": null,
                           "kind": "FragmentSpread",
                           "name": "useLiveFeedbackPromptResponsesFragment"
@@ -319,6 +366,6 @@ return {
 };
 })();
 
-(node as any).hash = "b14b2f278f7990fedcb0378bb55de91b";
+(node as any).hash = "3f40f76450491e1312e850d5dfa0d7d3";
 
 export default node;

@@ -19,6 +19,8 @@ import { StyledDialogTitle, StyledDialog } from '@local/components';
 import { Prompt } from './LiveFeedbackPromptList';
 import ViewpointsList from './ViewpointsList';
 import GenerateViewpoints from './GenerateViewpoints';
+import { RunRound1Simulation, SimulationConfiguration } from './RunRound1Simulation';
+import { hasRound1SimulationResponses } from './simulationEligibility';
 
 interface Props {
     open: boolean;
@@ -26,6 +28,8 @@ interface Props {
     promptRef: React.MutableRefObject<Prompt | null>;
     selectedPrompt: Prompt | null;
     setSelectedPrompt: React.Dispatch<React.SetStateAction<Prompt | null>>;
+    simulationConfiguration: SimulationConfiguration;
+    refresh: () => void;
 }
 
 export default function FeedbackResponsesDialog({
@@ -34,10 +38,13 @@ export default function FeedbackResponsesDialog({
     promptRef,
     selectedPrompt,
     setSelectedPrompt,
+    simulationConfiguration,
+    refresh,
 }: Props) {
     const theme = useTheme();
     const fullscreen = useMediaQuery(theme.breakpoints.down('md'));
     const [voteKey, setVoteKey] = React.useState<string>('default');
+    const [responseRefreshKey, setResponseRefreshKey] = React.useState(0);
 
     const handleSelectionChange = (e: SelectChangeEvent<string>) => {
         e.preventDefault();
@@ -83,6 +90,16 @@ export default function FeedbackResponsesDialog({
                                     generateOnLoad={true}
                                 />
                                 <ShareFeedbackPromptResults prompt={promptRef.current} />
+                                <RunRound1Simulation
+                                    prompt={promptRef.current}
+                                    isSurveyDraft={Boolean(promptRef.current.isDraft)}
+                                    hasResponses={hasRound1SimulationResponses(promptRef.current)}
+                                    configuration={simulationConfiguration}
+                                    onSuccess={() => {
+                                        setResponseRefreshKey((key) => key + 1);
+                                        refresh();
+                                    }}
+                                />
                             </React.Fragment>
                         ) : null}
                     </Stack>
@@ -114,7 +131,11 @@ export default function FeedbackResponsesDialog({
                     )}
                     {selectedPrompt ? <ViewpointsList prompt={selectedPrompt} vote={voteKey} /> : null}
                     {selectedPrompt ? (
-                        <PreloadedLiveFeedbackPromptResponseList prompt={selectedPrompt} vote={voteKey} />
+                        <PreloadedLiveFeedbackPromptResponseList
+                            key={`${selectedPrompt.id}-${responseRefreshKey}`}
+                            prompt={selectedPrompt}
+                            vote={voteKey}
+                        />
                     ) : null}
                 </Grid>
             </DialogContent>

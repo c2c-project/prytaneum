@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c20e24bc3287f1893f68fe67de18f50a>>
+ * @generated SignedSource<<826ffa196dffeed30cb9833fb2d3fc13>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -210,6 +210,34 @@ return {
             "selections": [
               {
                 "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "simulationEnabled",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "simulationParticipantCount",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "simulationTopic",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "simulationBackground",
+                "storageKey": null
+              },
+              {
+                "alias": null,
                 "args": (v2/*: any*/),
                 "concreteType": "EventLiveFeedbackPromptConnection",
                 "kind": "LinkedField",
@@ -266,6 +294,46 @@ return {
                             "kind": "ScalarField",
                             "name": "voteViewpoints",
                             "storageKey": null
+                          },
+                          {
+                            "alias": "simulationResponses",
+                            "args": [
+                              {
+                                "kind": "Literal",
+                                "name": "first",
+                                "value": 1
+                              }
+                            ],
+                            "concreteType": "EventLiveFeedbackPromptResponseConnection",
+                            "kind": "LinkedField",
+                            "name": "responses",
+                            "plural": false,
+                            "selections": [
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "EventLiveFeedbackPromptResponseEdge",
+                                "kind": "LinkedField",
+                                "name": "edges",
+                                "plural": true,
+                                "selections": [
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "concreteType": "EventLiveFeedbackPromptResponse",
+                                    "kind": "LinkedField",
+                                    "name": "node",
+                                    "plural": false,
+                                    "selections": [
+                                      (v4/*: any*/)
+                                    ],
+                                    "storageKey": null
+                                  }
+                                ],
+                                "storageKey": null
+                              }
+                            ],
+                            "storageKey": "responses(first:1)"
                           },
                           {
                             "alias": null,
@@ -402,16 +470,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "e64bdb8c36cbbb7b7179066cbee20025",
+    "cacheID": "e43db3b6d3cf8907913d9f78bf5b50cf",
     "id": null,
     "metadata": {},
     "name": "liveFeedbackPromptPagination",
     "operationKind": "query",
-    "text": "query liveFeedbackPromptPagination(\n  $after: String\n  $first: Int = 100\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useLiveFeedbackPromptsFragment_2HEEH6\n    id\n  }\n}\n\nfragment useLiveFeedbackPromptResponsesFragment on EventLiveFeedbackPrompt {\n  id\n  responses(first: 100) {\n    edges {\n      cursor\n      node {\n        id\n        isOpenEnded\n        response\n        isVote\n        vote\n        isMultipleChoice\n        multipleChoiceResponse\n        createdAt\n        createdBy {\n          id\n          firstName\n        }\n        prompt {\n          id\n          prompt\n        }\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment useLiveFeedbackPromptsFragment_2HEEH6 on Event {\n  id\n  liveFeedbackPrompts(first: $first, after: $after) {\n    edges {\n      cursor\n      node {\n        id\n        prompt\n        isVote\n        isOpenEnded\n        isMultipleChoice\n        multipleChoiceOptions\n        createdAt\n        isDraft\n        viewpoints\n        voteViewpoints\n        ...useLiveFeedbackPromptResponsesFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query liveFeedbackPromptPagination(\n  $after: String\n  $first: Int = 100\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useLiveFeedbackPromptsFragment_2HEEH6\n    id\n  }\n}\n\nfragment useLiveFeedbackPromptResponsesFragment on EventLiveFeedbackPrompt {\n  id\n  responses(first: 100) {\n    edges {\n      cursor\n      node {\n        id\n        isOpenEnded\n        response\n        isVote\n        vote\n        isMultipleChoice\n        multipleChoiceResponse\n        createdAt\n        createdBy {\n          id\n          firstName\n        }\n        prompt {\n          id\n          prompt\n        }\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment useLiveFeedbackPromptsFragment_2HEEH6 on Event {\n  id\n  simulationEnabled\n  simulationParticipantCount\n  simulationTopic\n  simulationBackground\n  liveFeedbackPrompts(first: $first, after: $after) {\n    edges {\n      cursor\n      node {\n        id\n        prompt\n        isVote\n        isOpenEnded\n        isMultipleChoice\n        multipleChoiceOptions\n        createdAt\n        isDraft\n        viewpoints\n        voteViewpoints\n        simulationResponses: responses(first: 1) {\n          edges {\n            node {\n              id\n            }\n          }\n        }\n        ...useLiveFeedbackPromptResponsesFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "03232f20673e50ece1440cd18346be74";
+(node as any).hash = "b3a2326363ff712e86057b340716a99b";
 
 export default node;

@@ -32,6 +32,12 @@ import EmptyState from '@local/components/EmptyState';
 import FeedbackFlowResponsesDialog from './FeedbackFlowResponsesDialog';
 import { ShareFeedbackPromptFlow } from '../LiveFeedbackFlow/ShareFeedbackPromptFlow';
 import { ShareFeedbackPromptFlowDraft } from '../LiveFeedbackFlow/ShareFeedbackPromptFlowDraft';
+import { RunRound1Simulation, SimulationConfiguration } from './RunRound1Simulation';
+import {
+    getRunnableSurveyPrompt,
+    getSurveyCardActionVisibility,
+    hasRound1SimulationResponses,
+} from './simulationEligibility';
 
 export type FeedbackDashboardTab = 'open-ended' | 'vote' | 'multiple-choice' | 'surveys';
 
@@ -46,6 +52,8 @@ export type Prompt = {
     readonly createdAt: Date | null;
     readonly viewpoints: ReadonlyArray<string> | null;
     readonly voteViewpoints: Record<string, string[]> | null;
+    readonly simulationResponses?: { readonly edges: readonly unknown[] | null } | null;
+    readonly hasSimulationResponses?: boolean;
 };
 
 export type Flow = {
@@ -65,9 +73,11 @@ export type Flow = {
 interface PromptItemProps {
     prompt: Prompt;
     handleClick: (prompt: Prompt) => void;
+    simulationConfiguration: SimulationConfiguration;
+    refresh: () => void;
 }
 
-function PromptItem({ prompt, handleClick }: PromptItemProps) {
+function PromptItem({ prompt, handleClick, simulationConfiguration, refresh }: PromptItemProps) {
     const ViewResponses = () => {
         return (
             <Tooltip title='View Responses' placement='top'>
@@ -101,7 +111,16 @@ function PromptItem({ prompt, handleClick }: PromptItemProps) {
             </CardContent>
             <CardActions sx={{ justifyContent: 'center' }}>
                 {prompt.isDraft ? (
-                    <ShareFeedbackPromptDraft prompt={prompt} />
+                    <Stack direction='row' spacing={1}>
+                        <ShareFeedbackPromptDraft prompt={prompt} />
+                        <RunRound1Simulation
+                            prompt={prompt}
+                            isSurveyDraft={Boolean(prompt.isDraft)}
+                            hasResponses={hasRound1SimulationResponses(prompt)}
+                            configuration={simulationConfiguration}
+                            onSuccess={refresh}
+                        />
+                    </Stack>
                 ) : (
                     <Stack direction='row' spacing={1}>
                         <ShareFeedbackPrompt prompt={prompt} />
@@ -116,9 +135,13 @@ function PromptItem({ prompt, handleClick }: PromptItemProps) {
 interface FlowItemProps {
     flow: Flow;
     handleClick: (flow: Flow) => void;
+    simulationConfiguration: SimulationConfiguration;
+    refresh: () => void;
 }
 
-function FlowItem({ flow, handleClick }: FlowItemProps) {
+function FlowItem({ flow, handleClick, simulationConfiguration, refresh }: FlowItemProps) {
+    const runnablePrompt = getRunnableSurveyPrompt(flow);
+    const actions = getSurveyCardActionVisibility(flow.isDraft);
     const ViewResponses = () => {
         return (
             <Tooltip title='View Responses' placement='top'>
@@ -151,12 +174,24 @@ function FlowItem({ flow, handleClick }: FlowItemProps) {
                 </Grid>
             </CardContent>
             <CardActions sx={{ justifyContent: 'center' }}>
-                {flow.isDraft ? (
-                    <ShareFeedbackPromptFlowDraft flow={flow} />
+                {actions.shareDraft ? (
+                    <Stack direction='row' spacing={1}>
+                        <ShareFeedbackPromptFlowDraft flow={flow} />
+                        {runnablePrompt && (
+                            <RunRound1Simulation
+                                prompt={runnablePrompt}
+                                isSurveyDraft={flow.isDraft}
+                                hasResponses={hasRound1SimulationResponses(runnablePrompt)}
+                                configuration={simulationConfiguration}
+                                onSuccess={refresh}
+                            />
+                        )}
+                        {actions.viewResponses && <ViewResponses />}
+                    </Stack>
                 ) : (
                     <Stack direction='row' spacing={1}>
-                        <ShareFeedbackPromptFlow flow={flow} />
-                        <ViewResponses />
+                        {actions.reshareSurvey && <ShareFeedbackPromptFlow flow={flow} />}
+                        {actions.viewResponses && <ViewResponses />}
                     </Stack>
                 )}
             </CardActions>
@@ -171,6 +206,8 @@ interface PromptListProps {
     handleFlowClick: (flow: Flow) => void;
     selectedTab: FeedbackDashboardTab;
     setSelectedTab: React.Dispatch<React.SetStateAction<FeedbackDashboardTab>>;
+    simulationConfiguration: SimulationConfiguration;
+    refresh: () => void;
 }
 
 /**
@@ -183,6 +220,8 @@ function PromptList({
     handleFlowClick,
     selectedTab,
     setSelectedTab,
+    simulationConfiguration,
+    refresh,
 }: PromptListProps) {
     const theme = useTheme();
     // Reverse the prompts so that the most recent are at the top
@@ -234,7 +273,13 @@ function PromptList({
                         openEndedPrompts
                             .slice(0, MAX_LIST_LENGTH)
                             .map((prompt) => (
-                                <PromptItem key={prompt.id} prompt={prompt} handleClick={handlePromptClick} />
+                                <PromptItem
+                                    key={prompt.id}
+                                    prompt={prompt}
+                                    handleClick={handlePromptClick}
+                                    simulationConfiguration={simulationConfiguration}
+                                    refresh={refresh}
+                                />
                             ))
                     ) : (
                         <EmptyState message='No Open Ended Prompts To Display Yet.' />
@@ -254,7 +299,13 @@ function PromptList({
                     >
                         {votePrompts.length > 0 ? (
                             votePrompts.map((prompt) => (
-                                <PromptItem key={prompt.id} prompt={prompt} handleClick={handlePromptClick} />
+                                <PromptItem
+                                    key={prompt.id}
+                                    prompt={prompt}
+                                    handleClick={handlePromptClick}
+                                    simulationConfiguration={simulationConfiguration}
+                                    refresh={refresh}
+                                />
                             ))
                         ) : (
                             <EmptyState message='No Vote Prompts To Display Yet.' />
@@ -274,7 +325,13 @@ function PromptList({
                 >
                     {multipleChoicePrompts.length > 0 ? (
                         multipleChoicePrompts.map((prompt) => (
-                            <PromptItem key={prompt.id} prompt={prompt} handleClick={handlePromptClick} />
+                            <PromptItem
+                                key={prompt.id}
+                                prompt={prompt}
+                                handleClick={handlePromptClick}
+                                simulationConfiguration={simulationConfiguration}
+                                refresh={refresh}
+                            />
                         ))
                     ) : (
                         <EmptyState message='No Multiple Choice Prompts To Display Yet.' />
@@ -292,7 +349,15 @@ function PromptList({
                     }}
                 >
                     {flows.length > 0 ? (
-                        flows.map((flow) => <FlowItem key={flow.id} flow={flow} handleClick={handleFlowClick} />)
+                        flows.map((flow) => (
+                            <FlowItem
+                                key={flow.id}
+                                flow={flow}
+                                handleClick={handleFlowClick}
+                                simulationConfiguration={simulationConfiguration}
+                                refresh={refresh}
+                            />
+                        ))
                     ) : (
                         <EmptyState message='No Surveys To Display Yet.' />
                     )}
@@ -313,10 +378,10 @@ interface LiveFeedbackPromptsListProps {
 export function LiveFeedbackPromptsList({ fragmentRef, flowsFragmentRef }: LiveFeedbackPromptsListProps) {
     const [isFeedbackResponsesOpen, setIsFeedbackResponsesOpen] = React.useState(false);
     const [isFlowResponsesOpen, setIsFlowResponsesOpen] = React.useState(false);
-    const { prompts, connections, refresh } = useLiveFeedbackPrompts({
+    const { prompts, connections, refresh, simulationConfiguration } = useLiveFeedbackPrompts({
         fragmentRef,
     });
-    const { flows } = useLiveFeedbackPromptFlows({ fragmentRef: flowsFragmentRef });
+    const { flows, connections: flowConnections } = useLiveFeedbackPromptFlows({ fragmentRef: flowsFragmentRef });
     useLiveFeedbackPrompted({ connections });
     const [selectedTab, setSelectedTab] = React.useState<FeedbackDashboardTab>('open-ended');
     const [selectedPrompt, setSelectedPrompt] = React.useState<Prompt | null>(null);
@@ -346,6 +411,18 @@ export function LiveFeedbackPromptsList({ fragmentRef, flowsFragmentRef }: LiveF
         handleOpenFlowResponses();
     };
 
+    const handleNewSurveySimulationSuccess = (flow: Flow) => {
+        selectedFlowRef.current = {
+            ...flow,
+            prompts: flow.prompts.map((flowPrompt) => ({
+                ...flowPrompt,
+                prompt: { ...flowPrompt.prompt, hasSimulationResponses: true },
+            })),
+        };
+        refresh();
+        handleOpenFlowResponses();
+    };
+
     React.useEffect(() => {
         refresh();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -356,7 +433,11 @@ export function LiveFeedbackPromptsList({ fragmentRef, flowsFragmentRef }: LiveF
             <Grid container direction='row' alignItems='center' justifyContent='center' sx={{ width: '100%', mb: 2 }}>
                 <SubmitLiveFeedbackPrompt connections={connections} selectedTab={selectedTab} />
                 <Divider orientation='vertical' flexItem sx={{ width: '1rem', marginRight: '1rem' }} />
-                <SubmitLiveFeedbackFlow />
+                <SubmitLiveFeedbackFlow
+                    connections={flowConnections}
+                    simulationConfiguration={simulationConfiguration}
+                    onSimulationSuccess={handleNewSurveySimulationSuccess}
+                />
             </Grid>
             <PromptList
                 prompts={prompts}
@@ -365,6 +446,8 @@ export function LiveFeedbackPromptsList({ fragmentRef, flowsFragmentRef }: LiveF
                 handleFlowClick={handleFlowClick}
                 selectedTab={selectedTab}
                 setSelectedTab={setSelectedTab}
+                simulationConfiguration={simulationConfiguration}
+                refresh={refresh}
             />
             <FeedbackResponsesDialog
                 open={isFeedbackResponsesOpen}
@@ -372,11 +455,15 @@ export function LiveFeedbackPromptsList({ fragmentRef, flowsFragmentRef }: LiveF
                 promptRef={selectedPromptRef}
                 selectedPrompt={selectedPrompt}
                 setSelectedPrompt={setSelectedPrompt}
+                simulationConfiguration={simulationConfiguration}
+                refresh={refresh}
             />
             <FeedbackFlowResponsesDialog
                 open={isFlowResponsesOpen}
                 handleClose={handleCloseFlowResponses}
                 selectedFlow={selectedFlowRef.current}
+                simulationConfiguration={simulationConfiguration}
+                refresh={refresh}
             />
         </Grid>
     );
