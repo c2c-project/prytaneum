@@ -1,4 +1,5 @@
 import type { Round1PersonaCovariates } from './prepareRound1';
+import type { ReasoningType } from '@local/__generated__/prisma';
 
 /** Match Python's str.capitalize() for the ASCII survey options used by Round 1. */
 export function pythonCapitalize(value: string): string {
@@ -13,7 +14,8 @@ export function buildRound1Prompt(
     topic: string,
     question: string,
     background: string,
-    options: string[]
+    options: string[],
+    reasoningType: ReasoningType
 ): string {
     let prompt = 'You will adopt the personality of a ';
     if (persona.education && persona.education !== 'None') prompt += `${persona.education}-educated, `;
@@ -44,13 +46,21 @@ export function buildRound1Prompt(
     if (persona.hhsize && persona.hhsize !== 'None') prompt += `Your household size is ${persona.hhsize}. `;
     if (persona.employstatus && persona.employstatus !== 'None')
         prompt += `Your employment status is ${persona.employstatus}. `;
-    prompt += `You must select from one of the following possible standpoints on ${topic} `;
-    prompt += 'and briefly provide your reasoning for doing so in 1-2 sentences. ';
+    prompt += `You must select from one of the following possible standpoints on ${topic}. `;
+    if (reasoningType === 'REQUIRED') {
+        prompt += 'Briefly provide your reasoning for doing so in 1-2 sentences. ';
+    } else if (reasoningType === 'OPTIONAL') {
+        prompt += 'You may briefly provide your reasoning for doing so in 1-2 sentences. ';
+    }
     prompt += 'The possible standpoints are:\n';
     options.forEach((option, index) => {
         prompt += `Standpoint ${index + 1}: ${pythonCapitalize(option)}. `;
     });
     prompt += `\n${`Polling question: ${question}\n${background}`.trim()}\n`;
-    prompt += 'Format your response in JSON format such as {"Standpoint 2": "your reasoning"}:\n\n';
+    if (reasoningType === 'DISABLED') {
+        prompt += 'Format your response in JSON format such as {"Standpoint 2": ""}:\n\n';
+    } else {
+        prompt += 'Format your response in JSON format such as {"Standpoint 2": "your reasoning"}:\n\n';
+    }
     return prompt;
 }

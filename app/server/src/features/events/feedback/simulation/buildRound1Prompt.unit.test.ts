@@ -8,13 +8,14 @@ describe('buildRound1Prompt', () => {
                 'nuclear power',
                 'Which option do you support?',
                 'Background facts.',
-                ['KEEP NASA Funding', 'reduce TAXES']
+                ['KEEP NASA Funding', 'reduce TAXES'],
+                'REQUIRED'
             )
         ).toBe(
             'You will adopt the personality of a Bachelor\'s degree-educated, female, liberal-leaning ' +
                 'focus group participant discussing nuclear power. ' +
-                'You must select from one of the following possible standpoints on nuclear power ' +
-                'and briefly provide your reasoning for doing so in 1-2 sentences. ' +
+                'You must select from one of the following possible standpoints on nuclear power. ' +
+                'Briefly provide your reasoning for doing so in 1-2 sentences. ' +
                 'The possible standpoints are:\n' +
                 'Standpoint 1: Keep nasa funding. Standpoint 2: Reduce taxes. ' +
                 '\nPolling question: Which option do you support?\nBackground facts.\n' +
@@ -38,7 +39,8 @@ describe('buildRound1Prompt', () => {
             'transit',
             'Choose?',
             'Context.',
-            ['Yes', 'No']
+            ['Yes', 'No'],
+            'REQUIRED'
         );
 
         expect(prompt).toContain(
@@ -53,9 +55,22 @@ describe('buildRound1Prompt', () => {
 
     test('supports an empty covariate selection', () => {
         expect(
-            buildRound1Prompt({}, 'transit', 'Choose?', 'Context.', ['Yes', 'No']).startsWith(
+            buildRound1Prompt({}, 'transit', 'Choose?', 'Context.', ['Yes', 'No'], 'REQUIRED').startsWith(
                 'You will adopt the personality of a focus group participant discussing transit'
             )
         ).toBe(true);
+    });
+
+    test('does not request reasoning when it is disabled', () => {
+        const prompt = buildRound1Prompt({}, 'transit', 'Choose?', 'Context.', ['Yes', 'No'], 'DISABLED');
+
+        expect(prompt).not.toContain('provide your reasoning');
+        expect(prompt).toContain('{"Standpoint 2": ""}');
+    });
+
+    test('makes reasoning optional when configured as optional', () => {
+        const prompt = buildRound1Prompt({}, 'transit', 'Choose?', 'Context.', ['Yes', 'No'], 'OPTIONAL');
+
+        expect(prompt).toContain('You may briefly provide your reasoning');
     });
 });

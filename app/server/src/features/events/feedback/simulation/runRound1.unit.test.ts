@@ -17,6 +17,7 @@ const input: Round1Input = {
     topic: 'topic',
     background: 'background',
     options: ['Yes', 'No'],
+    reasoningType: 'REQUIRED',
     generation: { force: false },
     participants: [
         {
@@ -35,6 +36,7 @@ const output: Round1Output = {
     model: 'gemini-3.5-flash',
     generatedAt: '2026-09-02T00:00:00.000Z',
     options: input.options,
+    reasoningType: 'REQUIRED',
     responses: [
         {
             participantKey: 'fgdt-demo-01',

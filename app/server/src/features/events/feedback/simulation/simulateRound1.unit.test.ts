@@ -10,6 +10,7 @@ const input: Round1Input = {
     topic: 'topic',
     background: 'background',
     options: ['Option A', 'Option B'],
+    reasoningType: 'REQUIRED',
     generation: { force: false },
     participants: [
         {
@@ -46,6 +47,7 @@ describe('simulateRound1', () => {
             runId: 'run',
             model: 'gemini-3.5-flash',
             options: ['Option A', 'Option B'],
+            reasoningType: 'REQUIRED',
             responses: [
                 { participantKey: 'one', standpointNum: 2, selectedOption: 'Option B', reasoning: 'Reason' },
                 { participantKey: 'two', standpointNum: 2, selectedOption: 'Option B', reasoning: 'Reason' },
@@ -80,6 +82,35 @@ describe('simulateRound1', () => {
         expect(prompt).toContain('18-29 years old');
         expect(prompt).not.toContain('College');
         expect(prompt).not.toContain('liberal-leaning');
+    });
+
+    test.each([
+        ['DISABLED', '{"Standpoint 1":null}', ''],
+        ['OPTIONAL', '{"Standpoint 1":""}', ''],
+        ['OPTIONAL', '{"Standpoint 1":"Optional reason"}', 'Optional reason'],
+    ] as const)('accepts valid %s reasoning output', async (reasoningType, rawResponse, reasoning) => {
+        const askGemini = jest.fn().mockResolvedValue(rawResponse);
+
+        const output = await simulateRound1(
+            { ...input, reasoningType, participants: input.participants.slice(0, 1) },
+            askGemini
+        );
+
+        expect(output.reasoningType).toBe(reasoningType);
+        expect(output.responses[0].reasoning).toBe(reasoning);
+        expect(askGemini).toHaveBeenCalledTimes(1);
+    });
+
+    test('retries when required reasoning is missing', async () => {
+        const askGemini = jest
+            .fn()
+            .mockResolvedValueOnce('{"Standpoint 1":""}')
+            .mockResolvedValueOnce('{"Standpoint 1":"Required reason"}');
+
+        const output = await simulateRound1({ ...input, participants: input.participants.slice(0, 1) }, askGemini);
+
+        expect(output.responses[0].reasoning).toBe('Required reason');
+        expect(askGemini.mock.calls.map((call) => call[1])).toEqual([false, true]);
     });
 
     test('fails after three invalid responses', async () => {

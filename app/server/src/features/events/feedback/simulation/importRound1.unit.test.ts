@@ -16,6 +16,7 @@ function makeValidJson(): unknown {
         model: 'gemini-3.5-flash',
         generatedAt: '2026-08-26T12:00:00Z',
         options: ['Expand nuclear power', 'Maintain current operations', 'Phase out nuclear power'],
+        reasoningType: 'REQUIRED',
         responses: [
             {
                 participantKey: 'fgdt-demo-01',
@@ -48,6 +49,7 @@ function mockValidPreflight(output = makeValidOutput()) {
         isOpenEnded: false,
         isDraft: false,
         multipleChoiceOptions: output.options,
+        reasoningType: output.reasoningType,
         flows: [{ feedbackFlow: { isDraft: true } }],
     } as any);
     prismaMock.user.findMany.mockResolvedValueOnce(output.responses.map(({ userId: id }) => ({ id })) as any);
@@ -110,6 +112,35 @@ describe('parseRound1Output', () => {
 
         expect(() => parseRound1Output(json)).toThrow('reasoning must be at most 500 characters');
     });
+
+    test.each([
+        ['DISABLED', ''],
+        ['OPTIONAL', ''],
+        ['OPTIONAL', 'Optional reasoning'],
+        ['REQUIRED', 'Required reasoning'],
+    ] as const)('accepts valid %s reasoning', (reasoningType, reasoning) => {
+        const json = makeValidJson() as any;
+        json.reasoningType = reasoningType;
+        json.responses.forEach((response: any) => {
+            response.reasoning = reasoning;
+        });
+
+        expect(parseRound1Output(json).responses[0].reasoning).toBe(reasoning);
+    });
+
+    test('rejects empty required reasoning', () => {
+        const json = makeValidJson() as any;
+        json.responses[0].reasoning = '';
+
+        expect(() => parseRound1Output(json)).toThrow('reasoning must be a nonempty string');
+    });
+
+    test('rejects reasoning when it is disabled', () => {
+        const json = makeValidJson() as any;
+        json.reasoningType = 'DISABLED';
+
+        expect(() => parseRound1Output(json)).toThrow('reasoning must be empty when reasoning is disabled');
+    });
 });
 
 describe('preflightRound1Import', () => {
@@ -136,6 +167,7 @@ describe('preflightRound1Import', () => {
             isOpenEnded: false,
             isDraft: false,
             multipleChoiceOptions: output.options,
+            reasoningType: output.reasoningType,
             flows: [{ feedbackFlow: { isDraft: true } }],
         } as any);
 
@@ -152,6 +184,7 @@ describe('preflightRound1Import', () => {
             isOpenEnded: false,
             isDraft: false,
             multipleChoiceOptions: [...output.options].reverse(),
+            reasoningType: output.reasoningType,
             flows: [{ feedbackFlow: { isDraft: true } }],
         } as any);
 
@@ -168,6 +201,7 @@ describe('preflightRound1Import', () => {
             isOpenEnded: false,
             isDraft: false,
             multipleChoiceOptions: output.options,
+            reasoningType: output.reasoningType,
             flows: [{ feedbackFlow: { isDraft: true } }],
         } as any);
         prismaMock.user.findMany.mockResolvedValueOnce([{ id: USER_1_ID }] as any);
@@ -185,6 +219,7 @@ describe('preflightRound1Import', () => {
             isOpenEnded: false,
             isDraft: false,
             multipleChoiceOptions: output.options,
+            reasoningType: output.reasoningType,
             flows: [{ feedbackFlow: { isDraft: true } }],
         } as any);
         prismaMock.user.findMany.mockResolvedValueOnce(output.responses.map(({ userId: id }) => ({ id })) as any);
@@ -203,6 +238,7 @@ describe('preflightRound1Import', () => {
             isOpenEnded: false,
             isDraft: false,
             multipleChoiceOptions: output.options,
+            reasoningType: output.reasoningType,
             flows: [{ feedbackFlow: { isDraft: false } }],
         } as any);
 

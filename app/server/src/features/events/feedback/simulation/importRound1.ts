@@ -1,4 +1,4 @@
-import type { PrismaClient } from '@local/__generated__/prisma';
+import type { PrismaClient, ReasoningType } from '@local/__generated__/prisma';
 import { isRound1PromptUnpublished } from './round1PromptEligibility';
 
 type JsonRecord = Record<string, unknown>;
@@ -19,6 +19,7 @@ export type Round1Output = {
     model: string;
     generatedAt: string;
     options: string[];
+    reasoningType: ReasoningType;
     responses: Round1Response[];
 };
 
@@ -77,7 +78,7 @@ function parseOptions(value: unknown): string[] {
     return options;
 }
 
-function parseResponse(value: unknown, index: number, options: string[]): Round1Response {
+function parseResponse(value: unknown, index: number, options: string[], reasoningType: ReasoningType): Round1Response {
     const response = requireRecord(value, `responses[${index}]`);
     const participantKey = requireNonemptyString(response.participantKey, `responses[${index}].participantKey`);
     const userId = requireUuid(response.userId, `responses[${index}].userId`);
@@ -95,7 +96,16 @@ function parseResponse(value: unknown, index: number, options: string[]): Round1
         throw new Round1ImportError(`responses[${index}].selectedOption does not match options[standpointNum - 1].`);
     }
 
-    const reasoning = requireNonemptyString(response.reasoning, `responses[${index}].reasoning`);
+    if (typeof response.reasoning !== 'string') {
+        throw new Round1ImportError(`responses[${index}].reasoning must be a string.`);
+    }
+    const reasoning = response.reasoning.trim();
+    if (reasoningType === 'REQUIRED' && reasoning.length === 0) {
+        throw new Round1ImportError(`responses[${index}].reasoning must be a nonempty string.`);
+    }
+    if (reasoningType === 'DISABLED' && reasoning.length > 0) {
+        throw new Round1ImportError(`responses[${index}].reasoning must be empty when reasoning is disabled.`);
+    }
     if (Array.from(reasoning).length > 500) {
         throw new Round1ImportError(`responses[${index}].reasoning must be at most 500 characters.`);
     }
@@ -115,11 +125,15 @@ export function parseRound1Output(json: unknown): Round1Output {
     if (model !== 'gemini-3.5-flash') throw new Round1ImportError('model must be gemini-3.5-flash.');
     const generatedAt = requireNonemptyString(output.generatedAt, 'generatedAt');
     const options = parseOptions(output.options);
+    const reasoningType = output.reasoningType;
+    if (reasoningType !== 'DISABLED' && reasoningType !== 'OPTIONAL' && reasoningType !== 'REQUIRED') {
+        throw new Round1ImportError('reasoningType must be DISABLED, OPTIONAL, or REQUIRED.');
+    }
 
     if (!Array.isArray(output.responses) || output.responses.length < 1 || output.responses.length > 20) {
         throw new Round1ImportError('responses must contain between 1 and 20 responses.');
     }
-    const responses = output.responses.map((response, index) => parseResponse(response, index, options));
+    const responses = output.responses.map((response, index) => parseResponse(response, index, options, reasoningType));
 
     const participantKeys = responses.map(({ participantKey }) => participantKey);
     if (new Set(participantKeys).size !== participantKeys.length) {
@@ -130,7 +144,7 @@ export function parseRound1Output(json: unknown): Round1Output {
         throw new Round1ImportError('responses contain a duplicate userId.');
     }
 
-    return { schemaVersion: 1, runId, eventId, promptId, model, generatedAt, options, responses };
+    return { schemaVersion: 1, runId, eventId, promptId, model, generatedAt, options, reasoningType, responses };
 }
 
 function arraysEqual(left: string[], right: string[]): boolean {
@@ -154,6 +168,7 @@ export async function preflightRound1Import(
             isOpenEnded: true,
             isDraft: true,
             multipleChoiceOptions: true,
+            reasoningType: true,
             flows: { select: { feedbackFlow: { select: { isDraft: true } } } },
         },
     });
@@ -169,6 +184,9 @@ export async function preflightRound1Import(
     }
     if (!arraysEqual(prompt.multipleChoiceOptions, output.options)) {
         throw new Round1ImportError('Prompt options do not exactly match the ordered FGDT output options.');
+    }
+    if (prompt.reasoningType !== output.reasoningType) {
+        throw new Round1ImportError('Prompt reasoning type does not match the FGDT output reasoning type.');
     }
 
     const userIds = output.responses.map(({ userId }) => userId);

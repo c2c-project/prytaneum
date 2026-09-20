@@ -28,6 +28,7 @@ function makePrompt(overrides: Record<string, unknown> = {}) {
         isVote: false,
         isDraft: false,
         multipleChoiceOptions: OPTIONS,
+        reasoningType: 'OPTIONAL',
         flows: [{ feedbackFlow: { isDraft: true } }],
         ...overrides,
     };
@@ -68,6 +69,7 @@ describe('prepareRound1Input', () => {
             topic: 'the adoption of nuclear power',
             background: 'The region is considering a new nuclear power plant.',
             options: OPTIONS,
+            reasoningType: 'OPTIONAL',
             generation: { force: false },
             participants: [
                 {
@@ -101,6 +103,7 @@ describe('prepareRound1Input', () => {
                 isVote: true,
                 isDraft: true,
                 multipleChoiceOptions: true,
+                reasoningType: true,
                 flows: { select: { feedbackFlow: { select: { isDraft: true } } } },
             },
         });

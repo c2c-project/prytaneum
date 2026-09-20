@@ -56,6 +56,7 @@ export function validateRound1OutputCorrelation(input: Round1Input, output: Roun
     assertEqual(output.runId, input.runId, 'runId');
     assertEqual(output.eventId, input.eventId, 'eventId');
     assertEqual(output.promptId, input.promptId, 'promptId');
+    assertEqual(output.reasoningType, input.reasoningType, 'reasoningType');
 
     if (
         output.options.length !== input.options.length ||

@@ -23,14 +23,19 @@ async function simulateParticipant(
         input.topic,
         input.question,
         input.background,
-        input.options
+        input.options,
+        input.reasoningType
     );
 
     let lastError: unknown;
     for (let attempt = 0; attempt < 3; attempt++) {
         const rawResponse = await askGemini(prompt, attempt === 0 ? input.generation.force : true);
         try {
-            const { standpointNum, reasoning } = parseRound1ModelResponse(rawResponse, input.options.length);
+            const { standpointNum, reasoning } = parseRound1ModelResponse(
+                rawResponse,
+                input.options.length,
+                input.reasoningType
+            );
             return {
                 participantKey: participant.participantKey,
                 userId: participant.userId,
@@ -67,6 +72,7 @@ export async function simulateRound1(
         model: ROUND1_GEMINI_MODEL,
         generatedAt: new Date().toISOString(),
         options: [...input.options],
+        reasoningType: input.reasoningType,
         responses,
     };
 }

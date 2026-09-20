@@ -1,3 +1,5 @@
+import type { ReasoningType } from '@local/__generated__/prisma';
+
 export type ParsedRound1ModelResponse = {
     standpointNum: number;
     reasoning: string;
@@ -11,7 +13,11 @@ export class Round1ModelResponseError extends Error {
 }
 
 /** Parse the first JSON object in a Gemini response, matching FGDT's tolerant extraction. */
-export function parseRound1ModelResponse(response: string, optionCount: number): ParsedRound1ModelResponse {
+export function parseRound1ModelResponse(
+    response: string,
+    optionCount: number,
+    reasoningType: ReasoningType
+): ParsedRound1ModelResponse {
     const start = response.indexOf('{');
     const end = response.indexOf('}', start + 1);
     if (start < 0 || end < 0) throw new Round1ModelResponseError('Gemini response did not contain a JSON object.');
@@ -36,7 +42,9 @@ export function parseRound1ModelResponse(response: string, optionCount: number):
     if (!Number.isInteger(standpointNum) || standpointNum < 1 || standpointNum > optionCount) {
         throw new Round1ModelResponseError(`Gemini standpoint must be between 1 and ${optionCount}.`);
     }
+    if (reasoningType === 'DISABLED') return { standpointNum, reasoning: '' };
     if (typeof rawReasoning !== 'string') {
+        if (reasoningType === 'OPTIONAL') return { standpointNum, reasoning: '' };
         throw new Round1ModelResponseError('Gemini reasoning must be a string.');
     }
     let reasoning = rawReasoning;
@@ -44,7 +52,9 @@ export function parseRound1ModelResponse(response: string, optionCount: number):
         reasoning = reasoning.slice(1, -1);
     }
     reasoning = reasoning.trim();
-    if (!reasoning) throw new Round1ModelResponseError('Gemini reasoning must not be empty.');
+    if (!reasoning && reasoningType === 'REQUIRED') {
+        throw new Round1ModelResponseError('Gemini reasoning must not be empty.');
+    }
     if (Array.from(reasoning).length > 500) {
         throw new Round1ModelResponseError('Gemini reasoning must be at most 500 characters.');
     }

@@ -1,4 +1,4 @@
-import type { PrismaClient } from '@local/__generated__/prisma';
+import type { PrismaClient, ReasoningType } from '@local/__generated__/prisma';
 import { FGDT_DUMMY_USER_COUNT, getFgdtDummyUserIdentity } from './dummyUsers';
 import { isRound1PromptUnpublished } from './round1PromptEligibility';
 import { sampleRound1Participants } from './sampleRound1Participants';
@@ -28,6 +28,7 @@ export type Round1Input = {
     topic: string;
     background: string;
     options: string[];
+    reasoningType: ReasoningType;
     generation: {
         force: boolean;
     };
@@ -126,6 +127,7 @@ export async function prepareRound1Input(
             isVote: true,
             isDraft: true,
             multipleChoiceOptions: true,
+            reasoningType: true,
             flows: { select: { feedbackFlow: { select: { isDraft: true } } } },
         },
     });
@@ -188,6 +190,7 @@ export async function prepareRound1Input(
         topic,
         background,
         options: [...prompt.multipleChoiceOptions],
+        reasoningType: prompt.reasoningType,
         generation: { force: params.force ?? false },
         participants,
     };
