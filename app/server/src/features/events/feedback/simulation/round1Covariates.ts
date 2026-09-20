@@ -19,8 +19,6 @@ export type Round1CovariateKey = typeof ROUND1_COVARIATE_KEYS[number];
 export type Round1Persona = Record<Round1CovariateKey, string>;
 export type Round1PersonaCovariates = Partial<Round1Persona>;
 
-export const DEFAULT_ROUND1_COVARIATE_KEYS: Round1CovariateKey[] = ['gender'];
-
 const allowedKeys = new Set<string>(ROUND1_COVARIATE_KEYS);
 
 export function normalizeRound1CovariateKeys(keys: readonly string[]): Round1CovariateKey[] {

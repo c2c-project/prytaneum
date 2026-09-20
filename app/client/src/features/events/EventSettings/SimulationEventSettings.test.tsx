@@ -76,9 +76,20 @@ describe('SimulationEventSettings covariates', function () {
         renderSettings();
 
         const region = container.querySelector<HTMLInputElement>('input[name="simulation-covariate-region"]')!;
-        const politics = container.querySelector<HTMLInputElement>('input[name="simulation-covariate-politics"]')!;
         ReactTestUtils.act(() => region.click());
-        ReactTestUtils.act(() => politics.click());
+        expect(container.querySelector<HTMLInputElement>('input[name="simulation-covariate-region"]')!.checked).toBe(
+            false
+        );
+
+        const politics = container.querySelector<HTMLInputElement>('input[name="simulation-covariate-politics"]')!;
+        ReactTestUtils.act(() =>
+            ReactTestUtils.Simulate.change(politics, {
+                target: { checked: false } as unknown as EventTarget,
+            })
+        );
+        expect(container.querySelector<HTMLInputElement>('input[name="simulation-covariate-politics"]')!.checked).toBe(
+            false
+        );
 
         expect(container.textContent).toContain('Select at least one persona covariate.');
         expect(
@@ -88,16 +99,25 @@ describe('SimulationEventSettings covariates', function () {
 
     test('allows participant count to be temporarily empty and normalizes it on blur', () => {
         renderSettings();
-        const input = container.querySelector<HTMLInputElement>('input[name="simulation-participant-count"]')!;
+        let input = container.querySelector<HTMLInputElement>('input[name="simulation-participant-count"]')!;
 
-        ReactTestUtils.act(() => ReactTestUtils.Simulate.change(input, { target: { value: '' } }));
+        ReactTestUtils.act(() => {
+            input.value = '';
+            ReactTestUtils.Simulate.change(input, { target: input });
+        });
+        input = container.querySelector<HTMLInputElement>('input[name="simulation-participant-count"]')!;
         expect(input.value).toBe('');
         expect(
             Array.from(container.querySelectorAll('button')).find((button) => button.textContent === 'Save')!.disabled
         ).toBe(true);
 
-        ReactTestUtils.act(() => ReactTestUtils.Simulate.change(input, { target: { value: '03' } }));
+        ReactTestUtils.act(() => {
+            input.value = '03';
+            ReactTestUtils.Simulate.change(input, { target: input });
+        });
+        input = container.querySelector<HTMLInputElement>('input[name="simulation-participant-count"]')!;
         ReactTestUtils.act(() => ReactTestUtils.Simulate.blur(input));
+        input = container.querySelector<HTMLInputElement>('input[name="simulation-participant-count"]')!;
         expect(input.value).toBe('3');
     });
 });
