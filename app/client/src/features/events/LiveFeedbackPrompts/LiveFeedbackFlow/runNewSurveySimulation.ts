@@ -39,7 +39,7 @@ export async function runNewSurveySimulation<
     if (!prompt) {
         throw new SavedDraftSimulationError(
             savedDraft,
-            new Error('The saved survey must contain one eligible multiple-choice prompt.')
+            new Error('The saved survey must contain one eligible prompt.')
         );
     }
     try {

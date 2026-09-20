@@ -1,5 +1,6 @@
 import { prismaMock } from '../../../../../mocks/prisma/singleton';
-import { importRound1Responses, parseRound1Output, preflightRound1Import, Round1Output } from './importRound1';
+import { importRound1Responses, parseRound1Output, preflightRound1Import } from './importRound1';
+import type { Round1OutputV1 } from './round1Types';
 
 const EVENT_ID = '4ca977f8-3cf4-40ea-a9af-e2b852c0b15f';
 const OTHER_EVENT_ID = 'cc0f08b4-bcb0-4d3b-b07d-918339f4a220';
@@ -36,8 +37,8 @@ function makeValidJson(): unknown {
     };
 }
 
-function makeValidOutput(): Round1Output {
-    return parseRound1Output(makeValidJson());
+function makeValidOutput(): Round1OutputV1 {
+    return parseRound1Output(makeValidJson()) as Round1OutputV1;
 }
 
 function mockValidPreflight(output = makeValidOutput()) {
@@ -58,7 +59,7 @@ function mockValidPreflight(output = makeValidOutput()) {
 
 describe('parseRound1Output', () => {
     test('parses a valid output', () => {
-        const output = parseRound1Output(makeValidJson());
+        const output = parseRound1Output(makeValidJson()) as Round1OutputV1;
 
         expect(output.runId).toBe('nuclear-demo-001');
         expect(output.responses).toHaveLength(2);
@@ -67,9 +68,9 @@ describe('parseRound1Output', () => {
 
     test('rejects an invalid schema version', () => {
         const json = makeValidJson() as any;
-        json.schemaVersion = 2;
+        json.schemaVersion = 3;
 
-        expect(() => parseRound1Output(json)).toThrow('schemaVersion must equal 1');
+        expect(() => parseRound1Output(json)).toThrow('schemaVersion must equal 1 or 2');
     });
 
     test('rejects any model other than the fixed Round 1 Gemini model', () => {
@@ -125,7 +126,7 @@ describe('parseRound1Output', () => {
             response.reasoning = reasoning;
         });
 
-        expect(parseRound1Output(json).responses[0].reasoning).toBe(reasoning);
+        expect((parseRound1Output(json) as Round1OutputV1).responses[0].reasoning).toBe(reasoning);
     });
 
     test('rejects empty required reasoning', () => {
@@ -140,6 +141,32 @@ describe('parseRound1Output', () => {
         json.reasoningType = 'DISABLED';
 
         expect(() => parseRound1Output(json)).toThrow('reasoning must be empty when reasoning is disabled');
+    });
+
+    test('accepts version 1 multiple-choice output for backward compatibility', () => {
+        expect(parseRound1Output(makeValidJson())).toMatchObject({
+            schemaVersion: 1,
+            options: ['Expand nuclear power', 'Maintain current operations', 'Phase out nuclear power'],
+        });
+    });
+
+    test.each([
+        ['OPEN_ENDED', '', 'nonempty string'],
+        ['OPEN_ENDED', '   ', 'nonempty string'],
+        ['OPEN_ENDED', 'x'.repeat(501), 'at most 500'],
+    ])('rejects invalid %s response', (questionType, response, message) => {
+        const json = {
+            schemaVersion: 2,
+            runId: 'run',
+            eventId: EVENT_ID,
+            promptId: PROMPT_ID,
+            model: 'gemini-3.5-flash',
+            generatedAt: '2026-09-02T00:00:00.000Z',
+            questionType,
+            responses: [{ participantKey: 'fgdt-demo-01', userId: USER_1_ID, questionType, response }],
+        };
+
+        expect(() => parseRound1Output(json)).toThrow(message);
     });
 });
 
@@ -247,6 +274,41 @@ describe('preflightRound1Import', () => {
         );
         expect(prismaMock.eventLiveFeedbackPromptResponse.create).not.toHaveBeenCalled();
     });
+
+    test('rejects an output question type mismatch', async () => {
+        const output = parseRound1Output({
+            schemaVersion: 2,
+            runId: 'run',
+            eventId: EVENT_ID,
+            promptId: PROMPT_ID,
+            model: 'gemini-3.5-flash',
+            generatedAt: '2026-09-02T00:00:00.000Z',
+            questionType: 'VOTE',
+            reasoningType: 'OPTIONAL',
+            responses: [
+                {
+                    participantKey: 'fgdt-demo-01',
+                    userId: USER_1_ID,
+                    questionType: 'VOTE',
+                    vote: 'FOR',
+                    reasoning: '',
+                },
+            ],
+        });
+        prismaMock.event.findUnique.mockResolvedValueOnce({ id: EVENT_ID } as any);
+        prismaMock.eventLiveFeedbackPrompt.findUnique.mockResolvedValueOnce({
+            eventId: EVENT_ID,
+            isMultipleChoice: true,
+            isVote: false,
+            isOpenEnded: false,
+            isDraft: true,
+            multipleChoiceOptions: ['Yes', 'No'],
+            reasoningType: 'OPTIONAL',
+            flows: [],
+        } as any);
+
+        await expect(preflightRound1Import(prismaMock, output)).rejects.toThrow('question type does not match');
+    });
 });
 
 describe('importRound1Responses', () => {
@@ -280,6 +342,68 @@ describe('importRound1Responses', () => {
             promptId: PROMPT_ID,
             insertedCount: 2,
             participantKeys: ['fgdt-demo-01', 'fgdt-demo-02'],
+        });
+    });
+
+    test.each([
+        [
+            'VOTE',
+            { reasoningType: 'REQUIRED' },
+            { vote: 'AGAINST', reasoning: 'Not beneficial.' },
+            {
+                response: 'Not beneficial.',
+                multipleChoiceResponse: '',
+                isMultipleChoice: false,
+                isOpenEnded: false,
+                isVote: true,
+                vote: 'AGAINST',
+            },
+        ],
+        [
+            'OPEN_ENDED',
+            {},
+            { response: 'Invest in transit.' },
+            {
+                response: 'Invest in transit.',
+                multipleChoiceResponse: '',
+                isMultipleChoice: false,
+                isOpenEnded: true,
+                isVote: false,
+                vote: 'CONFLICTED',
+            },
+        ],
+    ] as const)('persists a version 2 %s response', async (questionType, configuration, answer, expectedData) => {
+        const output = parseRound1Output({
+            schemaVersion: 2,
+            runId: 'run',
+            eventId: EVENT_ID,
+            promptId: PROMPT_ID,
+            model: 'gemini-3.5-flash',
+            generatedAt: '2026-09-02T00:00:00.000Z',
+            questionType,
+            ...configuration,
+            responses: [{ participantKey: 'fgdt-demo-01', userId: USER_1_ID, questionType, ...answer }],
+        });
+        prismaMock.event.findUnique.mockResolvedValueOnce({ id: EVENT_ID } as any);
+        prismaMock.eventLiveFeedbackPrompt.findUnique.mockResolvedValueOnce({
+            eventId: EVENT_ID,
+            isMultipleChoice: false,
+            isVote: questionType === 'VOTE',
+            isOpenEnded: questionType === 'OPEN_ENDED',
+            isDraft: true,
+            multipleChoiceOptions: [],
+            reasoningType: questionType === 'VOTE' ? 'REQUIRED' : 'DISABLED',
+            flows: [],
+        } as any);
+        prismaMock.user.findMany.mockResolvedValueOnce([{ id: USER_1_ID }] as any);
+        prismaMock.eventLiveFeedbackPromptResponse.findMany.mockResolvedValueOnce([]);
+        prismaMock.$transaction.mockImplementationOnce(async (callback: any) => callback(prismaMock));
+        prismaMock.eventLiveFeedbackPromptResponse.create.mockResolvedValue({} as any);
+
+        await importRound1Responses(prismaMock, output);
+
+        expect(prismaMock.eventLiveFeedbackPromptResponse.create).toHaveBeenCalledWith({
+            data: { promptId: PROMPT_ID, createdById: USER_1_ID, ...expectedData },
         });
     });
 });

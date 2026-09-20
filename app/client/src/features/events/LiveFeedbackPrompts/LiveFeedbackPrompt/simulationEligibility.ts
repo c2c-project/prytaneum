@@ -10,11 +10,11 @@ type PromptResponseState = {
 };
 
 export function isRound1PromptTypeEligible(prompt: Round1PromptEligibility): boolean {
-    return Boolean(prompt.isMultipleChoice && !prompt.isOpenEnded && !prompt.isVote);
+    return [prompt.isMultipleChoice, prompt.isOpenEnded, prompt.isVote].filter(Boolean).length === 1;
 }
 
 export function isRound1PromptFormEligible(prompt: { feedbackType: string }): boolean {
-    return prompt.feedbackType === 'multiple-choice';
+    return ['multiple-choice', 'vote', 'open-ended'].includes(prompt.feedbackType);
 }
 
 export function isRound1SimulationEligible(prompt: Round1PromptEligibility & { id: string }): boolean {

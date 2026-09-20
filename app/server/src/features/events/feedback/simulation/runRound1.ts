@@ -2,6 +2,7 @@ import type { PrismaClient } from '@local/__generated__/prisma';
 import { parseRound1Output, persistRound1Responses, preflightRound1Import, Round1Output } from './importRound1';
 import { prepareRound1Input, Round1Input } from './prepareRound1';
 import { simulateRound1 } from './simulateRound1';
+import { getRound1OutputQuestionType } from './round1Types';
 
 export type RunRound1Options = {
     eventId: string;
@@ -56,13 +57,24 @@ export function validateRound1OutputCorrelation(input: Round1Input, output: Roun
     assertEqual(output.runId, input.runId, 'runId');
     assertEqual(output.eventId, input.eventId, 'eventId');
     assertEqual(output.promptId, input.promptId, 'promptId');
-    assertEqual(output.reasoningType, input.reasoningType, 'reasoningType');
+    assertEqual(getRound1OutputQuestionType(output), input.questionType, 'questionType');
 
-    if (
-        output.options.length !== input.options.length ||
-        output.options.some((option, index) => option !== input.options[index])
-    ) {
-        throw new Round1RunError('Simulator output options do not match prepared input in value and order.');
+    if (input.questionType === 'MULTIPLE_CHOICE') {
+        if (!(output.schemaVersion === 1 || output.questionType === 'MULTIPLE_CHOICE')) {
+            throw new Round1RunError('Simulator output questionType does not match prepared input.');
+        }
+        assertEqual(output.reasoningType, input.reasoningType, 'reasoningType');
+        if (
+            output.options.length !== input.options.length ||
+            output.options.some((option, index) => option !== input.options[index])
+        ) {
+            throw new Round1RunError('Simulator output options do not match prepared input in value and order.');
+        }
+    } else if (input.questionType === 'VOTE') {
+        if (output.schemaVersion !== 2 || output.questionType !== 'VOTE') {
+            throw new Round1RunError('Simulator output questionType does not match prepared input.');
+        }
+        assertEqual(output.reasoningType, input.reasoningType, 'reasoningType');
     }
 
     if (output.responses.length !== input.participants.length) {

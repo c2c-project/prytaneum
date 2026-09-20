@@ -79,16 +79,14 @@ describe('runAuthorizedRound1', () => {
         expect(dependencies.run).toHaveBeenCalledTimes(1);
     });
 
-    test('returns a clear error for an ineligible non-multiple-choice prompt', async () => {
+    test('returns a clear error for malformed question-type flags', async () => {
         const dependencies = makeDependencies();
         dependencies.run.mockRejectedValue(
-            new Round1PrepareError(
-                `Prompt ${PROMPT_ID} must be a non-vote, non-open-ended multiple-choice prompt.`
-            )
+            new Round1PrepareError('Prompt must have exactly one active question-type flag.')
         );
 
         await expect(runAuthorizedRound1(VIEWER_ID, prisma, makeInput(), dependencies)).rejects.toMatchObject({
-            userMessage: `Prompt ${PROMPT_ID} must be a non-vote, non-open-ended multiple-choice prompt.`,
+            userMessage: 'Prompt must have exactly one active question-type flag.',
         });
     });
 

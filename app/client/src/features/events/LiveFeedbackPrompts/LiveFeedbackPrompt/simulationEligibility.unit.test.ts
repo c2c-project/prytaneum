@@ -49,10 +49,22 @@ describe('getRunnableSurveyPrompt', () => {
         });
     });
 
-    test('rejects an ineligible prompt and does not choose among multiple prompts', () => {
+    test.each([
+        { isMultipleChoice: true, isOpenEnded: false, isVote: false },
+        { isMultipleChoice: false, isOpenEnded: true, isVote: false },
+        { isMultipleChoice: false, isOpenEnded: false, isVote: true },
+    ])('accepts each supported prompt type: %j', (flags) => {
+        const prompt = { ...eligiblePrompt, ...flags };
+        expect(getRunnableSurveyPrompt(makeFlow(true, [prompt]))).toBe(prompt);
+    });
+
+    test('rejects malformed prompt flags and does not choose among multiple prompts', () => {
         expect(
-            getRunnableSurveyPrompt(makeFlow(true, [{ ...eligiblePrompt, isMultipleChoice: false, isOpenEnded: true }]))
+            getRunnableSurveyPrompt(
+                makeFlow(true, [{ ...eligiblePrompt, isMultipleChoice: false, isOpenEnded: false, isVote: false }])
+            )
         ).toBeNull();
+        expect(getRunnableSurveyPrompt(makeFlow(true, [{ ...eligiblePrompt, isOpenEnded: true }]))).toBeNull();
         expect(
             getRunnableSurveyPrompt(makeFlow(true, [eligiblePrompt, { ...eligiblePrompt, id: 'another-id' }]))
         ).toBeNull();

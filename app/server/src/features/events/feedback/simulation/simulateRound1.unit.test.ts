@@ -2,13 +2,14 @@ import type { Round1Input } from './prepareRound1';
 import { simulateRound1 } from './simulateRound1';
 
 const input: Round1Input = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     runId: 'run',
     eventId: '4ca977f8-3cf4-40ea-a9af-e2b852c0b15f',
     promptId: '90990f38-1855-4aaa-a417-fd4227fdbf7a',
     question: 'Question?',
     topic: 'topic',
     background: 'background',
+    questionType: 'MULTIPLE_CHOICE',
     options: ['Option A', 'Option B'],
     reasoningType: 'REQUIRED',
     generation: { force: false },
@@ -43,14 +44,26 @@ describe('simulateRound1', () => {
         expect(maximumActive).toBe(1);
         expect(askGemini).toHaveBeenCalledTimes(2);
         expect(output).toMatchObject({
-            schemaVersion: 1,
+            schemaVersion: 2,
             runId: 'run',
             model: 'gemini-3.5-flash',
             options: ['Option A', 'Option B'],
             reasoningType: 'REQUIRED',
             responses: [
-                { participantKey: 'one', standpointNum: 2, selectedOption: 'Option B', reasoning: 'Reason' },
-                { participantKey: 'two', standpointNum: 2, selectedOption: 'Option B', reasoning: 'Reason' },
+                {
+                    participantKey: 'one',
+                    questionType: 'MULTIPLE_CHOICE',
+                    standpointNum: 2,
+                    selectedOption: 'Option B',
+                    reasoning: 'Reason',
+                },
+                {
+                    participantKey: 'two',
+                    questionType: 'MULTIPLE_CHOICE',
+                    standpointNum: 2,
+                    selectedOption: 'Option B',
+                    reasoning: 'Reason',
+                },
             ],
         });
     });
@@ -64,6 +77,7 @@ describe('simulateRound1', () => {
 
         const output = await simulateRound1({ ...input, participants: input.participants.slice(0, 1) }, askGemini);
 
+        if (output.questionType !== 'MULTIPLE_CHOICE') throw new Error('Expected multiple choice output.');
         expect(output.responses[0].reasoning).toBe('Recovered');
         expect(askGemini.mock.calls.map((call) => call[1])).toEqual([false, true, true]);
     });
@@ -96,6 +110,7 @@ describe('simulateRound1', () => {
             askGemini
         );
 
+        if (output.questionType !== 'MULTIPLE_CHOICE') throw new Error('Expected multiple choice output.');
         expect(output.reasoningType).toBe(reasoningType);
         expect(output.responses[0].reasoning).toBe(reasoning);
         expect(askGemini).toHaveBeenCalledTimes(1);
@@ -109,6 +124,7 @@ describe('simulateRound1', () => {
 
         const output = await simulateRound1({ ...input, participants: input.participants.slice(0, 1) }, askGemini);
 
+        if (output.questionType !== 'MULTIPLE_CHOICE') throw new Error('Expected multiple choice output.');
         expect(output.responses[0].reasoning).toBe('Required reason');
         expect(askGemini.mock.calls.map((call) => call[1])).toEqual([false, true]);
     });
@@ -119,5 +135,60 @@ describe('simulateRound1', () => {
             simulateRound1({ ...input, participants: input.participants.slice(0, 1) }, askGemini)
         ).rejects.toThrow('Could not parse a valid Gemini response for participant one');
         expect(askGemini).toHaveBeenCalledTimes(3);
+    });
+
+    test('simulates a vote response', async () => {
+        const { options: _options, questionType: _questionType, ...common } = input;
+        const askGemini = jest.fn().mockResolvedValue('{"vote":"AGAINST","reasoning":"Too costly."}');
+
+        const output = await simulateRound1(
+            {
+                ...common,
+                questionType: 'VOTE',
+                reasoningType: 'REQUIRED',
+                participants: input.participants.slice(0, 1),
+            },
+            askGemini
+        );
+
+        expect(output).toMatchObject({
+            questionType: 'VOTE',
+            reasoningType: 'REQUIRED',
+            responses: [{ questionType: 'VOTE', vote: 'AGAINST', reasoning: 'Too costly.' }],
+        });
+    });
+
+    test('simulates an open-ended response without options or reasoning mode', async () => {
+        const { options: _options, reasoningType: _reasoningType, questionType: _questionType, ...common } = input;
+        const askGemini = jest.fn().mockResolvedValue('{"response":"More frequent buses."}');
+
+        const output = await simulateRound1(
+            { ...common, questionType: 'OPEN_ENDED', participants: input.participants.slice(0, 1) },
+            askGemini
+        );
+
+        expect(output).toMatchObject({
+            questionType: 'OPEN_ENDED',
+            responses: [{ questionType: 'OPEN_ENDED', response: 'More frequent buses.' }],
+        });
+        expect(output).not.toHaveProperty('options');
+        expect(output).not.toHaveProperty('reasoningType');
+    });
+
+    test('continues a multi-participant open-ended simulation when a response exceeds 500 characters', async () => {
+        const { options: _options, reasoningType: _reasoningType, questionType: _questionType, ...common } = input;
+        const askGemini = jest
+            .fn()
+            .mockResolvedValueOnce(JSON.stringify({ response: '😀'.repeat(501) }))
+            .mockResolvedValueOnce('{"response":"A short response."}');
+
+        const output = await simulateRound1({ ...common, questionType: 'OPEN_ENDED' }, askGemini);
+
+        if (output.questionType !== 'OPEN_ENDED') throw new Error('Expected open-ended output.');
+        expect(output.responses).toHaveLength(2);
+        expect(output.responses[0].response).toBe('😀'.repeat(500));
+        expect(Array.from(output.responses[0].response)).toHaveLength(500);
+        expect(output.responses[1].response).toBe('A short response.');
+        expect(askGemini).toHaveBeenCalledTimes(2);
     });
 });

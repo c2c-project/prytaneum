@@ -1,39 +1,14 @@
-import type { PrismaClient, ReasoningType } from '@local/__generated__/prisma';
+import type { PrismaClient } from '@local/__generated__/prisma';
 import { FGDT_DUMMY_USER_COUNT, getFgdtDummyUserIdentity } from './dummyUsers';
 import { isRound1PromptUnpublished } from './round1PromptEligibility';
 import { sampleRound1Participants } from './sampleRound1Participants';
 import type { Round1Random } from './sampleRound1Participants';
-import {
-    normalizeRound1CovariateKeys,
-    Round1CovariateKey,
-    Round1PersonaCovariates,
-    selectRound1Covariates,
-} from './round1Covariates';
+import { normalizeRound1CovariateKeys, Round1CovariateKey, selectRound1Covariates } from './round1Covariates';
 import { ROUND1_PERSONAS } from './round1Personas';
+import { deriveRound1QuestionType, Round1Input, Round1Question, Round1QuestionTypeError } from './round1Types';
 
 export type { Round1PersonaCovariates } from './round1Covariates';
-
-export type Round1InputParticipant = {
-    participantKey: string;
-    userId: string;
-    persona: { covariates: Round1PersonaCovariates };
-};
-
-export type Round1Input = {
-    schemaVersion: 1;
-    runId: string;
-    eventId: string;
-    promptId: string;
-    question: string;
-    topic: string;
-    background: string;
-    options: string[];
-    reasoningType: ReasoningType;
-    generation: {
-        force: boolean;
-    };
-    participants: Round1InputParticipant[];
-};
+export type { Round1Input, Round1InputParticipant } from './round1Types';
 
 export type PrepareRound1InputParams = {
     eventId: string;
@@ -135,14 +110,18 @@ export async function prepareRound1Input(
     if (prompt.eventId !== eventId) {
         throw new Round1PrepareError(`Prompt ${promptId} does not belong to event ${eventId}.`);
     }
-    if (!prompt.isMultipleChoice || prompt.isOpenEnded || prompt.isVote) {
-        throw new Round1PrepareError(`Prompt ${promptId} must be a non-vote, non-open-ended multiple-choice prompt.`);
+    let questionType: Round1Question['questionType'];
+    try {
+        questionType = deriveRound1QuestionType(prompt);
+    } catch (error) {
+        if (error instanceof Round1QuestionTypeError) throw new Round1PrepareError(error.message);
+        throw error;
     }
     if (!isRound1PromptUnpublished(prompt)) {
         throw new Round1PrepareError('Simulation is only available for draft/unpublished surveys.');
     }
     const question = requireNonemptyString(prompt.prompt, 'Prompt question');
-    validateOptions(prompt.multipleChoiceOptions);
+    if (questionType === 'MULTIPLE_CHOICE') validateOptions(prompt.multipleChoiceOptions);
 
     const expectedIdentities = Array.from({ length: FGDT_DUMMY_USER_COUNT }, (_, index) => ({
         ...getFgdtDummyUserIdentity(index + 1),
@@ -181,17 +160,25 @@ export async function prepareRound1Input(
         persona: { covariates: selectRound1Covariates(ROUND1_PERSONAS[personaIndex], selectedCovariates) },
     }));
 
-    return {
-        schemaVersion: 1,
+    const commonInput = {
+        schemaVersion: 2 as const,
         runId,
         eventId,
         promptId,
         question,
         topic,
         background,
-        options: [...prompt.multipleChoiceOptions],
-        reasoningType: prompt.reasoningType,
         generation: { force: params.force ?? false },
         participants,
     };
+    if (questionType === 'MULTIPLE_CHOICE') {
+        return {
+            ...commonInput,
+            questionType,
+            options: [...prompt.multipleChoiceOptions],
+            reasoningType: prompt.reasoningType,
+        };
+    }
+    if (questionType === 'VOTE') return { ...commonInput, questionType, reasoningType: prompt.reasoningType };
+    return { ...commonInput, questionType };
 }

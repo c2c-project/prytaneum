@@ -1,6 +1,7 @@
 import type { PrismaClient } from '@local/__generated__/prisma';
 import { Round1Output } from './importRound1';
 import { Round1Input, Round1PrepareError } from './prepareRound1';
+import type { Round1MultipleChoiceOutput } from './round1Types';
 import { runRound1, RunRound1Options, validateRound1OutputCorrelation } from './runRound1';
 import { simulateRound1 } from './simulateRound1';
 
@@ -9,13 +10,14 @@ const PROMPT_ID = '90990f38-1855-4aaa-a417-fd4227fdbf7a';
 const USER_ID = '00000000-0000-0000-0000-000000000001';
 
 const input: Round1Input = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     runId: 'fgdt-test-run',
     eventId: EVENT_ID,
     promptId: PROMPT_ID,
     question: 'Question?',
     topic: 'topic',
     background: 'background',
+    questionType: 'MULTIPLE_CHOICE',
     options: ['Yes', 'No'],
     reasoningType: 'REQUIRED',
     generation: { force: false },
@@ -23,24 +25,26 @@ const input: Round1Input = {
         {
             participantKey: 'fgdt-demo-01',
             userId: USER_ID,
-            persona: { covariates: { gender: 'female', education: 'Bachelor\'s degree', politics: 'liberal' } },
+            persona: { covariates: { gender: 'female', education: 'Bachelor\u0027s degree', politics: 'liberal' } },
         },
     ],
 };
 
-const output: Round1Output = {
-    schemaVersion: 1,
+const output: Round1MultipleChoiceOutput = {
+    schemaVersion: 2,
     runId: input.runId,
     eventId: EVENT_ID,
     promptId: PROMPT_ID,
     model: 'gemini-3.5-flash',
     generatedAt: '2026-09-02T00:00:00.000Z',
+    questionType: 'MULTIPLE_CHOICE',
     options: input.options,
     reasoningType: 'REQUIRED',
     responses: [
         {
             participantKey: 'fgdt-demo-01',
             userId: USER_ID,
+            questionType: 'MULTIPLE_CHOICE',
             standpointNum: 1,
             selectedOption: 'Yes',
             reasoning: 'Reason',
@@ -130,6 +134,7 @@ describe('runRound1', () => {
             {
                 participantKey: 'fgdt-demo-01',
                 userId: USER_ID,
+                questionType: 'MULTIPLE_CHOICE',
                 standpointNum: 2,
                 selectedOption: 'No',
                 reasoning: 'Mocked Gemini reasoning.',
@@ -154,7 +159,7 @@ describe('runRound1', () => {
 });
 
 describe('validateRound1OutputCorrelation', () => {
-    function changedOutput(change: Partial<Round1Output>): Round1Output {
+    function changedOutput(change: Partial<Round1MultipleChoiceOutput>): Round1MultipleChoiceOutput {
         return { ...output, ...change };
     }
 
@@ -181,6 +186,30 @@ describe('validateRound1OutputCorrelation', () => {
         expect(() => validateRound1OutputCorrelation(input, changedOutput({ responses: [] }))).toThrow(
             'Simulator output participant count does not match prepared input'
         );
+    });
+
+    test('rejects an output question type mismatch', () => {
+        const voteOutput: Round1Output = {
+            schemaVersion: 2,
+            runId: input.runId,
+            eventId: input.eventId,
+            promptId: input.promptId,
+            model: 'gemini-3.5-flash',
+            generatedAt: '2026-09-02T00:00:00.000Z',
+            questionType: 'VOTE',
+            reasoningType: 'REQUIRED',
+            responses: [
+                {
+                    participantKey: 'fgdt-demo-01',
+                    userId: USER_ID,
+                    questionType: 'VOTE',
+                    vote: 'FOR',
+                    reasoning: 'Reason',
+                },
+            ],
+        };
+
+        expect(() => validateRound1OutputCorrelation(input, voteOutput)).toThrow('questionType');
     });
 
     test('rejects mismatched participant identity', () => {

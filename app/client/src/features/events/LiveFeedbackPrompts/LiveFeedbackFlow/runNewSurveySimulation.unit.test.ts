@@ -44,6 +44,20 @@ describe('runNewSurveySimulation', () => {
         expect(runSimulation).toHaveBeenCalledTimes(1);
     });
 
+    test.each([
+        { isMultipleChoice: false, isOpenEnded: true, isVote: false },
+        { isMultipleChoice: false, isOpenEnded: false, isVote: true },
+    ])('runs a newly persisted supported prompt type: %j', async (flags) => {
+        const prompt = { ...persistedPrompt, ...flags };
+        const draft = { isDraft: true, prompts: [{ prompt }] };
+        const runSimulation = jest.fn().mockResolvedValue(undefined);
+
+        await expect(
+            runNewSurveySimulation(form, { persistSurvey: jest.fn().mockResolvedValue(draft), runSimulation })
+        ).resolves.toBe(draft);
+        expect(runSimulation).toHaveBeenCalledWith(prompt);
+    });
+
     test('prevents duplicate create-and-simulate submissions while one is active', async () => {
         let finishPersistence: (draft: typeof savedDraft) => void = () => {};
         const persistSurvey = jest.fn().mockReturnValue(

@@ -55,19 +55,20 @@ function mockValidDatabase() {
 }
 
 describe('prepareRound1Input', () => {
-    test('prepares the exact FGDT v1 structure from authoritative prompt data', async () => {
+    test('prepares the exact generalized structure from authoritative multiple-choice data', async () => {
         mockValidDatabase();
 
         const input = await prepareRound1Input(prismaMock, makeParams(), () => 0);
 
         expect(input).toEqual({
-            schemaVersion: 1,
+            schemaVersion: 2,
             runId: 'fgdt-test-run',
             eventId: EVENT_ID,
             promptId: PROMPT_ID,
             question: QUESTION,
             topic: 'the adoption of nuclear power',
             background: 'The region is considering a new nuclear power plant.',
+            questionType: 'MULTIPLE_CHOICE',
             options: OPTIONS,
             reasoningType: 'OPTIONAL',
             generation: { force: false },
@@ -177,16 +178,31 @@ describe('prepareRound1Input', () => {
     });
 
     test.each([
-        ['not multiple choice', { isMultipleChoice: false }],
-        ['open-ended', { isOpenEnded: true }],
-        ['vote', { isVote: true }],
-    ])('rejects a wrong prompt type: %s', async (_description, override) => {
+        ['no active flags', { isMultipleChoice: false }],
+        ['multiple active flags', { isOpenEnded: true }],
+    ])('rejects malformed prompt type flags: %s', async (_description, override) => {
         prismaMock.event.findUnique.mockResolvedValue({ id: EVENT_ID, simulationCovariates: ['gender'] } as any);
         prismaMock.eventLiveFeedbackPrompt.findUnique.mockResolvedValue(makePrompt(override) as any);
 
         await expect(prepareRound1Input(prismaMock, makeParams())).rejects.toThrow(
-            'must be a non-vote, non-open-ended multiple-choice prompt'
+            'exactly one active question-type flag'
         );
+    });
+
+    test.each([
+        ['VOTE', { isMultipleChoice: false, isVote: true }, { questionType: 'VOTE', reasoningType: 'OPTIONAL' }],
+        ['OPEN_ENDED', { isMultipleChoice: false, isOpenEnded: true }, { questionType: 'OPEN_ENDED' }],
+    ])('prepares %s without multiple-choice options', async (_description, override, expected) => {
+        mockValidDatabase();
+        prismaMock.eventLiveFeedbackPrompt.findUnique.mockResolvedValue(
+            makePrompt({ ...override, multipleChoiceOptions: [] }) as any
+        );
+
+        const input = await prepareRound1Input(prismaMock, makeParams(), () => 0);
+
+        expect(input).toMatchObject(expected);
+        expect(input).not.toHaveProperty('options');
+        if (expected.questionType === 'OPEN_ENDED') expect(input).not.toHaveProperty('reasoningType');
     });
 
     test.each([
@@ -257,6 +273,7 @@ describe('prepareRound1Input', () => {
         const input = await prepareRound1Input(prismaMock, makeParams(), () => 0);
 
         expect(input.question).toBe(' Exact database question? ');
+        if (input.questionType !== 'MULTIPLE_CHOICE') throw new Error('Expected multiple choice input.');
         expect(input.options).toEqual(exactOptions);
     });
 

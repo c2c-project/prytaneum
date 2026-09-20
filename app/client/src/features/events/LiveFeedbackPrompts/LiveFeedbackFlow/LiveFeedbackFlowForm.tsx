@@ -123,7 +123,7 @@ export function LiveFeedbackFlowForm({
     const simulationHelp = !simulationConfigurationValid
         ? 'Complete Event Settings → Simulation before running a simulation.'
         : !hasEligibleSimulationPrompt
-        ? 'Round 1 simulation requires one multiple-choice, non-vote prompt.'
+        ? 'Round 1 simulation requires one supported prompt.'
         : '';
 
     return (

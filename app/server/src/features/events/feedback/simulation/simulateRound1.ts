@@ -1,8 +1,8 @@
 import { buildRound1Prompt } from './buildRound1Prompt';
 import { askRound1Gemini, ROUND1_GEMINI_MODEL } from './geminiClient';
-import type { Round1Output, Round1Response } from './importRound1';
 import { parseRound1ModelResponse } from './parseRound1ModelResponse';
 import type { Round1Input } from './prepareRound1';
+import type { Round1OutputV2, Round1Response } from './round1Types';
 
 type AskGemini = typeof askRound1Gemini;
 
@@ -23,26 +23,27 @@ async function simulateParticipant(
         input.topic,
         input.question,
         input.background,
-        input.options,
-        input.reasoningType
+        input
     );
 
     let lastError: unknown;
     for (let attempt = 0; attempt < 3; attempt++) {
         const rawResponse = await askGemini(prompt, attempt === 0 ? input.generation.force : true);
         try {
-            const { standpointNum, reasoning } = parseRound1ModelResponse(
-                rawResponse,
-                input.options.length,
-                input.reasoningType
-            );
-            return {
-                participantKey: participant.participantKey,
-                userId: participant.userId,
-                standpointNum,
-                selectedOption: input.options[standpointNum - 1],
-                reasoning,
-            };
+            const parsed = parseRound1ModelResponse(rawResponse, input);
+            const identity = { participantKey: participant.participantKey, userId: participant.userId };
+            if (parsed.questionType === 'MULTIPLE_CHOICE' && input.questionType === 'MULTIPLE_CHOICE') {
+                return {
+                    ...identity,
+                    ...parsed,
+                    selectedOption: input.options[parsed.standpointNum - 1],
+                };
+            }
+            if (parsed.questionType === 'VOTE' && input.questionType === 'VOTE') return { ...identity, ...parsed };
+            if (parsed.questionType === 'OPEN_ENDED' && input.questionType === 'OPEN_ENDED') {
+                return { ...identity, ...parsed };
+            }
+            throw new Round1SimulationError('Parsed Gemini response type did not match the prepared question type.');
         } catch (error) {
             lastError = error;
         }
@@ -58,21 +59,40 @@ async function simulateParticipant(
 export async function simulateRound1(
     input: Round1Input,
     askGemini: AskGemini = askRound1Gemini
-): Promise<Round1Output> {
+): Promise<Round1OutputV2> {
     const responses: Round1Response[] = [];
     for (const participant of input.participants) {
         responses.push(await simulateParticipant(input, participant, askGemini));
     }
 
-    return {
-        schemaVersion: 1,
+    const commonOutput = {
+        schemaVersion: 2 as const,
         runId: input.runId,
         eventId: input.eventId,
         promptId: input.promptId,
         model: ROUND1_GEMINI_MODEL,
         generatedAt: new Date().toISOString(),
-        options: [...input.options],
-        reasoningType: input.reasoningType,
-        responses,
+    };
+    if (input.questionType === 'MULTIPLE_CHOICE') {
+        return {
+            ...commonOutput,
+            questionType: input.questionType,
+            options: [...input.options],
+            reasoningType: input.reasoningType,
+            responses: responses as Extract<Round1Response, { questionType: 'MULTIPLE_CHOICE' }>[],
+        };
+    }
+    if (input.questionType === 'VOTE') {
+        return {
+            ...commonOutput,
+            questionType: input.questionType,
+            reasoningType: input.reasoningType,
+            responses: responses as Extract<Round1Response, { questionType: 'VOTE' }>[],
+        };
+    }
+    return {
+        ...commonOutput,
+        questionType: input.questionType,
+        responses: responses as Extract<Round1Response, { questionType: 'OPEN_ENDED' }>[],
     };
 }
