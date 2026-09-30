@@ -43,8 +43,15 @@ export function useUsersDashboard({ fragmentRef }: UseUsersDashboardProps) {
         (filter: UsersDashboardSearchFilter) => {
             if (isRefreshing) return;
             setIsRefreshing(true);
-            refetch({ filter });
-            setIsRefreshing(false);
+            refetch(
+                { filter },
+                {
+                    fetchPolicy: 'store-and-network',
+                    onComplete: () => {
+                        setIsRefreshing(false);
+                    },
+                }
+            );
         },
         [isRefreshing, refetch]
     );
@@ -53,5 +60,5 @@ export function useUsersDashboard({ fragmentRef }: UseUsersDashboardProps) {
         return data.users?.edges?.map((edge) => edge?.node) ?? [];
     }, [data.users?.edges]);
 
-    return { users, loadNext, loadPrevious, hasNext, isLoadingNext, refresh };
+    return { users, loadNext, loadPrevious, hasNext, isLoadingNext, isRefreshing, refresh };
 }

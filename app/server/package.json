@@ -94,6 +94,7 @@
         "eslint-import-resolver-node": "^0.3.6",
         "eslint-plugin-import": "^2.25.4",
         "jest": "^27.5.1",
+        "jest-environment-node": "^27.5.1",
         "jest-mock-extended": "^2.0.5",
         "mercurius-integration-testing": "^6.0.1",
         "prettier": "^2.8.0",

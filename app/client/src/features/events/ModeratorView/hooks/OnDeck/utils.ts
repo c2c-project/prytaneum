@@ -150,13 +150,13 @@ export const onDeckEnqueuedMutationUpdater = ({
     if (!eventRecord) return console.error('Event Record not found');
 
     // Remove from modQueue
-    const modQueueConnection = ConnectionHandler.getConnectionID(
-        eventRecord.getDataID(),
+    const modQueueConnectionRecord = ConnectionHandler.getConnection(
+        eventRecord,
         'useQuestionModQueueFragment_questionModQueue'
     );
-    const modQueueConnectionRecord = store.get(modQueueConnection);
-    if (!modQueueConnectionRecord) return console.error('Mod Queue Connection record not found');
-    ConnectionHandler.deleteNode(modQueueConnectionRecord, questionId);
+    if (modQueueConnectionRecord) {
+        ConnectionHandler.deleteNode(modQueueConnectionRecord, questionId);
+    }
 
     // Add to onDeck
     const onDeckConnection = store.get(connections[0]);
@@ -168,26 +168,24 @@ export const onDeckEnqueuedMutationUpdater = ({
     ConnectionHandler.insertEdgeAfter(onDeckConnection, questionEdge);
 
     // Start with default, then remove the question from all question lists
-    const defaultConnection = ConnectionHandler.getConnectionID(
-        eventRecord.getDataID(),
-        'useQuestionsByTopicFragment_questionsByTopic'
+    const defaultConnectionRecord = ConnectionHandler.getConnection(
+        eventRecord,
+        'useQuestionsByTopicFragment_questionsByTopic',
+        { topic: 'default' }
     );
-
-    const defaultConnectionId = defaultConnection + '(topic:"default")';
-    const defaultConnectionRecord = store.get(defaultConnectionId);
-    if (!defaultConnectionRecord) return console.error('Default Connection record not found');
-    ConnectionHandler.deleteNode(defaultConnectionRecord, questionId);
+    if (defaultConnectionRecord) {
+        ConnectionHandler.deleteNode(defaultConnectionRecord, questionId);
+    }
 
     topics.forEach(({ topic }) => {
-        const connection = ConnectionHandler.getConnectionID(
-            eventRecord.getDataID(),
-            'useQuestionsByTopicFragment_questionsByTopic'
+        const connectionRecord = ConnectionHandler.getConnection(
+            eventRecord,
+            'useQuestionsByTopicFragment_questionsByTopic',
+            { topic }
         );
-        if (!connection) return console.error('Connection not found');
-        const connectionId = connection + `(topic:"${topic}")`;
-        const connectionRecord = store.get(connectionId);
-        if (!connectionRecord) return console.error(`Connection record ${connectionId} not found`);
-        ConnectionHandler.deleteNode(connectionRecord, questionId);
+        if (connectionRecord) {
+            ConnectionHandler.deleteNode(connectionRecord, questionId);
+        }
     });
 };
 

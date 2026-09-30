@@ -52,27 +52,31 @@ export function useQuestionDequeued() {
                 const payload = store.getRootField('questionDequeued');
                 if (!payload) return console.error('Update failed: No payload found!');
                 const serverEdge = payload.getLinkedRecord('edge');
-                const topics = serverEdge.getLinkedRecord('node').getLinkedRecords('topics');
-                const topicNames = topics.map((_topic) => _topic.getValue('topic'));
+                if (!serverEdge) return console.error('Update failed: No edge found!');
+                const node = serverEdge.getLinkedRecord('node');
+                const topics = node?.getLinkedRecords('topics');
+                const topicNames = topics ? topics.map((_topic) => _topic.getValue('topic')) : [];
 
                 // Always update the default topic list
-                const questionsByTopicConnection = ConnectionHandler.getConnectionID(
-                    eventRecord.getDataID(),
-                    'useQuestionsByTopicFragment_questionsByTopic'
+                const defaultConnectionRecord = ConnectionHandler.getConnection(
+                    eventRecord,
+                    'useQuestionsByTopicFragment_questionsByTopic',
+                    { topic: 'default' }
                 );
-                const connectionId = questionsByTopicConnection + '(topic:"default")';
-                const connectionRecord = store.get(connectionId);
-                if (!connectionRecord)
-                    return console.error(`Update failed: Connection record ${connectionId} not found!`);
-                ConnectionHandler.insertEdgeAfter(connectionRecord, serverEdge);
+                if (defaultConnectionRecord) {
+                    ConnectionHandler.insertEdgeAfter(defaultConnectionRecord, serverEdge);
+                }
 
                 // Update the topic lists that are in the question's topics
                 topicNames.forEach((_topic) => {
-                    const _connectionId = questionsByTopicConnection + `(topic:"${_topic}")`;
-                    const _connectionRecord = store.get(_connectionId);
-                    if (!_connectionRecord)
-                        return console.error(`Update failed: Connection record ${_connectionId} not found!`);
-                    ConnectionHandler.insertEdgeAfter(_connectionRecord, serverEdge);
+                    const topicConnectionRecord = ConnectionHandler.getConnection(
+                        eventRecord,
+                        'useQuestionsByTopicFragment_questionsByTopic',
+                        { topic: _topic }
+                    );
+                    if (topicConnectionRecord) {
+                        ConnectionHandler.insertEdgeAfter(topicConnectionRecord, serverEdge);
+                    }
                 });
             },
         }),

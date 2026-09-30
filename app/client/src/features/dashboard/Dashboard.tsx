@@ -1,11 +1,9 @@
 import * as React from 'react';
 import {
-    fetchQuery,
     graphql,
     PreloadedQuery,
     usePreloadedQuery,
     useQueryLoader,
-    useRelayEnvironment,
 } from 'react-relay';
 
 import type { DashboardQuery } from '@local/__generated__/DashboardQuery.graphql';
@@ -45,35 +43,25 @@ export function DashboardContainer({ queryRef }: DashboardContainerProps) {
 export function PreloadedDashboard() {
     const [queryRef, loadQuery, dispose] = useQueryLoader<DashboardQuery>(DASHBOARD_QUERY);
     const [isRefreshing, setIsRefreshing] = React.useState(false);
-    const environment = useRelayEnvironment();
     const REFRESH_INTERVAL = 60000; // 60 seconds
 
     const refresh = React.useCallback(() => {
         if (isRefreshing) return;
         setIsRefreshing(true);
-        fetchQuery(environment, DASHBOARD_QUERY, {}).subscribe({
-            complete: () => {
-                setIsRefreshing(false);
-                loadQuery({}, { fetchPolicy: 'store-or-network' });
-            },
-            error: (error: any) => {
-                console.error(error);
-                setIsRefreshing(false);
-            },
-        });
-    }, [environment, isRefreshing, loadQuery]);
+        loadQuery({}, { fetchPolicy: 'network-only' });
+        setIsRefreshing(false);
+    }, [isRefreshing, loadQuery]);
 
     React.useEffect(() => {
         // Load the query on initial render
         if (!queryRef) loadQuery({}, { fetchPolicy: 'network-only' });
-        // Refresh the query every 20 seconds
+        // Refresh the query every 60 seconds
         const interval = setInterval(refresh, REFRESH_INTERVAL);
         return () => {
             clearInterval(interval);
             dispose();
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [dispose, loadQuery, queryRef, refresh]);
 
     if (!queryRef) return <Loader />;
     return (

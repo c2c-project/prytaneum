@@ -1,7 +1,7 @@
 module.exports = {
     verbose: true,
     preset: 'ts-jest',
-    testEnvironment: 'node',
+    testEnvironment: '<rootDir>/custom-jest-environment.js',
     moduleFileExtensions: ['js', 'ts', 'tsx'],
     modulePaths: ['src', '.yarn'],
     moduleNameMapper: {

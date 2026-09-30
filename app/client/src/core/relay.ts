@@ -1,5 +1,5 @@
 // src: https://github.com/vercel/next.js/blob/canary/examples/with-relay-modern/lib/relay.js
-import { useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Environment, Network, RecordSource, Store, FetchFunction, Observable, SubscribeFunction } from 'relay-runtime';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { GetServerSidePropsContext } from 'next';
@@ -11,17 +11,41 @@ export function makeFetchFunction(config?: RequestInit): FetchFunction {
     return async (params, variables) => {
         const response = await fetch(process.env.NEXT_PUBLIC_GRAPHQL_URL, {
             method: 'POST',
+            credentials: 'include',
+            ...config,
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
+                ...config?.headers,
             },
             body: JSON.stringify({
                 query: params.text,
                 variables,
             }),
-            ...config,
         });
-        return response.json();
+
+        if (!response.ok) {
+            let errorText = '';
+            try {
+                errorText = await response.text();
+            } catch {
+                // ignore
+            }
+            throw new Error(
+                `Network response was not ok: ${response.status} ${response.statusText}${
+                    errorText ? ` - ${errorText}` : ''
+                }`
+            );
+        }
+
+        const json = await response.json();
+        if (json.errors && (!json.data || Object.keys(json.data).length === 0)) {
+            const errorMessages = json.errors
+                .map((e: { message?: string }) => e.message || 'GraphQL Error')
+                .join(', ');
+            throw new Error(errorMessages);
+        }
+        return json;
     };
 }
 
@@ -37,7 +61,15 @@ export function makeServerFetchFunction(ctx: GetServerSidePropsContext) {
     });
 }
 
+export function closeSubscriptionClient() {
+    if (subscriptionClient) {
+        subscriptionClient.close();
+        subscriptionClient = null;
+    }
+}
+
 const createSubscriptionClient = () => {
+    if (typeof window === 'undefined') return null;
     const wsProtocol = process.env.NODE_ENV === 'production' ? 'wss://' : 'ws://';
     // first element will be "http"
     const [, ...url] = process.env.NEXT_PUBLIC_GRAPHQL_URL.split('://');
@@ -47,10 +79,8 @@ const createSubscriptionClient = () => {
 };
 
 const initSubscriptionClient = () => {
+    if (typeof window === 'undefined') return null;
     const client = subscriptionClient ?? createSubscriptionClient();
-
-    // For SSG and SSR always create a new subscription client
-    if (typeof window === 'undefined') return client;
     if (!subscriptionClient) subscriptionClient = client;
 
     return client;
@@ -58,14 +88,17 @@ const initSubscriptionClient = () => {
 
 const subscribe: SubscribeFunction = (request, variables) => {
     const client = initSubscriptionClient();
+    if (!client) {
+        return Observable.create((sink) => {
+            sink.complete();
+        });
+    }
     const subscribeObservable = client.request({
         query: request.text ?? undefined,
         operationName: request.name,
         variables,
     });
     // Important: Convert subscriptions-transport-ws observable type to Relay's
-    // this is directly from the relay docs, so it should work?
-    // might just be a typings issue -- will investigate if there's something going wrong
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return Observable.from(subscribeObservable as any);
 };
@@ -107,34 +140,34 @@ export function initServerEnvironment(fetchFunction: FetchFunction) {
     return environment;
 }
 
-// export function useEnvironment(initialRecords: RecordMap) {
-//     const store = useMemo(() => initEnvironment(initialRecords), [initialRecords]);
-//     return store;
-// }
+type EnvListener = (newEnv: Environment) => void;
+const envListeners = new Set<EnvListener>();
 
-/**
- * this will reset the environment, but it will not cause a rerender in the react-dom
- * what this means is that the environment will change, but the previous environment may
- * still be rendered within the react tree.  So we must navigate to /logout
- * render a tree with the previous environment, then navigate away from that page so that
- * the new, cleared, environment gets used the next render.
- *
- * Also, the useEnvironment hook will not rerun with the new environment
- */
 export function clearEnvironment() {
+    closeSubscriptionClient();
     relayEnvironment = createEnvironment();
+    envListeners.forEach((listener) => listener(relayEnvironment!));
 }
 
 export function useEnvironment(initialRecords?: RecordMap) {
-    return useMemo(() => {
-        let env = initEnvironment(initialRecords);
-        const resetEnv = () => {
-            clearEnvironment();
-            env = initEnvironment(initialRecords);
+    const [env, setEnv] = useState<Environment>(() => initEnvironment(initialRecords));
+
+    useEffect(() => {
+        const listener = (newEnv: Environment) => {
+            setEnv(newEnv);
         };
-        return {
-            env,
-            resetEnv,
+        envListeners.add(listener);
+        return () => {
+            envListeners.delete(listener);
         };
-    }, [initialRecords]);
+    }, []);
+
+    const resetEnv = useCallback(() => {
+        clearEnvironment();
+    }, []);
+
+    return {
+        env,
+        resetEnv,
+    };
 }

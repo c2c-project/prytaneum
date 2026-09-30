@@ -261,13 +261,12 @@ export function PreloadedEventPre({ eventId }: PreloadedEventPreProps) {
 
     React.useEffect(() => {
         return () => disposeQuery();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [disposeQuery]);
 
     if (!eventLiveQueryRef) return <Loader />;
     return (
         <ConditionalRender client>
-            <React.Suspense fallback={<EventPreContainer queryRef={eventLiveQueryRef} />}>
+            <React.Suspense fallback={<Loader />}>
                 <EventPreContainer queryRef={eventLiveQueryRef} />
             </React.Suspense>
         </ConditionalRender>

@@ -5,6 +5,10 @@
 /.pnp
 .pnp.js
 
+# generated files
+src/__generated__/*
+!src/__generated__/.gitignore
+
 # testing
 /coverage
 

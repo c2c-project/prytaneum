@@ -82,20 +82,13 @@ export function DequeueQuestionButton({ questionId }: QueueButtonProps) {
             updater: (store) => {
                 const eventRecord = store.get(eventId);
                 if (!eventRecord) return console.error('Event Record not found');
-                const queueConnectionId = ConnectionHandler.getConnectionID(
-                    eventRecord.getDataID(),
+                const queueConnectionRecord = ConnectionHandler.getConnection(
+                    eventRecord,
                     'useQuestionModQueueFragment_questionModQueue'
                 );
-                const queueConnectionRecord = store.get(queueConnectionId);
-                if (!queueConnectionRecord) return console.error('Update failed: Connection record not found!');
-                ConnectionHandler.deleteNode(queueConnectionRecord, questionId);
-
-                // Get the connection for the question list by topic
-                const questionsByTopicConnection = ConnectionHandler.getConnectionID(
-                    eventRecord.getDataID(),
-                    'useQuestionsByTopicFragment_questionsByTopic'
-                );
-                if (!questionsByTopicConnection) return console.error('Update failed: Connection not found!');
+                if (queueConnectionRecord) {
+                    ConnectionHandler.deleteNode(queueConnectionRecord, questionId);
+                }
 
                 // Get the payload from the mutation
                 const payload = store.getRootField('removeQuestionFromTopicQueue');
@@ -108,21 +101,26 @@ export function DequeueQuestionButton({ questionId }: QueueButtonProps) {
                 if (!topics) return console.error('Update failed: No topics found!');
 
                 // Always add edge back to the default queue
-                const connectionId = questionsByTopicConnection + '(topic:"default")';
-                const connectionRecord = store.get(connectionId);
-                if (!connectionRecord) return console.error('Update failed: Connection record not found!');
-                ConnectionHandler.insertEdgeAfter(connectionRecord, serverEdge);
+                const defaultConnectionRecord = ConnectionHandler.getConnection(
+                    eventRecord,
+                    'useQuestionsByTopicFragment_questionsByTopic',
+                    { topic: 'default' }
+                );
+                if (defaultConnectionRecord) {
+                    ConnectionHandler.insertEdgeAfter(defaultConnectionRecord, serverEdge);
+                }
 
                 // Add the question to the topic queues
                 topics.forEach((topicRecord) => {
                     const _topic = topicRecord.getValue('topic') as string;
-                    const questionsByTopicConnectionId = questionsByTopicConnection + `(topic:"${_topic}")`;
-                    const questionsByTopicConnectionRecord = store.get(questionsByTopicConnectionId);
-                    if (!questionsByTopicConnectionRecord)
-                        return console.error(
-                            `Update failed: Connection record ${questionsByTopicConnectionId} not found!`
-                        );
-                    ConnectionHandler.insertEdgeAfter(questionsByTopicConnectionRecord, serverEdge);
+                    const topicConnectionRecord = ConnectionHandler.getConnection(
+                        eventRecord,
+                        'useQuestionsByTopicFragment_questionsByTopic',
+                        { topic: _topic }
+                    );
+                    if (topicConnectionRecord) {
+                        ConnectionHandler.insertEdgeAfter(topicConnectionRecord, serverEdge);
+                    }
                 });
             },
         });

@@ -90,23 +90,25 @@ export function EnqueueQuestionButton({ questionId }: QueueButtonProps) {
                 // Remove the question from the current list
                 const eventRecord = store.get(eventId);
                 if (!eventRecord) return console.error('Event Record not found');
-                const connection = ConnectionHandler.getConnectionID(
-                    eventRecord.getDataID(),
-                    'useQuestionsByTopicFragment_questionsByTopic'
+                const connectionRecord = ConnectionHandler.getConnection(
+                    eventRecord,
+                    'useQuestionsByTopicFragment_questionsByTopic',
+                    { topic }
                 );
-                // Need to do this workaround because the compiler in current version doesn't allow correctly naming the connection with _connection at the end.
-                const connectionId = connection + `(topic:"${topic}")`;
-                const connectionRecord = store.get(connectionId);
-                if (!connectionRecord) return console.error('Update failed: Connection record not found!');
-                ConnectionHandler.deleteNode(connectionRecord, questionId);
+                if (connectionRecord) {
+                    ConnectionHandler.deleteNode(connectionRecord, questionId);
+                }
 
                 // Also remove the question from the default list (if the current topic is not default)
                 if (topic !== 'default') {
-                    const defaultConnectionId = connection + '(topic:"default")';
-                    const defaultConnectionRecord = store.get(defaultConnectionId);
-                    if (!defaultConnectionRecord)
-                        return console.error('Update failed: Default connection record not found!');
-                    ConnectionHandler.deleteNode(defaultConnectionRecord, questionId);
+                    const defaultConnectionRecord = ConnectionHandler.getConnection(
+                        eventRecord,
+                        'useQuestionsByTopicFragment_questionsByTopic',
+                        { topic: 'default' }
+                    );
+                    if (defaultConnectionRecord) {
+                        ConnectionHandler.deleteNode(defaultConnectionRecord, questionId);
+                    }
                 }
 
                 // Add the question to the topic queue

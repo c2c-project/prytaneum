@@ -204,19 +204,18 @@ export function PreloadedEventPost({ eventId }: PreloadedEventPostProps) {
 
     React.useEffect(() => {
         if (isLoading) return;
-        if (!queryRef) loadQuery({ eventId, lang: user?.preferredLang || 'EN' });
-    }, [eventId, queryRef, loadQuery, isLoading, user?.preferredLang]);
+        loadQuery({ eventId, lang: user?.preferredLang || 'EN' });
+    }, [eventId, loadQuery, isLoading, user?.preferredLang]);
 
     React.useEffect(() => {
         return () => disposeQuery();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [disposeQuery]);
 
     if (!queryRef) return <Loader />;
 
     return (
         <ConditionalRender client>
-            <React.Suspense fallback={<EventPostContainer queryRef={queryRef} />}>
+            <React.Suspense fallback={<Loader />}>
                 <EventPostContainer queryRef={queryRef} />
             </React.Suspense>
         </ConditionalRender>
