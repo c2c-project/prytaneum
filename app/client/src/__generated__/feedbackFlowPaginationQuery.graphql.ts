@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<8a45f692f6bbd035a15d46147ac0e1b8>>
+ * @generated SignedSource<<ff5d1b74568561eda2aad22c605e84c3>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -316,6 +316,46 @@ return {
                                     "storageKey": null
                                   },
                                   {
+                                    "alias": "simulationResponses",
+                                    "args": [
+                                      {
+                                        "kind": "Literal",
+                                        "name": "first",
+                                        "value": 1
+                                      }
+                                    ],
+                                    "concreteType": "EventLiveFeedbackPromptResponseConnection",
+                                    "kind": "LinkedField",
+                                    "name": "responses",
+                                    "plural": false,
+                                    "selections": [
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "concreteType": "EventLiveFeedbackPromptResponseEdge",
+                                        "kind": "LinkedField",
+                                        "name": "edges",
+                                        "plural": true,
+                                        "selections": [
+                                          {
+                                            "alias": null,
+                                            "args": null,
+                                            "concreteType": "EventLiveFeedbackPromptResponse",
+                                            "kind": "LinkedField",
+                                            "name": "node",
+                                            "plural": false,
+                                            "selections": [
+                                              (v4/*: any*/)
+                                            ],
+                                            "storageKey": null
+                                          }
+                                        ],
+                                        "storageKey": null
+                                      }
+                                    ],
+                                    "storageKey": "responses(first:1)"
+                                  },
+                                  {
                                     "alias": null,
                                     "args": (v12/*: any*/),
                                     "concreteType": "EventLiveFeedbackPromptResponseConnection",
@@ -456,16 +496,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "a38919a291ef03cf5bc9aef357ee5f7d",
+    "cacheID": "1c3434370badc0c8383dc2ef6a9020ee",
     "id": null,
     "metadata": {},
     "name": "feedbackFlowPaginationQuery",
     "operationKind": "query",
-    "text": "query feedbackFlowPaginationQuery(\n  $after: String\n  $first: Int = 100\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useLiveFeedbackPromptFlowsFragment_2HEEH6\n    id\n  }\n}\n\nfragment useLiveFeedbackPromptFlowsFragment_2HEEH6 on Event {\n  id\n  feedbackFlows(first: $first, after: $after) {\n    edges {\n      cursor\n      node {\n        id\n        eventId\n        flowName\n        flowDescription\n        isDraft\n        prompts {\n          id\n          order\n          prompt {\n            id\n            prompt\n            isVote\n            isOpenEnded\n            isMultipleChoice\n            multipleChoiceOptions\n            createdAt\n            isDraft\n            viewpoints\n            voteViewpoints\n            ...useLiveFeedbackPromptResponsesFragment\n          }\n        }\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment useLiveFeedbackPromptResponsesFragment on EventLiveFeedbackPrompt {\n  id\n  responses(first: 100) {\n    edges {\n      cursor\n      node {\n        id\n        isOpenEnded\n        response\n        isVote\n        vote\n        isMultipleChoice\n        multipleChoiceResponse\n        createdAt\n        createdBy {\n          id\n          firstName\n        }\n        prompt {\n          id\n          prompt\n        }\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query feedbackFlowPaginationQuery(\n  $after: String\n  $first: Int = 100\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useLiveFeedbackPromptFlowsFragment_2HEEH6\n    id\n  }\n}\n\nfragment useLiveFeedbackPromptFlowsFragment_2HEEH6 on Event {\n  id\n  feedbackFlows(first: $first, after: $after) {\n    edges {\n      cursor\n      node {\n        id\n        eventId\n        flowName\n        flowDescription\n        isDraft\n        prompts {\n          id\n          order\n          prompt {\n            id\n            prompt\n            isVote\n            isOpenEnded\n            isMultipleChoice\n            multipleChoiceOptions\n            createdAt\n            isDraft\n            viewpoints\n            voteViewpoints\n            simulationResponses: responses(first: 1) {\n              edges {\n                node {\n                  id\n                }\n              }\n            }\n            ...useLiveFeedbackPromptResponsesFragment\n          }\n        }\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment useLiveFeedbackPromptResponsesFragment on EventLiveFeedbackPrompt {\n  id\n  responses(first: 100) {\n    edges {\n      cursor\n      node {\n        id\n        isOpenEnded\n        response\n        isVote\n        vote\n        isMultipleChoice\n        multipleChoiceResponse\n        createdAt\n        createdBy {\n          id\n          firstName\n        }\n        prompt {\n          id\n          prompt\n        }\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "b14b2f278f7990fedcb0378bb55de91b";
+(node as any).hash = "3f40f76450491e1312e850d5dfa0d7d3";
 
 export default node;

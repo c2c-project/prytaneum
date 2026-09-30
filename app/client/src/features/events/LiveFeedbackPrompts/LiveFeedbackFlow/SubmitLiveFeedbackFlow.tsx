@@ -14,10 +14,19 @@ import { TLiveFeedbackPromptFormState } from '../LiveFeedbackPrompt/LiveFeedback
 import { useSnack } from '@local/core';
 import { useEvent } from '@local/features/events';
 import type { SubmitLiveFeedbackFlowMutation } from '@local/__generated__/SubmitLiveFeedbackFlowMutation.graphql';
+import type { Flow } from '../LiveFeedbackPrompt/LiveFeedbackPromptList';
+import {
+    isSimulationConfigurationComplete,
+    SimulationConfiguration,
+    useRunRound1Simulation,
+} from '../LiveFeedbackPrompt/RunRound1Simulation';
+import { SavedDraftSimulationError, startNewSurveySimulation } from './runNewSurveySimulation';
 
 interface Props {
     className?: string;
     connections?: string[]; // For Relay store updates
+    simulationConfiguration: SimulationConfiguration;
+    onSimulationSuccess: (flow: Flow) => void;
 }
 
 export const SUBMIT_LIVE_FEEDBACK_FLOW_MUTATION = graphql`
@@ -29,9 +38,10 @@ export const SUBMIT_LIVE_FEEDBACK_FLOW_MUTATION = graphql`
                 cursor
                 node {
                     id
+                    eventId
                     flowName
                     flowDescription
-                    # isDraft # If you want to read back the draft status
+                    isDraft
                     prompts {
                         id
                         order
@@ -44,6 +54,16 @@ export const SUBMIT_LIVE_FEEDBACK_FLOW_MUTATION = graphql`
                             multipleChoiceOptions
                             isDraft
                             reasoningType
+                            createdAt
+                            viewpoints
+                            voteViewpoints
+                            simulationResponses: responses(first: 1) {
+                                edges {
+                                    node {
+                                        id
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -52,13 +72,21 @@ export const SUBMIT_LIVE_FEEDBACK_FLOW_MUTATION = graphql`
     }
 `;
 
-export function SubmitLiveFeedbackFlow({ className, connections = [] }: Props) {
+export function SubmitLiveFeedbackFlow({
+    className,
+    connections = [],
+    simulationConfiguration,
+    onSimulationSuccess,
+}: Props) {
     const [isOpen, openDialog, closeDialog] = useResponsiveDialog();
     const { user } = useUser();
     const { eventId } = useEvent();
     const { displaySnack } = useSnack();
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+    const [isRunWorkflowActive, setIsRunWorkflowActive] = React.useState(false);
+    const simulationFlight = React.useRef<{ current: Promise<Flow> | null }>({ current: null });
+    const { runSimulation, isRunning } = useRunRound1Simulation(simulationConfiguration);
 
     const [commitMutation, isMutationInFlight] = useMutation<SubmitLiveFeedbackFlowMutation>(
         SUBMIT_LIVE_FEEDBACK_FLOW_MUTATION
@@ -75,93 +103,86 @@ export function SubmitLiveFeedbackFlow({ className, connections = [] }: Props) {
         };
     };
 
-    const handleSubmit = (flowData: TLiveFeedbackFlowFormData) => {
+    const persistFlow = (flowData: TLiveFeedbackFlowFormData, isDraft: boolean): Promise<Flow> => {
         if (!eventId) {
-            displaySnack('Cannot create flow: Event ID is missing.', { variant: 'error' });
-            console.error('SubmitLiveFeedbackFlow: eventId is undefined.');
-            return;
+            return Promise.reject(new Error('Cannot save survey: Event ID is missing.'));
         }
         if (!user) {
-            displaySnack('You must be logged in to create a flow.', { variant: 'warning' });
-            return;
+            return Promise.reject(new Error('You must be logged in to save a survey.'));
         }
 
         const mutationInput = {
-            eventId: eventId,
+            eventId,
             flowName: flowData.name,
             flowDescription: flowData.description,
-            isDraft: false,
+            isDraft,
             prompts: flowData.prompts.map(transformPromptStateToInput),
         };
 
-        commitMutation({
-            variables: {
-                input: mutationInput,
-                connections: connections,
-            },
-            onCompleted: (response, errors) => {
-                if (errors) {
-                    errors.forEach((err) => displaySnack(err.message, { variant: 'error' }));
-                    return;
-                }
-                if (response.createFeedbackFlow?.isError) {
-                    displaySnack(response.createFeedbackFlow.message || 'Failed to create survey.', {
-                        variant: 'error',
-                    });
-                } else {
-                    displaySnack('Survey created successfully!', { variant: 'success' });
-                    closeDialog();
-                }
-            },
-            onError: (err) => {
-                displaySnack(`Error creating flow: ${err.message}`, { variant: 'error' });
-            },
+        return new Promise<Flow>((resolve, reject) => {
+            commitMutation({
+                variables: { input: mutationInput, connections },
+                onCompleted(response, errors) {
+                    if (errors?.length) {
+                        reject(new Error(errors.map(({ message }) => message).join('\n')));
+                        return;
+                    }
+                    const result = response.createFeedbackFlow;
+                    if (result.isError || !result.body) {
+                        reject(new Error(result.message || 'Failed to save survey.'));
+                        return;
+                    }
+                    resolve({ ...result.body.node, cursor: result.body.cursor } as Flow);
+                },
+                onError: reject,
+            });
         });
     };
 
-    const handleSaveDraft = (flowData: TLiveFeedbackFlowFormData) => {
-        if (!eventId) {
-            displaySnack('Cannot save draft: Event ID is missing.', { variant: 'error' });
-            return;
+    const handleSubmit = async (flowData: TLiveFeedbackFlowFormData) => {
+        try {
+            await persistFlow(flowData, false);
+            displaySnack('Survey created successfully!', { variant: 'success' });
+            closeDialog();
+        } catch (error) {
+            displaySnack(error instanceof Error ? error.message : 'Failed to create survey.', { variant: 'error' });
         }
-        if (!user) {
-            displaySnack('You must be logged in to save a draft.', { variant: 'warning' });
-            return;
+    };
+
+    const handleSaveDraft = async (flowData: TLiveFeedbackFlowFormData) => {
+        try {
+            await persistFlow(flowData, true);
+            displaySnack('Flow saved as draft!', { variant: 'success' });
+            closeDialog();
+        } catch (error) {
+            displaySnack(error instanceof Error ? error.message : 'Failed to save draft.', { variant: 'error' });
         }
+    };
 
-        const mutationInput = {
-            eventId: eventId,
-            flowName: flowData.name,
-            flowDescription: flowData.description,
-            isDraft: true,
-            prompts: flowData.prompts.map((promptState) => {
-                const transformedPrompt = transformPromptStateToInput(promptState);
-                return { ...transformedPrompt, isDraft: false }; // Individual prompts are not drafts
-            }),
-        };
-
-        // Actual mutation call for saving draft:
-        commitMutation({
-            variables: {
-                input: mutationInput,
-                connections: connections,
-            },
-            onCompleted: (response, errors) => {
-                if (errors) {
-                    errors.forEach((err) => displaySnack(err.message, { variant: 'error' }));
-                    return;
-                }
-                if (response.createFeedbackFlow?.isError) {
-                    displaySnack(response.createFeedbackFlow.message || 'Failed to save draft.', { variant: 'error' });
-                } else {
-                    displaySnack('Flow saved as draft!', { variant: 'success' });
-                    closeDialog();
-                }
-            },
-            onError: (err) => {
-                displaySnack(`Error saving draft: ${err.message}`, { variant: 'error' });
-            },
+    const handleRunSimulation = async (flowData: TLiveFeedbackFlowFormData) => {
+        if (isRunWorkflowActive || isMutationInFlight || isRunning) return;
+        const workflow = startNewSurveySimulation(simulationFlight.current, flowData, {
+            persistSurvey: persistFlow,
+            runSimulation,
         });
+        if (!workflow.started) return;
+        setIsRunWorkflowActive(true);
+        try {
+            const savedDraft = await workflow.result;
+            closeDialog();
+            onSimulationSuccess(savedDraft);
+        } catch (error) {
+            if (error instanceof SavedDraftSimulationError) {
+                closeDialog();
+                if (error.message.includes('must contain one eligible')) {
+                    displaySnack(error.message, { variant: 'error' });
+                }
+            } else {
+                displaySnack(error instanceof Error ? error.message : 'Failed to save survey.', { variant: 'error' });
+            }
+        } finally {
+            setIsRunWorkflowActive(false);
+        }
     };
 
     const handleCancel = () => {
@@ -185,7 +206,7 @@ export function SubmitLiveFeedbackFlow({ className, connections = [] }: Props) {
                         aria-label='close'
                         onClick={handleCancel}
                         sx={{ color: (themePalette) => themePalette.palette.grey[500] }}
-                        disabled={isMutationInFlight}
+                        disabled={isMutationInFlight || isRunWorkflowActive || isRunning}
                     >
                         <CloseIcon />
                     </IconButton>
@@ -195,6 +216,11 @@ export function SubmitLiveFeedbackFlow({ className, connections = [] }: Props) {
                         onSubmit={handleSubmit}
                         onCancel={handleCancel}
                         onSaveDraft={handleSaveDraft}
+                        onRunSimulation={handleRunSimulation}
+                        simulationEnabled={simulationConfiguration.enabled}
+                        simulationConfigurationValid={isSimulationConfigurationComplete(simulationConfiguration)}
+                        isBusy={isMutationInFlight || isRunWorkflowActive || isRunning}
+                        isRunningSimulation={isRunWorkflowActive || isRunning}
                     />
                 </DialogContent>
             </ResponsiveDialog>

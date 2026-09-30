@@ -383,6 +383,7 @@ export type Mutation = {
     shareFeedbackPromptResults: EventFeedbackPromptMutationResponse;
     submitPostEventFeedback: PostEventFeedbackMutationResponse;
     generateViewpoints: EventFeedbackPromptMutationResponse;
+    runRound1Simulation: Round1SimulationMutationResponse;
     createFeedbackFlow: FeedbackFlowMutationResponse;
     shareFeedbackFlowDraft: FeedbackFlowMutationResponse;
     reshareFeedbackFlow: FeedbackFlowMutationResponse;
@@ -583,6 +584,10 @@ export type MutationsubmitPostEventFeedbackArgs = {
 
 export type MutationgenerateViewpointsArgs = {
     input: GenerateViewpointsInput;
+};
+
+export type MutationrunRound1SimulationArgs = {
+    input: RunRound1SimulationInput;
 };
 
 export type MutationcreateFeedbackFlowArgs = {
@@ -818,6 +823,12 @@ export type Event = Node & {
     isForumEnabled?: Maybe<Scalars['Boolean']>;
     /** Is the event private, ie invite only */
     isPrivate?: Maybe<Scalars['Boolean']>;
+    /** Whether organizer-configured Round 1 simulation is available for this event */
+    simulationEnabled?: Maybe<Scalars['Boolean']>;
+    simulationParticipantCount?: Maybe<Scalars['Int']>;
+    simulationTopic?: Maybe<Scalars['String']>;
+    simulationBackground?: Maybe<Scalars['String']>;
+    simulationCovariates?: Maybe<Array<Scalars['String']>>;
     /** All questions relating to this event */
     questions?: Maybe<EventQuestionConnection>;
     questionsByTopic?: Maybe<EventQuestionConnection>;
@@ -978,6 +989,11 @@ export type UpdateEvent = {
     isCollectRatingsEnabled?: InputMaybe<Scalars['Boolean']>;
     isForumEnabled?: InputMaybe<Scalars['Boolean']>;
     isPrivate?: InputMaybe<Scalars['Boolean']>;
+    simulationEnabled?: InputMaybe<Scalars['Boolean']>;
+    simulationParticipantCount?: InputMaybe<Scalars['Int']>;
+    simulationTopic?: InputMaybe<Scalars['String']>;
+    simulationBackground?: InputMaybe<Scalars['String']>;
+    simulationCovariates?: InputMaybe<Array<Scalars['String']>>;
     eventId: Scalars['String'];
 };
 
@@ -1466,6 +1482,28 @@ export type GenerateViewpointsInput = {
     eventId: Scalars['ID'];
     promptId: Scalars['ID'];
     isForcedRegenerate?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type RunRound1SimulationInput = {
+    eventId: Scalars['ID'];
+    promptId: Scalars['ID'];
+    force?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type Round1SimulationResult = {
+    __typename?: 'Round1SimulationResult';
+    runId: Scalars['String'];
+    eventId: Scalars['String'];
+    promptId: Scalars['String'];
+    participantCount: Scalars['Int'];
+    insertedCount: Scalars['Int'];
+};
+
+export type Round1SimulationMutationResponse = MutationResponse & {
+    __typename?: 'Round1SimulationMutationResponse';
+    isError: Scalars['Boolean'];
+    message: Scalars['String'];
+    body?: Maybe<Round1SimulationResult>;
 };
 
 export type FeedbackFlow = Node & {
@@ -2090,6 +2128,7 @@ export type ResolversTypes = {
         | ResolversTypes['EventFeedbackPromptMutationResponse']
         | ResolversTypes['EventFeedbackPromptResponseMutationResponse']
         | ResolversTypes['PostEventFeedbackMutationResponse']
+        | ResolversTypes['Round1SimulationMutationResponse']
         | ResolversTypes['FeedbackFlowMutationResponse']
         | ResolversTypes['EventFeedbackPromptFlowResponseMutationResponse']
         | ResolversTypes['InviteMutationResponse']
@@ -2179,6 +2218,9 @@ export type ResolversTypes = {
     CreateFeedbackPromptResponse: CreateFeedbackPromptResponse;
     Votes: ResolverTypeWrapper<Votes>;
     GenerateViewpointsInput: GenerateViewpointsInput;
+    RunRound1SimulationInput: RunRound1SimulationInput;
+    Round1SimulationResult: ResolverTypeWrapper<Round1SimulationResult>;
+    Round1SimulationMutationResponse: ResolverTypeWrapper<Round1SimulationMutationResponse>;
     FeedbackFlow: ResolverTypeWrapper<FeedbackFlow>;
     FeedbackFlowEdge: ResolverTypeWrapper<FeedbackFlowEdge>;
     FeedbackFlowConnection: ResolverTypeWrapper<FeedbackFlowConnection>;
@@ -2289,6 +2331,7 @@ export type ResolversParentTypes = {
         | ResolversParentTypes['EventFeedbackPromptMutationResponse']
         | ResolversParentTypes['EventFeedbackPromptResponseMutationResponse']
         | ResolversParentTypes['PostEventFeedbackMutationResponse']
+        | ResolversParentTypes['Round1SimulationMutationResponse']
         | ResolversParentTypes['FeedbackFlowMutationResponse']
         | ResolversParentTypes['EventFeedbackPromptFlowResponseMutationResponse']
         | ResolversParentTypes['InviteMutationResponse']
@@ -2375,6 +2418,9 @@ export type ResolversParentTypes = {
     CreateFeedbackPromptResponse: CreateFeedbackPromptResponse;
     Votes: Votes;
     GenerateViewpointsInput: GenerateViewpointsInput;
+    RunRound1SimulationInput: RunRound1SimulationInput;
+    Round1SimulationResult: Round1SimulationResult;
+    Round1SimulationMutationResponse: Round1SimulationMutationResponse;
     FeedbackFlow: FeedbackFlow;
     FeedbackFlowEdge: FeedbackFlowEdge;
     FeedbackFlowConnection: FeedbackFlowConnection;
@@ -2612,6 +2658,7 @@ export type MutationResponseResolvers<
         | 'EventFeedbackPromptMutationResponse'
         | 'EventFeedbackPromptResponseMutationResponse'
         | 'PostEventFeedbackMutationResponse'
+        | 'Round1SimulationMutationResponse'
         | 'FeedbackFlowMutationResponse'
         | 'EventFeedbackPromptFlowResponseMutationResponse'
         | 'InviteMutationResponse'
@@ -2953,6 +3000,12 @@ export type MutationResolvers<
         ContextType,
         RequireFields<MutationgenerateViewpointsArgs, 'input'>
     >;
+    runRound1Simulation?: Resolver<
+        ResolversTypes['Round1SimulationMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationrunRound1SimulationArgs, 'input'>
+    >;
     createFeedbackFlow?: Resolver<
         ResolversTypes['FeedbackFlowMutationResponse'],
         ParentType,
@@ -3251,6 +3304,11 @@ export type EventResolvers<
     isCollectRatingsEnabled?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     isForumEnabled?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     isPrivate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    simulationEnabled?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    simulationParticipantCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+    simulationTopic?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    simulationBackground?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    simulationCovariates?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
     questions?: Resolver<
         Maybe<ResolversTypes['EventQuestionConnection']>,
         ParentType,
@@ -3882,6 +3940,28 @@ export type VotesResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type Round1SimulationResultResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['Round1SimulationResult'] = ResolversParentTypes['Round1SimulationResult']
+> = {
+    runId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    eventId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    promptId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    participantCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+    insertedCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Round1SimulationMutationResponseResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['Round1SimulationMutationResponse'] = ResolversParentTypes['Round1SimulationMutationResponse']
+> = {
+    isError?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+    message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    body?: Resolver<Maybe<ResolversTypes['Round1SimulationResult']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type FeedbackFlowResolvers<
     ContextType = MercuriusContext,
     ParentType extends ResolversParentTypes['FeedbackFlow'] = ResolversParentTypes['FeedbackFlow']
@@ -4392,6 +4472,8 @@ export type Resolvers<ContextType = MercuriusContext> = {
     EventFeedbackPromptResponseMutationResponse?: EventFeedbackPromptResponseMutationResponseResolvers<ContextType>;
     PostEventFeedbackMutationResponse?: PostEventFeedbackMutationResponseResolvers<ContextType>;
     Votes?: VotesResolvers<ContextType>;
+    Round1SimulationResult?: Round1SimulationResultResolvers<ContextType>;
+    Round1SimulationMutationResponse?: Round1SimulationMutationResponseResolvers<ContextType>;
     FeedbackFlow?: FeedbackFlowResolvers<ContextType>;
     FeedbackFlowEdge?: FeedbackFlowEdgeResolvers<ContextType>;
     FeedbackFlowConnection?: FeedbackFlowConnectionResolvers<ContextType>;
@@ -4547,6 +4629,11 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         isCollectRatingsEnabled?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
         isForumEnabled?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
         isPrivate?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
+        simulationEnabled?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
+        simulationParticipantCount?: LoaderResolver<Maybe<Scalars['Int']>, Event, {}, TContext>;
+        simulationTopic?: LoaderResolver<Maybe<Scalars['String']>, Event, {}, TContext>;
+        simulationBackground?: LoaderResolver<Maybe<Scalars['String']>, Event, {}, TContext>;
+        simulationCovariates?: LoaderResolver<Maybe<Array<Scalars['String']>>, Event, {}, TContext>;
         questions?: LoaderResolver<Maybe<EventQuestionConnection>, Event, EventquestionsArgs, TContext>;
         questionsByTopic?: LoaderResolver<Maybe<EventQuestionConnection>, Event, EventquestionsByTopicArgs, TContext>;
         topicQueue?: LoaderResolver<Maybe<EventQuestionConnection>, Event, EventtopicQueueArgs, TContext>;
@@ -4811,6 +4898,20 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         for?: LoaderResolver<Scalars['Int'], Votes, {}, TContext>;
         against?: LoaderResolver<Scalars['Int'], Votes, {}, TContext>;
         conflicted?: LoaderResolver<Scalars['Int'], Votes, {}, TContext>;
+    };
+
+    Round1SimulationResult?: {
+        runId?: LoaderResolver<Scalars['String'], Round1SimulationResult, {}, TContext>;
+        eventId?: LoaderResolver<Scalars['String'], Round1SimulationResult, {}, TContext>;
+        promptId?: LoaderResolver<Scalars['String'], Round1SimulationResult, {}, TContext>;
+        participantCount?: LoaderResolver<Scalars['Int'], Round1SimulationResult, {}, TContext>;
+        insertedCount?: LoaderResolver<Scalars['Int'], Round1SimulationResult, {}, TContext>;
+    };
+
+    Round1SimulationMutationResponse?: {
+        isError?: LoaderResolver<Scalars['Boolean'], Round1SimulationMutationResponse, {}, TContext>;
+        message?: LoaderResolver<Scalars['String'], Round1SimulationMutationResponse, {}, TContext>;
+        body?: LoaderResolver<Maybe<Round1SimulationResult>, Round1SimulationMutationResponse, {}, TContext>;
     };
 
     FeedbackFlow?: {

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<97b75d125d47d0c29a8e9891b0527079>>
+ * @generated SignedSource<<e1974298f656d51cb531cb7f0c341b51>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -33,13 +33,16 @@ export type SubmitLiveFeedbackFlowMutation$data = {
     readonly body: {
       readonly cursor: string;
       readonly node: {
+        readonly eventId: string;
         readonly flowDescription: string | null;
         readonly flowName: string;
         readonly id: string;
+        readonly isDraft: boolean;
         readonly prompts: ReadonlyArray<{
           readonly id: string;
           readonly order: number;
           readonly prompt: {
+            readonly createdAt: Date | null;
             readonly id: string;
             readonly isDraft: boolean | null;
             readonly isMultipleChoice: boolean | null;
@@ -48,6 +51,15 @@ export type SubmitLiveFeedbackFlowMutation$data = {
             readonly multipleChoiceOptions: ReadonlyArray<string> | null;
             readonly prompt: string;
             readonly reasoningType: string | null;
+            readonly simulationResponses: {
+              readonly edges: ReadonlyArray<{
+                readonly node: {
+                  readonly id: string;
+                };
+              }> | null;
+            } | null;
+            readonly viewpoints: ReadonlyArray<string> | null;
+            readonly voteViewpoints: any | null;
           };
         }>;
       };
@@ -103,6 +115,13 @@ v5 = {
 v6 = {
   "alias": null,
   "args": null,
+  "kind": "ScalarField",
+  "name": "isDraft",
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
   "concreteType": "FeedbackFlowEdge",
   "kind": "LinkedField",
   "name": "body",
@@ -128,6 +147,13 @@ v6 = {
           "alias": null,
           "args": null,
           "kind": "ScalarField",
+          "name": "eventId",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
           "name": "flowName",
           "storageKey": null
         },
@@ -138,6 +164,7 @@ v6 = {
           "name": "flowDescription",
           "storageKey": null
         },
+        (v6/*: any*/),
         {
           "alias": null,
           "args": null,
@@ -198,19 +225,74 @@ v6 = {
                   "name": "multipleChoiceOptions",
                   "storageKey": null
                 },
-                {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "isDraft",
-                  "storageKey": null
-                },
+                (v6/*: any*/),
                 {
                   "alias": null,
                   "args": null,
                   "kind": "ScalarField",
                   "name": "reasoningType",
                   "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "createdAt",
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "viewpoints",
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "voteViewpoints",
+                  "storageKey": null
+                },
+                {
+                  "alias": "simulationResponses",
+                  "args": [
+                    {
+                      "kind": "Literal",
+                      "name": "first",
+                      "value": 1
+                    }
+                  ],
+                  "concreteType": "EventLiveFeedbackPromptResponseConnection",
+                  "kind": "LinkedField",
+                  "name": "responses",
+                  "plural": false,
+                  "selections": [
+                    {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "EventLiveFeedbackPromptResponseEdge",
+                      "kind": "LinkedField",
+                      "name": "edges",
+                      "plural": true,
+                      "selections": [
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "EventLiveFeedbackPromptResponse",
+                          "kind": "LinkedField",
+                          "name": "node",
+                          "plural": false,
+                          "selections": [
+                            (v5/*: any*/)
+                          ],
+                          "storageKey": null
+                        }
+                      ],
+                      "storageKey": null
+                    }
+                  ],
+                  "storageKey": "responses(first:1)"
                 }
               ],
               "storageKey": null
@@ -244,7 +326,7 @@ return {
         "selections": [
           (v3/*: any*/),
           (v4/*: any*/),
-          (v6/*: any*/)
+          (v7/*: any*/)
         ],
         "storageKey": null
       }
@@ -271,7 +353,7 @@ return {
         "selections": [
           (v3/*: any*/),
           (v4/*: any*/),
-          (v6/*: any*/),
+          (v7/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -294,16 +376,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "110e4fe0b2cdb97125449c84bdf06e1f",
+    "cacheID": "93b5200a350d789485871d4c5ce28489",
     "id": null,
     "metadata": {},
     "name": "SubmitLiveFeedbackFlowMutation",
     "operationKind": "mutation",
-    "text": "mutation SubmitLiveFeedbackFlowMutation(\n  $input: CreateFeedbackFlowInput!\n) {\n  createFeedbackFlow(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        flowName\n        flowDescription\n        prompts {\n          id\n          order\n          prompt {\n            id\n            prompt\n            isVote\n            isOpenEnded\n            isMultipleChoice\n            multipleChoiceOptions\n            isDraft\n            reasoningType\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "mutation SubmitLiveFeedbackFlowMutation(\n  $input: CreateFeedbackFlowInput!\n) {\n  createFeedbackFlow(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        eventId\n        flowName\n        flowDescription\n        isDraft\n        prompts {\n          id\n          order\n          prompt {\n            id\n            prompt\n            isVote\n            isOpenEnded\n            isMultipleChoice\n            multipleChoiceOptions\n            isDraft\n            reasoningType\n            createdAt\n            viewpoints\n            voteViewpoints\n            simulationResponses: responses(first: 1) {\n              edges {\n                node {\n                  id\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "0ddd645df90302d20c432fa02a74770a";
+(node as any).hash = "d441c69b816f925b3f0c6867c6f7d700";
 
 export default node;

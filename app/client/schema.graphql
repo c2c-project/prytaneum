@@ -273,6 +273,15 @@ type Event implements Node {
 
   """Registrants for this event -- individuals invited"""
   registrants: UserConnection
+  simulationBackground: String
+  simulationCovariates: [String!]
+
+  """
+  Whether organizer-configured Round 1 simulation is available for this event
+  """
+  simulationEnabled: Boolean
+  simulationParticipantCount: Int
+  simulationTopic: String
 
   """Speakers for this event"""
   speakers(after: String, first: Int): EventSpeakerConnection
@@ -822,6 +831,7 @@ type Mutation {
   resetPasswordRequest(input: ResetPasswordRequestForm!): ResetPasswordRequestMutationResponse!
   reshareFeedbackFlow(flowId: ID!): FeedbackFlowMutationResponse!
   reshareFeedbackPrompt(promptId: ID!): EventFeedbackPromptMutationResponse!
+  runRound1Simulation(input: RunRound1SimulationInput!): Round1SimulationMutationResponse!
   shareFeedbackFlowDraft(flowId: ID!): FeedbackFlowMutationResponse!
   shareFeedbackPromptDraft(promptId: ID!): EventFeedbackPromptMutationResponse!
   shareFeedbackPromptResults(eventId: ID!, promptId: ID!): EventFeedbackPromptMutationResponse!
@@ -1025,6 +1035,26 @@ type ResetPasswordRequestMutationResponse implements MutationResponse {
   message: String!
 }
 
+type Round1SimulationMutationResponse implements MutationResponse {
+  body: Round1SimulationResult
+  isError: Boolean!
+  message: String!
+}
+
+type Round1SimulationResult {
+  eventId: String!
+  insertedCount: Int!
+  participantCount: Int!
+  promptId: String!
+  runId: String!
+}
+
+input RunRound1SimulationInput {
+  eventId: ID!
+  force: Boolean
+  promptId: ID!
+}
+
 type Subscription {
   broadcastMessageCreated(eventId: ID!): EventBroadcastMessageEdgeContainer!
   broadcastMessageDeleted(eventId: ID!): EventBroadcastMessageEdgeContainer!
@@ -1126,6 +1156,11 @@ input UpdateEvent {
   isForumEnabled: Boolean
   isPrivate: Boolean
   isQuestionFeedVisible: Boolean
+  simulationBackground: String
+  simulationCovariates: [String!]
+  simulationEnabled: Boolean
+  simulationParticipantCount: Int
+  simulationTopic: String
   startDateTime: Date
   title: String
   topic: String

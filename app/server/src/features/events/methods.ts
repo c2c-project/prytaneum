@@ -3,6 +3,7 @@ import { Event, PrismaClient } from '@local/__generated__/prisma';
 import { errors, filterFields, toGlobalId } from '@local/features/utils';
 import { isMemberOfOrg } from '@local/features/permissions';
 import { ProtectedError } from '@local/lib/ProtectedError';
+import { normalizeRound1CovariateKeys } from './feedback/simulation/round1Covariates';
 import type { CreateEvent, DeleteEvent, UpdateEvent } from '@local/graphql-types';
 
 export { isModerator } from './moderation/methods';
@@ -78,6 +79,11 @@ export async function createEvent(userId: string, prisma: PrismaClient, input: C
         isCollectRatingsEnabled: true,
         isForumEnabled: true,
         isPrivate: false,
+        simulationEnabled: false,
+        simulationParticipantCount: 3,
+        simulationTopic: '',
+        simulationBackground: '',
+        simulationCovariates: ['gender', 'education', 'politics'],
         createdById: userId,
         issueGuideUrl: '',
         issue: '',
@@ -142,7 +148,59 @@ export async function canUserModify(userId: string, id: string, prisma: PrismaCl
  */
 export async function updateEvent(userId: string, prisma: PrismaClient, input: UpdateEvent) {
     // check if user has valid permissions
-    if (!canUserModify(userId, input.eventId, prisma)) throw new ProtectedError({ userMessage: errors.permissions });
+    if (!(await canUserModify(userId, input.eventId, prisma))) {
+        throw new ProtectedError({ userMessage: errors.permissions });
+    }
+
+    let normalizedSimulationCovariates: string[] | undefined;
+    const includesSimulationSettings = [
+        input.simulationEnabled,
+        input.simulationParticipantCount,
+        input.simulationTopic,
+        input.simulationBackground,
+        input.simulationCovariates,
+    ].some((value) => value !== null && value !== undefined);
+
+    if (includesSimulationSettings) {
+        const current = await prisma.event.findUnique({
+            where: { id: input.eventId },
+            select: {
+                simulationEnabled: true,
+                simulationParticipantCount: true,
+                simulationTopic: true,
+                simulationBackground: true,
+                simulationCovariates: true,
+            },
+        });
+        if (!current) throw new ProtectedError({ userMessage: 'Event not found.' });
+
+        const simulation = {
+            simulationEnabled: input.simulationEnabled ?? current.simulationEnabled,
+            simulationParticipantCount: input.simulationParticipantCount ?? current.simulationParticipantCount,
+            simulationTopic: input.simulationTopic ?? current.simulationTopic,
+            simulationBackground: input.simulationBackground ?? current.simulationBackground,
+            simulationCovariates: input.simulationCovariates ?? current.simulationCovariates,
+        };
+        try {
+            simulation.simulationCovariates = normalizeRound1CovariateKeys(simulation.simulationCovariates);
+            normalizedSimulationCovariates = simulation.simulationCovariates;
+        } catch (error) {
+            throw new ProtectedError({ userMessage: error instanceof Error ? error.message : String(error) });
+        }
+        if (
+            !Number.isInteger(simulation.simulationParticipantCount) ||
+            simulation.simulationParticipantCount < 1 ||
+            simulation.simulationParticipantCount > 20
+        ) {
+            throw new ProtectedError({ userMessage: 'Simulated participant count must be between 1 and 20.' });
+        }
+        if (simulation.simulationEnabled && simulation.simulationTopic.trim().length === 0) {
+            throw new ProtectedError({ userMessage: 'Simulation topic is required when simulation is enabled.' });
+        }
+        if (simulation.simulationEnabled && simulation.simulationBackground.trim().length === 0) {
+            throw new ProtectedError({ userMessage: 'Simulation background is required when simulation is enabled.' });
+        }
+    }
 
     const fields = filterFields({
         input,
@@ -156,8 +214,16 @@ export async function updateEvent(userId: string, prisma: PrismaClient, input: U
             isForumEnabled: true,
             isPrivate: true,
             isQuestionFeedVisible: true,
+            simulationEnabled: true,
+            simulationParticipantCount: true,
+            simulationTopic: true,
+            simulationBackground: true,
+            simulationCovariates: true,
         },
     });
+    if (input.simulationCovariates !== null && input.simulationCovariates !== undefined) {
+        fields.simulationCovariates = normalizedSimulationCovariates;
+    }
 
     return prisma.event.update({ where: { id: input.eventId }, data: { ...fields } });
 }

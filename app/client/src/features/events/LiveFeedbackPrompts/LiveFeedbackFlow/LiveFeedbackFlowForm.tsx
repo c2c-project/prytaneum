@@ -10,15 +10,18 @@ import {
     Box,
     Grid,
     Divider,
+    Tooltip,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import SaveIcon from '@mui/icons-material/Save'; // Icon for Save Draft
 import SendIcon from '@mui/icons-material/Send'; // Icon for Prompt
+import SmartToyIcon from '@mui/icons-material/SmartToy';
 
 import { LiveFeedbackPromptForm, TLiveFeedbackPromptFormState } from '../LiveFeedbackPrompt/LiveFeedbackPromptForm';
-import { STARTING_CHOICE_AMOUNT } from '@local/utils/rules';
+import { CHOICE_MAX_LENGTH, FEEDBACK_PROMPT_MAX_LENGTH, STARTING_CHOICE_AMOUNT } from '@local/utils/rules';
+import { isRound1PromptFormEligible } from '../LiveFeedbackPrompt/simulationEligibility';
 
 export interface TLiveFeedbackFlowFormData {
     name: string;
@@ -30,6 +33,11 @@ export interface LiveFeedbackFlowFormProps {
     onSubmit: (flowData: TLiveFeedbackFlowFormData) => void;
     onCancel: () => void;
     onSaveDraft: (flowData: TLiveFeedbackFlowFormData) => void;
+    onRunSimulation?: (flowData: TLiveFeedbackFlowFormData) => void;
+    simulationEnabled?: boolean;
+    simulationConfigurationValid?: boolean;
+    isBusy?: boolean;
+    isRunningSimulation?: boolean;
     initialState?: Partial<TLiveFeedbackFlowFormData>; // For potential editing functionality later
 }
 
@@ -40,7 +48,17 @@ const createDefaultPromptState = (): TLiveFeedbackPromptFormState => ({
     reasoningType: 'optional',
 });
 
-export function LiveFeedbackFlowForm({ onSubmit, onCancel, onSaveDraft, initialState }: LiveFeedbackFlowFormProps) {
+export function LiveFeedbackFlowForm({
+    onSubmit,
+    onCancel,
+    onSaveDraft,
+    onRunSimulation,
+    simulationEnabled = false,
+    simulationConfigurationValid = false,
+    isBusy = false,
+    isRunningSimulation = false,
+    initialState,
+}: LiveFeedbackFlowFormProps) {
     const [flowName, setFlowName] = React.useState<string>(initialState?.name ?? '');
     const [flowDescription, setFlowDescription] = React.useState<string>(initialState?.description ?? '');
 
@@ -89,9 +107,24 @@ export function LiveFeedbackFlowForm({ onSubmit, onCancel, onSaveDraft, initialS
         onSaveDraft(getFlowData());
     };
 
+    const handleRunSimulation = () => {
+        onRunSimulation?.(getFlowData());
+    };
+
     const isFlowInfoValid = flowName.length > 0 && flowDescription.length > 0;
-    const arePromptsValid = prompts.every((p) => p.prompt.length > 0); // Simplified check
+    const arePromptsValid = prompts.every((prompt) => {
+        if (prompt.prompt.trim().length === 0 || prompt.prompt.length > FEEDBACK_PROMPT_MAX_LENGTH) return false;
+        if (prompt.feedbackType !== 'multiple-choice') return true;
+        return prompt.choices.every((choice) => choice.trim().length > 0 && choice.length <= CHOICE_MAX_LENGTH);
+    });
     const canSubmit = isFlowInfoValid && arePromptsValid;
+    const hasEligibleSimulationPrompt = prompts.length === 1 && isRound1PromptFormEligible(prompts[0]);
+    const canRunSimulation = canSubmit && hasEligibleSimulationPrompt && simulationConfigurationValid && !isBusy;
+    const simulationHelp = !simulationConfigurationValid
+        ? 'Complete Event Settings → Simulation before running a simulation.'
+        : !hasEligibleSimulationPrompt
+        ? 'Round 1 simulation requires one supported prompt.'
+        : '';
 
     return (
         <Box component='form' onSubmit={handleSubmit} sx={{ width: '100%', height: '100%' }}>
@@ -177,7 +210,7 @@ export function LiveFeedbackFlowForm({ onSubmit, onCancel, onSaveDraft, initialS
             <Divider sx={{ my: 2 }} />
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
-                <Button variant='outlined' color='secondary' onClick={onCancel}>
+                <Button variant='outlined' color='secondary' onClick={onCancel} disabled={isBusy}>
                     Cancel
                 </Button>
                 <Button
@@ -185,16 +218,32 @@ export function LiveFeedbackFlowForm({ onSubmit, onCancel, onSaveDraft, initialS
                     color='primary'
                     onClick={handleSaveDraft}
                     startIcon={<SaveIcon />}
-                    disabled={!isFlowInfoValid}
+                    disabled={!isFlowInfoValid || isBusy}
                 >
                     Save as Draft
                 </Button>
+                {simulationEnabled && onRunSimulation && (
+                    <Tooltip title={simulationHelp} disableHoverListener={!simulationHelp}>
+                        <span>
+                            <Button
+                                type='button'
+                                variant='contained'
+                                color='secondary'
+                                onClick={handleRunSimulation}
+                                startIcon={<SmartToyIcon />}
+                                disabled={!canRunSimulation}
+                            >
+                                {isRunningSimulation ? 'Running Simulation...' : 'Run Simulation'}
+                            </Button>
+                        </span>
+                    </Tooltip>
+                )}
                 <Button
                     type='submit'
                     variant='contained'
                     color='primary'
                     startIcon={<SendIcon />}
-                    disabled={!canSubmit}
+                    disabled={!canSubmit || isBusy}
                 >
                     Prompt Survey
                 </Button>

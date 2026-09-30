@@ -6,6 +6,8 @@
         "dev": "dotenv -c development -- ts-node-dev --ignore-watch /downloads/ --watch ./src/features -r tsconfig-paths/register --rs --transpile-only --no-notify --exit-child ./src/index.ts",
         "build": "yarn exec scripts/build.sh",
         "add-feat": "ts-node-dev --script-mode ./scripts/add-feature.ts",
+        "seed-fgdt-users": "dotenv -c development -- yarn workspace prytaneum exec ts-node -P app/server/tsconfig.json app/server/scripts/seed-fgdt-users.ts",
+        "fgdt-round1": "dotenv -c development -- yarn workspace prytaneum exec ts-node -P app/server/tsconfig.json app/server/scripts/fgdt-round1.ts",
         "typecheck": "tsc -p tsconfig.prod.json --noEmit",
         "prod": "dotenv -e .env.production -- yarn node -r module-alias/register build/index.js",
         "generate": "yarn pnpify prisma generate",

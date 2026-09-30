@@ -11,9 +11,18 @@ export interface ConfirmationDialogProps {
     open: boolean;
     onClose: () => void;
     isLoading?: boolean;
+    confirmLabel?: string;
 }
 
-export function ConfirmationDialog({ open, onConfirm, title, children, onClose, isLoading }: ConfirmationDialogProps) {
+export function ConfirmationDialog({
+    open,
+    onConfirm,
+    title,
+    children,
+    onClose,
+    isLoading,
+    confirmLabel = 'Confirm',
+}: ConfirmationDialogProps) {
     // NOTE: the () => onClose() and () => onConfirm is done on purpose to prevent the synthetic event from being passed up
     // storybook yells at me if it's passed up
     return (
@@ -26,7 +35,7 @@ export function ConfirmationDialog({ open, onConfirm, title, children, onClose, 
                     Cancel
                 </Button>
                 <LoadingButton variant='contained' color='primary' onClick={onConfirm} loading={Boolean(isLoading)}>
-                    Confirm
+                    {confirmLabel}
                 </LoadingButton>
             </DialogActions>
         </ResponsiveDialog>

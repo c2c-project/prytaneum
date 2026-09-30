@@ -8,6 +8,10 @@ const USE_LIVE_FEEDBACK_PROMPTS = graphql`
     @refetchable(queryName: "liveFeedbackPromptPagination")
     @argumentDefinitions(first: { type: "Int", defaultValue: 100 }, after: { type: "String" }) {
         id
+        simulationEnabled
+        simulationParticipantCount
+        simulationTopic
+        simulationBackground
         liveFeedbackPrompts(first: $first, after: $after)
             @connection(key: "useLiveFeedbackPromptsFragment_liveFeedbackPrompts") {
             __id
@@ -24,6 +28,13 @@ const USE_LIVE_FEEDBACK_PROMPTS = graphql`
                     isDraft
                     viewpoints
                     voteViewpoints
+                    simulationResponses: responses(first: 1) {
+                        edges {
+                            node {
+                                id
+                            }
+                        }
+                    }
                     ...useLiveFeedbackPromptResponsesFragment
                 }
             }
@@ -73,5 +84,20 @@ export function useLiveFeedbackPrompts({ fragmentRef }: Props) {
         [data.liveFeedbackPrompts?.__id]
     );
 
-    return { prompts: promptsList, connections, refresh };
+    const simulationConfiguration = React.useMemo(
+        () => ({
+            enabled: Boolean(data.simulationEnabled),
+            participantCount: data.simulationParticipantCount,
+            topic: data.simulationTopic,
+            background: data.simulationBackground,
+        }),
+        [data.simulationBackground, data.simulationEnabled, data.simulationParticipantCount, data.simulationTopic]
+    );
+
+    return {
+        prompts: promptsList,
+        connections,
+        refresh,
+        simulationConfiguration,
+    };
 }

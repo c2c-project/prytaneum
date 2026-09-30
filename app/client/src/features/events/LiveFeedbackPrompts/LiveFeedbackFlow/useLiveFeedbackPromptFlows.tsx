@@ -33,6 +33,13 @@ const USE_LIVE_FEEDBACK_PROMPT_FLOWS_FRAGMENT = graphql`
                             isDraft
                             viewpoints
                             voteViewpoints
+                            simulationResponses: responses(first: 1) {
+                                edges {
+                                    node {
+                                        id
+                                    }
+                                }
+                            }
                             ...useLiveFeedbackPromptResponsesFragment
                         }
                     }

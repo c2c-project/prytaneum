@@ -19,6 +19,8 @@ import type { Flow, Prompt as IndividualPromptType } from './LiveFeedbackPromptL
 import GenerateViewpoints from './GenerateViewpoints';
 import ViewpointsList from './ViewpointsList';
 import { ShareFeedbackPromptResults } from '../LiveFeedbackPromptResponses';
+import { RunRound1Simulation, SimulationConfiguration } from './RunRound1Simulation';
+import { hasRound1SimulationResponses } from './simulationEligibility';
 
 export type SummarizedViewpoints = {
     viewpoints: string[];
@@ -29,12 +31,16 @@ interface FeedbackFlowResponsesDialogProps {
     open: boolean;
     handleClose: () => void;
     selectedFlow: Flow | null;
+    simulationConfiguration: SimulationConfiguration;
+    refresh: () => void;
 }
 
 export default function FeedbackFlowResponsesDialog({
     open,
     handleClose,
     selectedFlow,
+    simulationConfiguration,
+    refresh,
 }: FeedbackFlowResponsesDialogProps) {
     const theme = useTheme();
     const fullscreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -45,6 +51,7 @@ export default function FeedbackFlowResponsesDialog({
             voteViewpoints: prompt.voteViewpoints || {},
         })) || []
     );
+    const [responseRefreshKeys, setResponseRefreshKeys] = React.useState<Record<string, number>>({});
 
     const handleAccordionChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
         setExpandedAccordion(isExpanded ? panel : false);
@@ -144,6 +151,20 @@ export default function FeedbackFlowResponsesDialog({
                                                         }}
                                                     />
                                                     <ShareFeedbackPromptResults prompt={individualPrompt} />
+                                                    <RunRound1Simulation
+                                                        prompt={individualPrompt}
+                                                        isSurveyDraft={selectedFlow.isDraft}
+                                                        hasResponses={hasRound1SimulationResponses(individualPrompt)}
+                                                        configuration={simulationConfiguration}
+                                                        onSuccess={() => {
+                                                            setResponseRefreshKeys((keys) => ({
+                                                                ...keys,
+                                                                [individualPrompt.id]:
+                                                                    (keys[individualPrompt.id] ?? 0) + 1,
+                                                            }));
+                                                            refresh();
+                                                        }}
+                                                    />
                                                 </Stack>
                                             </Grid>
                                             <Box sx={{ p: 1 }}>
@@ -155,6 +176,11 @@ export default function FeedbackFlowResponsesDialog({
                                             </Box>
                                             <Box sx={{ p: 1 }}>
                                                 <PreloadedLiveFeedbackPromptResponseList
+                                                    key={
+                                                        individualPrompt.id +
+                                                        '-' +
+                                                        (responseRefreshKeys[individualPrompt.id] ?? 0)
+                                                    }
                                                     prompt={individualPrompt}
                                                     vote={'default'}
                                                     isFlow={true}

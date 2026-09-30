@@ -77,3 +77,10 @@ export function getRedisClient(logger: FastifyBaseLogger = server.log): Redis {
 
     return redis;
 }
+
+// Release the singleton from one-shot scripts without creating a new connection
+export function disconnectRedisClientIfCreated(): void {
+    if (!_redis) return;
+    _redis.disconnect();
+    _redis = null;
+}

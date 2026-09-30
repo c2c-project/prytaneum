@@ -105,6 +105,11 @@ model Event {
     isCollectRatingsEnabled Boolean
     isForumEnabled Boolean
     isPrivate Boolean
+    simulationEnabled Boolean @default(false)
+    simulationParticipantCount Int @default(3)
+    simulationTopic String @default("")
+    simulationBackground String @default("")
+    simulationCovariates String[] @default(["gender", "education", "politics"])
 
     feedback EventLiveFeedback[]
     postEventFeedback PostEventFeedback[]

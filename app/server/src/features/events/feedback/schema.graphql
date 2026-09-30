@@ -150,6 +150,26 @@ input GenerateViewpointsInput {
     isForcedRegenerate: Boolean
 }
 
+input RunRound1SimulationInput {
+    eventId: ID!
+    promptId: ID!
+    force: Boolean
+}
+
+type Round1SimulationResult {
+    runId: String!
+    eventId: String!
+    promptId: String!
+    participantCount: Int!
+    insertedCount: Int!
+}
+
+type Round1SimulationMutationResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+    body: Round1SimulationResult
+}
+
 # --- Feedback Flow Types ---
 type FeedbackFlow implements Node {
     id: ID!
@@ -225,6 +245,7 @@ type Mutation {
     shareFeedbackPromptResults(eventId: ID!, promptId: ID!): EventFeedbackPromptMutationResponse!
     submitPostEventFeedback(feedback: String!, eventId: ID!): PostEventFeedbackMutationResponse!
     generateViewpoints(input: GenerateViewpointsInput!): EventFeedbackPromptMutationResponse!
+    runRound1Simulation(input: RunRound1SimulationInput!): Round1SimulationMutationResponse!
     # --- Feedback Flow Mutations ---
     createFeedbackFlow(input: CreateFeedbackFlowInput!): FeedbackFlowMutationResponse!
     shareFeedbackFlowDraft(flowId: ID!): FeedbackFlowMutationResponse!
