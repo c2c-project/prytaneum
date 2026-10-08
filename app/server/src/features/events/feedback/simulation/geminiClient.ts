@@ -3,7 +3,7 @@ import axios, { AxiosError } from 'axios';
 import type { Redis } from 'ioredis';
 import { getRedisClient } from '../../../../core/utils/redis';
 
-export const ROUND1_GEMINI_MODEL = 'gemini-3.5-flash';
+export const ROUND1_GEMINI_MODEL = 'gemini-3.8-flash';
 const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${ROUND1_GEMINI_MODEL}:generateContent`;
 const RETRYABLE_STATUS_CODES = new Set([408, 429, 500, 502, 503, 504]);
 const HTTP_ATTEMPTS = 10;
@@ -64,7 +64,6 @@ async function requestGemini(
                 GEMINI_ENDPOINT,
                 {
                     contents: [{ parts: [{ text: prompt }] }],
-                    generationConfig: { temperature: 0.5, topK: 40 },
                     safetySettings: [
                         { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
                         { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' },

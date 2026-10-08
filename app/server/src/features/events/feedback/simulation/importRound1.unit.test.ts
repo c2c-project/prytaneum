@@ -14,7 +14,7 @@ function makeValidJson(): unknown {
         runId: 'nuclear-demo-001',
         eventId: EVENT_ID,
         promptId: PROMPT_ID,
-        model: 'gemini-3.5-flash',
+        model: 'gemini-3.8-flash',
         generatedAt: '2026-08-26T12:00:00Z',
         options: ['Expand nuclear power', 'Maintain current operations', 'Phase out nuclear power'],
         reasoningType: 'REQUIRED',
@@ -66,6 +66,21 @@ describe('parseRound1Output', () => {
         expect(output.responses[0].selectedOption).toBe(output.options[1]);
     });
 
+    test('accepts Gemini 3.8 output for both schema versions', () => {
+        const model = 'gemini-3.8-flash';
+        const json = { ...(makeValidJson() as Round1OutputV1), model };
+
+        expect(parseRound1Output(json).model).toBe(model);
+        expect(
+            parseRound1Output({
+                ...json,
+                schemaVersion: 2,
+                questionType: 'MULTIPLE_CHOICE',
+                responses: json.responses.map((response) => ({ ...response, questionType: 'MULTIPLE_CHOICE' })),
+            }).model
+        ).toBe(model);
+    });
+
     test('rejects an invalid schema version', () => {
         const json = makeValidJson() as any;
         json.schemaVersion = 3;
@@ -73,10 +88,18 @@ describe('parseRound1Output', () => {
         expect(() => parseRound1Output(json)).toThrow('schemaVersion must equal 1 or 2');
     });
 
-    test('rejects any model other than the fixed Round 1 Gemini model', () => {
-        expect(() => parseRound1Output({ ...(makeValidJson() as object), model: 'gemini-other' })).toThrow(
-            'model must be gemini-3.5-flash'
-        );
+    test.each(['gemini-3.5-flash', 'gemini-other'])('rejects unsupported model %s for both schema versions', (model) => {
+        const json = { ...(makeValidJson() as Round1OutputV1), model };
+
+        expect(() => parseRound1Output(json)).toThrow('model must be gemini-3.8-flash');
+        expect(() =>
+            parseRound1Output({
+                ...json,
+                schemaVersion: 2,
+                questionType: 'MULTIPLE_CHOICE',
+                responses: json.responses.map((response) => ({ ...response, questionType: 'MULTIPLE_CHOICE' })),
+            })
+        ).toThrow('model must be gemini-3.8-flash');
     });
 
     test('rejects a duplicate participantKey', () => {
@@ -160,7 +183,7 @@ describe('parseRound1Output', () => {
             runId: 'run',
             eventId: EVENT_ID,
             promptId: PROMPT_ID,
-            model: 'gemini-3.5-flash',
+            model: 'gemini-3.8-flash',
             generatedAt: '2026-09-02T00:00:00.000Z',
             questionType,
             responses: [{ participantKey: 'fgdt-demo-01', userId: USER_1_ID, questionType, response }],
@@ -281,7 +304,7 @@ describe('preflightRound1Import', () => {
             runId: 'run',
             eventId: EVENT_ID,
             promptId: PROMPT_ID,
-            model: 'gemini-3.5-flash',
+            model: 'gemini-3.8-flash',
             generatedAt: '2026-09-02T00:00:00.000Z',
             questionType: 'VOTE',
             reasoningType: 'OPTIONAL',
@@ -378,7 +401,7 @@ describe('importRound1Responses', () => {
             runId: 'run',
             eventId: EVENT_ID,
             promptId: PROMPT_ID,
-            model: 'gemini-3.5-flash',
+            model: 'gemini-3.8-flash',
             generatedAt: '2026-09-02T00:00:00.000Z',
             questionType,
             ...configuration,
