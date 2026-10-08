@@ -39,7 +39,7 @@ describe('askRound1Gemini', () => {
         expect(post).not.toHaveBeenCalled();
     });
 
-    test('sends the preserved Gemini settings and caches the response', async () => {
+    test('sends the Gemini 3.8 request without sampling parameters and caches the response', async () => {
         const cache = makeCache();
         post.mockResolvedValue({ data: { candidates: [{ content: { parts: [{ text: 'response' }] } }] } });
 
@@ -47,10 +47,9 @@ describe('askRound1Gemini', () => {
             'response'
         );
         expect(post).toHaveBeenCalledWith(
-            'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent',
+            'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent',
             {
                 contents: [{ parts: [{ text: 'prompt' }] }],
-                generationConfig: { temperature: 0.5, topK: 40 },
                 safetySettings: [
                     { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
                     { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' },
@@ -61,7 +60,7 @@ describe('askRound1Gemini', () => {
             { headers: { 'Content-Type': 'application/json', 'x-goog-api-key': 'test-key' }, timeout: 120000 }
         );
         expect(cache.set).toHaveBeenCalledWith(
-            expect.stringContaining('fgdt-round1:gemini:gemini-3.5-flash:'),
+            expect.stringContaining('fgdt-round1:gemini:gemini-3.8-flash:'),
             'response'
         );
     });

@@ -125,7 +125,9 @@ function parseMultipleChoiceResponse(
 
 function parseCommonOutput(output: JsonRecord) {
     const model = requireNonemptyString(output.model, 'model');
-    if (model !== 'gemini-3.5-flash') throw new Round1ImportError('model must be gemini-3.5-flash.');
+    if (model !== 'gemini-3.8-flash') {
+        throw new Round1ImportError('model must be gemini-3.8-flash.');
+    }
     return {
         runId: requireNonemptyString(output.runId, 'runId'),
         eventId: requireUuid(output.eventId, 'eventId'),

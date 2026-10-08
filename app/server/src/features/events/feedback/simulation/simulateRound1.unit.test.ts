@@ -47,7 +47,7 @@ describe('simulateRound1', () => {
         expect(output).toMatchObject({
             schemaVersion: 2,
             runId: 'run',
-            model: 'gemini-3.5-flash',
+            model: 'gemini-3.8-flash',
             options: ['Option A', 'Option B'],
             reasoningType: 'REQUIRED',
             responses: [

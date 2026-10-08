@@ -45,10 +45,10 @@ def _get_client():
     return _client
 
 
-DEFAULT_MODEL = os.environ.get('GEMINI_MODEL', 'gemini-3.7-flash')
+DEFAULT_MODEL = os.environ.get('GEMINI_MODEL', 'gemini-3.8-flash')
 
 
-def AskGoogleGemini(prompt: str, model=None, max_output_tokens=1024, force=False, temperature=0.2, top_k=40) -> str:
+def AskGoogleGemini(prompt: str, model=None, max_output_tokens=1024, force=False) -> str:
     "Ask a prompt to given Google Cloud model and return the response text and safety ratings."
     if not model:
         model = os.environ.get('GEMINI_MODEL', DEFAULT_MODEL)
@@ -102,8 +102,6 @@ def AskGoogleGemini(prompt: str, model=None, max_output_tokens=1024, force=False
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     # max_output_tokens=max_output_tokens,
-                    top_k=top_k,
-                    temperature=temperature,  # Randomness: Low temp = low randomness, high temp = high creativity
                     http_options=types.HttpOptions(
                         retry_options=types.HttpRetryOptions(
                             attempts=10,        # default is 5
